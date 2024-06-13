@@ -111,18 +111,25 @@ export default function Navbar() {
               </Tooltip>
             </li>
           </ul>
-          <Button
-            size="icon"
-            variant="ghost"
-            className={navOpen ? "self-end" : ""}
-            onClick={() => {
-              setNavOpen(!navOpen);
-              localStorage.setItem("navOpen", !navOpen);
-            }}>
-            {navOpen ?
-              <ArrowLeftToLine size={18} className="" />
-            : <ArrowRightToLine size={18} className="" />}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                className={navOpen ? "self-end" : ""}
+                onClick={() => {
+                  setNavOpen(!navOpen);
+                  localStorage.setItem("navOpen", !navOpen);
+                }}>
+                {navOpen ?
+                  <ArrowLeftToLine size={18} className="" />
+                : <ArrowRightToLine size={18} className="" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>{navOpen ? "Collapse" : "Expand"}</p>
+            </TooltipContent>
+          </Tooltip>
         </TooltipProvider>
       </nav>
     </aside>
