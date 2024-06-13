@@ -19,8 +19,11 @@ export default function Toolbar() {
   return (
     <div className="justify- flex h-fit flex-row items-center justify-between border-b border-neutral-200 px-3 py-3">
       <TooltipProvider delayDuration={50}>
-        <div className="flex flex-row items-center gap-4">
-          <h1>Current Repo</h1>
+        <div className="flex h-full flex-row items-center gap-4">
+          <Button variant="outline" size="sm">
+            <h1 className="">Current Repo</h1>
+          </Button>
+          <Separator orientation="vertical" className="h-full" />
           <ul className="flex flex-row items-center gap-12">
             <li>
               <div className="flex gap-4">
