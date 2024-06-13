@@ -24,7 +24,4 @@ export default defineConfig(async () => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  optimizeDeps: {
-    include: ["nodegit"],
-  },
 }));
