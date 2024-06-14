@@ -85,7 +85,7 @@ export default function Toolbar() {
             </TooltipTrigger>
             <TooltipContent side="bottom">
               <p>
-                Your <b>username</b> when using git commit
+                <b>username</b> used when using git commit
               </p>
             </TooltipContent>
           </Tooltip>
