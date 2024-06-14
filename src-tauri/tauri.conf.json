@@ -13,9 +13,7 @@
       "all": false,
       "fs": {
         "all": true,
-        "scope": [
-          "**/*"
-        ]
+        "scope": ["**/*"]
       },
       "path": {
         "all": true
