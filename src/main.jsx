@@ -6,6 +6,7 @@ import "./index.css";
 import Layout from "./routes/Layout";
 import Index from "./routes/index";
 import Settings from "./routes/pages/settings";
+import Git from "./routes/pages/git";
 
 import ErrorPage from "./error-page";
 
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/settings",
         element: <Settings />,
+      },
+      {
+        path: "/git",
+        element: <Git />,
       },
     ],
   },
