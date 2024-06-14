@@ -21,7 +21,6 @@ export default function Navbar() {
   const currentPath = useLocation();
   useLayoutEffect(() => {
     setNavOpen(localStorage.getItem("navOpen") == "true" ? true : false);
-    console.log(navOpen);
   }, [navOpen]);
 
   return (
