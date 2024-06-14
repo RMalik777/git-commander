@@ -35,47 +35,56 @@ export default function Settings() {
     setUsername(localStorage.getItem("username") || "IDxxxxx");
   }, []);
 
-  const form = useForm({
+  const usernameForm = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
     },
   });
-  const { handleSubmit, reset } = form;
+  const { handleSubmit, reset } = usernameForm;
 
   function onSubmit(values) {
     localStorage.setItem("username", values.username);
     reset();
   }
   return (
-    <Card>
-      <CardHeader className="px-6 pb-3">
-        <CardTitle>Profile</CardTitle>
-        <CardDescription>Profile configuration</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem className="">
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder={username} {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This will be the <b>user.name</b> used when committing
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Submit</Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+    <>
+      <Card>
+        <CardHeader className="px-6 pb-3">
+          <CardTitle>Profile</CardTitle>
+          <CardDescription>Profile configuration</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...usernameForm}>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={usernameForm.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder={username} {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This will be the <b>user.name</b> used when committing
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Submit</Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+      <Button
+        variant="destructive"
+        onClick={() => {
+          localStorage.clear();
+        }}>
+        Clear Settings
+      </Button>
+    </>
   );
 }
