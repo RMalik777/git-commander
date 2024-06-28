@@ -1,15 +1,7 @@
-import { Check, ChevronsUpDown, CloudDownload } from "lucide-react";
 import { useState } from "react";
+import { open } from "@tauri-apps/api/dialog";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Command,
   CommandEmpty,
@@ -42,11 +34,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+
+import { Check, ChevronsUpDown, CloudDownload } from "lucide-react";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+
+import * as git from "@/lib/git";
 
 const links = [
   {
@@ -58,7 +55,7 @@ const links = [
     label: "https://github.com/RMalik777/porto",
   },
   {
-    value: "dashone",
+    value: "DashOne",
     label: "https://github.com/RMalik777/DashOne",
   },
   {
@@ -66,33 +63,55 @@ const links = [
     label: "https://github.com/RMalik777/web-blog",
   },
   {
-    value: "filebag",
+    value: "FileBag",
     label: "https://github.com/RMalik777/FileBag",
   },
 ];
 
 const FormSchema = z.object({
   target: z.string({
-    required_error: "Please select a language.",
+    required_error: "Please select a repository!",
+  }),
+  location: z.string().min(2, {
+    message: "Please select a location!",
   }),
 });
 export default function Clone() {
+  const [comboOpen, setComboOpen] = useState(false);
   const cloneForm = useForm({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      location: "",
+    },
   });
   const { handleSubmit, reset } = cloneForm;
   function onSubmit(values) {
-    console.log(values);
+    console.log(values.target);
+    const repository = links.find((link) => link.value === values.target);
+    git.clone(values.location, repository.label);
+    localStorage.setItem("currentRepoName", repository.value);
+    setLocation("");
+    reset();
   }
 
-  const [open, setOpen] = useState(false);
-
+  const [location, setLocation] = useState("");
+  async function openFile() {
+    const toOpen = await open({
+      multiple: false,
+      directory: true,
+    });
+    if (toOpen) {
+      setLocation(toOpen);
+      return toOpen;
+    }
+    return "";
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">Clone</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[480px] lg:max-w-[720px]">
+      <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[720px] xl:max-w-[960px]">
         <DialogHeader>
           <DialogTitle>Clone Remote Repository</DialogTitle>
           <DialogDescription>
@@ -107,15 +126,15 @@ export default function Clone() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Repository</FormLabel>
-                  <Popover open={open} onOpenChange={setOpen}>
+                  <Popover open={comboOpen} onOpenChange={setComboOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant="outline"
                           role="combobox"
-                          aria-expanded={open}
+                          aria-expanded={comboOpen}
                           className={cn(
-                            "w-full justify-between",
+                            "h-fit w-full justify-between whitespace-normal break-all text-left",
                             !field.value && "text-muted-foreground"
                           )}>
                           {field.value ?
@@ -138,9 +157,9 @@ export default function Clone() {
                                 value={link.value}
                                 onSelect={() => {
                                   cloneForm.setValue("target", link.value);
-                                  setOpen(false);
+                                  setComboOpen(false);
                                 }}
-                                className="break-all">
+                                className="whitespace-normal break-all">
                                 <Check
                                   className={cn(
                                     "mr-2 h-4 w-4",
@@ -162,6 +181,42 @@ export default function Clone() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={cloneForm.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Location</FormLabel>
+                  <FormControl>
+                    <div className="flex flex-row gap-2">
+                      <Input
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e); // Handle field change
+                          setLocation(e.target.value); // Also update local state
+                        }}
+                        value={location}
+                        placeholder="Location"
+                      />
+                      <Button
+                        variant="outline"
+                        type="button"
+                        onClick={async () => {
+                          const newLocation = await openFile();
+                          field.onChange({ target: { value: newLocation } }); // Update form control's value
+                        }}>
+                        Open
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormDescription>
+                    Location to store cloned repository.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <DialogFooter>
               <Button
                 type="submit"
