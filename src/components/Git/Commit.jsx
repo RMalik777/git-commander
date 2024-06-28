@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ToastAction } from "@/components/ui/toast";
 
 import * as git from "@/lib/git";
 
@@ -52,7 +53,7 @@ export default function Commit() {
   const { handleSubmit, reset } = commitForm;
   function onSubmit(values) {
     console.log(values.commitMsg);
-    // git.commit(workDir, values.commitMsg);
+    // git.commitAll(workDir, values.commitMsg);
     toast({
       title: "Successfully Commited",
       description: (
@@ -63,6 +64,15 @@ export default function Commit() {
           Commit Message: <br />
           <p>{values.commitMsg}</p>
         </>
+      ),
+      action: (
+        <ToastAction
+          altText="Push"
+          onClick={() => {
+            git.push(workDir);
+          }}>
+          Push
+        </ToastAction>
       ),
     });
     reset();

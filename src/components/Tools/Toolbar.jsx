@@ -18,22 +18,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/ui/use-toast";
 
 import {
   ArrowDownToLine,
   ArrowUpToLine,
   GitBranch,
   GitCompare,
+  Undo2,
 } from "lucide-react";
 
 import * as git from "@/lib/git";
 
 export default function Toolbar() {
+  const { toast } = useToast();
+
   const [currentBranch, setCurrentBranch] = useState("");
   const [branchList, setBranchList] = useState([]);
 
   const username = useSelector((state) => state.user.value);
   const repoName = useSelector((state) => state.repo.value);
+  const dirLocation = useSelector((state) => state.dir.value);
 
   useLayoutEffect(() => {
     async function getBranch() {
@@ -111,12 +116,17 @@ export default function Toolbar() {
               <div className="flex gap-4">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button size="icon" variant="outline">
-                      <ArrowDownToLine
-                        onClick={() => {
-                          git.pull();
-                        }}
-                      />
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={async () => {
+                        const response = await git.pull(dirLocation);
+                        toast({
+                          title: "Pulled Succesfully",
+                          description: response,
+                        });
+                      }}>
+                      <ArrowDownToLine />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
@@ -125,16 +135,44 @@ export default function Toolbar() {
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button size="icon" variant="outline">
-                      <ArrowUpToLine
-                        onClick={() => {
-                          git.push();
-                        }}
-                      />
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={async () => {
+                        const response = await git.push(dirLocation);
+                        toast({
+                          title: "Pushed Succesfully",
+                          description: response,
+                        });
+                      }}>
+                      <ArrowUpToLine />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p>Push</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </li>
+            <li>
+              <div className="flex gap-4">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      onClick={async () => {
+                        const response = await git.undoLastCommit(dirLocation);
+                        toast({
+                          title: "Undo Succesfully",
+                          description: response,
+                        });
+                      }}>
+                      <Undo2 />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>Undo Last Commit</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
