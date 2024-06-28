@@ -20,7 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-("use client");
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
