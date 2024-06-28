@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "@/lib/Redux/userSlice";
 
@@ -38,10 +37,6 @@ const formSchema = z.object({
 export default function Settings() {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.user.value);
-
-  useEffect(() => {
-    console.log("USER: ", username);
-  }, []);
 
   const usernameForm = useForm({
     resolver: zodResolver(formSchema),
