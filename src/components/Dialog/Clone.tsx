@@ -42,7 +42,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
+import { useAppDispatch } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
 import * as db from "@/lib/database";

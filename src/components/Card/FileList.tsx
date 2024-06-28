@@ -23,6 +23,7 @@ export default function FileList() {
 
   const diffList = useAppSelector((state) => state.repo.diff);
   useEffect(() => {
+    if (dir === "") return;
     async function getDiff() {
       const data = await git.showChanged(dir);
       dispatch(setRepo({ diff: data }));
@@ -32,6 +33,7 @@ export default function FileList() {
 
   const stagedList = useAppSelector((state) => state.repo.staged);
   useEffect(() => {
+    if (dir === "") return;
     async function getStaged() {
       const data = await git.showStaged(dir);
       dispatch(setRepo({ staged: data }));
@@ -40,6 +42,7 @@ export default function FileList() {
   }, [dir]);
 
   useEffect(() => {
+    if (dir === "") return;
     async function getAllChildDir(repo: string) {
       try {
         const dir = await readDir(repo, {});

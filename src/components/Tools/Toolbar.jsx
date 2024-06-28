@@ -75,7 +75,7 @@ export default function Toolbar() {
   const repoName = useAppSelector((state) => state.repo.name);
   const dirLocation = useAppSelector((state) => state.repo.directory);
   useLayoutEffect(() => {
-    console.log("RAN");
+    if (repoName === "") return;
     async function getBranch() {
       const target = await git.currentBranch(dirLocation);
       const newBranchList = await git.branchList(dirLocation);

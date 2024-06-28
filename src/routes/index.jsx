@@ -11,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import * as git from "@/lib/git";
 
@@ -22,16 +21,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeRepo, setRepo } from "@/lib/Redux/repoSlice";
 
 export default function Index() {
-  const repoName = useSelector((state) => state.repo.name);
   const dir = useSelector((state) => state.repo.directory);
   const dispatch = useDispatch();
 
   const [isGitRepo, setIsGitRepo] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [dirList, setDirList] = useState([]);
-
-  const diffList = useSelector((state) => state.repo.diff);
   useEffect(() => {
+    if (!dir || dir == "") return;
     async function getDiff() {
       const data = await git.showChanged(dir);
       dispatch(setRepo({ diff: data }));
@@ -39,31 +35,14 @@ export default function Index() {
     getDiff();
   }, [dir]);
 
-  const stagedList = useSelector((state) => state.repo.staged);
   useEffect(() => {
+    if (!dir || dir == "") return;
     async function getStaged() {
       const data = await git.showStaged(dir);
       dispatch(setRepo({ staged: data }));
     }
     getStaged();
   }, [dir]);
-
-  useEffect(() => {
-    async function getAllChildDir(repo) {
-      try {
-        const dir = await fs.readDir(repo, {});
-        console.log(dir);
-        return dir;
-      } catch (error) {
-        console.error(error);
-        return [];
-      }
-    }
-    async function setDirectory() {
-      setDirList(await getAllChildDir(dir));
-    }
-    setDirectory();
-  }, [repoName, dir]);
 
   async function openFile() {
     const toOpen = await open({
@@ -83,7 +62,7 @@ export default function Index() {
 
   return (
     <>
-      <div className="flex min-h-fit flex-col lg:flex-row gap-4">
+      <div className="flex min-h-fit flex-col gap-4 lg:flex-row">
         <Card className="h-fit flex-grow">
           <CardHeader className="bg-gray-100 pb-3">
             <CardTitle>Git Repository</CardTitle>
