@@ -3,7 +3,6 @@ import { open } from "@tauri-apps/api/dialog";
 import { fs } from "@tauri-apps/api";
 
 import { Button } from "@/components/ui/button";
-import { Command } from "@tauri-apps/api/shell";
 import {
   Card,
   CardContent,
@@ -15,57 +14,21 @@ import {
 
 import * as git from "@/lib/git";
 
-import { invoke } from "@tauri-apps/api/tauri";
-
 import Commit from "@/components/Git/Commit";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setRepo } from "@/lib/Redux/repoSlice";
+import { setDir } from "@/lib/Redux/dirSlice";
 
 export default function Index() {
   const [isGitRepo, setIsGitRepo] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
   const [dirList, setDirList] = useState([]);
 
-  async function clone(path = repo) {
-    const command = new Command(
-      "git 2 args",
-      ["clone", "https://github.com/RMalik777/tigabot.git"],
-      { cwd: path }
-    );
-    command.stdout.on("data", (data) => {
-      console.log("stdout: ", data);
-    });
-    command.stderr.on("data", (line) => {
-      console.log(`command stderr: "${line}"`);
-    });
-    await command.spawn().catch((error) => {
-      console.error(error);
-    });
-  }
-
-  async function checkGit(path = repo) {
-    setErrorMsg(null);
-    const command = new Command("git 1 args", ["status"], { cwd: path });
-    command.on("close", (data) => {
-      console.log(
-        `command finished with code ${data.code} and signal ${data.signal}`
-      );
-    });
-    command.on("error", (error) => console.error(`command error: "${error}"`));
-    command.stdout.on("data", (data) => {
-      setIsGitRepo(true);
-      console.log("stdout: ", data);
-    });
-    command.stderr.on("data", (line) => {
-      setIsGitRepo(false);
-      console.log(`command stderr: "${line}"`);
-    });
-
-    await command.spawn().catch((error) => {
-      setErrorMsg(error);
-      console.error(error);
-    });
-  }
-
-  const [repo, setRepo] = useState("path/to/repo");
+  const repoName = useSelector((state) => state.repo.value);
+  const dir = useSelector((state) => state.dir.value);
+  const dispatch = useDispatch();
+  
   useEffect(() => {
     async function getAllChildDir(repo) {
       try {
@@ -78,11 +41,11 @@ export default function Index() {
       }
     }
     async function setDirectory() {
-      setDirList(await getAllChildDir(repo));
+      setDirList(await getAllChildDir(dir));
     }
-    setRepo(localStorage.getItem("repoDir") || "path/to/repo");
     setDirectory();
-  }, [repo]);
+  }, [repoName, dir]);
+
   async function openFile() {
     const toOpen = await open({
       multiple: false,
@@ -90,11 +53,16 @@ export default function Index() {
     });
     if (toOpen) {
       localStorage.setItem("repoDir", toOpen);
-      setRepo(toOpen);
-      const repoName = toOpen.split("\\").pop();
-      localStorage.setItem("currentRepoName", repoName);
+      setDir(toOpen);
+      const repoNameNew = toOpen.split("\\").pop();
+      localStorage.setItem("currentRepoName", repoNameNew);
+      dispatch(setRepo(repoNameNew));
+      dispatch(setDir(toOpen));
     }
-    await checkGit(toOpen);
+    const data = await git.checkGit(toOpen);
+    console.log(data);
+    setIsGitRepo(data.isGitRepo);
+    setErrorMsg(data.errorMsg);
   }
 
   return (
@@ -109,7 +77,7 @@ export default function Index() {
           </CardHeader>
           <CardContent className="pt-3">
             <p className="w-fit rounded border bg-gray-100 px-2 py-1 text-gray-900">
-              <code className="">{repo}</code>
+              <code className="">{dir}</code>
             </p>
             <span className={isGitRepo ? "text-green-600" : "text-red-600"}>
               {isGitRepo ? "\u00A0" : errorMsg ?? "Error! Not a git repository"}
@@ -129,18 +97,11 @@ export default function Index() {
               variant="secondary"
               onClick={() => {
                 localStorage.removeItem("repoDir");
-                setRepo("no directory selected");
+                setDir("no directory selected");
               }}>
               Close Repository
             </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={async () => {
-                await invoke("get_all_remote_repo").then((data) =>
-                  console.log(data)
-                );
-              }}>
+            <Button size="sm" variant="outline" onClick={() => {}}>
               Trial
             </Button>
           </CardFooter>

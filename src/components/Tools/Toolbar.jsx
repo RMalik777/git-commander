@@ -1,5 +1,5 @@
-import { useEffect, useState, useLayoutEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState, useLayoutEffect } from "react";
+import { useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -29,26 +29,23 @@ import {
 import * as git from "@/lib/git";
 
 export default function Toolbar() {
-  const [position, setPosition] = useState("bottom");
-
-  const [currentRepo, setCurrentRepo] = useState("");
   const [currentBranch, setCurrentBranch] = useState("main");
   const [branchList, setBranchList] = useState([]);
 
   const username = useSelector((state) => state.user.value);
+  const repoName = useSelector((state) => state.repo.value);
 
   useLayoutEffect(() => {
     async function getBranch() {
-      const repo = localStorage.getItem("repoDir");
-      const target = await git.currentBranch(repo);
-      const branchlist = await git.branchList(repo);
+      const repoDir = localStorage.getItem("repoDir");
+      const target = await git.currentBranch(repoDir);
+      const branchlist = await git.branchList(repoDir);
       setBranchList(branchlist);
       setCurrentBranch(target);
       console.log(target);
     }
-    setCurrentRepo(localStorage.getItem("currentRepoName") || "Empty");
     getBranch();
-  }, [username]);
+  }, [repoName]);
 
   return (
     <div className="justify- flex h-fit flex-row items-center justify-between border-b border-neutral-200 px-3 py-3">
@@ -56,7 +53,7 @@ export default function Toolbar() {
         <div className="flex h-full flex-row items-center gap-4">
           <Button variant="outline" size="sm">
             <h1 className="">
-              <span>{currentRepo}</span>/{currentBranch}
+              <span>{repoName}</span>/{currentBranch}
             </h1>
           </Button>
           <Separator orientation="vertical" className="h-full" />

@@ -1,5 +1,37 @@
 import { Command } from "@tauri-apps/api/shell";
 
+export async function checkGit(path) {
+  let errorMsg = null;
+  let isGitRepo = false;
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 1 args", ["status"], { cwd: path });
+    command.on("close", (data) => {
+      console.log(
+        `command finished with code ${data.code} and signal ${data.signal}`
+      );
+      resolve({ isGitRepo, errorMsg });
+    });
+    command.on("error", (error) => {
+      console.error(`command error: "${error}"`);
+      reject(new Error(error));
+    });
+    command.stdout.on("data", (data) => {
+      isGitRepo = true;
+      console.log("stdout: ", data);
+    });
+    command.stderr.on("data", (line) => {
+      isGitRepo = false;
+      console.log(`command stderr: "${line}"`);
+    });
+    command.spawn().catch((error) => {
+      errorMsg = error;
+      console.error(error);
+      reject(new Error(error));
+    });
+  });
+  return await response;
+}
+
 export async function configUsername(username) {
   const command = new Command("git username", [
     "config --global user.name",
