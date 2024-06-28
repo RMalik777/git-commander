@@ -2,7 +2,7 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import react from "eslint-plugin-react";
-import tseslint from 'typescript-eslint';
+import tseslint from "typescript-eslint";
 
 export default [
   pluginJs.configs.recommended,
