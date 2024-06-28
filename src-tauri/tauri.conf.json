@@ -33,6 +33,23 @@
             ]
           },
           {
+            "name": "git ssl",
+            "cmd": "git",
+            "args": [
+              "config --global http.sslVerify false"
+            ]
+          },
+          {
+            "name": "git username",
+            "cmd": "git",
+            "args": [
+              "config --global user.name",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
             "name": "git 1 args",
             "cmd": "git",
             "args": [
