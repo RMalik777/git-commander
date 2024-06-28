@@ -1,0 +1,8 @@
+-- Your SQL goes here
+CREATE TABLE remote_repository(
+  id VARCHAR(50) PRIMARY KEY NOT NULL,
+  repo_name VARCHAR(255) NOT NULL,
+  repo_url VARCHAR(255) NOT NULL,
+  repo_type VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+)
