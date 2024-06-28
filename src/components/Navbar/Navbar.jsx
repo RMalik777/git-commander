@@ -42,7 +42,7 @@ export default function Navbar() {
             <li className="w-full">
               <Tooltip open={navOpen ? false : undefined}>
                 <TooltipTrigger asChild>
-                  <NavLink to={"/"} className="group block h-fit w-full">
+                  <NavLink to="/" className="group block h-fit w-full">
                     <Button
                       className={
                         "" + (navOpen ? "w-full justify-start gap-2 p-2" : "")
@@ -64,7 +64,7 @@ export default function Navbar() {
             <li className="w-full">
               <Tooltip open={navOpen ? false : undefined}>
                 <TooltipTrigger asChild>
-                  <NavLink to={"/git"} className="group block h-fit w-full">
+                  <NavLink to="/git" className="group block h-fit w-full">
                     <Button
                       className={
                         "" + (navOpen ? "w-full justify-start gap-2 p-2" : "")
@@ -86,9 +86,7 @@ export default function Navbar() {
             <li className="w-full">
               <Tooltip open={navOpen ? false : undefined}>
                 <TooltipTrigger asChild>
-                  <NavLink
-                    to={"/settings"}
-                    className="group block h-fit w-full">
+                  <NavLink to="/settings" className="group block h-fit w-full">
                     <Button
                       className={
                         "" + (navOpen ? "w-full justify-start gap-2 p-2" : "")
