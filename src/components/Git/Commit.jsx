@@ -40,8 +40,8 @@ const formSchema = z.object({
 
 export default function Commit() {
   const [commitMsg, setCommitMsg] = useState("");
-  const workDir = useSelector((state) => state.dir.value);
-  const repoName = useSelector((state) => state.repo.value);
+  const repoName = useSelector((state) => state.repo.name);
+  const workDir = useSelector((state) => state.repo.directory);
 
   const commitForm = useForm({
     resolver: zodResolver(formSchema),
