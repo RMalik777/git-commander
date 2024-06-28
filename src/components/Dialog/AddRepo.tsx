@@ -37,7 +37,7 @@ const formSchema = z.object({
   link: z.string().url({ message: "Please enter a valid URL" }),
 });
 
-export default function AddRepo({ afterAdd }) {
+export default function AddRepo({ afterAdd }: { afterAdd: () => void }) {
   const [open, setOpen] = useState(false);
 
   const addRepoForm = useForm<z.infer<typeof formSchema>>({
