@@ -17,6 +17,7 @@ export default [
       ...react.configs.recommended.rules,
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
+      "react/jsx-curly-brace-presence": "warn",
     },
     settings: {
       react: {
