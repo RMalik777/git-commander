@@ -17,11 +17,9 @@ export async function checkGit(path) {
     });
     command.stdout.on("data", (data) => {
       isGitRepo = true;
-      console.log("stdout: ", data);
     });
     command.stderr.on("data", (line) => {
       isGitRepo = false;
-      console.log(`command stderr: "${line}"`);
     });
     command.spawn().catch((error) => {
       errorMsg = error;
@@ -124,7 +122,7 @@ export async function status(path) {
 }
 
 export async function currentBranch(path) {
-  const regex = /(?:on branch) ([\S\s]+\S)/gi;
+  const regex = /(?:on branch) ([\S\s]+)/gi;
   const command = new Command("git 1 args", ["status"], { cwd: path });
   const response = new Promise((resolve, reject) => {
     let result;
@@ -135,7 +133,7 @@ export async function currentBranch(path) {
     command.stdout.on("data", (data) => {
       if (data.match(regex)) {
         result = RegExp(regex).exec(data)[1];
-        resolve(result);
+        resolve(result.trim());
       }
     });
     command.stderr.on("data", (line) => {
@@ -162,7 +160,7 @@ export async function branchList(path) {
         .replace(/[*+]/g, "")
         .replace(/origin\//gi, "")
         .trim();
-      if (!(toPush == "HEAD -> main")) result.push(toPush);
+      if (toPush != "HEAD -> main") result.push(toPush);
     });
     command.stderr.on("data", (line) => {
       console.log(`command stderr: "${line}"`);
@@ -188,8 +186,73 @@ export async function switchBranch(path, branch) {
   console.log(command);
 }
 
-export async function commit(path, message) {
-  const command = new Command("git 3 args", ["commit", "-m", message], {
-    cwd: path,
+export async function showChanged(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 2 args", ["diff", "--name-only"], {
+      cwd: path,
+    });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => {
+      result.push(line.trim().replace(/[\n\r]/g, ""));
+    });
+    command.stderr.on("data", (line) => {
+      console.log(`command stderr: "${line}"`);
+    });
+    command.spawn().catch((error) => {
+      reject(new Error(error));
+    });
   });
+  return await response;
+}
+
+export async function showStaged(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command(
+      "git 3 args",
+      ["diff", "--name-only", "--cached"],
+      {
+        cwd: path,
+      }
+    );
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => {
+      result.push(line.trim().replace(/[\n\r]/g, ""));
+    });
+    command.stderr.on("data", (line) => {
+      console.log(`command stderr: "${line}"`);
+    });
+    command.spawn().catch((error) => {
+      reject(new Error(error));
+    });
+  });
+  return await response;
+}
+
+export async function commitAll(path, message) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 3 args", ["commit", "-m", message], {
+      cwd: path,
+    });
+    command.on("close", (data) => {
+      console.log(
+        `command finished with code ${data.code} and signal ${data.signal}`
+      );
+      resolve(data);
+    });
+    command.on("error", (error) => console.error(`command error: "${error}"`));
+    command.stdout.on("data", (line) => {
+      console.log(`command stdout: "${line}"`);
+    });
+    command.stderr.on("data", (line) => {
+      console.log(`command stderr: "${line}"`);
+    });
+    command.spawn().catch((error) => {
+      reject(new Error(error));
+    });
+  });
+  return await response;
 }

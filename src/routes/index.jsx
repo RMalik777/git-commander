@@ -21,13 +21,31 @@ import { setRepo } from "@/lib/Redux/repoSlice";
 import { setDir } from "@/lib/Redux/dirSlice";
 
 export default function Index() {
+  const repoName = useSelector((state) => state.repo.value);
+  const dir = useSelector((state) => state.dir.value);
+  const dispatch = useDispatch();
+
   const [isGitRepo, setIsGitRepo] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
   const [dirList, setDirList] = useState([]);
 
-  const repoName = useSelector((state) => state.repo.value);
-  const dir = useSelector((state) => state.dir.value);
-  const dispatch = useDispatch();
+  const [diffList, setDiffList] = useState([]);
+  useEffect(() => {
+    async function getDiff() {
+      const data = await git.showChanged(dir);
+      setDiffList(data);
+    }
+    getDiff();
+  }, [dir]);
+
+  const [stagedList, setStagedList] = useState([]);
+  useEffect(() => {
+    async function getStaged() {
+      const data = await git.showStaged(dir);
+      setStagedList(data);
+    }
+    getStaged();
+  }, [dir]);
 
   useEffect(() => {
     async function getAllChildDir(repo) {
@@ -60,7 +78,6 @@ export default function Index() {
       dispatch(setDir(toOpen));
     }
     const data = await git.checkGit(toOpen);
-    console.log(data);
     setIsGitRepo(data.isGitRepo);
     setErrorMsg(data.errorMsg);
   }
@@ -101,7 +118,13 @@ export default function Index() {
               }}>
               Close Repository
             </Button>
-            <Button size="sm" variant="outline" onClick={() => {}}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={async () => {
+                const data = await git.showChanged(dir);
+                console.log(data);
+              }}>
               Trial
             </Button>
           </CardFooter>
@@ -116,14 +139,41 @@ export default function Index() {
           </CardHeader>
           <CardContent className="pt-3">
             <ul className="flex flex-col rounded border bg-gray-100 p-2">
-              {dirList?.map((file) => {
+              {dirList.map((file) => {
+                const isChanged = diffList.some(
+                  (diffFile) =>
+                    diffFile === file.name ||
+                    diffFile.split("/").shift() ===
+                      file.path.replace(dir + "\\", "")
+                );
+                const isStaged = stagedList.some(
+                  (stagedFile) =>
+                    stagedFile === file.name ||
+                    stagedFile.split("/").shift() ===
+                      file.path.replace(dir + "\\", "")
+                );
                 return (
                   <li key={file.path} className="w-fit">
-                    <code className="w-fit text-sm">{file.name}</code>
+                    <code
+                      className={
+                        (isChanged ? "text-bold text-blue-600" : "") +
+                        (isStaged ? " text-green-600" : "") +
+                        " w-fit text-sm"
+                      }>
+                      {file.name}
+                    </code>
                   </li>
                 );
               })}
             </ul>
+            <div className="flex flex-col">
+              <small>
+                <span className="text-blue-600">blue</span> = changed file
+              </small>
+              <small>
+                <span className="text-green-600">green</span> = staged file
+              </small>
+            </div>
           </CardContent>
         </Card>
       </div>

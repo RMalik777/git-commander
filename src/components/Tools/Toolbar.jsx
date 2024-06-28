@@ -29,7 +29,7 @@ import {
 import * as git from "@/lib/git";
 
 export default function Toolbar() {
-  const [currentBranch, setCurrentBranch] = useState("main");
+  const [currentBranch, setCurrentBranch] = useState("");
   const [branchList, setBranchList] = useState([]);
 
   const username = useSelector((state) => state.user.value);
@@ -39,10 +39,12 @@ export default function Toolbar() {
     async function getBranch() {
       const repoDir = localStorage.getItem("repoDir");
       const target = await git.currentBranch(repoDir);
-      const branchlist = await git.branchList(repoDir);
-      setBranchList(branchlist);
-      setCurrentBranch(target);
-      console.log(target);
+      const newBranchList = await git.branchList(repoDir);
+      setBranchList(newBranchList);
+      const showedBranch = newBranchList.find(
+        (branch) => branch.toLowerCase() === target.toLowerCase()
+      );
+      setCurrentBranch(showedBranch.toString());
     }
     getBranch();
   }, [repoName]);
