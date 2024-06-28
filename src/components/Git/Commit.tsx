@@ -1,4 +1,5 @@
 import { useAppSelector } from "@/lib/Redux/hooks";
+import { NavLink } from "react-router-dom";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,9 +58,13 @@ export default function Commit() {
         title: "No Changes",
         description:
           "No changes to commit, add changed file to staged before commiting",
+        action: (
+          <ToastAction altText="Add" onClick={() => {}} asChild>
+            <NavLink to="/folder">Staging Area</NavLink>
+          </ToastAction>
+        ),
       });
-    }
-    if (RegExp(/nothing to commit/gi).test(response)) {
+    } else if (RegExp(/nothing to commit/gi).test(response)) {
       toast({
         title: "Nothing to Commit",
         description: "No changes to commit",
