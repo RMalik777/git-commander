@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
-import { fs } from "@tauri-apps/api";
 
 import { Button } from "@/components/ui/button";
 import {
