@@ -1,4 +1,5 @@
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState, useLayoutEffect, useContext } from "react";
+import { BranchContext } from "@/lib/context";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -28,6 +29,8 @@ import {
 import * as git from "@/lib/git";
 
 export default function Toolbar() {
+  const trialBranch = useContext(BranchContext);
+
   const [position, setPosition] = useState("bottom");
 
   const [currentRepo, setCurrentRepo] = useState("Empty");
