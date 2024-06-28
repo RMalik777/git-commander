@@ -51,7 +51,7 @@ export default function RepoTable({
               </Button>
               <ConfirmationDialog
                 open={openDialogId === repo.id}
-                repoName={repo.repo_name}
+                title={"Delete " + repo.repo_name + " ?"}
                 setOpen={() => setOpenDialogId("")}
                 message={
                   <>
