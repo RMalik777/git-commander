@@ -130,7 +130,7 @@ export default function Settings() {
           <RepoTable repos={repos} onDeleteRepo={handleDelete} />
         </CardContent>
         <CardFooter>
-          <AddRepo />
+          <AddRepo afterAdd={fetchData} />
         </CardFooter>
       </Card>
 

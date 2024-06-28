@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -11,39 +10,9 @@ import {
 
 import { Button } from "@/components/ui/button";
 
-import * as db from "@/lib/database";
 import type { RepoFormat } from "@/lib/Types/repo";
 
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
-import { useToast } from "@/components/ui/use-toast";
-
-const repo_data = [
-  {
-    name: "git-commander",
-    link: "https://github.com/RMalik777/git-commander",
-    provider: "GitHub",
-  },
-  {
-    name: "porto",
-    link: "https://github.com/RMalik777/porto",
-    provider: "GitHub",
-  },
-  {
-    name: "DashOne",
-    link: "https://github.com/RMalik777/DashOne",
-    provider: "GitHub",
-  },
-  {
-    name: "web-blog",
-    link: "https://github.com/RMalik777/web-blog",
-    provider: "GitHub",
-  },
-  {
-    name: "FileBag",
-    link: "https://github.com/RMalik777/FileBag",
-    provider: "GitHub",
-  },
-];
 
 export default function RepoTable({
   repos,
@@ -90,7 +59,7 @@ export default function RepoTable({
                     sure?
                   </>
                 }
-                onConfirm={() => onDeleteRepo(repo.id, repo.repo_name)} 
+                onConfirm={() => onDeleteRepo(repo.id, repo.repo_name)}
               />
             </TableCell>
           </TableRow>
