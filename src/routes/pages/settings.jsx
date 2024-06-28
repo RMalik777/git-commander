@@ -62,7 +62,7 @@ export default function Settings() {
   }
   const { toast } = useToast();
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <Card>
         <CardHeader className="bg-gray-100 pb-3">
           <CardTitle>Profile</CardTitle>
@@ -109,12 +109,13 @@ export default function Settings() {
       </Card>
 
       <Button
+      className="w-fit self-end"
         variant="destructive"
         onClick={() => {
           localStorage.clear();
         }}>
         Clear Settings
       </Button>
-    </>
+    </div>
   );
 }
