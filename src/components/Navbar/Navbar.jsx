@@ -74,12 +74,12 @@ export default function Navbar() {
                         currentPath.pathname == "/folder" ? "default" : "ghost"
                       }>
                       <FolderGit2 className="" />
-                      {navOpen ? "Source" : ""}
+                      {navOpen ? "Content" : ""}
                     </Button>
                   </NavLink>
                 </TooltipTrigger>
                 <TooltipContent side="right">
-                  <p>Git</p>
+                  <p>Content</p>
                 </TooltipContent>
               </Tooltip>
             </li>
