@@ -22,15 +22,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "../ui/use-toast";
+
+import * as db from "@/lib/database";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z
@@ -41,6 +38,8 @@ const formSchema = z.object({
 });
 
 export default function AddRepo() {
+  const [open, setOpen] = useState(false);
+
   const addRepoForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,17 +48,28 @@ export default function AddRepo() {
     },
   });
   const { handleSubmit, reset } = addRepoForm;
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    reset();
-    toast({
-      title: "Repository added",
-      description: `Repository ${values.name} added successfully`,
-    });
+    const response = await db.insertIntoRepo(values.name, values.link);
+    console.log(await response);
+    if (response instanceof Error) {
+      toast({
+        title: "Error",
+        description: response.message,
+        variant: "destructive",
+      });
+    } else {
+      reset();
+      toast({
+        title: "Repository added",
+        description: `Repository ${values.name} added successfully`,
+      });
+      setOpen(false);
+    }
   }
   const { toast } = useToast();
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Add Repo</Button>
       </DialogTrigger>
@@ -91,7 +101,7 @@ export default function AddRepo() {
                     <FormDescription>
                       Repository name that will be shown
                     </FormDescription>
-                    <FormMessage /> 
+                    <FormMessage />
                   </div>
                 </FormItem>
               )}

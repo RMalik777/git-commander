@@ -43,12 +43,19 @@ const repo_data = [
 ];
 
 export default function RepoTable() {
-  const [repos, setRepos] = useState<RepoFormat[]>([]);
+  const [repos, setRepos] = useState<RepoFormat[]>();
   useEffect(() => {
-    db.getAllRepo().then((data) => {
-      setRepos(data);
-    });
-  });
+    async function fetchData() {
+      try {
+        const response = await db.getAllRepo();
+        setRepos(response);
+        console.log("Responses", response);
+      } catch (error) {
+        console.error("A", error);
+      }
+    }
+    fetchData();
+  }, []);
   return (
     <Table>
       <TableCaption>A list of your remote repositories</TableCaption>
@@ -69,7 +76,12 @@ export default function RepoTable() {
               </a>
             </TableCell>
             <TableCell className="text-center">
-              <Button variant="destructive" size="sm">
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={async () => {
+                  db.deleteRemoteRepoById(repo.id);
+                }}>
                 Delete
               </Button>
             </TableCell>
