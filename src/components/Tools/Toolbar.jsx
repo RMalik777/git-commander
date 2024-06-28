@@ -35,16 +35,6 @@ import {
 import * as git from "@/lib/git";
 
 export default function Toolbar() {
-  const { toast } = useToast();
-  const dispatch = useAppDispatch();
-
-  const currentBranch = useAppSelector((state) => state.repo.branch);
-  const [branchList, setBranchList] = useState([]);
-
-  const username = useAppSelector((state) => state.user.value);
-  const repoName = useAppSelector((state) => state.repo.name);
-  const dirLocation = useAppSelector((state) => state.repo.directory);
-
   let themeMode;
   themeMode = window.localStorage.getItem("theme");
   window
@@ -74,7 +64,18 @@ export default function Toolbar() {
         }
       }
     });
+
+  const { toast } = useToast();
+  const dispatch = useAppDispatch();
+
+  const currentBranch = useAppSelector((state) => state.repo.branch);
+  const [branchList, setBranchList] = useState([]);
+
+  const username = useAppSelector((state) => state.user.value);
+  const repoName = useAppSelector((state) => state.repo.name);
+  const dirLocation = useAppSelector((state) => state.repo.directory);
   useLayoutEffect(() => {
+    console.log("RAN");
     async function getBranch() {
       const target = await git.currentBranch(dirLocation);
       const newBranchList = await git.branchList(dirLocation);
