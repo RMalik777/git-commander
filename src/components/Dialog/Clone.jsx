@@ -111,7 +111,7 @@ export default function Clone() {
       <DialogTrigger asChild>
         <Button variant="outline">Clone</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[720px] xl:max-w-[960px]">
+      <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
         <DialogHeader>
           <DialogTitle>Clone Remote Repository</DialogTitle>
           <DialogDescription>
