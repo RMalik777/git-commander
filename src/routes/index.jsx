@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import * as git from "@/lib/git";
 
 import Commit from "@/components/Git/Commit";
+import Clone from "@/components/Dialog/Clone";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setRepo } from "@/lib/Redux/repoSlice";
@@ -107,22 +108,14 @@ export default function Index() {
               }}>
               Open Repository
             </Button>
+            <Clone />
             <Button
               size="sm"
-              variant="secondary"
+              variant="destructive"
               onClick={() => {
                 localStorage.removeItem("repoDir");
               }}>
               Close Repository
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={async () => {
-                const data = await git.showChanged(dir);
-                console.log(data);
-              }}>
-              Trial
             </Button>
           </CardFooter>
         </Card>
