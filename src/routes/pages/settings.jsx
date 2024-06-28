@@ -41,9 +41,11 @@ export default function Settings() {
       username: "",
     },
   });
+  const { handleSubmit, reset } = form;
 
   function onSubmit(values) {
     localStorage.setItem("username", values.username);
+    reset();
   }
   return (
     <Card>
@@ -53,7 +55,7 @@ export default function Settings() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="username"
