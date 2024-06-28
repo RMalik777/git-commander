@@ -26,7 +26,7 @@ export const repoSlice = createSlice({
         directory?: string;
         branch?: string;
         diff?: string[];
-        staged: string[];
+        staged?: string[];
       }>
     ) => {
       state.name = action.payload.name ?? state.name;
