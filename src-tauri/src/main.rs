@@ -16,16 +16,11 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             get_all_remote_repo,
-            my_custom_command
+            get_remote_repo_by_id,
+            insert_remote_repo,
+            delete_all_remote_repo,
+            delete_remote_repo_by_id
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-}
-
-#[tauri::command]
-fn my_custom_command() -> Result<(), String> {
-  // This will return an error
-  std::fs::File::open("path/that/does/not/exist").map_err(|err| err.to_string())?;
-  // Return nothing on success
-  Ok(())
 }
