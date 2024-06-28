@@ -15,6 +15,8 @@ import {
 
 import * as git from "@/lib/git";
 
+import { invoke } from "@tauri-apps/api/tauri";
+
 import Commit from "@/components/Git/Commit";
 
 export default function Index() {
@@ -135,8 +137,9 @@ export default function Index() {
               size="sm"
               variant="outline"
               onClick={async () => {
-                const trial = await git.switchBranch(repo, "main");
-                const trial2 = await git.branchList(repo);
+                await invoke("get_all_remote_repo").then((data) =>
+                  console.log(data)
+                );
               }}>
               Trial
             </Button>
