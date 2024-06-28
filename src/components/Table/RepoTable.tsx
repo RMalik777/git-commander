@@ -44,6 +44,7 @@ const repo_data = [
 
 export default function RepoTable() {
   const [repos, setRepos] = useState<RepoFormat[]>();
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -58,7 +59,6 @@ export default function RepoTable() {
   }, []);
   return (
     <Table>
-      <TableCaption>A list of your remote repositories</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
