@@ -7,32 +7,32 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import { ReactNode } from "react";
 
 interface ConfirmationDialogProps {
-  message: string;
-  buttonText: string;
+  open: boolean;
+  repoName: string;
+  setOpen: (open: boolean) => void;
+  message: string | ReactNode;
   onConfirm(): void;
 }
 
 export function ConfirmationDialog({
+  open,
+  repoName,
+  setOpen,
   message,
-  buttonText,
   onConfirm,
 }: Readonly<ConfirmationDialogProps>) {
   function handleConfirm() {
     onConfirm();
   }
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="outline">{buttonText}</Button>
-      </AlertDialogTrigger>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogTitle>Delete {repoName}?</AlertDialogTitle>
           <AlertDialogDescription>{message}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -14,6 +14,9 @@ import { Button } from "@/components/ui/button";
 import * as db from "@/lib/database";
 import type { RepoFormat } from "@/lib/Types/repo";
 
+import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
+import { useToast } from "@/components/ui/use-toast";
+
 const repo_data = [
   {
     name: "git-commander",
@@ -43,18 +46,19 @@ const repo_data = [
 ];
 
 export default function RepoTable() {
+  const { toast } = useToast();
   const [repos, setRepos] = useState<RepoFormat[]>();
+  const [openDialogId, setOpenDialogId] = useState("");
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await db.getAllRepo();
-        setRepos(response);
-        console.log("Responses", response);
-      } catch (error) {
-        console.error("A", error);
-      }
+  async function fetchData() {
+    try {
+      const response = await db.getAllRepo();
+      setRepos(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+  useEffect(() => {
     fetchData();
   }, []);
   return (
@@ -79,11 +83,34 @@ export default function RepoTable() {
               <Button
                 variant="destructive"
                 size="sm"
-                onClick={async () => {
-                  db.deleteRemoteRepoById(repo.id);
+                onClick={() => {
+                  setOpenDialogId(repo.id);
                 }}>
                 Delete
               </Button>
+              <ConfirmationDialog
+                open={openDialogId === repo.id}
+                repoName={repo.repo_name}
+                setOpen={() => setOpenDialogId("")}
+                message={
+                  <>
+                    {repo.repo_name} will be deleted <b>permanently</b>. Are you
+                    sure?
+                  </>
+                }
+                onConfirm={async () => {
+                  await db.deleteRemoteRepoById(repo.id);
+                  fetchData();
+                  toast({
+                    title: "Repository Deleted",
+                    description: (
+                      <>
+                        <code>{repo.repo_name}</code> deleted successfully,
+                      </>
+                    ),
+                  });
+                }}
+              />
             </TableCell>
           </TableRow>
         ))}
