@@ -15,6 +15,8 @@ import {
 
 import * as git from "@/lib/git";
 
+import Commit from "@/components/Git/Commit";
+
 export default function Index() {
   const [isGitRepo, setIsGitRepo] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -161,6 +163,7 @@ export default function Index() {
           </CardContent>
         </Card>
       </div>
+      <Commit />
       <h1>Index</h1>
     </>
   );
