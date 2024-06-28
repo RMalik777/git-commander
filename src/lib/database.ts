@@ -1,11 +1,13 @@
 import { invoke } from "@tauri-apps/api";
+import { RepoFormat } from "@/lib/Types/repo";
 
 export async function getAllRepo() {
   try {
-    const response = await invoke("get_all_remote_repo");
-    return await response;
+    const response: RepoFormat[] = await invoke("get_all_remote_repo");
+    return response;
   } catch (error) {
     console.error(error);
+    throw Error(error as string);
   }
 }
 
@@ -26,7 +28,7 @@ export async function insertIntoRepo(repoName: string, repoUrl: string) {
     });
     return await response;
   } catch (error) {
-    console.error(error);
+    return new Error(error as string);
   }
 }
 
