@@ -1,5 +1,6 @@
 import { useState, useLayoutEffect } from "react";
-import { useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
+import { setRepo } from "@/lib/Redux/repoSlice";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -32,27 +33,27 @@ import * as git from "@/lib/git";
 
 export default function Toolbar() {
   const { toast } = useToast();
+  const dispatch = useAppDispatch();
 
-  const [currentBranch, setCurrentBranch] = useState("");
+  const currentBranch = useAppSelector((state) => state.repo.branch);
   const [branchList, setBranchList] = useState([]);
 
-  const username = useSelector((state) => state.user.value);
-  const repoName = useSelector((state) => state.repo.value);
-  const dirLocation = useSelector((state) => state.dir.value);
+  const username = useAppSelector((state) => state.user.value);
+  const repoName = useAppSelector((state) => state.repo.name);
+  const dirLocation = useAppSelector((state) => state.repo.directory);
 
   useLayoutEffect(() => {
     async function getBranch() {
-      const repoDir = localStorage.getItem("repoDir");
-      const target = await git.currentBranch(repoDir);
-      const newBranchList = await git.branchList(repoDir);
+      const target = await git.currentBranch(dirLocation);
+      const newBranchList = await git.branchList(dirLocation);
       setBranchList(newBranchList);
-      const showedBranch = newBranchList.find(
+      const showedBranch = newBranchList?.find(
         (branch) => branch.toLowerCase() === target.toLowerCase()
       );
-      setCurrentBranch(showedBranch.toString());
+      dispatch(setRepo({ branch: showedBranch }));
     }
     getBranch();
-  }, [repoName]);
+  }, [currentBranch, repoName]);
 
   return (
     <div className="justify- flex h-fit flex-row items-center justify-between border-b border-neutral-200 px-3 py-3">
@@ -85,9 +86,33 @@ export default function Toolbar() {
                     <DropdownMenuSeparator />
                     <DropdownMenuRadioGroup
                       value={currentBranch}
-                      onValueChange={(e) => {
-                        setCurrentBranch(e);
-                        // git.switchBranch(e);
+                      onValueChange={async (e) => {
+                        try {
+                          const response = await git.switchBranch(
+                            dirLocation,
+                            e
+                          );
+                          toast({
+                            title: "Switched Branch",
+                            description: (
+                              <p className="whitespace-pre-wrap break-words">
+                                {response}
+                              </p>
+                            ),
+                          });
+                          dispatch(setRepo({ branch: e }));
+                        } catch (error) {
+                          console.error(error);
+                          toast({
+                            title: "Failed to switch branch",
+                            description: (
+                              <p className="whitespace-pre-wrap break-words">
+                                {error.message}
+                              </p>
+                            ),
+                            variant: "destructive",
+                          });
+                        }
                       }}>
                       {branchList.map((branch) => {
                         return (

@@ -165,10 +165,34 @@ export async function branchList(path) {
 }
 
 export async function switchBranch(path, branch) {
-  const command = await new Command("git 2 args", ["switch", branch], {
-    cwd: path,
-  }).execute();
-  console.log(command);
+  const response = new Promise((resolve, reject) => {
+    const resultNormal = [],
+      resultReject = [];
+    const command = new Command("git 2 args", ["switch", branch], {
+      cwd: path,
+    });
+    command.on("close", () => {
+      if (resultReject.length > 1) {
+        const result = resultReject.join("").trim();
+        const leadingError = /(^error:)([\S\s]+)(aborting)/gi;
+        const newError = RegExp(leadingError).exec(result)[2];
+        if (newError) reject(new Error(newError.trim()));
+        else reject(new Error(result));
+      }
+      resolve(resultNormal);
+    });
+    command.on("error", (error) => {
+      reject(new Error(error));
+      console.error(`command error: "${error}"`);
+    });
+    command.stdout.on("data", (data) => resultNormal.push(data));
+    command.stderr.on("data", (line) => resultReject.push(line));
+    command.spawn().catch((error) => {
+      reject(new Error(error));
+      console.error("Rejected: ", error);
+    });
+  });
+  return await response;
 }
 
 export async function showChanged(path) {
