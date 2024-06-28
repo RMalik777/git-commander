@@ -4,7 +4,7 @@ import Toolbar from "@/components/Tools/Toolbar";
 
 export default function Layout({ children }) {
   return (
-    <div className="flex max-h-dvh min-h-dvh flex-col overflow-hidden">
+    <div className="flex h-dvh max-h-dvh min-h-dvh flex-col overflow-hidden">
       <Toolbar />
       <div className="min-w-dvw flex h-fit flex-grow flex-row overflow-hidden scroll-smooth">
         <Navbar />
