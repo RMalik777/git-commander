@@ -1,3 +1,5 @@
+import { useEffect, useState, useLayoutEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -6,6 +8,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import {
   ArrowDownToLine,
@@ -14,29 +25,74 @@ import {
   GitCompare,
 } from "lucide-react";
 
+import * as git from "@/lib/git";
+
 export default function Toolbar() {
+  const [position, setPosition] = useState("bottom");
+
+  const [currentRepo, setCurrentRepo] = useState("Empty");
+  const [currentBranch, setCurrentBranch] = useState("main");
+  const [branchList, setBranchList] = useState([]);
+  useLayoutEffect(() => {
+    async function getBranch() {
+      const repo = localStorage.getItem("repoDir");
+      const target = await git.currentBranch(repo);
+      const branchlist = await git.branchList(repo);
+      setBranchList(branchlist);
+      setCurrentBranch(target);
+    }
+
+    setCurrentRepo(localStorage.getItem("currentRepoName") || "Empty");
+    getBranch();
+  }, []);
+
   const username = localStorage.getItem("username") || "IDxxxxx";
   return (
     <div className="justify- flex h-fit flex-row items-center justify-between border-b border-neutral-200 px-3 py-3">
       <TooltipProvider delayDuration={50}>
         <div className="flex h-full flex-row items-center gap-4">
           <Button variant="outline" size="sm">
-            <h1 className="">Current Repo</h1>
+            <h1 className="">
+              {currentRepo}/{currentBranch}
+            </h1>
           </Button>
           <Separator orientation="vertical" className="h-full" />
           <ul className="flex flex-row items-center gap-12">
             <li>
               <div className="flex gap-4">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button size="icon" variant="outline">
-                      <GitBranch />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Branch</p>
-                  </TooltipContent>
-                </Tooltip>
+                <DropdownMenu>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon">
+                          <GitBranch />
+                        </Button>
+                      </DropdownMenuTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Branch</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Branch</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuRadioGroup
+                      value={currentBranch}
+                      onValueChange={(e) => {
+                        setCurrentBranch(e);
+                        // git.switchBranch(e);
+                      }}>
+                      {branchList.map((branch) => {
+                        return (
+                          <DropdownMenuRadioItem key={branch} value={branch}>
+                            {branch}
+                          </DropdownMenuRadioItem>
+                        );
+                      })}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button size="icon" variant="outline">
@@ -54,7 +110,11 @@ export default function Toolbar() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button size="icon" variant="outline">
-                      <ArrowDownToLine />
+                      <ArrowDownToLine
+                        onClick={() => {
+                          git.pull();
+                        }}
+                      />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
@@ -64,7 +124,11 @@ export default function Toolbar() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button size="icon" variant="outline">
-                      <ArrowUpToLine />
+                      <ArrowUpToLine
+                        onClick={() => {
+                          git.push();
+                        }}
+                      />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
