@@ -4,7 +4,7 @@ export interface UserState {
   value: string;
 }
 const initialState: UserState = {
-  value: "",
+  value: localStorage.getItem("username") ?? "",
 };
 
 export const userSlice = createSlice({
