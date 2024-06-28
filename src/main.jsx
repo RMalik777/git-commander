@@ -35,6 +35,22 @@ const router = createBrowserRouter([
   },
 ]);
 
+if (window.localStorage.getItem("theme") === "Dark") {
+  document.documentElement.style.colorScheme = "dark";
+  document.documentElement.className = "dark";
+} else if (window.localStorage.getItem("theme") === "Light") {
+  document.documentElement.style.colorScheme = "light";
+  document.documentElement.classList.remove("dark");
+} else {
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    document.documentElement.style.colorScheme = "dark";
+    document.documentElement.className = "dark";
+  } else {
+    document.documentElement.style.colorScheme = "light";
+    document.documentElement.classList.remove("dark");
+  }
+}
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RouterProvider router={router} />

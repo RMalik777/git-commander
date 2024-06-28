@@ -27,6 +27,9 @@ import {
   GitBranch,
   GitCompare,
   Undo2,
+  SunMoon,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 import * as git from "@/lib/git";
@@ -42,6 +45,35 @@ export default function Toolbar() {
   const repoName = useAppSelector((state) => state.repo.name);
   const dirLocation = useAppSelector((state) => state.repo.directory);
 
+  let themeMode;
+  themeMode = window.localStorage.getItem("theme");
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      if (e.matches && !localStorage.theme) {
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          document.documentElement.className = "dark";
+          document.documentElement.style.colorScheme = "dark";
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.documentElement.style.colorScheme = "light";
+        }
+      }
+    });
+
+  window
+    .matchMedia("(prefers-color-scheme: light)")
+    .addEventListener("change", (e) => {
+      if (e.matches && !localStorage.theme) {
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          document.documentElement.className = "dark";
+          document.documentElement.style.colorScheme = "dark";
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.documentElement.style.colorScheme = "light";
+        }
+      }
+    });
   useLayoutEffect(() => {
     async function getBranch() {
       const target = await git.currentBranch(dirLocation);
@@ -56,7 +88,7 @@ export default function Toolbar() {
   }, [currentBranch, repoName]);
 
   return (
-    <div className="justify- flex h-fit flex-row items-center justify-between border-b border-neutral-200 px-3 py-3">
+    <div className="flex h-fit flex-row items-center justify-between border-b border-neutral-200 bg-white px-3 py-3">
       <TooltipProvider delayDuration={50}>
         <div className="flex h-full flex-row items-center gap-4">
           <Button variant="outline" size="sm">
@@ -205,7 +237,6 @@ export default function Toolbar() {
           </ul>
         </div>
         <div className="flex h-full w-fit flex-row items-center gap-4">
-          <Separator orientation="vertical" className="h-full" />
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="outline" size="sm">
@@ -218,6 +249,45 @@ export default function Toolbar() {
               </p>
             </TooltipContent>
           </Tooltip>
+          <Separator orientation="vertical" className="h-full" />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => {
+              // if the theme is dark, change to light
+              if (
+                document.documentElement.classList.contains("dark") &&
+                window.localStorage.getItem("theme") === "Dark"
+              ) {
+                document.documentElement.classList.remove("dark");
+                document.documentElement.style.colorScheme = "light";
+                window.localStorage.setItem("theme", "Light");
+                themeMode = "Light";
+              }
+              // if the theme is light, change to follow system
+              else if (
+                !document.documentElement.classList.contains("dark") &&
+                window.localStorage.getItem("theme") === "Light"
+              ) {
+                document.documentElement.classList.remove("dark");
+                document.documentElement.style.removeProperty("color-scheme");
+                window.localStorage.removeItem("theme");
+                themeMode = null;
+              }
+              // if the theme is following system, change to dark
+              else {
+                document.documentElement.classList.add("dark");
+                document.documentElement.style.colorScheme = "dark";
+                window.localStorage.setItem("theme", "Dark");
+                themeMode = "Dark";
+              }
+            }}>
+            {themeMode == "Light" ?
+              <Sun />
+            : themeMode == "Dark" ?
+              <Moon />
+            : <SunMoon />}
+          </Button>
         </div>
       </TooltipProvider>
     </div>

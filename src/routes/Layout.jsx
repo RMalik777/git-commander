@@ -12,7 +12,7 @@ export default function Layout({ children }) {
         <Toolbar />
         <div className="min-w-dvw flex h-fit flex-grow flex-row overflow-hidden">
           <Navbar />
-          <main className="flex-grow overflow-y-auto bg-neutral-50 p-3">
+          <main className="flex-grow overflow-y-auto bg-neutral-50 dark:bg-neutral-900 p-3">
             {children ?? <Outlet />}
           </main>
           <Toaster />
