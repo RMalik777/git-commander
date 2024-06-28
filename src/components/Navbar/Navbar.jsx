@@ -3,10 +3,10 @@ import { NavLink, useLocation } from "react-router-dom";
 
 import {
   Home,
-  GitGraph,
   ArrowRightToLine,
   ArrowLeftToLine,
   Settings,
+  FolderGit2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -64,16 +64,16 @@ export default function Navbar() {
             <li className="w-full">
               <Tooltip open={navOpen ? false : undefined}>
                 <TooltipTrigger asChild>
-                  <NavLink to="/git" className="group block h-fit w-full">
+                  <NavLink to="/folder" className="group block h-fit w-full">
                     <Button
                       className={
                         "" + (navOpen ? "w-full justify-start gap-2 p-2" : "")
                       }
                       size="icon"
                       variant={
-                        currentPath.pathname == "/git" ? "default" : "ghost"
+                        currentPath.pathname == "/folder" ? "default" : "ghost"
                       }>
-                      <GitGraph className="" />
+                      <FolderGit2 className="" />
                       {navOpen ? "Source" : ""}
                     </Button>
                   </NavLink>

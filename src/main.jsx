@@ -6,7 +6,7 @@ import "./index.css";
 import Layout from "./routes/Layout";
 import Index from "./routes/index";
 import Settings from "./routes/pages/settings";
-import Git from "./routes/pages/git";
+import Folder from "./routes/pages/folder";
 
 import ErrorPage from "./error-page";
 
@@ -28,8 +28,8 @@ const router = createBrowserRouter([
         element: <Settings />,
       },
       {
-        path: "/git",
-        element: <Git />,
+        path: "/Folder",
+        element: <Folder />,
       },
     ],
   },
