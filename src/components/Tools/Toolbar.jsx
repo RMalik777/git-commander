@@ -93,7 +93,12 @@ export default function Toolbar() {
         <div className="flex h-full flex-row items-center gap-4">
           <Button variant="outline" size="sm">
             <h1 className="">
-              <span>{repoName}</span>/{currentBranch}
+              {repoName === "" ?
+                ""
+              : <>
+                  <span>{repoName}</span>/{currentBranch}
+                </>
+              }
             </h1>
           </Button>
           <Separator orientation="vertical" className="h-full" />

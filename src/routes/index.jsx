@@ -19,7 +19,7 @@ import Commit from "@/components/Git/Commit";
 import Clone from "@/components/Dialog/Clone";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setRepo } from "@/lib/Redux/repoSlice";
+import { removeRepo, setRepo } from "@/lib/Redux/repoSlice";
 
 export default function Index() {
   const repoName = useSelector((state) => state.repo.name);
@@ -114,6 +114,8 @@ export default function Index() {
               variant="destructive"
               onClick={() => {
                 localStorage.removeItem("repoDir");
+                localStorage.removeItem("currentRepoName");
+                dispatch(removeRepo());
               }}>
               Close Repository
             </Button>
