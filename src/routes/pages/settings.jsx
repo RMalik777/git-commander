@@ -34,7 +34,10 @@ import { useEffect, useState } from "react";
 import * as db from "@/lib/database";
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
+  username: z
+    .string()
+    .min(1, { message: "Username can't be empty" })
+    .max(50, { message: "Username can't be more than 50 characters" }),
 });
 
 export default function Settings() {
