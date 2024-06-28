@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/lib/Redux/hooks";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +25,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ToastAction } from "@/components/ui/toast";
 
 import * as git from "@/lib/git";
@@ -39,11 +37,10 @@ const formSchema = z.object({
 });
 
 export default function Commit() {
-  const [commitMsg, setCommitMsg] = useState("");
-  const repoName = useSelector((state) => state.repo.name);
-  const workDir = useSelector((state) => state.repo.directory);
+  const repoName = useAppSelector((state) => state.repo.name);
+  const workDir = useAppSelector((state) => state.repo.directory);
 
-  const commitForm = useForm({
+  const commitForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       commitMsg: "",
@@ -51,36 +48,51 @@ export default function Commit() {
   });
   const { toast } = useToast();
   const { handleSubmit, reset } = commitForm;
-  function onSubmit(values) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values.commitMsg);
-    // git.commitAll(workDir, values.commitMsg);
-    toast({
-      title: "Successfully Commited",
-      description: (
-        <>
-          Commited to{" "}
-          <code className="rounded bg-gray-50 p-1">{repoName}/Branch</code>
-          <br />
-          Commit Message: <br />
-          <p>{values.commitMsg}</p>
-        </>
-      ),
-      action: (
-        <ToastAction
-          altText="Push"
-          onClick={() => {
-            git.push(workDir);
-          }}>
-          Push
-        </ToastAction>
-      ),
-    });
+    const response = await git.commitAll(workDir, values.commitMsg);
+    console.log(response);
+    if (RegExp(/no changes/gi).test(response)) {
+      toast({
+        title: "No Changes",
+        description:
+          "No changes to commit, add changed file to staged before commiting",
+      });
+    }
+    if (RegExp(/nothing to commit/gi).test(response)) {
+      toast({
+        title: "Nothing to Commit",
+        description: "No changes to commit",
+      });
+    } else {
+      toast({
+        title: "Successfully Commited",
+        description: (
+          <>
+            Commited to{" "}
+            <code className="rounded bg-gray-50 p-1">{repoName}/Branch</code>
+            <br />
+            Commit Message: <br />
+            <p>{values.commitMsg}</p>
+          </>
+        ),
+        action: (
+          <ToastAction
+            altText="Push"
+            onClick={() => {
+              git.push(workDir);
+            }}>
+            Push
+          </ToastAction>
+        ),
+      });
+    }
     reset();
   }
   return (
     <Form {...commitForm}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Card className="w-fit">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex-grow">
+        <Card className="w-full">
           <CardHeader className="bg-gray-100 pb-3">
             <CardTitle>Commit</CardTitle>
             <CardDescription>
