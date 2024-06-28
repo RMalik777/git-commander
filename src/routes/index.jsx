@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+
+import { open } from "@tauri-apps/api/dialog";
+import { fs } from "@tauri-apps/api";
+
 import { Button } from "@/components/ui/button";
 import { Command } from "@tauri-apps/api/shell";
 import {
@@ -9,17 +13,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { open } from "@tauri-apps/api/dialog";
-import { fs } from "@tauri-apps/api";
 
 export default function Index() {
   const [isGitRepo, setIsGitRepo] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
   const [dirList, setDirList] = useState([]);
 
+  async function clone(path = repo) {
+    const command = new Command(
+      "git 2 args",
+      ["clone", "https://github.com/RMalik777/tigabot.git"],
+      { cwd: path }
+    );
+    command.stdout.on("data", (data) => {
+      console.log(data);
+    });
+    command.stderr.on("data", (line) => {
+      console.log(`command stderr: "${line}"`);
+    });
+    await command.spawn().catch((error) => {
+      console.error(error);
+    });
+  }
+
   async function checkGit(path = repo) {
     setErrorMsg(null);
-    const command = new Command("git command", ["status", "."], { cwd: path });
+    const command = new Command("git 1 args", ["status"], { cwd: path });
     command.on("close", (data) => {
       console.log(
         `command finished with code ${data.code} and signal ${data.signal}`
@@ -108,7 +127,12 @@ export default function Index() {
               }}>
               Close Repository
             </Button>
-            <Button size="sm" variant="outline" onClick={() => {}}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={async () => {
+                await clone();
+              }}>
               Trial
             </Button>
           </CardFooter>
