@@ -20,6 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,8 +46,17 @@ export default function Settings() {
 
   function onSubmit(values) {
     localStorage.setItem("username", values.username);
+    toast({
+      title: "Username Changed",
+      description: (
+        <>
+          Your username has been changed to <code className="bg-gray-100 p-1 rounded">{values.username}</code>
+        </>
+      ),
+    });
     reset();
   }
+  const { toast } = useToast();
   return (
     <>
       <Card>
@@ -73,7 +83,7 @@ export default function Settings() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Change</Button>
             </form>
           </Form>
         </CardContent>
