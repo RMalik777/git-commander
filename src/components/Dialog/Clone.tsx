@@ -68,7 +68,7 @@ const links = [
   },
 ];
 
-const FormSchema = z.object({
+const formSchema = z.object({
   target: z.string({
     required_error: "Please select a repository!",
   }),
@@ -78,16 +78,20 @@ const FormSchema = z.object({
 });
 export default function Clone() {
   const [comboOpen, setComboOpen] = useState(false);
-  const cloneForm = useForm({
-    resolver: zodResolver(FormSchema),
+  const cloneForm = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       location: "",
     },
   });
   const { handleSubmit, reset } = cloneForm;
-  function onSubmit(values) {
+  function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values.target);
     const repository = links.find((link) => link.value === values.target);
+    if (!repository) {
+      // Add Error Handling
+      return;
+    }
     git.clone(values.location, repository.label);
     localStorage.setItem("currentRepoName", repository.value);
     setLocation("");
@@ -101,7 +105,7 @@ export default function Clone() {
       directory: true,
     });
     if (toOpen) {
-      setLocation(toOpen);
+      setLocation(toOpen.toString());
       return toOpen;
     }
     return "";
