@@ -29,14 +29,17 @@ import { useForm } from "react-hook-form";
 
 import RepoTable from "@/components/Table/RepoTable";
 import AddRepo from "@/components/Dialog/AddRepo";
+import { useEffect, useState } from "react";
+
+import * as db from "@/lib/database";
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
 });
 
 export default function Settings() {
+  const { toast } = useToast();
   const dispatch = useDispatch();
-  const username = useSelector((state) => state.user.value);
 
   const usernameForm = useForm({
     resolver: zodResolver(formSchema),
@@ -46,6 +49,7 @@ export default function Settings() {
   });
   const { handleSubmit, reset } = usernameForm;
 
+  const username = useSelector((state) => state.user.value);
   function onSubmit(values) {
     dispatch(setUser(values.username));
     localStorage.setItem("username", values.username);
@@ -60,7 +64,29 @@ export default function Settings() {
     });
     reset();
   }
-  const { toast } = useToast();
+
+  const [repos, setRepos] = useState();
+  async function fetchData() {
+    try {
+      const response = await db.getAllRepo();
+      setRepos(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function handleDelete(repoId, repoName) {
+    await db.deleteRemoteRepoById(repoId);
+    toast({
+      title: "Repository Deleted",
+      description: `Repository ${repoName} deleted successfully`,
+    });
+    fetchData();
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <Card>
@@ -101,7 +127,7 @@ export default function Settings() {
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-3">
-          <RepoTable />
+          <RepoTable repos={repos} onDeleteRepo={handleDelete} />
         </CardContent>
         <CardFooter>
           <AddRepo />
@@ -109,7 +135,7 @@ export default function Settings() {
       </Card>
 
       <Button
-      className="w-fit self-end"
+        className="w-fit self-end"
         variant="destructive"
         onClick={() => {
           localStorage.clear();

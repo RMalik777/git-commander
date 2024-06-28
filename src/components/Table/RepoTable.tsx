@@ -45,22 +45,14 @@ const repo_data = [
   },
 ];
 
-export default function RepoTable() {
-  const { toast } = useToast();
-  const [repos, setRepos] = useState<RepoFormat[]>();
+export default function RepoTable({
+  repos,
+  onDeleteRepo,
+}: Readonly<{
+  repos: RepoFormat[];
+  onDeleteRepo: (repoId: string, repoName: string) => void;
+}>) {
   const [openDialogId, setOpenDialogId] = useState("");
-
-  async function fetchData() {
-    try {
-      const response = await db.getAllRepo();
-      setRepos(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  useEffect(() => {
-    fetchData();
-  }, []);
   return (
     <Table>
       <TableHeader>
@@ -98,18 +90,7 @@ export default function RepoTable() {
                     sure?
                   </>
                 }
-                onConfirm={async () => {
-                  await db.deleteRemoteRepoById(repo.id);
-                  fetchData();
-                  toast({
-                    title: "Repository Deleted",
-                    description: (
-                      <>
-                        <code>{repo.repo_name}</code> deleted successfully,
-                      </>
-                    ),
-                  });
-                }}
+                onConfirm={() => onDeleteRepo(repo.id, repo.repo_name)} 
               />
             </TableCell>
           </TableRow>
