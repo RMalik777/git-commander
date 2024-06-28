@@ -1,5 +1,5 @@
-import { useEffect, useState, useLayoutEffect, useContext } from "react";
-import { BranchContext } from "@/lib/context";
+import { useEffect, useState, useLayoutEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -29,13 +29,14 @@ import {
 import * as git from "@/lib/git";
 
 export default function Toolbar() {
-  const trialBranch = useContext(BranchContext);
-
   const [position, setPosition] = useState("bottom");
 
   const [currentRepo, setCurrentRepo] = useState("");
   const [currentBranch, setCurrentBranch] = useState("main");
   const [branchList, setBranchList] = useState([]);
+
+  const username = useSelector((state) => state.user.value);
+
   useLayoutEffect(() => {
     async function getBranch() {
       const repo = localStorage.getItem("repoDir");
@@ -47,9 +48,8 @@ export default function Toolbar() {
     }
     setCurrentRepo(localStorage.getItem("currentRepoName") || "Empty");
     getBranch();
-  }, []);
+  }, [username]);
 
-  const username = localStorage.getItem("username") || "IDxxxxx";
   return (
     <div className="justify- flex h-fit flex-row items-center justify-between border-b border-neutral-200 px-3 py-3">
       <TooltipProvider delayDuration={50}>

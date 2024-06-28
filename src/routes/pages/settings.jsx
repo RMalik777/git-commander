@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser, removeUser } from "@/lib/Redux/userSlice";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,9 +37,11 @@ const formSchema = z.object({
 });
 
 export default function Settings() {
-  const [username, setUsername] = useState("IDxxxxx");
+  const dispatch = useDispatch();
+  const username = useSelector((state) => state.user.value);
+
   useEffect(() => {
-    setUsername(localStorage.getItem("username") || "IDxxxxx");
+    console.log("USER: ", username);
   }, []);
 
   const usernameForm = useForm({
@@ -49,6 +53,7 @@ export default function Settings() {
   const { handleSubmit, reset } = usernameForm;
 
   function onSubmit(values) {
+    dispatch(setUser(values.username));
     localStorage.setItem("username", values.username);
     toast({
       title: "Username Changed",
