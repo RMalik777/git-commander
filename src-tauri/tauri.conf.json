@@ -14,7 +14,7 @@
       "fs": {
         "all": true,
         "scope": [
-          "**/*"
+          "$DOCUMENT/*",""
         ]
       },
       "path": {
@@ -36,16 +36,31 @@
             "name": "git ssl",
             "cmd": "git",
             "args": [
-              "config --global http.sslVerify false"
+              "config",
+              "http.sslVerify",
+              "false"
             ]
           },
           {
             "name": "git username",
             "cmd": "git",
             "args": [
-              "config --global user.name",
+              "config",
+              "user.name",
               {
-                "validator": "\\S+"
+                "validator": "[\\S\\s]+"
+              }
+            ]
+          },
+          {
+            "name": "git username replace",
+            "cmd": "git",
+            "args": [
+              "config",
+              "--replace-all",
+              "user.name",
+              {
+                "validator": "[\\S\\s]+"
               }
             ]
           },
