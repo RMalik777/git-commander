@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import * as git from "@/lib/git";
 
@@ -138,42 +139,77 @@ export default function Index() {
             </CardDescription>
           </CardHeader>
           <CardContent className="pt-3">
-            <ul className="flex flex-col rounded border bg-gray-100 p-2">
-              {dirList.map((file) => {
-                const isChanged = diffList.some(
-                  (diffFile) =>
-                    diffFile === file.name ||
-                    diffFile.split("/").shift() ===
-                      file.path.replace(dir + "\\", "")
-                );
-                const isStaged = stagedList.some(
-                  (stagedFile) =>
-                    stagedFile === file.name ||
-                    stagedFile.split("/").shift() ===
-                      file.path.replace(dir + "\\", "")
-                );
-                return (
-                  <li key={file.path} className="w-fit">
-                    <code
-                      className={
-                        (isChanged ? "text-bold text-blue-600" : "") +
-                        (isStaged ? " text-green-600" : "") +
-                        " w-fit text-sm"
-                      }>
-                      {file.name}
-                    </code>
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="flex flex-col">
-              <small>
-                <span className="text-blue-600">blue</span> = changed file
-              </small>
-              <small>
-                <span className="text-green-600">green</span> = staged file
-              </small>
-            </div>
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList>
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="changed">Changed</TabsTrigger>
+                <TabsTrigger value="staged">Staged</TabsTrigger>
+              </TabsList>
+              <TabsContent value="all">
+                <ul className="flex flex-col rounded border bg-gray-100 p-2">
+                  {dirList.map((file) => {
+                    const isChanged = diffList.some(
+                      (diffFile) =>
+                        diffFile === file.name ||
+                        diffFile.split("/").shift() ===
+                          file.path.replace(dir + "\\", "")
+                    );
+                    const isStaged = stagedList.some(
+                      (stagedFile) =>
+                        stagedFile === file.name ||
+                        stagedFile.split("/").shift() ===
+                          file.path.replace(dir + "\\", "")
+                    );
+                    return (
+                      <li key={file.path} className="w-fit">
+                        <code
+                          className={
+                            (isChanged ? "text-bold text-blue-600" : "") +
+                            (isStaged ? " text-green-600" : "") +
+                            " w-fit text-sm"
+                          }>
+                          {file.name}
+                        </code>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="flex flex-col">
+                  <small>
+                    <span className="text-blue-600">blue</span> = changed file
+                  </small>
+                  <small>
+                    <span className="text-green-600">green</span> = staged file
+                  </small>
+                </div>
+              </TabsContent>
+              <TabsContent value="changed">
+                <ul className="flex flex-col rounded border bg-gray-100 p-2">
+                  {diffList.map((file) => {
+                    return (
+                      <li key={file} className="w-fit">
+                        <code className="w-fit text-sm">
+                          {file?.split("/").shift()}
+                        </code>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </TabsContent>
+              <TabsContent value="staged">
+                <ul className="flex flex-col rounded border bg-gray-100 p-2">
+                  {stagedList.map((file) => {
+                    return (
+                      <li key={file} className="w-fit">
+                        <code className="w-fit text-sm">
+                          {file?.split("/").shift()}
+                        </code>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
       </div>
