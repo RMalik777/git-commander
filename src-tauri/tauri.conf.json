@@ -13,11 +13,37 @@
       "all": false,
       "shell": {
         "all": true,
-        "scope": [{
-          "name": "run-git-log",
-          "cmd": "git",
-          "args": ["log"]
-        }]
+        "scope": [
+          {
+            "name": "go to folder",
+            "cmd": "cd",
+            "args": [
+              {
+                "validator": "[\\s\\S]+"
+              }
+            ]
+          },
+          {
+            "name": "git command",
+            "cmd": "git",
+            "args": [
+              {
+                "validator": "\\S+"
+              },
+              {
+                "validator": "\\S*"
+              }
+            ]
+          }
+        ]
+      },
+      "dialog": {
+        "all": false,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true,
+        "save": false
       }
     },
     "windows": [
