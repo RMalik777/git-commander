@@ -24,7 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
@@ -33,6 +33,7 @@ import { RefreshCw } from "lucide-react";
 import * as git from "@/lib/git";
 
 export default function FileList() {
+  const { toast } = useToast();
   const [openDialogId, setOpenDialogId] = useState("");
   const repoName = useAppSelector((state) => state.repo.name);
   const dir = useAppSelector((state) => state.repo.directory);
@@ -192,7 +193,62 @@ export default function FileList() {
                           sure?
                         </>
                       }
-                      onConfirm={() => console.log("delete")}
+                      onConfirm={async () => {
+                        if (fileStatus === "Staged") {
+                          try {
+                            await git.unstagedFile(dir, file.name);
+                          } catch (error) {
+                            console.error(error);
+                            if (error instanceof Error) {
+                              toast({
+                                title: "Error Reverting",
+                                description: (
+                                  <p>
+                                    <code>{file.name}</code> can&apos;t be
+                                    reverted
+                                    <br />
+                                    <code>{error.message}</code>
+                                  </p>
+                                ),
+                                variant: "destructive",
+                              });
+                            }
+                            return;
+                          }
+                        }
+                        try {
+                          await git.revertFile(dir, file.name);
+                          await getDiff();
+                          await getStaged();
+                        } catch (error) {
+                          console.error(error);
+                          if (error instanceof Error) {
+                            toast({
+                              title: "Error Reverting",
+                              description: (
+                                <p>
+                                  <code>{file.name}</code> can&apos;t be
+                                  reverted
+                                  <br />
+                                  <code>{error.message}</code>
+                                </p>
+                              ),
+                              variant: "destructive",
+                            });
+                          }
+                          return;
+                        }
+                        dispatch(setDiff([...diffList]));
+                        dispatch(setStaged([...stagedList]));
+                        toast({
+                          title: "Successfully Reverted",
+                          description: (
+                            <>
+                              Reverted <code>{file.name}</code> to last commit
+                            </>
+                          ),
+                        });
+                      }}
                     />
                   </TableCell>
                 </TableRow>
