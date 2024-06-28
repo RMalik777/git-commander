@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/Navbar/Navbar";
 import Toolbar from "@/components/Tools/Toolbar";
 
@@ -11,6 +12,7 @@ export default function Layout({ children }) {
         <main className="flex-grow overflow-y-auto bg-neutral-50 p-3">
           {children ?? <Outlet />}
         </main>
+        <Toaster />
       </div>
     </div>
   );
