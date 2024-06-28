@@ -19,31 +19,30 @@ import Commit from "@/components/Git/Commit";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setRepo } from "@/lib/Redux/repoSlice";
-import { setDir } from "@/lib/Redux/dirSlice";
 
 export default function Index() {
-  const repoName = useSelector((state) => state.repo.value);
-  const dir = useSelector((state) => state.dir.value);
+  const repoName = useSelector((state) => state.repo.name);
+  const dir = useSelector((state) => state.repo.directory);
   const dispatch = useDispatch();
 
   const [isGitRepo, setIsGitRepo] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
   const [dirList, setDirList] = useState([]);
 
-  const [diffList, setDiffList] = useState([]);
+  const diffList = useSelector((state) => state.repo.diff);
   useEffect(() => {
     async function getDiff() {
       const data = await git.showChanged(dir);
-      setDiffList(data);
+      dispatch(setRepo({ diff: data }));
     }
     getDiff();
   }, [dir]);
 
-  const [stagedList, setStagedList] = useState([]);
+  const stagedList = useSelector((state) => state.repo.staged);
   useEffect(() => {
     async function getStaged() {
       const data = await git.showStaged(dir);
-      setStagedList(data);
+      dispatch(setRepo({ staged: data }));
     }
     getStaged();
   }, [dir]);
@@ -72,11 +71,9 @@ export default function Index() {
     });
     if (toOpen) {
       localStorage.setItem("repoDir", toOpen);
-      setDir(toOpen);
       const repoNameNew = toOpen.split("\\").pop();
       localStorage.setItem("currentRepoName", repoNameNew);
-      dispatch(setRepo(repoNameNew));
-      dispatch(setDir(toOpen));
+      dispatch(setRepo({ name: repoNameNew, directory: toOpen }));
     }
     const data = await git.checkGit(toOpen);
     setIsGitRepo(data.isGitRepo);
@@ -115,7 +112,6 @@ export default function Index() {
               variant="secondary"
               onClick={() => {
                 localStorage.removeItem("repoDir");
-                setDir("no directory selected");
               }}>
               Close Repository
             </Button>
@@ -147,14 +143,14 @@ export default function Index() {
               </TabsList>
               <TabsContent value="all">
                 <ul className="flex flex-col rounded border bg-gray-100 p-2">
-                  {dirList.map((file) => {
-                    const isChanged = diffList.some(
+                  {dirList?.map((file) => {
+                    const isChanged = diffList?.some(
                       (diffFile) =>
                         diffFile === file.name ||
                         diffFile.split("/").shift() ===
                           file.path.replace(dir + "\\", "")
                     );
-                    const isStaged = stagedList.some(
+                    const isStaged = stagedList?.some(
                       (stagedFile) =>
                         stagedFile === file.name ||
                         stagedFile.split("/").shift() ===
@@ -185,7 +181,7 @@ export default function Index() {
               </TabsContent>
               <TabsContent value="changed">
                 <ul className="flex flex-col rounded border bg-gray-100 p-2">
-                  {diffList.map((file) => {
+                  {diffList?.map((file) => {
                     return (
                       <li key={file} className="w-fit">
                         <code className="w-fit text-sm">
@@ -198,7 +194,7 @@ export default function Index() {
               </TabsContent>
               <TabsContent value="staged">
                 <ul className="flex flex-col rounded border bg-gray-100 p-2">
-                  {stagedList.map((file) => {
+                  {stagedList?.map((file) => {
                     return (
                       <li key={file} className="w-fit">
                         <code className="w-fit text-sm">
