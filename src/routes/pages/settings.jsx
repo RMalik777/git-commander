@@ -10,6 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 import {
@@ -25,6 +26,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+
+import RepoTable from "@/components/Table/RepoTable";
+import AddRepo from "@/components/Dialog/AddRepo";
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
@@ -50,7 +54,8 @@ export default function Settings() {
       title: "Username Changed",
       description: (
         <>
-          Your username has been changed to <code className="bg-gray-100 p-1 rounded">{values.username}</code>
+          Your username has been changed to{" "}
+          <code className="rounded bg-gray-100 p-1">{values.username}</code>
         </>
       ),
     });
@@ -60,11 +65,11 @@ export default function Settings() {
   return (
     <>
       <Card>
-        <CardHeader className="px-6 pb-3">
+        <CardHeader className="bg-gray-100 pb-3">
           <CardTitle>Profile</CardTitle>
           <CardDescription>Profile configuration</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-3">
           <Form {...usernameForm}>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -88,6 +93,22 @@ export default function Settings() {
           </Form>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader className="bg-gray-100 pb-3">
+          <CardTitle>Remote Repositories List</CardTitle>
+          <CardDescription>
+            Add or remove your predefined remote repositories
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-3">
+          <RepoTable />
+        </CardContent>
+        <CardFooter>
+          <AddRepo />
+        </CardFooter>
+      </Card>
+
       <Button
         variant="destructive"
         onClick={() => {
