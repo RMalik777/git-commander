@@ -16,13 +16,13 @@ export default function Commit() {
   return (
     <form>
       <Card className="w-fit">
-        <CardHeader>
+        <CardHeader className="bg-gray-100 pb-3">
           <CardTitle>Commit</CardTitle>
           <CardDescription>
             Commit changes made to remote repository
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-3">
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Commit Messages</Label>
@@ -31,10 +31,12 @@ export default function Commit() {
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button type="reset" variant="outline">
+          <Button type="reset" variant="outline" size="sm">
             Cancel
           </Button>
-          <Button type="submit">Deploy</Button>
+          <Button type="submit" size="sm">
+            Deploy
+          </Button>
         </CardFooter>
       </Card>
     </form>
