@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 import {
@@ -6,6 +6,7 @@ import {
   GitGraph,
   ArrowRightToLine,
   ArrowLeftToLine,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,7 +41,7 @@ export default function Navbar() {
               "flex w-full flex-col gap-4 " + (navOpen ? "self-end" : "")
             }>
             <li className="w-full">
-              <Tooltip>
+              <Tooltip open={navOpen ? false : undefined}>
                 <TooltipTrigger asChild>
                   <NavLink to={"/"} className="group block h-fit w-full">
                     <Button
@@ -56,16 +57,13 @@ export default function Navbar() {
                     </Button>
                   </NavLink>
                 </TooltipTrigger>
-                {navOpen ?
-                  ""
-                : <TooltipContent side="right">
-                    <p>Home</p>
-                  </TooltipContent>
-                }
+                <TooltipContent side="right">
+                  <p>Home</p>
+                </TooltipContent>
               </Tooltip>
             </li>
             <li className="w-full">
-              <Tooltip>
+              <Tooltip open={navOpen ? false : undefined}>
                 <TooltipTrigger asChild>
                   <NavLink to={"/git"} className="group block h-fit w-full">
                     <Button
@@ -81,12 +79,35 @@ export default function Navbar() {
                     </Button>
                   </NavLink>
                 </TooltipTrigger>
-                {navOpen ?
-                  ""
-                : <TooltipContent side="right">
-                    <p>Git</p>
-                  </TooltipContent>
-                }
+                <TooltipContent side="right">
+                  <p>Git</p>
+                </TooltipContent>
+              </Tooltip>
+            </li>
+            <li className="w-full">
+              <Tooltip open={navOpen ? false : undefined}>
+                <TooltipTrigger asChild>
+                  <NavLink
+                    to={"/settings"}
+                    className="group block h-fit w-full">
+                    <Button
+                      className={
+                        "" + (navOpen ? "w-full justify-start gap-2 p-2" : "")
+                      }
+                      size="icon"
+                      variant={
+                        currentPath.pathname == "/settings" ?
+                          "default"
+                        : "ghost"
+                      }>
+                      <Settings className="" />
+                      {navOpen ? "Settings" : ""}
+                    </Button>
+                  </NavLink>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>Settings</p>
+                </TooltipContent>
               </Tooltip>
             </li>
           </ul>
