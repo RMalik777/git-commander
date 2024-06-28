@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
 
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeRepo, setRepo } from "@/lib/Redux/repoSlice";
 
 export default function Index() {
+  useEffect(() => {
+    async function setSLL() {
+      await git.setSSLFalse();
+    }
+    setSLL();
+  }, []);
+  
   const dir = useSelector((state) => state.repo.directory);
   const dispatch = useDispatch();
 

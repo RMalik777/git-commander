@@ -1,9 +1,10 @@
 import { Command } from "@tauri-apps/api/shell";
-import * as func from "./functions";
+import { useSelector } from "react-redux";
 
 export async function checkGit(path) {
   let errorMsg = null;
   let isGitRepo = false;
+  configUsername(path);
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 1 args", ["status"], { cwd: path });
     command.on("close", (data) => {
@@ -27,16 +28,30 @@ export async function checkGit(path) {
   return await response;
 }
 
-export async function configUsername(username) {
-  const command = new Command("git username", [
-    "config --global user.name",
-    username,
-  ]);
+export async function configUsername(path) {
+  const username = useSelector((state) => state.user.value);
+  const command = new Command(
+    "git username",
+    ["config", "user.name", username],
+    {
+      cwd: path,
+    }
+  );
   await command.spawn().catch((error) => {
     console.error(error);
   });
 }
-
+export async function configUsernameReplace(path) {
+  const username = useSelector((state) => state.user.value);
+  const command = new Command(
+    "git username replace",
+    ["config", "--replace-all", "user.name", username],
+    { cwd: path }
+  );
+  await command.spawn().catch((error) => {
+    console.error(error);
+  });
+}
 export async function setSSLFalse() {
   const command = new Command("git ssl", [
     "config --global http.sslVerify false",
@@ -72,6 +87,7 @@ export async function pull(path) {
 }
 
 export async function clone(localRepo, remoteRepo) {
+  configUsername(localRepo);
   const response = new Promise((resolve, reject) => {
     const result = [];
     const command = new Command("git 2 args", ["clone", remoteRepo], {
@@ -298,6 +314,7 @@ export async function addFile(path, file) {
 }
 
 export async function commit(path, message) {
+  configUsername(path);
   const response = new Promise((resolve, reject) => {
     const result = [];
     const commmit = new Command("git 3 args", ["commit", "-m", message], {
