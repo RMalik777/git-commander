@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
 
 import { Button } from "@/components/ui/button";
@@ -42,30 +42,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
+import { setRepo } from "@/lib/Redux/repoSlice";
+
+import * as db from "@/lib/database";
 import * as git from "@/lib/git";
 
-const links = [
-  {
-    value: "git-commander",
-    label: "https://github.com/RMalik777/git-commander",
-  },
-  {
-    value: "porto",
-    label: "https://github.com/RMalik777/porto",
-  },
-  {
-    value: "DashOne",
-    label: "https://github.com/RMalik777/DashOne",
-  },
-  {
-    value: "web-blog",
-    label: "https://github.com/RMalik777/web-blog",
-  },
-  {
-    value: "FileBag",
-    label: "https://github.com/RMalik777/FileBag",
-  },
-];
+import { RepoFormat } from "@/lib/Types/repo";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   target: z.string({
@@ -76,7 +60,25 @@ const formSchema = z.object({
   }),
 });
 export default function Clone() {
+  const { toast } = useToast();
   const [comboOpen, setComboOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const [links, setLinks] = useState<RepoFormat[]>([]);
+  async function fetchData() {
+    try {
+      const response = await db.getAllRepo();
+      setLinks(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const cloneForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -84,17 +86,55 @@ export default function Clone() {
     },
   });
   const { handleSubmit, reset } = cloneForm;
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    toast({
+      title: "Cloning Repository",
+      description: "Please wait while we clone the repository...",
+      duration: 5000,
+    });
     console.log(values.target);
-    const repository = links.find((link) => link.value === values.target);
+    const repository = links?.find((link) => link.repo_url === values.target);
     if (!repository) {
       // Add Error Handling
       return;
     }
-    git.clone(values.location, repository.label);
-    localStorage.setItem("currentRepoName", repository.value);
-    setLocation("");
-    reset();
+    try {
+      const response = await git.clone(values.location, values.target);
+      if (
+        response.toString().startsWith("fatal") ||
+        response.toString().startsWith("error")
+      ) {
+        throw new Error(response);
+      }
+      const newLocation = values.location + "\\" + repository.repo_name;
+      localStorage.setItem("currentRepoName", repository.repo_name);
+      localStorage.setItem("repoDir", newLocation);
+      dispatch(setRepo({ name: repository.repo_name, directory: newLocation }));
+      toast({
+        title: "Repository Cloned",
+        description: (
+          <p>
+            Repository <b>{repository.repo_name}</b> cloned successfully!
+            <br />
+            Location:{" "}
+            <code className="rounded bg-gray-100 p-1">{newLocation}</code>
+          </p>
+        ),
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error);
+        toast({
+          title: "Error Cloning Repository",
+          description: <>{error.message}</>,
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setLocation("");
+      reset();
+      setDialogOpen(false);
+    }
   }
 
   const [location, setLocation] = useState("");
@@ -109,10 +149,13 @@ export default function Clone() {
     }
     return "";
   }
+
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Clone</Button>
+        <Button variant="secondary" size="sm">
+          Clone
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
         <DialogHeader>
@@ -141,8 +184,8 @@ export default function Clone() {
                             !field.value && "text-muted-foreground"
                           )}>
                           {field.value ?
-                            links.find((link) => link.value === field.value)
-                              ?.label
+                            links?.find((link) => link.repo_url === field.value)
+                              ?.repo_name
                           : "Select remote repository..."}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -154,24 +197,24 @@ export default function Clone() {
                         <CommandList>
                           <CommandEmpty>No link found.</CommandEmpty>
                           <CommandGroup>
-                            {links.map((link) => (
+                            {links?.map((link) => (
                               <CommandItem
-                                key={link.value}
-                                value={link.value}
+                                key={link.repo_url}
+                                value={link.repo_url}
                                 onSelect={() => {
-                                  cloneForm.setValue("target", link.value);
+                                  cloneForm.setValue("target", link.repo_url);
                                   setComboOpen(false);
                                 }}
                                 className="whitespace-normal break-all">
                                 <Check
                                   className={cn(
                                     "mr-2 h-4 w-4",
-                                    link.value === field.value ?
+                                    link.repo_url === field.value ?
                                       "opacity-100"
                                     : "opacity-0"
                                   )}
                                 />
-                                {link.label}
+                                {link.repo_url}
                               </CommandItem>
                             ))}
                           </CommandGroup>
