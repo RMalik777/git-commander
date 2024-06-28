@@ -13,7 +13,9 @@
       "all": false,
       "fs": {
         "all": true,
-        "scope": ["**/*"]
+        "scope": [
+          "**/*"
+        ]
       },
       "path": {
         "all": true
@@ -33,7 +35,9 @@
           {
             "name": "git ssl",
             "cmd": "git",
-            "args": ["config --global http.sslVerify false"]
+            "args": [
+              "config --global http.sslVerify false"
+            ]
           },
           {
             "name": "git username",
@@ -70,6 +74,24 @@
             "name": "git 3 args",
             "cmd": "git",
             "args": [
+              {
+                "validator": "\\S+"
+              },
+              {
+                "validator": "\\S+"
+              },
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
+            "name": "git 4 args",
+            "cmd": "git",
+            "args": [
+              {
+                "validator": "\\S+"
+              },
               {
                 "validator": "\\S+"
               },

@@ -35,6 +35,14 @@ export const repoSlice = createSlice({
       state.diff = action.payload.diff ?? state.diff;
       state.staged = action.payload.staged ?? state.staged;
     },
+    setDiff: (state, action: PayloadAction<string[]>) => {
+      state.diff = state.diff.filter((item) => !action.payload.includes(item));
+    },
+    setStaged: (state, action: PayloadAction<string[]>) => {
+      state.staged = state.staged.filter(
+        (item) => !action.payload.includes(item)
+      );
+    },
     removeRepo: (state) => {
       state.name = "";
       state.directory = "";
@@ -45,5 +53,5 @@ export const repoSlice = createSlice({
   },
 });
 
-export const { setRepo, removeRepo } = repoSlice.actions;
+export const { setRepo, setDiff, setStaged, removeRepo } = repoSlice.actions;
 export default repoSlice.reducer;

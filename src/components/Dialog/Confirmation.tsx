@@ -12,7 +12,7 @@ import { ReactNode } from "react";
 
 interface ConfirmationDialogProps {
   open: boolean;
-  repoName: string;
+  title: string;
   setOpen: (open: boolean) => void;
   message: string | ReactNode;
   onConfirm(): void;
@@ -20,7 +20,7 @@ interface ConfirmationDialogProps {
 
 export function ConfirmationDialog({
   open,
-  repoName,
+  title,
   setOpen,
   message,
   onConfirm,
@@ -32,7 +32,7 @@ export function ConfirmationDialog({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete {repoName}?</AlertDialogTitle>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{message}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
