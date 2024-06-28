@@ -5,7 +5,6 @@ diesel::table! {
         id -> Text,
         repo_name -> Text,
         repo_url -> Text,
-        repo_type -> Text,
         created_at -> Timestamp,
     }
 }

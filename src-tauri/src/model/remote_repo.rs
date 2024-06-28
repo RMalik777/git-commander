@@ -10,6 +10,5 @@ pub struct RemoteRepo {
     pub id: String,
     pub repo_name: String,
     pub repo_url: String,
-    pub repo_type: String,
     pub created_at: NaiveDateTime,
 }

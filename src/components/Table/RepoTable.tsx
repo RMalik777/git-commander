@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -9,6 +10,9 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
+
+import * as db from "@/lib/database";
+import type { RepoFormat } from "@/lib/Types/repo";
 
 const repo_data = [
   {
@@ -39,6 +43,12 @@ const repo_data = [
 ];
 
 export default function RepoTable() {
+  const [repos, setRepos] = useState<RepoFormat[]>([]);
+  useEffect(() => {
+    db.getAllRepo().then((data) => {
+      setRepos(data);
+    });
+  });
   return (
     <Table>
       <TableCaption>A list of your remote repositories</TableCaption>
@@ -46,20 +56,18 @@ export default function RepoTable() {
         <TableRow>
           <TableHead>Name</TableHead>
           <TableHead>Link</TableHead>
-          <TableHead>Provider</TableHead>
           <TableHead className="text-center">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {repo_data.map((repo) => (
-          <TableRow key={repo.name}>
-            <TableCell className="font-medium">{repo.name}</TableCell>
+        {repos?.map((repo) => (
+          <TableRow key={repo.id}>
+            <TableCell className="font-medium">{repo.repo_name}</TableCell>
             <TableCell>
-              <a href={repo.link} target="_blank" rel="noopener noreferrer">
-                <code>{repo.link}</code>
+              <a href={repo.repo_url} target="_blank" rel="noopener noreferrer">
+                <code>{repo.repo_url}</code>
               </a>
             </TableCell>
-            <TableCell>{repo.provider}</TableCell>
             <TableCell className="text-center">
               <Button variant="destructive" size="sm">
                 Delete
