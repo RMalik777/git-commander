@@ -28,7 +28,7 @@ export default function Index() {
   const repoName = useSelector((state) => state.repo.value);
   const dir = useSelector((state) => state.dir.value);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     async function getAllChildDir(repo) {
       try {

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser  } from "@/lib/Redux/userSlice";
+import { setUser } from "@/lib/Redux/userSlice";
 
 import { Button } from "@/components/ui/button";
 import {
