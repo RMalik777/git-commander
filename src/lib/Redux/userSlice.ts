@@ -1,12 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+export interface UserState {
+  value: string;
+}
+const initialState: UserState = {
+  value: "",
+};
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: {
-    value: localStorage.getItem("username") || "",
-  },
+  initialState,
   reducers: {
-    setUser: (state, action) => {
+    setUser: (state, action: PayloadAction<string>) => {
       state.value = action.payload;
     },
     removeUser: (state) => {

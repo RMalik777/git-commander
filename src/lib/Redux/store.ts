@@ -3,10 +3,13 @@ import userReducer from "./userSlice";
 import repoReducer from "./repoSlice";
 import dirReducer from "./dirSlice";
 
-export default configureStore({
+export const store = configureStore({
   reducer: {
     user: userReducer,
     repo: repoReducer,
     dir: dirReducer,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

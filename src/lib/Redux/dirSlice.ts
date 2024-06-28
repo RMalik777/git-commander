@@ -1,12 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+export interface DirState {
+  value: string;
+}
+const initialState: DirState = {
+  value: "",
+};
 
 export const dirSlice = createSlice({
   name: "repo",
-  initialState: {
-    value: localStorage.getItem("repoDir") || "",
-  },
+  initialState,
   reducers: {
-    setDir: (state, action) => {
+    setDir: (state, action: PayloadAction<string>) => {
       state.value = action.payload;
     },
     removeDir: (state) => {
