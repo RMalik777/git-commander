@@ -1,4 +1,5 @@
 import { Command } from "@tauri-apps/api/shell";
+import * as func from "./functions";
 
 export async function checkGit(path) {
   let errorMsg = null;
@@ -240,6 +241,20 @@ export async function showStaged(path) {
   });
   return await response;
 }
+export async function unstagedAll(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 2 args", ["reset", "HEAD^"], {
+      cwd: path,
+    });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line));
+    command.stderr.on("data", (line) => result.push(line));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
 
 export async function addAll(path) {
   const command = new Command("git 2 args", ["add", "."], { cwd: path });
@@ -256,6 +271,7 @@ export async function addFile(path, file) {
 
 export async function commit(path, message) {
   const response = new Promise((resolve, reject) => {
+    const result = [];
     const commmit = new Command("git 3 args", ["commit", "-m", message], {
       cwd: path,
     });
@@ -263,15 +279,17 @@ export async function commit(path, message) {
       console.log(
         `command finished with code ${data.code} and signal ${data.signal}`
       );
-      resolve(data);
+      resolve(result.at(-1));
     });
     commmit.on("error", (error) => console.error(`command error: "${error}"`));
-    commmit.stdout.on("data", (line) =>
-      console.log(`command stdout: "${line}"`)
-    );
-    commmit.stderr.on("data", (line) =>
-      console.log(`command stderr: "${line}"`)
-    );
+    commmit.stdout.on("data", (line) => {
+      console.log(`command stdout: "${line}"`);
+      result.push(line);
+    });
+    commmit.stderr.on("data", (line) => {
+      console.log(`command stderr: "${line}"`);
+      result.push(line);
+    });
     commmit.spawn().catch((error) => {
       reject(new Error(error));
     });
@@ -280,14 +298,14 @@ export async function commit(path, message) {
 }
 
 export async function commitAll(path, message) {
-  await addAll(path);
+  // await addAll(path);
   return await commit(path, message);
 }
 
 export async function undoLastCommit(path) {
   const response = new Promise((resolve, reject) => {
     const result = [];
-    const command = new Command("git 2 args", ["reset", "--soft"], {
+    const command = new Command("git 3 args", ["reset", "--soft", "HEAD^"], {
       cwd: path,
     });
     command.on("close", () => resolve(result));
