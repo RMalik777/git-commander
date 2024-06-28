@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { open } from "@tauri-apps/api/dialog";
 import { fs } from "@tauri-apps/api";
 
@@ -14,6 +13,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import * as git from "@/lib/git";
+
 export default function Index() {
   const [isGitRepo, setIsGitRepo] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -26,7 +27,7 @@ export default function Index() {
       { cwd: path }
     );
     command.stdout.on("data", (data) => {
-      console.log(data);
+      console.log("stdout: ", data);
     });
     command.stderr.on("data", (line) => {
       console.log(`command stderr: "${line}"`);
@@ -47,7 +48,7 @@ export default function Index() {
     command.on("error", (error) => console.error(`command error: "${error}"`));
     command.stdout.on("data", (data) => {
       setIsGitRepo(true);
-      console.log(data);
+      console.log("stdout: ", data);
     });
     command.stderr.on("data", (line) => {
       setIsGitRepo(false);
@@ -75,8 +76,7 @@ export default function Index() {
     async function setDirectory() {
       setDirList(await getAllChildDir(repo));
     }
-    setRepo(localStorage.getItem("openRepo") || "path/to/repo");
-    console.log("repo", repo);
+    setRepo(localStorage.getItem("repoDir") || "path/to/repo");
     setDirectory();
   }, [repo]);
   async function openFile() {
@@ -85,8 +85,10 @@ export default function Index() {
       directory: true,
     });
     if (toOpen) {
-      localStorage.setItem("openRepo", toOpen);
+      localStorage.setItem("repoDir", toOpen);
       setRepo(toOpen);
+      const repoName = toOpen.split("\\").pop();
+      localStorage.setItem("currentRepoName", repoName);
     }
     await checkGit(toOpen);
   }
@@ -122,7 +124,7 @@ export default function Index() {
               size="sm"
               variant="secondary"
               onClick={() => {
-                localStorage.removeItem("openRepo");
+                localStorage.removeItem("repoDir");
                 setRepo("no directory selected");
               }}>
               Close Repository
@@ -131,7 +133,8 @@ export default function Index() {
               size="sm"
               variant="outline"
               onClick={async () => {
-                await clone();
+                const trial = await git.switchBranch(repo, "main");
+                const trial2 = await git.branchList(repo);
               }}>
               Trial
             </Button>
