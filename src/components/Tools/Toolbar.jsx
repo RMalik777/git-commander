@@ -33,7 +33,7 @@ export default function Toolbar() {
 
   const [position, setPosition] = useState("bottom");
 
-  const [currentRepo, setCurrentRepo] = useState("Empty");
+  const [currentRepo, setCurrentRepo] = useState("");
   const [currentBranch, setCurrentBranch] = useState("main");
   const [branchList, setBranchList] = useState([]);
   useLayoutEffect(() => {
@@ -43,8 +43,8 @@ export default function Toolbar() {
       const branchlist = await git.branchList(repo);
       setBranchList(branchlist);
       setCurrentBranch(target);
+      console.log(target);
     }
-
     setCurrentRepo(localStorage.getItem("currentRepoName") || "Empty");
     getBranch();
   }, []);
@@ -56,7 +56,7 @@ export default function Toolbar() {
         <div className="flex h-full flex-row items-center gap-4">
           <Button variant="outline" size="sm">
             <h1 className="">
-              {currentRepo}/{currentBranch}
+              <span>{currentRepo}</span>/{currentBranch}
             </h1>
           </Button>
           <Separator orientation="vertical" className="h-full" />

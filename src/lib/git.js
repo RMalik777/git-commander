@@ -92,7 +92,7 @@ export async function status(path) {
 }
 
 export async function currentBranch(path) {
-  const regex = /(?:on branch) ([\S\s]+)/gi;
+  const regex = /(?:on branch) ([\S\s]+\S)/gi;
   const command = new Command("git 1 args", ["status"], { cwd: path });
   const response = new Promise((resolve, reject) => {
     let result;
@@ -115,7 +115,7 @@ export async function currentBranch(path) {
     });
   });
   const result = await response.catch((error) => {
-    console.error(error);
+    return error(error);
   });
   return result;
 }
