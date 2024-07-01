@@ -311,6 +311,7 @@ export async function addFile(path, file) {
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 2 args", ["add", file], { cwd: path });
     command.on("close", () => resolve());
+    command.on("error", (error) => reject(new Error(error)));
     command.spawn().catch((error) => {
       console.error(error);
     });

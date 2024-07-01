@@ -5,7 +5,9 @@ import Toolbar from "@/components/Tools/Toolbar";
 import { store } from "@/lib/Redux/store";
 import { Provider } from "react-redux";
 
-export default function Layout({ children }) {
+export default function Layout({
+  children,
+}: Readonly<{ children?: React.ReactNode }>) {
   return (
     <div className="flex h-dvh max-h-dvh min-h-dvh flex-col overflow-hidden scroll-smooth antialiased">
       <Provider store={store}>

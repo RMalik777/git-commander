@@ -162,7 +162,6 @@ export default function FileList() {
                           size="sm"
                           onClick={async () => {
                             await git.addFile(dir, file.name);
-                            // dispatch(setDiff([file.path]));
                             await getStaged();
                             await getDiff();
                           }}>
@@ -186,7 +185,6 @@ export default function FileList() {
                           size="sm"
                           onClick={async () => {
                             await git.unstagedFile(dir, file.name);
-                            // dispatch(setStaged([file.path]));
                             await getDiff();
                             await getStaged();
                           }}>
@@ -337,7 +335,7 @@ export default function FileList() {
                     textColor = "text-green-600";
                   }
                   let actionButton;
-                  if (fileStatus === "Changed") {
+                  if (fileStatus == "Changed") {
                     actionButton = (
                       <>
                         <Button
@@ -346,7 +344,6 @@ export default function FileList() {
                           size="sm"
                           onClick={async () => {
                             await git.addFile(dir, file.name);
-                            // dispatch(setDiff([file.path]));
                             await getStaged();
                             await getDiff();
                           }}>
@@ -361,7 +358,7 @@ export default function FileList() {
                         </Button>
                       </>
                     );
-                  } else if (fileStatus === "Staged") {
+                  } else if (fileStatus == "Staged") {
                     actionButton = (
                       <>
                         <Button
@@ -370,7 +367,6 @@ export default function FileList() {
                           size="sm"
                           onClick={async () => {
                             await git.unstagedFile(dir, file.name);
-                            // dispatch(setStaged([file.path]));
                             await getDiff();
                             await getStaged();
                           }}>
@@ -389,7 +385,7 @@ export default function FileList() {
                     actionButton = null;
                   }
 
-                  return fileStatus === "Changed" ?
+                  return fileStatus == "Changed" ?
                       <TableRow key={file.name}>
                         <TableCell
                           className={"cursor-pointer font-medium " + textColor}
@@ -421,28 +417,27 @@ export default function FileList() {
                               </>
                             }
                             onConfirm={async () => {
-                              if (fileStatus === "Staged") {
-                                try {
-                                  await git.unstagedFile(dir, file.name);
-                                } catch (error) {
-                                  console.error(error);
-                                  if (error instanceof Error) {
-                                    toast({
-                                      title: "Error Reverting",
-                                      description: (
-                                        <p>
-                                          <code>{file.name}</code> can&apos;t be
-                                          reverted
-                                          <br />
-                                          <code>{error.message}</code>
-                                        </p>
-                                      ),
-                                      variant: "destructive",
-                                    });
-                                  }
-                                  return;
+                              try {
+                                await git.unstagedFile(dir, file.name);
+                              } catch (error) {
+                                console.error(error);
+                                if (error instanceof Error) {
+                                  toast({
+                                    title: "Error Reverting",
+                                    description: (
+                                      <p>
+                                        <code>{file.name}</code> can&apos;t be
+                                        reverted
+                                        <br />
+                                        <code>{error.message}</code>
+                                      </p>
+                                    ),
+                                    variant: "destructive",
+                                  });
                                 }
+                                return;
                               }
+
                               try {
                                 await git.revertFile(dir, file.name);
                                 await getDiff();
@@ -465,8 +460,8 @@ export default function FileList() {
                                 }
                                 return;
                               }
-                              dispatch(setDiff([...diffList]));
-                              dispatch(setStaged([...stagedList]));
+                              await getDiff();
+                              await getStaged();
                               toast({
                                 title: "Successfully Reverted",
                                 description: (
@@ -532,7 +527,6 @@ export default function FileList() {
                           size="sm"
                           onClick={async () => {
                             await git.addFile(dir, file.name);
-                            // dispatch(setDiff([file.path]));
                             await getStaged();
                             await getDiff();
                           }}>
@@ -556,7 +550,6 @@ export default function FileList() {
                           size="sm"
                           onClick={async () => {
                             await git.unstagedFile(dir, file.name);
-                            // dispatch(setStaged([file.path]));
                             await getDiff();
                             await getStaged();
                           }}>
@@ -607,28 +600,27 @@ export default function FileList() {
                               </>
                             }
                             onConfirm={async () => {
-                              if (fileStatus === "Staged") {
-                                try {
-                                  await git.unstagedFile(dir, file.name);
-                                } catch (error) {
-                                  console.error(error);
-                                  if (error instanceof Error) {
-                                    toast({
-                                      title: "Error Reverting",
-                                      description: (
-                                        <p>
-                                          <code>{file.name}</code> can&apos;t be
-                                          reverted
-                                          <br />
-                                          <code>{error.message}</code>
-                                        </p>
-                                      ),
-                                      variant: "destructive",
-                                    });
-                                  }
-                                  return;
+                              try {
+                                await git.unstagedFile(dir, file.name);
+                              } catch (error) {
+                                console.error(error);
+                                if (error instanceof Error) {
+                                  toast({
+                                    title: "Error Reverting",
+                                    description: (
+                                      <p>
+                                        <code>{file.name}</code> can&apos;t be
+                                        reverted
+                                        <br />
+                                        <code>{error.message}</code>
+                                      </p>
+                                    ),
+                                    variant: "destructive",
+                                  });
                                 }
+                                return;
                               }
+
                               try {
                                 await git.revertFile(dir, file.name);
                                 await getDiff();
@@ -651,8 +643,8 @@ export default function FileList() {
                                 }
                                 return;
                               }
-                              dispatch(setDiff([...diffList]));
-                              dispatch(setStaged([...stagedList]));
+                              await getDiff();
+                              await getStaged();
                               toast({
                                 title: "Successfully Reverted",
                                 description: (

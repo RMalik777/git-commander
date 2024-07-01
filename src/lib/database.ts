@@ -13,8 +13,10 @@ export async function getAllRepo() {
 
 export async function getRepoById(id: string) {
   try {
-    const response = await invoke("get_remote_repo_by_id", { id: id });
-    return await response;
+    const response: RepoFormat = await invoke("get_remote_repo_by_id", {
+      id: id,
+    });
+    return response;
   } catch (error) {
     console.error(error);
   }

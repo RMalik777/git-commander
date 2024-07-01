@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 import {
@@ -116,7 +116,7 @@ export default function Navbar() {
                 className={navOpen ? "self-end" : ""}
                 onClick={() => {
                   setNavOpen(!navOpen);
-                  localStorage.setItem("navOpen", !navOpen);
+                  localStorage.setItem("navOpen", (!navOpen).toString());
                 }}>
                 {navOpen ?
                   <ArrowLeftToLine size={18} className="" />

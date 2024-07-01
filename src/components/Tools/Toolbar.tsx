@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
@@ -35,7 +35,7 @@ import {
 import * as git from "@/lib/git";
 
 export default function Toolbar() {
-  const [themeMode, setThemeMode] = useState(null);
+  const [themeMode, setThemeMode] = useState<string | null>(null);
   window
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", (e) => {
@@ -68,7 +68,7 @@ export default function Toolbar() {
   const dispatch = useAppDispatch();
 
   const currentBranch = useAppSelector((state) => state.repo.branch);
-  const [branchList, setBranchList] = useState([]);
+  const [branchList, setBranchList] = useState<string[]>([]);
 
   const username = useAppSelector((state) => state.user.value);
   const repoName = useAppSelector((state) => state.repo.name);
@@ -76,8 +76,8 @@ export default function Toolbar() {
   useLayoutEffect(() => {
     if (repoName === "") return;
     async function getBranch() {
-      const target = await git.currentBranch(dirLocation);
-      const newBranchList = await git.branchList(dirLocation);
+      const target: string = await git.currentBranch(dirLocation);
+      const newBranchList: string[] = await git.branchList(dirLocation);
       setBranchList(newBranchList);
       const showedBranch = newBranchList?.find(
         (branch) => branch.toLowerCase() === target.toLowerCase()
@@ -139,16 +139,18 @@ export default function Toolbar() {
                           });
                           dispatch(setRepo({ branch: e }));
                         } catch (error) {
-                          console.error(error);
-                          toast({
-                            title: "Failed to switch branch",
-                            description: (
-                              <p className="whitespace-pre-wrap break-words">
-                                {error.message}
-                              </p>
-                            ),
-                            variant: "destructive",
-                          });
+                          if (error instanceof Error) {
+                            console.error(error);
+                            toast({
+                              title: "Failed to switch branch",
+                              description: (
+                                <p className="whitespace-pre-wrap break-words">
+                                  {error.message}
+                                </p>
+                              ),
+                              variant: "destructive",
+                            });
+                          }
                         }
                       }}>
                       {branchList.map((branch) => {

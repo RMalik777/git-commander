@@ -1,5 +1,6 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setUser } from "@/lib/Redux/userSlice";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,7 +30,8 @@ import { useForm } from "react-hook-form";
 
 import RepoTable from "@/components/Table/RepoTable";
 import AddRepo from "@/components/Dialog/AddRepo";
-import { useEffect, useState } from "react";
+
+import type { RepoFormat } from "@/lib/Types/repo";
 
 import * as db from "@/lib/database";
 
@@ -42,9 +44,9 @@ const formSchema = z.object({
 
 export default function Settings() {
   const { toast } = useToast();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const usernameForm = useForm({
+  const usernameForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
@@ -52,8 +54,8 @@ export default function Settings() {
   });
   const { handleSubmit, reset } = usernameForm;
 
-  const username = useSelector((state) => state.user.value);
-  function onSubmit(values) {
+  const username = useAppSelector((state) => state.user.value);
+  function onSubmit(values: z.infer<typeof formSchema>) {
     dispatch(setUser(values.username));
     localStorage.setItem("username", values.username);
     toast({
@@ -68,7 +70,7 @@ export default function Settings() {
     reset();
   }
 
-  const [repos, setRepos] = useState();
+  const [repos, setRepos] = useState<RepoFormat[]>([]);
   async function fetchData() {
     try {
       const response = await db.getAllRepo();
@@ -81,7 +83,7 @@ export default function Settings() {
     fetchData();
   }, []);
 
-  async function handleDelete(repoId, repoName) {
+  async function handleDelete(repoId: string, repoName: string) {
     await db.deleteRemoteRepoById(repoId);
     toast({
       title: "Repository Deleted",
