@@ -184,7 +184,7 @@ export default function FileList() {
                           variant="outline"
                           size="sm"
                           onClick={async () => {
-                            await git.unstagedFile(dir, file.name);
+                            await git.unstageFile(dir, file.name);
                             await getDiff();
                             await getStaged();
                           }}>
@@ -235,7 +235,7 @@ export default function FileList() {
                           onConfirm={async () => {
                             if (fileStatus === "Staged") {
                               try {
-                                await git.unstagedFile(dir, file.name);
+                                await git.unstageFile(dir, file.name);
                               } catch (error) {
                                 console.error(error);
                                 if (error instanceof Error) {
@@ -366,7 +366,7 @@ export default function FileList() {
                           variant="outline"
                           size="sm"
                           onClick={async () => {
-                            await git.unstagedFile(dir, file.name);
+                            await git.unstageFile(dir, file.name);
                             await getDiff();
                             await getStaged();
                           }}>
@@ -418,7 +418,7 @@ export default function FileList() {
                             }
                             onConfirm={async () => {
                               try {
-                                await git.unstagedFile(dir, file.name);
+                                await git.unstageFile(dir, file.name);
                               } catch (error) {
                                 console.error(error);
                                 if (error instanceof Error) {
@@ -549,7 +549,7 @@ export default function FileList() {
                           variant="outline"
                           size="sm"
                           onClick={async () => {
-                            await git.unstagedFile(dir, file.name);
+                            await git.unstageFile(dir, file.name);
                             await getDiff();
                             await getStaged();
                           }}>
@@ -601,7 +601,7 @@ export default function FileList() {
                             }
                             onConfirm={async () => {
                               try {
-                                await git.unstagedFile(dir, file.name);
+                                await git.unstageFile(dir, file.name);
                               } catch (error) {
                                 console.error(error);
                                 if (error instanceof Error) {

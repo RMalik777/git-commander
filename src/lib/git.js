@@ -1,6 +1,47 @@
 import { Command } from "@tauri-apps/api/shell";
 import { useSelector } from "react-redux";
 
+export async function addAll(path) {
+  const command = new Command("git 2 args", ["add", "."], { cwd: path });
+  await command.spawn().catch((error) => {
+    console.error(error);
+  });
+}
+export async function addFile(path, file) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 2 args", ["add", file], { cwd: path });
+    command.on("close", () => resolve());
+    command.on("error", (error) => reject(new Error(error)));
+    command.spawn().catch((error) => {
+      console.error(error);
+    });
+  });
+  return await response;
+}
+
+export async function branchList(path) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 2 args", ["branch", "-a"], { cwd: path });
+    const result = [];
+    command.on("error", (error) => console.error(`command error: "${error}"`));
+    command.stdout.on("data", (data) => {
+      const toPush = data
+        .replace(/[*+]/g, "")
+        .replace(/remotes\/origin\//gi, "")
+        .trim();
+      if (result.some((branch) => branch === toPush)) return;
+      if (toPush != "HEAD -> origin/main") result.push(toPush);
+    });
+    command.stderr.on("data", (line) => {
+      console.log(`command stderr: "${line}"`);
+      reject(new Error(line));
+    });
+    command.on("close", () => resolve(result));
+    command.spawn().catch((error) => console.error(error));
+  });
+  return await response;
+}
+
 export async function checkGit(path) {
   let errorMsg = null;
   let isGitRepo = false;
@@ -159,28 +200,6 @@ export async function currentBranch(path) {
   return await response;
 }
 
-export async function branchList(path) {
-  const response = new Promise((resolve, reject) => {
-    const command = new Command("git 2 args", ["branch", "-r"], { cwd: path });
-    const result = [];
-    command.on("error", (error) => console.error(`command error: "${error}"`));
-    command.stdout.on("data", (data) => {
-      const toPush = data
-        .replace(/[*+]/g, "")
-        .replace(/origin\//gi, "")
-        .trim();
-      if (toPush != "HEAD -> main") result.push(toPush);
-    });
-    command.stderr.on("data", (line) => {
-      console.log(`command stderr: "${line}"`);
-      reject(new Error(line));
-    });
-    command.on("close", () => resolve(result));
-    command.spawn().catch((error) => console.error(error));
-  });
-  return await response;
-}
-
 export async function switchBranch(path, branch) {
   const response = new Promise((resolve, reject) => {
     const resultNormal = [],
@@ -258,7 +277,7 @@ export async function showStaged(path) {
   });
   return await response;
 }
-export async function unstagedAll(path) {
+export async function unstageAll(path) {
   const response = new Promise((resolve, reject) => {
     const result = [];
     const command = new Command("git 2 args", ["reset", "HEAD"], {
@@ -272,7 +291,7 @@ export async function unstagedAll(path) {
   });
   return await response;
 }
-export async function unstagedFile(path, file) {
+export async function unstageFile(path, file) {
   const response = new Promise((resolve, reject) => {
     const result = [];
     const command = new Command("git 3 args", ["restore", "--staged", file], {
@@ -297,24 +316,6 @@ export async function revertFile(path, file) {
     command.stdout.on("data", (line) => result.push(line));
     command.stderr.on("data", (line) => result.push(line));
     command.spawn().catch((error) => reject(new Error(error)));
-  });
-  return await response;
-}
-
-export async function addAll(path) {
-  const command = new Command("git 2 args", ["add", "."], { cwd: path });
-  await command.spawn().catch((error) => {
-    console.error(error);
-  });
-}
-export async function addFile(path, file) {
-  const response = new Promise((resolve, reject) => {
-    const command = new Command("git 2 args", ["add", file], { cwd: path });
-    command.on("close", () => resolve());
-    command.on("error", (error) => reject(new Error(error)));
-    command.spawn().catch((error) => {
-      console.error(error);
-    });
   });
   return await response;
 }
