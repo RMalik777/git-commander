@@ -246,6 +246,7 @@ export async function showStaged(path) {
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => {
+      console.log(`command stdout: "${line}"`);
       result.push(line.trim().replace(/[\n\r]/g, ""));
     });
     command.stderr.on("data", (line) => {
@@ -307,10 +308,14 @@ export async function addAll(path) {
   });
 }
 export async function addFile(path, file) {
-  const command = new Command("git 2 args", ["add", file], { cwd: path });
-  await command.spawn().catch((error) => {
-    console.error(error);
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 2 args", ["add", file], { cwd: path });
+    command.on("close", () => resolve());
+    command.spawn().catch((error) => {
+      console.error(error);
+    });
   });
+  return await response;
 }
 
 export async function commit(path, message) {

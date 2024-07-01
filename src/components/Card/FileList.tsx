@@ -46,7 +46,6 @@ export default function FileList() {
     async function getAllChildDir(repo: string) {
       try {
         const dir = await readDir(repo, {});
-        console.log(dir);
         return dir;
       } catch (error) {
         console.error(error);
@@ -72,6 +71,7 @@ export default function FileList() {
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="changed">Changed</TabsTrigger>
             <TabsTrigger value="staged">Staged</TabsTrigger>
+            <TabsTrigger value="none">None</TabsTrigger>
           </TabsList>
           <TabsContent value="all">
             <ul className="flex flex-col rounded border bg-gray-100 p-2">
@@ -113,30 +113,39 @@ export default function FileList() {
           </TabsContent>
           <TabsContent value="changed">
             <ul className="flex flex-col rounded border bg-gray-100 p-2">
-              {diffList?.map((file) => {
-                return (
-                  <li key={file} className="w-fit">
-                    <code className="w-fit text-sm">
-                      {file?.split("/").shift()}
-                    </code>
-                  </li>
+              {dirList?.map((file) => {
+                const isChanged = diffList?.some(
+                  (diffFile) =>
+                    diffFile === file.name ||
+                    diffFile.split("/").shift() ===
+                      file.path.replace(dir + "\\", "")
                 );
+                return isChanged ?
+                    <li key={file.path} className="w-fit">
+                      <code className="w-fit text-sm">{file.name}</code>
+                    </li>
+                  : null;
               })}
             </ul>
           </TabsContent>
           <TabsContent value="staged">
             <ul className="flex flex-col rounded border bg-gray-100 p-2">
-              {stagedList?.map((file) => {
-                return (
-                  <li key={file} className="w-fit">
-                    <code className="w-fit text-sm">
-                      {file?.split("/").shift()}
-                    </code>
-                  </li>
+              {dirList?.map((file) => {
+                const isChanged = stagedList?.some(
+                  (diffFile) =>
+                    diffFile === file.name ||
+                    diffFile.split("/").shift() ===
+                      file.path.replace(dir + "\\", "")
                 );
+                return isChanged ?
+                    <li key={file.path} className="w-fit">
+                      <code className="w-fit text-sm">{file.name}</code>
+                    </li>
+                  : null;
               })}
             </ul>
           </TabsContent>
+          <TabsContent value="none"></TabsContent>
         </Tabs>
       </CardContent>
     </Card>
