@@ -69,64 +69,6 @@ export async function checkGit(path) {
   return await response;
 }
 
-export async function configUsername(path) {
-  const username = useSelector((state) => state.user.value);
-  const command = new Command(
-    "git username",
-    ["config", "user.name", username],
-    {
-      cwd: path,
-    }
-  );
-  await command.spawn().catch((error) => {
-    console.error(error);
-  });
-}
-export async function configUsernameReplace(path) {
-  const username = useSelector((state) => state.user.value);
-  const command = new Command(
-    "git username replace",
-    ["config", "--replace-all", "user.name", username],
-    { cwd: path }
-  );
-  await command.spawn().catch((error) => {
-    console.error(error);
-  });
-}
-export async function setSSLFalse() {
-  const command = new Command("git ssl", [
-    "config --global http.sslVerify false",
-  ]);
-  await command.spawn().catch((error) => {
-    console.error(error);
-  });
-}
-
-export async function push(path) {
-  const response = new Promise((resolve, reject) => {
-    const result = [];
-    const command = new Command("git 1 args", ["push"], { cwd: path });
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => result.push(line));
-    command.stderr.on("data", (line) => result.push(line));
-    command.spawn().catch((error) => reject(new Error(error)));
-  });
-  return await response;
-}
-export async function pull(path) {
-  const response = new Promise((resolve, reject) => {
-    const result = [];
-    const command = new Command("git 1 args", ["pull"], { cwd: path });
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => result.push(line));
-    command.stderr.on("data", (line) => result.push(line));
-    command.spawn().catch((error) => reject(new Error(error)));
-  });
-  return await response;
-}
-
 export async function clone(localRepo, remoteRepo) {
   configUsername(localRepo);
   const response = new Promise((resolve, reject) => {
@@ -150,172 +92,6 @@ export async function clone(localRepo, remoteRepo) {
       console.error(error);
       reject(new Error(error));
     });
-  });
-  return await response;
-}
-
-export async function status(path) {
-  const response = new Promise((resolve, reject) => {
-    const result = [];
-    const command = new Command("git 1 args", ["status"], { cwd: path });
-    command.on("error", (error) => {
-      console.error(`command error: "${error}"`);
-      reject(new Error(error));
-    });
-    command.stdout.on("data", (data) => console.log(data));
-    command.stderr.on("data", (line) =>
-      result.push(line.replace(/[\n\r]/g, ""))
-    );
-    command.spawn().catch((error) => {
-      console.error(error);
-      reject(new Error(error));
-    });
-  });
-  return await response;
-}
-
-export async function currentBranch(path) {
-  const response = new Promise((resolve, reject) => {
-    const regex = /(?:on branch) ([\S\s]+)/gi;
-    const command = new Command("git 1 args", ["status"], { cwd: path });
-    let result;
-    command.on("error", (error) => {
-      console.error(`command error: "${error}"`);
-      reject(new Error(error));
-    });
-    command.stdout.on("data", (data) => {
-      if (data.match(regex)) {
-        result = RegExp(regex).exec(data)[1];
-        resolve(result.trim());
-      }
-    });
-    command.stderr.on("data", (line) =>
-      console.log(`command stderr: "${line}"`)
-    );
-    command.spawn().catch((error) => {
-      console.error(error);
-      reject(new Error(error));
-    });
-  });
-  return await response;
-}
-
-export async function switchBranch(path, branch) {
-  const response = new Promise((resolve, reject) => {
-    const resultNormal = [],
-      resultReject = [];
-    const command = new Command("git 2 args", ["switch", branch], {
-      cwd: path,
-    });
-    command.on("close", () => {
-      if (resultReject.length > 1) {
-        const result = resultReject.join("").trim();
-        const leadingError = /(^error:)([\S\s]+)(aborting)/gi;
-        const newError = RegExp(leadingError).exec(result)[2];
-        if (newError) reject(new Error(newError.trim()));
-        else reject(new Error(result));
-      }
-      resolve(resultNormal);
-    });
-    command.on("error", (error) => {
-      reject(new Error(error));
-      console.error(`command error: "${error}"`);
-    });
-    command.stdout.on("data", (data) => resultNormal.push(data));
-    command.stderr.on("data", (line) => resultReject.push(line));
-    command.spawn().catch((error) => {
-      reject(new Error(error));
-      console.error("Rejected: ", error);
-    });
-  });
-  return await response;
-}
-
-export async function showChanged(path) {
-  const response = new Promise((resolve, reject) => {
-    const result = [];
-    const command = new Command("git 2 args", ["diff", "--name-only"], {
-      cwd: path,
-    });
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => {
-      result.push(line.trim().replace(/[\n\r]/g, ""));
-    });
-    command.stderr.on("data", (line) =>
-      console.log(`command stderr: "${line}"`)
-    );
-    command.spawn().catch((error) => {
-      reject(new Error(error));
-    });
-  });
-  return await response;
-}
-
-export async function showStaged(path) {
-  const response = new Promise((resolve, reject) => {
-    const result = [];
-    const command = new Command(
-      "git 3 args",
-      ["diff", "--name-only", "--cached"],
-      {
-        cwd: path,
-      }
-    );
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => {
-      console.log(`command stdout: "${line}"`);
-      result.push(line.trim().replace(/[\n\r]/g, ""));
-    });
-    command.stderr.on("data", (line) => {
-      console.log(`command stderr: "${line}"`);
-    });
-    command.spawn().catch((error) => {
-      reject(new Error(error));
-    });
-  });
-  return await response;
-}
-export async function unstageAll(path) {
-  const response = new Promise((resolve, reject) => {
-    const result = [];
-    const command = new Command("git 2 args", ["reset", "HEAD"], {
-      cwd: path,
-    });
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => result.push(line));
-    command.stderr.on("data", (line) => result.push(line));
-    command.spawn().catch((error) => reject(new Error(error)));
-  });
-  return await response;
-}
-export async function unstageFile(path, file) {
-  const response = new Promise((resolve, reject) => {
-    const result = [];
-    const command = new Command("git 3 args", ["restore", "--staged", file], {
-      cwd: path,
-    });
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => result.push(line));
-    command.stderr.on("data", (line) => result.push(line));
-    command.spawn().catch((error) => reject(new Error(error)));
-  });
-  return await response;
-}
-export async function revertFile(path, file) {
-  const response = new Promise((resolve, reject) => {
-    const result = [];
-    const command = new Command("git 2 args", ["restore", file], {
-      cwd: path,
-    });
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => result.push(line));
-    command.stderr.on("data", (line) => result.push(line));
-    command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
 }
@@ -350,8 +126,168 @@ export async function commit(path, message) {
 }
 
 export async function commitAll(path, message) {
-  // await addAll(path);
+  await addAll(path);
   return await commit(path, message);
+}
+
+export async function configUsername(path) {
+  const username = useSelector((state) => state.user.value);
+  const command = new Command(
+    "git username",
+    ["config", "user.name", username],
+    {
+      cwd: path,
+    }
+  );
+  await command.spawn().catch((error) => {
+    console.error(error);
+  });
+}
+export async function configUsernameReplace(path) {
+  const username = useSelector((state) => state.user.value);
+  const command = new Command(
+    "git username replace",
+    ["config", "--replace-all", "user.name", username],
+    { cwd: path }
+  );
+  await command.spawn().catch((error) => {
+    console.error(error);
+  });
+}
+
+export async function currentBranch(path) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 2 args", ["branch", "--show-current"], {
+      cwd: path,
+    });
+    let result;
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => {
+      console.error(`command error: "${error}"`);
+      reject(new Error(error));
+    });
+    command.stdout.on("data", (data) => (result = data.trim()));
+    command.stderr.on("data", (line) =>
+      console.log(`command stderr: "${line}"`)
+    );
+    command.spawn().catch((error) => {
+      console.error(error);
+      reject(new Error(error));
+    });
+  });
+  return await response;
+}
+
+export async function push(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 1 args", ["push"], { cwd: path });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line));
+    command.stderr.on("data", (line) => result.push(line));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+export async function pull(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 1 args", ["pull"], { cwd: path });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line));
+    command.stderr.on("data", (line) => result.push(line));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
+export async function revertFile(path, file) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 2 args", ["restore", file], {
+      cwd: path,
+    });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line));
+    command.stderr.on("data", (line) => result.push(line));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
+export async function showChanged(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 2 args", ["diff", "--name-only"], {
+      cwd: path,
+    });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) =>
+      result.push(line.trim().replace(/[\n\r]/g, ""))
+    );
+    command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
+export async function showStaged(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command(
+      "git 3 args",
+      ["diff", "--name-only", "--cached"],
+      {
+        cwd: path,
+      }
+    );
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) =>
+      result.push(line.trim().replace(/[\n\r]/g, ""))
+    );
+    command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
+export async function setSSLFalse() {
+  const command = new Command("git ssl", [
+    "config --global http.sslVerify false",
+  ]);
+  await command.spawn().catch((error) => {
+    console.error(error);
+  });
+}
+
+export async function switchBranch(path, branch) {
+  const response = new Promise((resolve, reject) => {
+    const resultNormal = [],
+      resultReject = [];
+    const command = new Command("git 2 args", ["switch", branch], {
+      cwd: path,
+    });
+    command.on("close", () => {
+      if (resultReject.length > 1) {
+        const result = resultReject.join("").trim();
+        const leadingError = /(^error:)([\S\s]+)(aborting)/gi;
+        const newError = RegExp(leadingError).exec(result)[2];
+        if (newError) reject(new Error(newError.trim()));
+        else reject(new Error(result));
+      }
+      resolve(resultNormal);
+    });
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (data) => resultNormal.push(data));
+    command.stderr.on("data", (line) => resultReject.push(line));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
 }
 
 export async function undoLastCommit(path) {
@@ -371,19 +307,31 @@ export async function undoLastCommit(path) {
   return await response;
 }
 
-export async function undoStaged(path) {
+export async function unstageAll(path) {
   const response = new Promise((resolve, reject) => {
     const result = [];
-    const command = new Command("git 1 args", ["reset"], {
+    const command = new Command("git 2 args", ["reset", "HEAD"], {
       cwd: path,
     });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line));
     command.stderr.on("data", (line) => result.push(line));
-    command.spawn().catch((error) => {
-      reject(new Error(error));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+export async function unstageFile(path, file) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 3 args", ["restore", "--staged", file], {
+      cwd: path,
     });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line));
+    command.stderr.on("data", (line) => result.push(line));
+    command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
 }
