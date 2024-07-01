@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
+import { open } from "@tauri-apps/api/shell";
 
 import type { RepoFormat } from "@/lib/Types/repo";
 
@@ -34,7 +35,13 @@ export default function RepoTable({
       <TableBody>
         {repos?.map((repo) => (
           <TableRow key={repo.id}>
-            <TableCell className="font-medium">{repo.repo_name}</TableCell>
+            <TableCell
+              className="font-medium"
+              onClick={async () => {
+                await open(repo.repo_url);
+              }}>
+              {repo.repo_name}
+            </TableCell>
             <TableCell>
               <a href={repo.repo_url} target="_blank" rel="noopener noreferrer">
                 <code>{repo.repo_url}</code>

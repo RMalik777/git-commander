@@ -34,10 +34,10 @@ import * as git from "@/lib/git";
 
 export default function FileList() {
   const { toast } = useToast();
+  const dispatch = useAppDispatch();
   const [openDialogId, setOpenDialogId] = useState("");
   const repoName = useAppSelector((state) => state.repo.name);
   const dir = useAppSelector((state) => state.repo.directory);
-  const dispatch = useAppDispatch();
 
   const diffList = useAppSelector((state) => state.repo.diff);
   async function getDiff() {
@@ -53,6 +53,7 @@ export default function FileList() {
   async function getStaged() {
     const data = await git.showStaged(dir);
     dispatch(setRepo({ staged: data }));
+    console.log("Dispatched Staged", data);
   }
   useEffect(() => {
     if (dir === "") return;
@@ -75,6 +76,8 @@ export default function FileList() {
   useEffect(() => {
     if (dir === "") return;
     setDirectory();
+    // console.log("StagedList", stagedList);
+    // console.log("DiffList", diffList);
   }, [repoName, dir, stagedList, diffList]);
   return (
     <Card className="w-full">
@@ -118,9 +121,25 @@ export default function FileList() {
           <TableBody>
             {dirList.map((file) => {
               let fileStatus;
-              if (diffList.some((target) => target === file.name)) {
+              if (
+                diffList.some((target) => {
+                  return (
+                    target === file.name ||
+                    target.split("/").shift() ===
+                      file.path.replace(dir + "\\", "")
+                  );
+                })
+              ) {
                 fileStatus = "Changed";
-              } else if (stagedList.some((target) => target === file.name)) {
+              } else if (
+                stagedList.some((target) => {
+                  return (
+                    target === file.name ||
+                    target.split("/").shift() ===
+                      file.path.replace(dir + "\\", "")
+                  );
+                })
+              ) {
                 fileStatus = "Staged";
               } else {
                 fileStatus = "Unchanged";
@@ -134,9 +153,9 @@ export default function FileList() {
                       size="sm"
                       onClick={async () => {
                         await git.addFile(dir, file.name);
-                        await getDiff();
+                        // dispatch(setDiff([file.path]));
                         await getStaged();
-                        dispatch(setDiff([...diffList]));
+                        await getDiff();
                       }}>
                       Stage
                     </Button>
@@ -156,8 +175,9 @@ export default function FileList() {
                       size="sm"
                       onClick={async () => {
                         await git.unstagedFile(dir, file.name);
+                        // dispatch(setStaged([file.path]));
                         await getDiff();
-                        dispatch(setStaged([...stagedList]));
+                        await getStaged();
                       }}>
                       Unstage
                     </Button>
