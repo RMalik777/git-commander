@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
@@ -35,8 +35,7 @@ import {
 import * as git from "@/lib/git";
 
 export default function Toolbar() {
-  let themeMode;
-  themeMode = window.localStorage.getItem("theme");
+  const [themeMode, setThemeMode] = useState(null);
   window
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", (e) => {
@@ -89,7 +88,7 @@ export default function Toolbar() {
   }, [currentBranch, repoName]);
 
   return (
-    <div className="flex h-fit flex-row items-center justify-between border-b border-neutral-200 bg-white px-3 py-3">
+    <div className="flex h-fit flex-row items-center justify-between border-b border-neutral-200 bg-white px-3 py-3 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950">
       <TooltipProvider delayDuration={50}>
         <div className="flex h-full flex-row items-center gap-4">
           <Button variant="outline" size="sm">
@@ -256,44 +255,53 @@ export default function Toolbar() {
             </TooltipContent>
           </Tooltip>
           <Separator orientation="vertical" className="h-full" />
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              // if the theme is dark, change to light
-              if (
-                document.documentElement.classList.contains("dark") &&
-                window.localStorage.getItem("theme") === "Dark"
-              ) {
-                document.documentElement.classList.remove("dark");
-                document.documentElement.style.colorScheme = "light";
-                window.localStorage.setItem("theme", "Light");
-                themeMode = "Light";
-              }
-              // if the theme is light, change to follow system
-              else if (
-                !document.documentElement.classList.contains("dark") &&
-                window.localStorage.getItem("theme") === "Light"
-              ) {
-                document.documentElement.classList.remove("dark");
-                document.documentElement.style.removeProperty("color-scheme");
-                window.localStorage.removeItem("theme");
-                themeMode = null;
-              }
-              // if the theme is following system, change to dark
-              else {
-                document.documentElement.classList.add("dark");
-                document.documentElement.style.colorScheme = "dark";
-                window.localStorage.setItem("theme", "Dark");
-                themeMode = "Dark";
-              }
-            }}>
-            {themeMode == "Light" ?
-              <Sun />
-            : themeMode == "Dark" ?
-              <Moon />
-            : <SunMoon />}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => {
+                  // if the theme is dark, change to light
+                  if (
+                    document.documentElement.classList.contains("dark") &&
+                    window.localStorage.getItem("theme") === "Dark"
+                  ) {
+                    document.documentElement.classList.remove("dark");
+                    document.documentElement.style.colorScheme = "light";
+                    window.localStorage.setItem("theme", "Light");
+                    setThemeMode("Light");
+                  }
+                  // if the theme is light, change to follow system
+                  else if (
+                    !document.documentElement.classList.contains("dark") &&
+                    window.localStorage.getItem("theme") === "Light"
+                  ) {
+                    document.documentElement.classList.remove("dark");
+                    document.documentElement.style.removeProperty(
+                      "color-scheme"
+                    );
+                    window.localStorage.removeItem("theme");
+                    setThemeMode("System");
+                  }
+                  // if the theme is following system, change to dark
+                  else {
+                    document.documentElement.classList.add("dark");
+                    document.documentElement.style.colorScheme = "dark";
+                    window.localStorage.setItem("theme", "Dark");
+                    setThemeMode("Dark");
+                  }
+                }}>
+                {themeMode == "Light" ?
+                  <Sun />
+                : themeMode == "Dark" ?
+                  <Moon />
+                : <SunMoon />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p>{themeMode}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </TooltipProvider>
     </div>

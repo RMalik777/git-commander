@@ -61,14 +61,14 @@ export default function RepoView() {
 
   return (
     <Card className="h-fit flex-grow">
-      <CardHeader className="bg-gray-100 pb-3">
+      <CardHeader className="">
         <CardTitle>Git Repository</CardTitle>
         <CardDescription className="flex max-w-full flex-col text-balance leading-relaxed">
           Select your local git repository
         </CardDescription>
       </CardHeader>
-      <CardContent className="pt-3">
-        <p className="w-fit rounded border bg-gray-100 px-2 py-1 text-gray-900">
+      <CardContent className="">
+        <p className="w-fit rounded border bg-gray-100 px-2 py-1 text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50">
           <code className="">{dir}</code>
         </p>
         <span className={isGitRepo ? "text-green-600" : "text-red-600"}>

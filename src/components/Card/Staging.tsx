@@ -118,7 +118,7 @@ export default function FileList() {
           <TabsContent value="all">
             <Table>
               <TableHeader>
-                <TableRow className="bg-neutral-100">
+                <TableRow>
                   <TableHead>File Name</TableHead>
                   <TableHead className="hidden sm:table-cell">Path</TableHead>
                   <TableHead className="text-center">Status</TableHead>
@@ -128,7 +128,7 @@ export default function FileList() {
               <TableBody>
                 {dirList.map((file) => {
                   let fileStatus = "Unchanged";
-                  let textColor = "text-black";
+                  let textColor = "text-black dark:text-neutral-50";
                   if (
                     diffList.some((target) => {
                       return (
@@ -139,7 +139,7 @@ export default function FileList() {
                     })
                   ) {
                     fileStatus = "Changed";
-                    textColor = "text-blue-600";
+                    textColor = "text-blue-600 dark:text-blue-400";
                   } else if (
                     stagedList.some((target) => {
                       return (
@@ -150,7 +150,7 @@ export default function FileList() {
                     })
                   ) {
                     fileStatus = "Staged";
-                    textColor = "text-green-600";
+                    textColor = "text-green-600 dark:text-green-400";
                   }
                   let actionButton;
                   if (fileStatus === "Changed") {
