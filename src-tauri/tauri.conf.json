@@ -14,7 +14,7 @@
       "fs": {
         "all": true,
         "scope": [
-          "$DOCUMENT/*",""
+          "**/*"
         ]
       },
       "path": {
