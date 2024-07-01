@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo, setDiff, setStaged } from "@/lib/Redux/repoSlice";
 import { FileEntry, readDir } from "@tauri-apps/api/fs";
+import { open } from "@tauri-apps/api/shell";
 
 import {
   Card,
@@ -53,7 +54,6 @@ export default function FileList() {
   async function getStaged() {
     const data = await git.showStaged(dir);
     dispatch(setRepo({ staged: data }));
-    console.log("Dispatched Staged", data);
   }
   useEffect(() => {
     if (dir === "") return;
@@ -76,8 +76,6 @@ export default function FileList() {
   useEffect(() => {
     if (dir === "") return;
     setDirectory();
-    // console.log("StagedList", stagedList);
-    // console.log("DiffList", diffList);
   }, [repoName, dir, stagedList, diffList]);
   return (
     <Card className="w-full">
@@ -114,13 +112,14 @@ export default function FileList() {
             <TableRow className="bg-neutral-100">
               <TableHead>File Name</TableHead>
               <TableHead className="hidden sm:table-cell">Path</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Action</TableHead>
+              <TableHead className="text-center">Status</TableHead>
+              <TableHead className="text-center">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {dirList.map((file) => {
-              let fileStatus;
+              let fileStatus = "Unchanged";
+              let textColor = "text-black";
               if (
                 diffList.some((target) => {
                   return (
@@ -131,6 +130,7 @@ export default function FileList() {
                 })
               ) {
                 fileStatus = "Changed";
+                textColor = "text-blue-600";
               } else if (
                 stagedList.some((target) => {
                   return (
@@ -141,14 +141,14 @@ export default function FileList() {
                 })
               ) {
                 fileStatus = "Staged";
-              } else {
-                fileStatus = "Unchanged";
+                textColor = "text-green-600";
               }
               let actionButton;
               if (fileStatus === "Changed") {
                 actionButton = (
                   <>
                     <Button
+                    className="flex-grow"
                       variant="outline"
                       size="sm"
                       onClick={async () => {
@@ -160,6 +160,7 @@ export default function FileList() {
                       Stage
                     </Button>
                     <Button
+                    className="flex-grow"
                       variant="destructive"
                       size="sm"
                       onClick={() => setOpenDialogId(file.path)}>
@@ -171,6 +172,7 @@ export default function FileList() {
                 actionButton = (
                   <>
                     <Button
+                    className="flex-grow"
                       variant="outline"
                       size="sm"
                       onClick={async () => {
@@ -182,6 +184,7 @@ export default function FileList() {
                       Unstage
                     </Button>
                     <Button
+                    className="flex-grow"
                       variant="destructive"
                       size="sm"
                       onClick={() => setOpenDialogId(file.path)}>
@@ -195,12 +198,19 @@ export default function FileList() {
 
               return (
                 <TableRow key={file.name}>
-                  <TableCell>{file.name}</TableCell>
-                  <TableCell className="hidden break-all sm:table-cell">
+                  <TableCell
+                    className={"cursor-pointer font-medium " + textColor}
+                    onClick={async () => {
+                      await open(file.path);
+                    }}>
+                    {file.name}
+                  </TableCell>
+                  <TableCell
+                    className={"hidden break-all sm:table-cell " + textColor}>
                     {file.path}
                   </TableCell>
-                  <TableCell>{fileStatus}</TableCell>
-                  <TableCell className="flex flex-col items-center gap-2 lg:flex-row">
+                  <TableCell className={textColor}>{fileStatus}</TableCell>
+                  <TableCell className="flex flex-col items-center justify-between gap-2 lg:flex-row">
                     {actionButton}
                     <ConfirmationDialog
                       open={openDialogId === file.path}
