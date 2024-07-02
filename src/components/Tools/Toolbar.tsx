@@ -1,4 +1,5 @@
 import { useState, useLayoutEffect } from "react";
+import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
@@ -246,9 +247,11 @@ export default function Toolbar() {
         <div className="flex h-full w-fit flex-row items-center gap-4">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="sm">
-                <p className="text-base">{username}</p>
-              </Button>
+              <NavLink to="/settings">
+                <Button variant="outline" size="sm">
+                  <p className="text-base">{username}</p>
+                </Button>
+              </NavLink>
             </TooltipTrigger>
             <TooltipContent side="bottom">
               <p>
