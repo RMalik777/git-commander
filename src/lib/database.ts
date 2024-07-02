@@ -1,6 +1,41 @@
 import { invoke } from "@tauri-apps/api";
 import { RepoFormat } from "@/lib/Types/repo";
 
+export async function checkNameDup(repoName: string) {
+  const response = await getAllRepo();
+  const nameIsDuplicate = response.find((repo) => repo.repo_name === repoName);
+  if (nameIsDuplicate) {
+    return true;
+  }
+  return false;
+}
+
+export async function checkUrlDup(repoUrl: string) {
+  const response = await getAllRepo();
+  const urlIsDuplicate = response.find((repo) => repo.repo_url === repoUrl);
+  if (urlIsDuplicate) {
+    return true;
+  }
+  return false;
+}
+
+export async function deleteAllRemoteRepo() {
+  try {
+    await invoke("delete_all_remote_repo");
+  } catch (error) {
+    console.error(error);
+    throw Error(error as string);
+  }
+}
+export async function deleteRemoteRepoById(id: string) {
+  try {
+    await invoke("delete_remote_repo_by_id", { id: id });
+  } catch (error) {
+    console.error(error);
+    throw Error(error as string);
+  }
+}
+
 export async function getAllRepo() {
   try {
     const response: RepoFormat[] = await invoke("get_all_remote_repo");
@@ -39,24 +74,6 @@ export async function insertIntoRepo(repoName: string, repoUrl: string) {
   }
 }
 
-export async function deleteRemoteRepoById(id: string) {
-  try {
-    await invoke("delete_remote_repo_by_id", { id: id });
-  } catch (error) {
-    console.error(error);
-    throw Error(error as string);
-  }
-}
-
-export async function deleteAllRemoteRepo() {
-  try {
-    await invoke("delete_all_remote_repo");
-  } catch (error) {
-    console.error(error);
-    throw Error(error as string);
-  }
-}
-
 export async function updateRemoteRepoById(
   id: string,
   newRepoName: string,
@@ -72,13 +89,4 @@ export async function updateRemoteRepoById(
     console.error(error);
     throw Error(error as string);
   }
-}
-
-async function checkUrlDup(repoUrl: string) {
-  const response = await getAllRepo();
-  const urlIsDuplicate = response.find((repo) => repo.repo_url === repoUrl);
-  if (urlIsDuplicate) {
-    return true;
-  }
-  return false;
 }
