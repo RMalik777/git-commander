@@ -18,7 +18,6 @@ export default function Index() {
         <RepoView />
         <Commit />
       </div>
-      <h1>Index</h1>
     </>
   );
 }
