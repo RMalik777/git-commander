@@ -19,35 +19,49 @@ export async function getRepoById(id: string) {
     return response;
   } catch (error) {
     console.error(error);
+    throw Error(error as string);
   }
 }
 
 export async function insertIntoRepo(repoName: string, repoUrl: string) {
+  const isDuplicate = await checkUrlDup(repoUrl);
+  if (isDuplicate) {
+    throw new Error("Repository URL already exists");
+  }
   try {
-    const response = await invoke("insert_remote_repo", {
+    await invoke("insert_remote_repo", {
       repoName: repoName,
       repoUrl: repoUrl,
     });
-    return await response;
   } catch (error) {
-    return new Error(error as string);
+    console.error(error);
+    throw new Error(error as string);
   }
 }
 
 export async function deleteRemoteRepoById(id: string) {
   try {
-    const response = await invoke("delete_remote_repo_by_id", { id: id });
-    return await response;
+    await invoke("delete_remote_repo_by_id", { id: id });
   } catch (error) {
     console.error(error);
+    throw Error(error as string);
   }
 }
 
 export async function deleteAllRemoteRepo() {
   try {
-    const response = await invoke("delete_all_remote_repo");
-    return await response;
+    await invoke("delete_all_remote_repo");
   } catch (error) {
     console.error(error);
+    throw Error(error as string);
   }
+}
+
+async function checkUrlDup(repoUrl:string) {
+  const response = await getAllRepo();
+  const urlIsDuplicate = response.find((repo) => repo.repo_url === repoUrl);
+  if (urlIsDuplicate) {
+    return true;
+  }
+  return false;
 }

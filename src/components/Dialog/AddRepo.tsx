@@ -37,7 +37,9 @@ const formSchema = z.object({
   link: z.string().url({ message: "Please enter a valid URL" }),
 });
 
-export default function AddRepo({ afterAdd }: { afterAdd: () => void }) {
+export default function AddRepo({
+  afterAdd,
+}: Readonly<{ afterAdd: () => void }>) {
   const [open, setOpen] = useState(false);
 
   const addRepoForm = useForm<z.infer<typeof formSchema>>({
@@ -49,16 +51,8 @@ export default function AddRepo({ afterAdd }: { afterAdd: () => void }) {
   });
   const { handleSubmit, reset } = addRepoForm;
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    const response = await db.insertIntoRepo(values.name, values.link);
-    console.log(await response);
-    if (response instanceof Error) {
-      toast({
-        title: "Error",
-        description: response.message,
-        variant: "destructive",
-      });
-    } else {
+    try {
+      await db.insertIntoRepo(values.name, values.link);
       reset();
       toast({
         title: "Repository added",
@@ -66,6 +60,14 @@ export default function AddRepo({ afterAdd }: { afterAdd: () => void }) {
       });
       setOpen(false);
       afterAdd();
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     }
   }
   const { toast } = useToast();
