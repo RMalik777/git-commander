@@ -74,7 +74,7 @@ export default function FileList() {
             <TabsTrigger value="none">None</TabsTrigger>
           </TabsList>
           <TabsContent value="all">
-            <ul className="flex flex-col rounded border bg-gray-100 p-2 dark:bg-neutral-800">
+            <ul className="flex flex-col rounded border bg-gray-100 p-2 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-800">
               {dirList?.map((file) => {
                 const isChanged = diffList?.some(
                   (diffFile) =>
@@ -93,10 +93,10 @@ export default function FileList() {
                     <code
                       className={
                         (isChanged ?
-                          "text-bold text-blue-600 dark:text-blue-400"
+                          "text-bold text-blue-600 duration-200 ease-out dark:text-blue-400"
                         : "") +
                         (isStaged ?
-                          "text-bold text-green-600 dark:text-green-400"
+                          "text-bold text-green-600 duration-200 ease-out dark:text-green-400"
                         : "") +
                         " w-fit text-sm"
                       }>
@@ -108,11 +108,13 @@ export default function FileList() {
             </ul>
             <div className="flex flex-col">
               <small>
-                <span className="text-blue-600 dark:text-blue-400">blue</span> =
-                changed file
+                <span className="text-blue-600 duration-200 ease-out dark:text-blue-400">
+                  blue
+                </span>{" "}
+                = changed file
               </small>
               <small>
-                <span className="text-green-600 dark:text-green-400">
+                <span className="text-green-600 duration-200 ease-out dark:text-green-400">
                   green
                 </span>{" "}
                 = staged file
@@ -120,7 +122,7 @@ export default function FileList() {
             </div>
           </TabsContent>
           <TabsContent value="changed">
-            <ul className="flex flex-col rounded border bg-gray-100 p-2">
+            <ul className="flex flex-col rounded border bg-gray-100 p-2 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-800">
               {dirList?.map((file) => {
                 const isChanged = diffList?.some(
                   (diffFile) =>
@@ -137,7 +139,7 @@ export default function FileList() {
             </ul>
           </TabsContent>
           <TabsContent value="staged">
-            <ul className="flex flex-col rounded border bg-gray-100 p-2">
+            <ul className="flex flex-col rounded border bg-gray-100 p-2 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-800">
               {dirList?.map((file) => {
                 const isChanged = stagedList?.some(
                   (diffFile) =>
