@@ -1,6 +1,10 @@
 # Git Commander
 
-## Quick Start
+## Download
+
+Available in [release](https://github.com/RMalik777/git-commander/releases)
+
+## Quick Start Dev
 
 ### Recommended IDE Setup
 
@@ -35,7 +39,21 @@ npm run tauri build
 
 The finished build will be located inside `./src-tauri/target/release/bundle` in the form of `.msi` inside msi folder and `.exe` inside nsis folder.
 
+## How to use
+
+>COMING SOON
+
+### Initial Setup
+
 ## Development
+
+### Front End
+
+Built with [React](https://react.dev/) with UI using [shadcn/ui](https://ui.shadcn.com/).
+
+#### shadcn/ui
+
+To use shadcn/ui, go to [shadcn/ui docs](https://ui.shadcn.com/docs/components) and choose the components you want to install. The installed components is located inside `/src/components/ui`
 
 ### Git Command
 
