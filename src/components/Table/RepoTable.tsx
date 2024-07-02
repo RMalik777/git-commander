@@ -58,7 +58,7 @@ export default function RepoTable({
               </a>
             </TableCell>
             <TableCell align="center">
-              <div className="flex items-center justify-between gap-2 md:gap-4">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 md:gap-4">
                 <EditRepo
                   key={repo.id + repo.repo_name + repo.repo_url}
                   repoId={repo.id}

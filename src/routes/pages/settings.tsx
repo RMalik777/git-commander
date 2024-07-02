@@ -87,7 +87,11 @@ export default function Settings() {
     await db.deleteRemoteRepoById(repoId);
     toast({
       title: "Repository Deleted",
-      description: `Repository ${repoName} deleted successfully`,
+      description: (
+        <p>
+          Repository <b>{repoName}</b> deleted successfully
+        </p>
+      ),
     });
     fetchData();
   }
