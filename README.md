@@ -38,31 +38,48 @@ The finished build will be located inside `./src-tauri/target/release/bundle` in
 ## Git Command
 
 All command related got Git are located inside `/src/lib/git.js`.
-Build using Tauri [Tauri Shell API](https://tauri.app/v1/api/js/shell#command)
-List of command:
+Build using Tauri [Tauri Shell API](https://tauri.app/v1/api/js/shell#command). All git commands available can be seen in [Git Documentation](https://git-scm.com/docs)\
+List of all command:
 
+<!-- prettier-ignore-start -->
 | Function Name  | Parameter | Git Command                       | Notes |
 | -------------- | --------- | --------------------------------- | ----- |
-|`addAll`|`path`|`git add .`|Adding (staging) all changed files|
-|`addFile`|`path`, `file`|`git add <file_name>`|Adding (staging) specific file|
-|`branchList`|`path`|`git branch -a`|Return a list of all branch available. Parameter `-a` is used to get all the available branch local and remote|
-|`checkGit`| `path`| `git status`|Checking whether a opened folder is a git repository or not|
-|`clone`|`localRepo`, `remoteRepo`|`git clone <remoteRepo>`|Clone a remote repository into a local directory|
-|`commit`|`path`, `message`|`git commit -m <message>`|Commit all staged changes |
-|`commitAll`|`path`, `message`|`git add .` + `git commit -m <message>`|Add all changed item and commit it directly|
-| `configUsername` | `path`    | `git config user.name <username>` |Only `path` used as parameter because this function is only setting the user.name on **local** config and **global** config. The username is handled by Redux|
-|`configUsernameReplace` |`path`|`git config --replace-all user.name <username>`|For changing username, if the git require replace all parameter <br/> **(Unused)**|
-|`currentBranch`|`path`|`git branch --show-current`|Get the current branch|
+|`addAll`|`path`|`git add .`|Adding (staging) all changed files.|
+|`addFile`|`path`, `file`|`git add <file_name>`|Adding (staging) specific file.|
+|`branchList`|`path`|`git branch -a`|Return a list of all branch .available. Parameter `-a` is used to get all the available branch local and remote.|
+|`checkGit`| `path`| `git status`|Checking whether a opened folder is a git repository or not.|
+|`clone`|`localRepo`, `remoteRepo`|`git clone <remoteRepo>`|Clone a remote repository into a local directory.|
+|`commit`|`path`, `message`|`git commit -m <message>`|Commit all staged changes.|
+|`commitAll`|`path`, `message`|`git add .` + `git commit -m <message>`|Add all changed item and commit it directly.|
+| `configUsername` | `path`    | `git config user.name <username>` |Only `path` used as parameter because this function is only setting the user.name on **local** config and **global** config. The username is handled by Redux.|
+|`configUsernameReplace` |`path`|`git config --replace-all user.name <username>`|For changing username, if the git require replace all parameter. <br/> **(Unused)**|
+|`currentBranch`|`path`|`git branch --show-current`|Get the current branch.|
 |`pull`|`path`|`git pull`||
 |`push`|`path`|`git push`||
-|`revertFile`|`path`, `file`|`git restore <file>`|Revert all the changes made into the file (proceed with caution, this action is irreversible)|
+|`revertFile`|`path`, `file`|`git restore <file>`|Revert all the changes made into the file **(proceed with caution, this action is irreversible)**.|
 |`setSSLFalse`|`-`|`git config --global http.sslVerify false`|For disabling SSL Verification.|
-|`showChanged`|`path`|`git diff --name-only`|Show all changed file made|
-|`showStaged`|`path`|`git diff --name-only --cached`|Show all staged files|
-|`switchBranch`|`path`, `branch`|`git switch <branch>`|Change branch|
-|`undoLastCommit`|`path`|`git reset --soft HEAD^`|Undo last commit to a last commit known. Option `--soft` to keep all the files untouched. Option `HEAD^` refer to a last commit|
-|`unstageAll`|`path`|`git reset HEAD`|Undo all staged file. No option so the method is default (`--mixed`). HEAD is refering to the current HEAD |
-|`unstageFile`|`path`, `file`|`git restore --staged <file>`|Undo staged but only one specific file|
+|`showChanged`|`path`|`git diff --name-only`|Show all changed file made.|
+|`showStaged`|`path`|`git diff --name-only --cached`|Show all staged files.|
+|`switchBranch`|`path`, `branch`|`git switch <branch>`|Change branch.|
+|`undoLastCommit`|`path`|`git reset --soft HEAD^`|Undo last commit to a last commit known. Option `--soft` to keep all the files untouched. Option `HEAD^` refer to a last commit.|
+|`unstageAll`|`path`|`git reset HEAD`|Undo all staged file. No option so the method is default (`--mixed`). HEAD is refering to the current HEAD.|
+|`unstageFile`|`path`, `file`|`git restore --staged <file>`|Undo staged but only one specific file.|
+<!-- prettier-ignore-end -->
+
+## Database TS Call
+
+Located inside `/src/lib/database.ts`, the function is built using [Tauri Invoke API](https://tauri.app/v1/guides/features/command/). The function will invoke (call) the handler function inside rust file located in `/src-tauri/src/handler`. The Handler then will process the input (if any) and then call the repository function to query the db.\
+Types available inside `/src/lib/Types/repo.ts`
+
+| Function Name          | Parameter            | Return                  |
+| ---------------------- | -------------------- | ----------------------- |
+| `checkNameDup`         | `repoName`           | `Promise<boolean>`      |
+| `checkUrlDup`          | `repoUrl`            | `Promise<boolean>`      |
+| `deleteAllRemoteRepo`  | `-`                  | `Promise<void>`         |
+| `deleteRemoteRepoById` | `id`                 | `Promise<void>`         |
+| `getAllRepo`           | `-`                  | `Promise<RepoFormat[]>` |
+| `getRepoById`          | `id`                 | `Promise<RepoFormat>`   |
+| `insertIntoRepo`       | `repoName`,`repoUrl` | `Promise<void>`         |
 
 # References
 
