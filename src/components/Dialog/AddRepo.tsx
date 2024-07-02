@@ -78,9 +78,9 @@ export default function AddRepo({
       </DialogTrigger>
       <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Add Repository</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
+            Add a new repository to the list
           </DialogDescription>
         </DialogHeader>
         <Form {...addRepoForm}>
