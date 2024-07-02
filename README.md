@@ -1,31 +1,33 @@
-# Quick Start
+# Git Commander
 
-## Recommended IDE Setup
+## Quick Start
+
+### Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/)
 - [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode)
 - [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 
-## Clone Project
+### Clone Project
 
 ```shell
 git clone https://github.com/RMalik777/git-commander.git
 cd git-commander
 ```
 
-## Install Dependencies
+### Install Dependencies
 
 ```shell
 npm i
 ```
 
-## Run Development Build
+### Run Development Build
 
 ```shell
 npm run tauri dev
 ```
 
-## Build Production App
+### Build Production App
 
 ```shell
 npm run tauri build
@@ -33,9 +35,9 @@ npm run tauri build
 
 The finished build will be located inside `./src-tauri/target/release/bundle` in the form of `.msi` inside msi folder and `.exe` inside nsis folder.
 
-# Development
+## Development
 
-## Git Command
+### Git Command
 
 All command related got Git are located inside `/src/lib/git.js`.
 Build using Tauri [Tauri Shell API](https://tauri.app/v1/api/js/shell#command). All git commands available can be seen in [Git Documentation](https://git-scm.com/docs)\
@@ -66,7 +68,7 @@ List of all command:
 |`unstageFile`|`path`, `file`|`git restore --staged <file>`|Undo staged but only one specific file.|
 <!-- prettier-ignore-end -->
 
-## Database TS Call
+### Database TS Call
 
 Located inside `/src/lib/database.ts`, the function is built using [Tauri Invoke API](https://tauri.app/v1/guides/features/command/). The function will invoke (call) the handler function inside rust file located in `/src-tauri/src/handler`. The Handler then will process the input (if any) and then call the repository function to query the db.\
 Types available inside `/src/lib/Types/repo.ts`
@@ -81,9 +83,9 @@ Types available inside `/src/lib/Types/repo.ts`
 | `getRepoById`          | `id`                 | `Promise<RepoFormat>`   |
 | `insertIntoRepo`       | `repoName`,`repoUrl` | `Promise<void>`         |
 
-# References
+## References
 
-## Built With
+### Built With
 
 - [![Git][GitImg]](https://git-scm.com/)
 - [![React][ReactImg]](https://react.dev/)
