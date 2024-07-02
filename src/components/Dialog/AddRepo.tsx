@@ -24,7 +24,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "../ui/use-toast";
+import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
+import { useToast } from "@/components/ui/use-toast";
 
 import * as db from "@/lib/database";
 import { useState } from "react";
@@ -40,7 +41,9 @@ const formSchema = z.object({
 export default function AddRepo({
   afterAdd,
 }: Readonly<{ afterAdd: () => void }>) {
-  const [open, setOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [agree, setAgree] = useState(false);
 
   const addRepoForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,100 +53,116 @@ export default function AddRepo({
     },
   });
   const { handleSubmit, reset } = addRepoForm;
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      await db.insertIntoRepo(values.name, values.link);
-      reset();
-      toast({
-        title: "Repository added",
-        description: `Repository ${values.name} added successfully`,
-      });
-      setOpen(false);
-      afterAdd();
-    } catch (error) {
-      if (error instanceof Error) {
+    if (!agree && (await db.checkNameDup(values.name))) {
+      setConfirmationOpen(true);
+    } else {
+      try {
+        await db.insertIntoRepo(values.name, values.link);
+        reset();
         toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
+          title: "Repository added",
+          description: `Repository ${values.name} added successfully`,
         });
+        setFormOpen(false);
+        setAgree(false);
+        afterAdd();
+      } catch (error) {
+        if (error instanceof Error) {
+          toast({
+            title: "Error",
+            description: error.message,
+            variant: "destructive",
+          });
+        }
       }
     }
   }
+
   const { toast } = useToast();
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">Add Repo</Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
-        <DialogHeader>
-          <DialogTitle>Add Repository</DialogTitle>
-          <DialogDescription>
-            Add a new repository to the list
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...addRepoForm}>
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={handleSubmit(onSubmit)}>
-            <FormField
-              control={addRepoForm.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Repository Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Repository Name"
-                      type="text"
-                    />
-                  </FormControl>
-                  <div>
-                    <FormDescription>
-                      Repository name that will be shown
-                    </FormDescription>
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={addRepoForm.control}
-              name="link"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Repository Link</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Repository Link"
-                      type="text"
-                    />
-                  </FormControl>
-                  <div>
-                    <FormDescription>
-                      Link to corresponding remote repository
-                    </FormDescription>
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="secondary" onClick={() => reset()}>
-                  Cancel
+    <>
+      <Dialog open={formOpen} onOpenChange={setFormOpen}>
+        <DialogTrigger asChild>
+          <Button variant="outline">Add Repo</Button>
+        </DialogTrigger>
+        <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
+          <DialogHeader>
+            <DialogTitle>Add Repository</DialogTitle>
+            <DialogDescription>
+              Add a new repository to the list
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...addRepoForm}>
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={handleSubmit(onSubmit)}>
+              <FormField
+                control={addRepoForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Repository Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Repository Name"
+                        type="text"
+                      />
+                    </FormControl>
+                    <div>
+                      <FormDescription>
+                        Repository name that will be shown
+                      </FormDescription>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={addRepoForm.control}
+                name="link"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Repository Link</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Repository Link"
+                        type="text"
+                      />
+                    </FormControl>
+                    <div>
+                      <FormDescription>
+                        Link to corresponding remote repository
+                      </FormDescription>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="secondary" onClick={() => reset()}>
+                    Cancel
+                  </Button>
+                </DialogClose>
+                <Button variant="default" type="submit">
+                  Add
                 </Button>
-              </DialogClose>
-              <Button variant="default" type="submit">
-                Add
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      <ConfirmationDialog
+        open={confirmationOpen}
+        setOpen={setConfirmationOpen}
+        title="Duplicate Repository Name"
+        message="The repository name already exists. Having two repositories with the same name can cause confusion. Do you want to continue?"
+        onConfirm={() => setAgree(true)}
+      />
+    </>
   );
 }

@@ -13,16 +13,16 @@ import { ReactNode } from "react";
 interface ConfirmationDialogProps {
   open: boolean;
   title: string;
-  setOpen: (open: boolean) => void;
   message: string | ReactNode;
+  setOpen: (open: boolean) => void;
   onConfirm(): void;
 }
 
 export function ConfirmationDialog({
   open,
   title,
-  setOpen,
   message,
+  setOpen,
   onConfirm,
 }: Readonly<ConfirmationDialogProps>) {
   function handleConfirm() {
