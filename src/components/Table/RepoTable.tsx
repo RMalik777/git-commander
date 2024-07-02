@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { open } from "@tauri-apps/api/shell";
@@ -14,15 +15,22 @@ import { open } from "@tauri-apps/api/shell";
 import type { RepoFormat } from "@/lib/Types/repo";
 
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
+import EditRepo from "@/components/Dialog/EditRepo";
 
 export default function RepoTable({
   repos,
   onDeleteRepo,
+  fetchData,
 }: Readonly<{
   repos: RepoFormat[];
   onDeleteRepo: (repoId: string, repoName: string) => void;
+  fetchData: () => void;
 }>) {
   const [openDialogId, setOpenDialogId] = useState("");
+
+  useEffect(() => {
+    console.log("Changed");
+  }, [repos]);
   return (
     <Table>
       <TableHeader>
@@ -44,18 +52,31 @@ export default function RepoTable({
             </TableCell>
             <TableCell>
               <a href={repo.repo_url} target="_blank" rel="noopener noreferrer">
-                <code>{repo.repo_url}</code>
+                <code className="whitespace-normal break-all">
+                  {repo.repo_url}
+                </code>
               </a>
             </TableCell>
-            <TableCell className="text-center">
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => {
-                  setOpenDialogId(repo.id);
-                }}>
-                Delete
-              </Button>
+            <TableCell align="center">
+              <div className="flex items-center justify-between gap-2 md:gap-4">
+                <EditRepo
+                  key={repo.id + repo.repo_name + repo.repo_url}
+                  repoId={repo.id}
+                  oldRepoName={repo.repo_name}
+                  oldRepoUrl={repo.repo_url}
+                  afterEdit={fetchData}
+                />
+                <Button
+                  className="flex flex-grow items-center justify-center gap-1"
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => {
+                    setOpenDialogId(repo.id);
+                  }}>
+                  <Trash2 size={16} className="md:hidden lg:block" />
+                  <span className="hidden md:block">Delete</span>
+                </Button>
+              </div>
               <ConfirmationDialog
                 open={openDialogId === repo.id}
                 title={"Delete " + repo.repo_name + " ?"}

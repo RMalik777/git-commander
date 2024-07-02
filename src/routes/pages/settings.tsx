@@ -132,7 +132,11 @@ export default function Settings() {
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-3">
-          <RepoTable repos={repos} onDeleteRepo={handleDelete} />
+          <RepoTable
+            repos={repos}
+            onDeleteRepo={handleDelete}
+            fetchData={fetchData}
+          />
         </CardContent>
         <CardFooter>
           <AddRepo afterAdd={fetchData} />

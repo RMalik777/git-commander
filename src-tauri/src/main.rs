@@ -18,6 +18,9 @@ fn main() {
             get_all_remote_repo,
             get_remote_repo_by_id,
             insert_remote_repo,
+            edit_remote_repo,
+            edit_remote_repo_name,
+            edit_remote_repo_url,
             delete_all_remote_repo,
             delete_remote_repo_by_id
         ])

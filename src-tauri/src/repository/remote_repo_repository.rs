@@ -31,6 +31,35 @@ pub fn insert_remote_repo(remote_repo: RemoteRepo) -> Result<usize, String> {
         .map_err(|e| e.to_string())
 }
 
+pub fn update_remote_repo(id: &str, repo_name: &str, repo_url: &str) -> Result<usize, String> {
+    let connection = &mut establish_db_connection();
+
+    diesel::update(dsl::remote_repository.find(id))
+        .set((dsl::repo_name.eq(repo_name), dsl::repo_url.eq(repo_url)))
+        .execute(connection)
+        .map_err(|e| e.to_string())
+}
+
+pub fn update_remote_repo_name(id: &str, repo_name: &str) -> Result<usize, String> {
+    let connection = &mut establish_db_connection();
+
+    diesel::update(dsl::remote_repository)
+        .filter(dsl::id.eq(id))
+        .set(dsl::repo_name.eq(repo_name))
+        .execute(connection)
+        .map_err(|e| e.to_string())
+}
+
+pub fn update_remote_repo_url(id: &str, repo_url: &str) -> Result<usize, String> {
+    let connection = &mut establish_db_connection();
+
+    diesel::update(dsl::remote_repository)
+        .filter(dsl::id.eq(id))
+        .set(dsl::repo_url.eq(repo_url))
+        .execute(connection)
+        .map_err(|e| e.to_string())
+}
+
 pub fn delete_remote_repo_by_id(id: &str) -> Result<usize, String> {
     let connection = &mut establish_db_connection();
 

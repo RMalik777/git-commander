@@ -57,7 +57,24 @@ export async function deleteAllRemoteRepo() {
   }
 }
 
-async function checkUrlDup(repoUrl:string) {
+export async function updateRemoteRepoById(
+  id: string,
+  newRepoName: string,
+  newRepoUrl: string
+) {
+  try {
+    await invoke("edit_remote_repo", {
+      id: id,
+      repoName: newRepoName,
+      repoUrl: newRepoUrl,
+    });
+  } catch (error) {
+    console.error(error);
+    throw Error(error as string);
+  }
+}
+
+async function checkUrlDup(repoUrl: string) {
   const response = await getAllRepo();
   const urlIsDuplicate = response.find((repo) => repo.repo_url === repoUrl);
   if (urlIsDuplicate) {
