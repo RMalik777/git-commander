@@ -132,12 +132,12 @@ To commit changes, enter the commit message in the input field and click the `Co
 
 [^1]: <https://gist.github.com/zeljic/d8b542788b225b1bcb5fce169ee28c55>
 
-##### Setting Up
+#### Setting Up
 
 > [!IMPORTANT]
 > Make sure you complete the steps in [Dependencies](#dependencies) before continuing.
 
-###### Default Path for the Database
+##### Default Path for the Database
 
 Inside `db.rs`, there will be a `get_db_path` function. If you want to change the directory into the directory you want. For the list of all available directory, check [dirs documentation](https://crates.io/crates/dirs#features)
 
@@ -151,7 +151,7 @@ fn get_db_path() -> String {
 
 From the code above, it will create the database file inside your documents folder for example: `C:/Users/<Your_Username>/Documents/DashOne/database.sqlite`
 
-###### Migration and Database
+##### Migration and Database
 
 If you new to Diesel and Rust, follow the tutorial on [Diesel Getting Started Page](https://diesel.rs/guides/getting-started)
 
