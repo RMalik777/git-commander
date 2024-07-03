@@ -165,7 +165,7 @@ export default function Toolbar() {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                <Tooltip>
+                {/* <Tooltip>
                   <TooltipTrigger asChild>
                     <Button size="icon" variant="outline">
                       <GitCompare />
@@ -174,7 +174,7 @@ export default function Toolbar() {
                   <TooltipContent side="bottom">
                     <p>Compare</p>
                   </TooltipContent>
-                </Tooltip>
+                </Tooltip> */}
               </div>
             </li>
             <li>
