@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/RMalik777/git-commander/compare/v1.0.0...v1.0.1) (2024-07-03)
+
+
+### Bug Fixes
+
+* hide unused button ([733f9a2](https://github.com/RMalik777/git-commander/commit/733f9a2fd205d47f952604986799a80def194ec3))
+* warning not showing after error toast occured ([252bd24](https://github.com/RMalik777/git-commander/commit/252bd24bddb56dca350caea95129756f5da66a01))
+
 # 1.0.0 (2024-07-03)
 
 ### Bug Fixes
