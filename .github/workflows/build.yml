@@ -9,6 +9,9 @@ permissions:
 
 jobs:
   release-action:
+    permissions:
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: googleapis/release-please-action@v4
@@ -18,6 +21,8 @@ jobs:
           manifest-file: release-please-manifest.json
 
   publish-tauri:
+    permissions:
+      contents: write
     needs: release-action
     strategy:
       fail-fast: false
