@@ -14,9 +14,7 @@
       "all": false,
       "fs": {
         "all": true,
-        "scope": [
-          "**/*"
-        ]
+        "scope": ["**/*"]
       },
       "path": {
         "all": true
@@ -36,11 +34,7 @@
           {
             "name": "git ssl",
             "cmd": "git",
-            "args": [
-              "config",
-              "http.sslVerify",
-              "false"
-            ]
+            "args": ["config", "http.sslVerify", "false"]
           },
           {
             "name": "git username",

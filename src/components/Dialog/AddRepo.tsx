@@ -76,6 +76,7 @@ export default function AddRepo({
             variant: "destructive",
           });
         }
+        setAgree(false);
       }
     }
   }
