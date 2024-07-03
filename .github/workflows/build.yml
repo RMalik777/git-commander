@@ -32,9 +32,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: After Semantic Release
-        uses: actions/checkout@v4
-
   publish-tauri:
     needs: create-release
     permissions:
@@ -55,6 +52,8 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: setup node
         uses: actions/setup-node@v4
