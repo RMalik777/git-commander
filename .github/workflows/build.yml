@@ -32,6 +32,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: After Semantic Release
+        uses: actions/checkout@v4
+
   publish-tauri:
     needs: create-release
     permissions:
