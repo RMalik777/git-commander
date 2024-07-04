@@ -1,5 +1,8 @@
 # Git Commander
 
+> [!IMPORTANT]
+> This program doesn't include git binary. Make sure you have git installed on your system. If you don't have git installed, you can download it from [Git SCM](https://git-scm.com/)
+
 ## Download
 
 Available in [release](https://github.com/RMalik777/git-commander/releases)
