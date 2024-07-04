@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/RMalik777/git-commander/compare/v1.1.0...v1.1.1) (2024-07-04)
+
+
+### Bug Fixes
+
+* change dropdown to select to fix can't scroll ([54a5752](https://github.com/RMalik777/git-commander/commit/54a57522e2a423f3ef68c584339a42d6bb9beb6d))
+
 # [1.1.0](https://github.com/RMalik777/git-commander/compare/v1.0.1...v1.1.0) (2024-07-04)
 
 
