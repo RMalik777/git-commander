@@ -149,7 +149,7 @@ export default function Clone() {
     toast({
       title: "Cloning Repository",
       description: "Please wait while we clone the repository...",
-      duration: undefined,
+      duration: 7000,
     });
     console.log(values.target);
     const repository = links?.find((link) => link.repo_url === values.target);
