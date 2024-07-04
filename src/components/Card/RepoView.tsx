@@ -55,9 +55,15 @@ export default function RepoView() {
         localStorage.setItem("currentRepoName", repoNameNew.toString());
       dispatch(setRepo({ name: repoNameNew, directory: toOpen }));
     }
-    const data = await git.checkGit(toOpen);
-    setIsGitRepo(data.isGitRepo);
-    setErrorMsg(data.errorMsg);
+    const isExist = await exists(toOpen?.toString() ?? "");
+    if (!isExist) {
+      setIsGitRepo(isExist);
+      setErrorMsg("Error! Folder does not exist");
+    } else {
+      const data = await git.checkGit(toOpen);
+      setIsGitRepo(data.isGitRepo);
+      setErrorMsg(data.errorMsg);
+    }
   }
 
   useEffect(() => {
@@ -67,13 +73,14 @@ export default function RepoView() {
       return;
     }
     async function checkDir(path: string) {
-      const data = await exists(path);
-      if (!data) {
-        setIsGitRepo(data);
+      const isExist = await exists(path);
+      if (!isExist) {
+        setIsGitRepo(isExist);
         setErrorMsg("Error! Folder does not exist");
       } else {
-        setIsGitRepo(true);
-        setErrorMsg(null);
+        const data = await git.checkGit(path);
+        setIsGitRepo(data.isGitRepo);
+        setErrorMsg(data.errorMsg);
       }
     }
     checkDir(dir);

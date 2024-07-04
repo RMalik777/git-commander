@@ -62,12 +62,11 @@ export async function checkGit(path) {
     });
     command.stdout.on("data", () => (isGitRepo = true));
     command.stderr.on("data", () => (isGitRepo = false));
-    const process = command.spawn().catch((error) => {
+    command.spawn().catch((error) => {
       errorMsg = error;
       console.error(error);
       reject(new Error(error));
     });
-    process.kill();
   });
   return await response;
 }
@@ -242,7 +241,7 @@ export async function showChanged(path) {
     command.stdout.on("data", (line) =>
       result.push(line.trim().replace(/[\n\r]/g, ""))
     );
-    command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
+    // command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
@@ -263,7 +262,7 @@ export async function showStaged(path) {
     command.stdout.on("data", (line) =>
       result.push(line.trim().replace(/[\n\r]/g, ""))
     );
-    command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
+    // command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
