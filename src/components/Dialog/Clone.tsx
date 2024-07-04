@@ -281,7 +281,9 @@ export default function Clone() {
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormDescription>Remote repository to clone. Add more in settings</FormDescription>
+                  <FormDescription>
+                    Remote repository to clone. Add more in settings
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -12,14 +12,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
+
 import { useToast } from "@/components/ui/use-toast";
 
 import {
@@ -34,6 +32,7 @@ import {
 } from "lucide-react";
 
 import * as git from "@/lib/git";
+import { PulseLoader } from "react-spinners";
 
 export default function Toolbar() {
   const [themeMode, setThemeMode] = useState<string | null>(null);
@@ -113,64 +112,63 @@ export default function Toolbar() {
           <ul className="flex flex-row items-center gap-12">
             <li>
               <div className="flex gap-4">
-                <DropdownMenu>
+                <Select
+                  value={currentBranch}
+                  onValueChange={async (e) => {
+                    toast({
+                      title: "Switching Branch",
+                      description: (
+                        <PulseLoader size={6} speedMultiplier={0.8} />
+                      ),
+                    });
+                    try {
+                      const response = await git.switchBranch(dirLocation, e);
+                      toast({
+                        title: "Switched Branch",
+                        description: (
+                          <p className="whitespace-pre-wrap break-words">
+                            {response}
+                          </p>
+                        ),
+                      });
+                      dispatch(setRepo({ branch: e }));
+                    } catch (error) {
+                      if (error instanceof Error) {
+                        console.error(error);
+                        toast({
+                          title: "Failed to switch branch",
+                          description: (
+                            <p className="whitespace-pre-wrap break-words">
+                              {error.message}
+                            </p>
+                          ),
+                          variant: "destructive",
+                        });
+                      }
+                    }
+                  }}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon">
+                      <Button variant="outline" size="icon" asChild>
+                        <SelectTrigger className="w-fit">
                           <GitBranch />
-                        </Button>
-                      </DropdownMenuTrigger>
+                        </SelectTrigger>
+                      </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
                       <p>Branch</p>
                     </TooltipContent>
                   </Tooltip>
-                  <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>Branch</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuRadioGroup
-                      value={currentBranch}
-                      onValueChange={async (e) => {
-                        try {
-                          const response = await git.switchBranch(
-                            dirLocation,
-                            e
-                          );
-                          toast({
-                            title: "Switched Branch",
-                            description: (
-                              <p className="whitespace-pre-wrap break-words">
-                                {response}
-                              </p>
-                            ),
-                          });
-                          dispatch(setRepo({ branch: e }));
-                        } catch (error) {
-                          if (error instanceof Error) {
-                            console.error(error);
-                            toast({
-                              title: "Failed to switch branch",
-                              description: (
-                                <p className="whitespace-pre-wrap break-words">
-                                  {error.message}
-                                </p>
-                              ),
-                              variant: "destructive",
-                            });
-                          }
-                        }
-                      }}>
-                      {branchList.map((branch) => {
-                        return (
-                          <DropdownMenuRadioItem key={branch} value={branch}>
-                            {branch}
-                          </DropdownMenuRadioItem>
-                        );
-                      })}
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  <SelectContent className="h-fit max-h-[80dvh]">
+                    {branchList?.map((branch) => {
+                      return (
+                        <SelectItem key={branch} value={branch}>
+                          {branch}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
 
                 {/* <Tooltip>
                   <TooltipTrigger asChild>
