@@ -272,8 +272,8 @@ On `/src-tauri` folder, there will be a file name `.env.example`. Copy the file 
 - [![Rust][RustImg]](https://www.rust-lang.org/)
 - [![ShadUi][ShadUiImg]](https://ui.shadcn.com/)
 - [![Sqlite][SqliteImg]](https://www.sqlite.org/)
-- [![Tauri][TauriImg]](https://tauri.app/)
 - [![Tailwind][TailwindImg]](https://www.rust-lang.org/)
+- [![Tauri][TauriImg]](https://tauri.app/)
 - [![Vite][ViteImg]](https://vitejs.dev/)
 
 [GitImg]: https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white
