@@ -37,6 +37,9 @@ import * as git from "@/lib/git";
 
 export default function Toolbar() {
   const [themeMode, setThemeMode] = useState<string | null>(null);
+  useLayoutEffect(() => {
+    setThemeMode(window.localStorage.getItem("theme") ?? null);
+  }, []);
   window
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", (e) => {
@@ -77,13 +80,17 @@ export default function Toolbar() {
   useLayoutEffect(() => {
     if (repoName === "") return;
     async function getBranch() {
-      const target: string = await git.currentBranch(dirLocation);
-      const newBranchList: string[] = await git.branchList(dirLocation);
-      setBranchList(newBranchList);
-      const showedBranch = newBranchList?.find(
-        (branch) => branch.toLowerCase() === target.toLowerCase()
-      );
-      dispatch(setRepo({ branch: showedBranch }));
+      try {
+        const target: string = await git.currentBranch(dirLocation);
+        const newBranchList: string[] = await git.branchList(dirLocation);
+        setBranchList(newBranchList);
+        const showedBranch = newBranchList?.find(
+          (branch) => branch.toLowerCase() === target.toLowerCase()
+        );
+        dispatch(setRepo({ branch: showedBranch }));
+      } catch (error) {
+        console.error(error);
+      }
     }
     getBranch();
   }, [currentBranch, repoName]);
