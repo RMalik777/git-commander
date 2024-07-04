@@ -142,13 +142,13 @@ To commit changes, enter the commit message in the input field and click the `Co
 
 ##### Default Path for the Database
 
-Inside `db.rs`, there will be a `get_db_path` function. If you want to change the directory into the directory you want. For the list of all available directory, check [dirs documentation](https://crates.io/crates/dirs#features)
+Inside `db.rs`, there will be a `get_db_path` function. If you want to change the directory into the directory you want. For the list of all available directory, check [dirs documentation](https://crates.io/crates/dirs#features). This will be the location for the production database when you build the app.
 
 ```rust
 // db.rs
 fn get_db_path() -> String {
     let home_dir = dirs::document_dir().unwrap();
-    home_dir.to_str().unwrap().to_string() + "/DashOne/database.sqlite"
+    home_dir.to_str().unwrap().to_string() + "/Git-Commander/database.sqlite"
 }
 ```
 
@@ -158,7 +158,7 @@ From the code above, it will create the database file inside your documents fold
 
 If you new to Diesel and Rust, follow the tutorial on [Diesel Getting Started Page](https://diesel.rs/guides/getting-started)
 
-1. Rename the `.env.example` file to `.env`
+1. Rename the `.env.example` file (located inside `/src-tauri`) to `.env`
 2. Change the value of `DATABASE_URL` to choose a location for your new database, OR\
    Simply run this command in the terminal to create `.env` file and the location simultaneously
 
@@ -167,8 +167,10 @@ If you new to Diesel and Rust, follow the tutorial on [Diesel Getting Started Pa
      #Change the value based on the file location
    ```
 
+   To make it easy to maintain, the default value used is in `C:/Users/<username>/Documents/Git-Commander/database.sqlite`.
+
 > [!NOTE]
-> Make sure the file path is the same as the one in the `db.rs`. To change the path, make sure to change the path in both files.
+> If you want to change the path, make sure the file path is the same as the one in the `db.rs`. Make sure to change the path in both files.
 
 3. Run the command below to create a database
 
@@ -255,7 +257,7 @@ Types available inside `/src/lib/Types/repo.ts`
 ### Database
 
 This program use SQLite as the database. When you clone repository, the database is not provided but you can build it.\
-On `/src-tauri` folder, there will be a file name `.env.example`. Copy the file and rename it to `.env`. The default path is the same path that reference for the production database (reference inside `/src-tauri/src/db.rs`) which is `C:/Users/<username>/Documents/database.sqlite`. You can change the path to your desired path if you want.
+On `/src-tauri` folder, there will be a file name `.env.example`. Copy the file and rename it to `.env`. The default path is the same path that reference for the production database (reference inside `/src-tauri/src/db.rs`) which is `C:/Users/<username>/Documents/Git-Commander/database.sqlite`. You can change the path to your desired path if you want.
 
 #### Migrations
 
