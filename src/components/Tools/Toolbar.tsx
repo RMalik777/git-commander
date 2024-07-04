@@ -38,7 +38,8 @@ import * as git from "@/lib/git";
 export default function Toolbar() {
   const [themeMode, setThemeMode] = useState<string | null>(null);
   useLayoutEffect(() => {
-    setThemeMode(window.localStorage.getItem("theme") ?? null);
+    console.log("Once")
+    setThemeMode(window.localStorage.getItem("theme") ?? "System");
   }, []);
   window
     .matchMedia("(prefers-color-scheme: dark)")
@@ -192,11 +193,34 @@ export default function Toolbar() {
                       size="icon"
                       variant="outline"
                       onClick={async () => {
-                        const response = await git.pull(dirLocation);
-                        toast({
-                          title: "Pulled Succesfully",
-                          description: response,
-                        });
+                        try {
+                          const response = await git.pull(dirLocation);
+                          if (response.toString().startsWith("fatal")) {
+                            toast({
+                              title: "Error",
+                              description: response,
+                              variant: "destructive",
+                            });
+                          } else {
+                            toast({
+                              title: "Pulled Succesfully",
+                              description: response,
+                            });
+                          }
+                        } catch (error) {
+                          if (error instanceof Error) {
+                            console.error(error);
+                            toast({
+                              title: "Failed to pull",
+                              description: (
+                                <p className="whitespace-pre-wrap break-words">
+                                  {error.message}
+                                </p>
+                              ),
+                              variant: "destructive",
+                            });
+                          }
+                        }
                       }}>
                       <ArrowDownToLine />
                     </Button>
@@ -211,11 +235,34 @@ export default function Toolbar() {
                       size="icon"
                       variant="outline"
                       onClick={async () => {
-                        const response = await git.push(dirLocation);
-                        toast({
-                          title: "Pushed Succesfully",
-                          description: response,
-                        });
+                        try {
+                          const response = await git.push(dirLocation);
+                          if (response.toString().startsWith("fatal")) {
+                            toast({
+                              title: "Error",
+                              description: response,
+                              variant: "destructive",
+                            });
+                          } else {
+                            toast({
+                              title: "Pushed Succesfully",
+                              description: response,
+                            });
+                          }
+                        } catch (error) {
+                          if (error instanceof Error) {
+                            console.error(error);
+                            toast({
+                              title: "Failed to pull",
+                              description: (
+                                <p className="whitespace-pre-wrap break-words">
+                                  {error.message}
+                                </p>
+                              ),
+                              variant: "destructive",
+                            });
+                          }
+                        }
                       }}>
                       <ArrowUpToLine />
                     </Button>
