@@ -37,16 +37,19 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 import { Check, ChevronsUpDown, CloudDownload } from "lucide-react";
+import { ScaleLoader } from "react-spinners";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { useAppDispatch } from "@/lib/Redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
 import * as db from "@/lib/database";
 import * as git from "@/lib/git";
+
+import { Command as ShellCommand } from "@tauri-apps/api/shell";
 
 import { RepoFormat } from "@/lib/Types/repo";
 import { useToast } from "@/components/ui/use-toast";
@@ -86,11 +89,67 @@ export default function Clone() {
     },
   });
   const { handleSubmit, reset } = cloneForm;
+  const username = useAppSelector((state) => state.user.value);
+  const [progress, setProgress] = useState("");
+  const [isCloning, setIsCloning] = useState(false);
+  async function clone(
+    localRepo: string,
+    remoteRepo: string,
+    username: string
+  ) {
+    git.configUsername(localRepo, username);
+    const response: Promise<string[]> = new Promise((resolve, reject) => {
+      const result: string[] = [];
+      const command = new ShellCommand(
+        "git 3 args",
+        ["clone", "--progress", remoteRepo],
+        {
+          cwd: localRepo,
+        }
+      );
+      command.on("close", (data) => {
+        console.log(
+          `command finished with code ${data.code} and signal ${data.signal}`
+        );
+        setProgress("");
+        setIsCloning(false);
+        resolve(result);
+      });
+      command.on("error", (error) => {
+        console.error(`command error: "${error}"`);
+        reject(new Error(error));
+      });
+      command.stdout.on("data", (line) => {
+        console.log(`stdout: "${line}"`);
+        result.push(line);
+        setIsCloning(true);
+      });
+      command.stderr.on("data", (line) => {
+        if (
+          line.toString().includes("fatal") ||
+          line.toString().includes("error")
+        )
+          reject(new Error(line));
+        console.log(`stderr: "${line}"`);
+        setProgress(line);
+        setIsCloning(true);
+        result.push(line);
+      });
+      command.spawn().catch((error) => {
+        console.error(error);
+        setProgress("");
+        setIsCloning(false);
+        reject(new Error(error));
+      });
+    });
+    return await response;
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     toast({
       title: "Cloning Repository",
       description: "Please wait while we clone the repository...",
-      duration: 5000,
+      duration: 7000,
     });
     console.log(values.target);
     const repository = links?.find((link) => link.repo_url === values.target);
@@ -99,12 +158,12 @@ export default function Clone() {
       return;
     }
     try {
-      const response = await git.clone(values.location, values.target);
+      const response = await clone(values.location, values.target, username);
       if (
         response.toString().startsWith("fatal") ||
         response.toString().startsWith("error")
       ) {
-        throw new Error(response);
+        throw new Error(response.toString());
       }
       const newLocation = values.location + "\\" + repository.repo_name;
       localStorage.setItem("currentRepoName", repository.repo_name);
@@ -157,7 +216,7 @@ export default function Clone() {
           Clone
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
+      <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[720px]">
         <DialogHeader>
           <DialogTitle>Clone Remote Repository</DialogTitle>
           <DialogDescription>
@@ -222,7 +281,7 @@ export default function Clone() {
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormDescription>Remote repository to clone.</FormDescription>
+                  <FormDescription>Remote repository to clone. Add more in settings</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -263,10 +322,17 @@ export default function Clone() {
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="items-center">
+              {isCloning ?
+                <ScaleLoader height={16} width={1.5} margin={1.75} radius={8} />
+              : null}
+              <p className="text-center text-gray-800 sm:text-right">
+                {progress}
+              </p>
               <Button
                 type="submit"
                 variant="default"
+                disabled={isCloning}
                 className="flex flex-row items-center gap-2">
                 <CloudDownload size={20} />
                 Clone

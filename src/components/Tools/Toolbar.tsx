@@ -37,6 +37,9 @@ import * as git from "@/lib/git";
 
 export default function Toolbar() {
   const [themeMode, setThemeMode] = useState<string | null>(null);
+  useLayoutEffect(() => {
+    setThemeMode(window.localStorage.getItem("theme") ?? "System");
+  }, []);
   window
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", (e) => {
@@ -77,13 +80,17 @@ export default function Toolbar() {
   useLayoutEffect(() => {
     if (repoName === "") return;
     async function getBranch() {
-      const target: string = await git.currentBranch(dirLocation);
-      const newBranchList: string[] = await git.branchList(dirLocation);
-      setBranchList(newBranchList);
-      const showedBranch = newBranchList?.find(
-        (branch) => branch.toLowerCase() === target.toLowerCase()
-      );
-      dispatch(setRepo({ branch: showedBranch }));
+      try {
+        const target: string = await git.currentBranch(dirLocation);
+        const newBranchList: string[] = await git.branchList(dirLocation);
+        setBranchList(newBranchList);
+        const showedBranch = newBranchList?.find(
+          (branch) => branch.toLowerCase() === target.toLowerCase()
+        );
+        dispatch(setRepo({ branch: showedBranch }));
+      } catch (error) {
+        console.error(error);
+      }
     }
     getBranch();
   }, [currentBranch, repoName]);
@@ -185,11 +192,34 @@ export default function Toolbar() {
                       size="icon"
                       variant="outline"
                       onClick={async () => {
-                        const response = await git.pull(dirLocation);
-                        toast({
-                          title: "Pulled Succesfully",
-                          description: response,
-                        });
+                        try {
+                          const response = await git.pull(dirLocation);
+                          if (response.toString().startsWith("fatal")) {
+                            toast({
+                              title: "Error",
+                              description: response,
+                              variant: "destructive",
+                            });
+                          } else {
+                            toast({
+                              title: "Pulled Succesfully",
+                              description: response,
+                            });
+                          }
+                        } catch (error) {
+                          if (error instanceof Error) {
+                            console.error(error);
+                            toast({
+                              title: "Failed to pull",
+                              description: (
+                                <p className="whitespace-pre-wrap break-words">
+                                  {error.message}
+                                </p>
+                              ),
+                              variant: "destructive",
+                            });
+                          }
+                        }
                       }}>
                       <ArrowDownToLine />
                     </Button>
@@ -204,11 +234,34 @@ export default function Toolbar() {
                       size="icon"
                       variant="outline"
                       onClick={async () => {
-                        const response = await git.push(dirLocation);
-                        toast({
-                          title: "Pushed Succesfully",
-                          description: response,
-                        });
+                        try {
+                          const response = await git.push(dirLocation);
+                          if (response.toString().startsWith("fatal")) {
+                            toast({
+                              title: "Error",
+                              description: response,
+                              variant: "destructive",
+                            });
+                          } else {
+                            toast({
+                              title: "Pushed Succesfully",
+                              description: response,
+                            });
+                          }
+                        } catch (error) {
+                          if (error instanceof Error) {
+                            console.error(error);
+                            toast({
+                              title: "Failed to pull",
+                              description: (
+                                <p className="whitespace-pre-wrap break-words">
+                                  {error.message}
+                                </p>
+                              ),
+                              variant: "destructive",
+                            });
+                          }
+                        }
                       }}>
                       <ArrowUpToLine />
                     </Button>

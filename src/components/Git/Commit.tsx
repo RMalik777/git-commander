@@ -50,9 +50,7 @@ export default function Commit() {
   const { toast } = useToast();
   const { handleSubmit, reset } = commitForm;
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values.commitMsg);
     const response = await git.commitAll(workDir, values.commitMsg);
-    console.log(response);
     if (RegExp(/no changes/gi).test(response)) {
       toast({
         title: "No Changes",

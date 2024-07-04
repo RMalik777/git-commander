@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
+import { open as openFolder } from "@tauri-apps/api/shell";
+import { exists } from "@tauri-apps/api/fs";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +25,7 @@ export default function RepoView() {
   const dispatch = useAppDispatch();
 
   const [isGitRepo, setIsGitRepo] = useState(true);
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   useEffect(() => {
     if (!dir || dir == "") return;
     async function getDiff() {
@@ -54,10 +56,36 @@ export default function RepoView() {
         localStorage.setItem("currentRepoName", repoNameNew.toString());
       dispatch(setRepo({ name: repoNameNew, directory: toOpen }));
     }
-    const data = await git.checkGit(toOpen);
-    setIsGitRepo(data.isGitRepo);
-    setErrorMsg(data.errorMsg);
+    const isExist = await exists(toOpen?.toString() ?? "");
+    if (!isExist) {
+      setIsGitRepo(isExist);
+      setErrorMsg("Error! Folder does not exist");
+    } else {
+      const data = await git.checkGit(toOpen);
+      setIsGitRepo(data.isGitRepo);
+      setErrorMsg(data.errorMsg);
+    }
   }
+
+  useEffect(() => {
+    if (!dir || dir == "") {
+      setIsGitRepo(true);
+      setErrorMsg(null);
+      return;
+    }
+    async function checkDir(path: string) {
+      const isExist = await exists(path);
+      if (!isExist) {
+        setIsGitRepo(isExist);
+        setErrorMsg("Error! Folder does not exist");
+      } else {
+        const data = await git.checkGit(path);
+        setIsGitRepo(data.isGitRepo);
+        setErrorMsg(data.errorMsg);
+      }
+    }
+    checkDir(dir);
+  }, [dir]);
 
   return (
     <Card className="h-fit flex-grow">
@@ -68,12 +96,17 @@ export default function RepoView() {
         </CardDescription>
       </CardHeader>
       <CardContent className="">
-        <p className="w-fit rounded border bg-gray-100 px-2 py-1 text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50">
+        <Button
+          variant="link"
+          className="h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg"
+          onClick={() => {
+            openFolder(dir);
+          }}>
           <code className="">{dir}</code>
-        </p>
-        <span className={isGitRepo ? "text-green-600" : "text-red-600"}>
+        </Button>
+        <p className={isGitRepo ? "text-green-600" : "text-red-600"}>
           {isGitRepo ? "\u00A0" : errorMsg ?? "Error! Not a git repository"}
-        </span>
+        </p>
       </CardContent>
       <CardFooter className="flex flex-row gap-2">
         <Button
@@ -92,6 +125,7 @@ export default function RepoView() {
             localStorage.removeItem("repoDir");
             localStorage.removeItem("currentRepoName");
             dispatch(removeRepo());
+            dispatch(setRepo({ directory: "" }));
           }}>
           Close Repository
         </Button>

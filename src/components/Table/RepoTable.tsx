@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -27,10 +27,6 @@ export default function RepoTable({
   fetchData: () => void;
 }>) {
   const [openDialogId, setOpenDialogId] = useState("");
-
-  useEffect(() => {
-    console.log("Changed");
-  }, [repos]);
   return (
     <Table>
       <TableHeader>

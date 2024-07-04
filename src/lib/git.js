@@ -45,7 +45,9 @@ export async function branchList(path) {
 export async function checkGit(path) {
   let errorMsg = null;
   let isGitRepo = false;
-  configUsername(path);
+  configUsername(path).catch((error) => {
+    throw new Error(error);
+  });
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 1 args", ["status"], { cwd: path });
     command.on("close", (data) => {
@@ -69,13 +71,17 @@ export async function checkGit(path) {
   return await response;
 }
 
-export async function clone(localRepo, remoteRepo) {
-  configUsername(localRepo);
+export async function clone(localRepo, remoteRepo, username) {
+  configUsername(localRepo, username);
   const response = new Promise((resolve, reject) => {
     const result = [];
-    const command = new Command("git 2 args", ["clone", remoteRepo], {
-      cwd: localRepo,
-    });
+    const command = new Command(
+      "git 3 args",
+      ["clone", "--progress", remoteRepo],
+      {
+        cwd: localRepo,
+      }
+    );
     command.on("close", (data) => {
       console.log(
         `command finished with code ${data.code} and signal ${data.signal}`
@@ -86,8 +92,14 @@ export async function clone(localRepo, remoteRepo) {
       console.error(`command error: "${error}"`);
       reject(new Error(error));
     });
-    command.stdout.on("data", (line) => result.push(line));
-    command.stderr.on("data", (line) => result.push(line));
+    command.stdout.on("data", (line) => {
+      console.log(`stdout: "${line}"`);
+      result.push(line);
+    });
+    command.stderr.on("data", (line) => {
+      console.log(`stderr: "${line}"`);
+      result.push(line);
+    });
     command.spawn().catch((error) => {
       console.error(error);
       reject(new Error(error));
@@ -130,8 +142,7 @@ export async function commitAll(path, message) {
   return await commit(path, message);
 }
 
-export async function configUsername(path) {
-  const username = useSelector((state) => state.user.value);
+export async function configUsername(path, username) {
   const command = new Command(
     "git username",
     ["config", "user.name", username],
@@ -140,7 +151,8 @@ export async function configUsername(path) {
     }
   );
   await command.spawn().catch((error) => {
-    console.error(error);
+    console.log(error);
+    throw new Error(error);
   });
 }
 export async function configUsernameReplace(path) {
@@ -229,7 +241,7 @@ export async function showChanged(path) {
     command.stdout.on("data", (line) =>
       result.push(line.trim().replace(/[\n\r]/g, ""))
     );
-    command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
+    // command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
@@ -250,7 +262,7 @@ export async function showStaged(path) {
     command.stdout.on("data", (line) =>
       result.push(line.trim().replace(/[\n\r]/g, ""))
     );
-    command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
+    // command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
