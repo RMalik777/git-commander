@@ -1,3 +1,22 @@
+# [1.1.0](https://github.com/RMalik777/git-commander/compare/v1.0.1...v1.1.0) (2024-07-04)
+
+
+### Bug Fixes
+
+* change toast duration ([d5ed761](https://github.com/RMalik777/git-commander/commit/d5ed761a7f0c6c57829d04984d9fc0cb42c32677))
+* check git not working ([86f93bc](https://github.com/RMalik777/git-commander/commit/86f93bcc94c253bb9d2283728db20bb7686ec97f))
+* check if folder has been deleted or not ([04ecdd8](https://github.com/RMalik777/git-commander/commit/04ecdd86a6be07fe85cf06140fc2ed5368764dce))
+* fix tooltip for dark mode not showing ([ddd7fa0](https://github.com/RMalik777/git-commander/commit/ddd7fa0c1ba1ed29aff3aed5fd25b1ccb55d1893))
+* not getting initial theme on first load ([1711336](https://github.com/RMalik777/git-commander/commit/1711336b54d2a0d3e6db602c2e8141ae7908c39d))
+* show information in form label ([d8f9290](https://github.com/RMalik777/git-commander/commit/d8f9290ef6e44f571365bfd7e8f78eec0ca69922))
+* wrong color on table while in dark mode ([f85d0fc](https://github.com/RMalik777/git-commander/commit/f85d0fc29f515544a132bc3612b2c0fc16913100))
+
+
+### Features
+
+* add progress indicator while cloning ([1e4e3d9](https://github.com/RMalik777/git-commander/commit/1e4e3d993ca3473d5f87625d0da600a01612bde9))
+* make directory click to open in explorer ([c0832f9](https://github.com/RMalik777/git-commander/commit/c0832f9ba6c30296f09b82101d8032be9b53b08c))
+
 ## [1.0.1](https://github.com/RMalik777/git-commander/compare/v1.0.0...v1.0.1) (2024-07-03)
 
 
