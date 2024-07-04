@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
+import { open as openFolder } from "@tauri-apps/api/shell";
 import { exists } from "@tauri-apps/api/fs";
 
 import { Button } from "@/components/ui/button";
@@ -95,12 +96,17 @@ export default function RepoView() {
         </CardDescription>
       </CardHeader>
       <CardContent className="">
-        <p className="w-fit rounded border bg-gray-100 px-2 py-1 text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50">
+        <Button
+          variant="link"
+          className="h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg"
+          onClick={() => {
+            openFolder(dir);
+          }}>
           <code className="">{dir}</code>
-        </p>
-        <span className={isGitRepo ? "text-green-600" : "text-red-600"}>
+        </Button>
+        <p className={isGitRepo ? "text-green-600" : "text-red-600"}>
           {isGitRepo ? "\u00A0" : errorMsg ?? "Error! Not a git repository"}
-        </span>
+        </p>
       </CardContent>
       <CardFooter className="flex flex-row gap-2">
         <Button
