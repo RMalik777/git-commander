@@ -59,19 +59,19 @@ There are a couple things you can do with Git Commander:
 
 The quick access toolbar is located at the top of the app. It contains the following buttons:
 
-##### Branch ![Branch](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWdpdC1icmFuY2giPjxsaW5lIHgxPSI2IiB4Mj0iNiIgeTE9IjMiIHkyPSIxNSIvPjxjaXJjbGUgY3g9IjE4IiBjeT0iNiIgcj0iMyIvPjxjaXJjbGUgY3g9IjYiIGN5PSIxOCIgcj0iMyIvPjxwYXRoIGQ9Ik0xOCA5YTkgOSAwIDAgMS05IDkiLz48L3N2Zz4=)
+##### Branch ![Branch](https://unpkg.com/lucide-static@latest/icons/git-branch.svg)
 
 To change branch in the repository, click the icon. After that, the popup will appear and you can choose the branch you want to switch to. If there are still unstaged changes, you can't switch branch before committing the changes.
 
-##### Pull ![Pull](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWFycm93LWRvd24tdG8tbGluZSI+PHBhdGggZD0iTTEyIDE3VjMiLz48cGF0aCBkPSJtNiAxMSA2IDYgNi02Ii8+PHBhdGggZD0iTTE5IDIxSDUiLz48L3N2Zz4=)
+##### Pull ![Pull](https://unpkg.com/lucide-static@latest/icons/arrow-down-to-line.svg)
 
 Pull and integrate changes from the remote repository to the local repository.
 
-##### Push ![Push](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWFycm93LXVwLWZyb20tbGluZSI+PHBhdGggZD0ibTE4IDktNi02LTYgNiIvPjxwYXRoIGQ9Ik0xMiAzdjE0Ii8+PHBhdGggZD0iTTUgMjFoMTQiLz48L3N2Zz4=)
+##### Push ![Push](https://unpkg.com/lucide-static@latest/icons/arrow-up-from-line.svg)
 
 Push changes from the local repository to the remote repository
 
-##### Undo ![Undo](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVuZG8tMiI+PHBhdGggZD0iTTkgMTQgNCA5bDUtNSIvPjxwYXRoIGQ9Ik00IDloMTAuNWE1LjUgNS41IDAgMCAxIDUuNSA1LjVhNS41IDUuNSAwIDAgMS01LjUgNS41SDExIi8+PC9zdmc+)
+##### Undo ![Undo](https://unpkg.com/lucide-static@latest/icons/undo-2.svg)
 
 Undo last commit but keeping the changes made.
 
@@ -142,13 +142,13 @@ To commit changes, enter the commit message in the input field and click the `Co
 
 ##### Default Path for the Database
 
-Inside `db.rs`, there will be a `get_db_path` function. If you want to change the directory into the directory you want. For the list of all available directory, check [dirs documentation](https://crates.io/crates/dirs#features)
+Inside `db.rs`, there will be a `get_db_path` function. If you want to change the directory into the directory you want. For the list of all available directory, check [dirs documentation](https://crates.io/crates/dirs#features). This will be the location for the production database when you build the app.
 
 ```rust
 // db.rs
 fn get_db_path() -> String {
     let home_dir = dirs::document_dir().unwrap();
-    home_dir.to_str().unwrap().to_string() + "/DashOne/database.sqlite"
+    home_dir.to_str().unwrap().to_string() + "/Git-Commander/database.sqlite"
 }
 ```
 
@@ -158,7 +158,7 @@ From the code above, it will create the database file inside your documents fold
 
 If you new to Diesel and Rust, follow the tutorial on [Diesel Getting Started Page](https://diesel.rs/guides/getting-started)
 
-1. Rename the `.env.example` file to `.env`
+1. Rename the `.env.example` file (located inside `/src-tauri`) to `.env`
 2. Change the value of `DATABASE_URL` to choose a location for your new database, OR\
    Simply run this command in the terminal to create `.env` file and the location simultaneously
 
@@ -167,8 +167,10 @@ If you new to Diesel and Rust, follow the tutorial on [Diesel Getting Started Pa
      #Change the value based on the file location
    ```
 
+   To make it easy to maintain, the default value used is in `C:/Users/<username>/Documents/Git-Commander/database.sqlite`.
+
 > [!NOTE]
-> Make sure the file path is the same as the one in the `db.rs`. To change the path, make sure to change the path in both files.
+> If you want to change the path, make sure the file path is the same as the one in the `db.rs`. Make sure to change the path in both files.
 
 3. Run the command below to create a database
 
@@ -255,7 +257,7 @@ Types available inside `/src/lib/Types/repo.ts`
 ### Database
 
 This program use SQLite as the database. When you clone repository, the database is not provided but you can build it.\
-On `/src-tauri` folder, there will be a file name `.env.example`. Copy the file and rename it to `.env`. The default path is the same path that reference for the production database (reference inside `/src-tauri/src/db.rs`) which is `C:/Users/<username>/Documents/database.sqlite`. You can change the path to your desired path if you want.
+On `/src-tauri` folder, there will be a file name `.env.example`. Copy the file and rename it to `.env`. The default path is the same path that reference for the production database (reference inside `/src-tauri/src/db.rs`) which is `C:/Users/<username>/Documents/Git-Commander/database.sqlite`. You can change the path to your desired path if you want.
 
 #### Migrations
 
@@ -270,8 +272,8 @@ On `/src-tauri` folder, there will be a file name `.env.example`. Copy the file 
 - [![Rust][RustImg]](https://www.rust-lang.org/)
 - [![ShadUi][ShadUiImg]](https://ui.shadcn.com/)
 - [![Sqlite][SqliteImg]](https://www.sqlite.org/)
-- [![Tauri][TauriImg]](https://tauri.app/)
 - [![Tailwind][TailwindImg]](https://www.rust-lang.org/)
+- [![Tauri][TauriImg]](https://tauri.app/)
 - [![Vite][ViteImg]](https://vitejs.dev/)
 
 [GitImg]: https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white

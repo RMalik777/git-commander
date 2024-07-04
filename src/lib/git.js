@@ -36,7 +36,10 @@ export async function branchList(path) {
       console.log(`command stderr: "${line}"`);
       reject(new Error(line));
     });
-    command.on("close", () => resolve(result));
+    command.on("close", () => {
+      result.sort();
+      return resolve(result);
+    });
     command.spawn().catch((error) => console.error(error));
   });
   return await response;
@@ -45,9 +48,6 @@ export async function branchList(path) {
 export async function checkGit(path) {
   let errorMsg = null;
   let isGitRepo = false;
-  configUsername(path).catch((error) => {
-    throw new Error(error);
-  });
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 1 args", ["status"], { cwd: path });
     command.on("close", (data) => {
