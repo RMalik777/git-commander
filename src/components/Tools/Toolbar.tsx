@@ -38,7 +38,6 @@ import * as git from "@/lib/git";
 export default function Toolbar() {
   const [themeMode, setThemeMode] = useState<string | null>(null);
   useLayoutEffect(() => {
-    console.log("Once")
     setThemeMode(window.localStorage.getItem("theme") ?? "System");
   }, []);
   window
