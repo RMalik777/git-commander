@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
+import { exists } from "@tauri-apps/api/fs";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +24,7 @@ export default function RepoView() {
   const dispatch = useAppDispatch();
 
   const [isGitRepo, setIsGitRepo] = useState(true);
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   useEffect(() => {
     if (!dir || dir == "") return;
     async function getDiff() {
@@ -59,6 +60,25 @@ export default function RepoView() {
     setErrorMsg(data.errorMsg);
   }
 
+  useEffect(() => {
+    if (!dir || dir == "") {
+      setIsGitRepo(true);
+      setErrorMsg(null);
+      return;
+    }
+    async function checkDir(path: string) {
+      const data = await exists(path);
+      if (!data) {
+        setIsGitRepo(data);
+        setErrorMsg("Error! Folder does not exist");
+      } else {
+        setIsGitRepo(true);
+        setErrorMsg(null);
+      }
+    }
+    checkDir(dir);
+  }, [dir]);
+
   return (
     <Card className="h-fit flex-grow">
       <CardHeader className="">
@@ -92,6 +112,7 @@ export default function RepoView() {
             localStorage.removeItem("repoDir");
             localStorage.removeItem("currentRepoName");
             dispatch(removeRepo());
+            dispatch(setRepo({ directory: "" }));
           }}>
           Close Repository
         </Button>
