@@ -100,7 +100,7 @@ export default function RepoView() {
           variant="link"
           className="h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg"
           onClick={() => {
-            openFolder(dir);
+            if (dir) openFolder(dir);
           }}>
           <code className="">{dir}</code>
         </Button>
