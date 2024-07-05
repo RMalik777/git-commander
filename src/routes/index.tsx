@@ -13,11 +13,9 @@ export default function Index() {
     setSLL();
   }, []);
   return (
-    <>
-      <div className="flex min-h-fit flex-col gap-4 lg:flex-row">
-        <RepoView />
-        <Commit />
-      </div>
-    </>
+    <div className="flex min-h-fit flex-col gap-4 lg:flex-row">
+      <RepoView />
+      <Commit />
+    </div>
   );
 }
