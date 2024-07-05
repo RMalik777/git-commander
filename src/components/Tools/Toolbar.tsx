@@ -1,9 +1,17 @@
-import { useState, useLayoutEffect } from "react";
-import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
+import { useLayoutEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
+  SelectTrigger,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
@@ -11,24 +19,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-
 import { useToast } from "@/components/ui/use-toast";
 
 import {
   ArrowDownToLine,
   ArrowUpToLine,
   GitBranch,
-  GitCompare,
-  Undo2,
-  SunMoon,
-  Sun,
   Moon,
+  Sun,
+  SunMoon,
+  Undo2,
 } from "lucide-react";
 
 import * as git from "@/lib/git";
@@ -71,7 +71,10 @@ export default function Toolbar() {
   const dispatch = useAppDispatch();
 
   const currentBranch = useAppSelector((state) => state.repo.branch);
-  const [branchList, setBranchList] = useState<string[]>([]);
+  const [branchList, setBranchList] = useState<{
+    local: string[];
+    remote: string[];
+  }>();
 
   const username = useAppSelector((state) => state.user.value);
   const repoName = useAppSelector((state) => state.repo.name);
@@ -81,9 +84,10 @@ export default function Toolbar() {
     async function getBranch() {
       try {
         const target: string = await git.currentBranch(dirLocation);
-        const newBranchList: string[] = await git.branchList(dirLocation);
+        const newBranchList: { local: string[]; remote: string[] } =
+          await git.branchList(dirLocation);
         setBranchList(newBranchList);
-        const showedBranch = newBranchList?.find(
+        const showedBranch = newBranchList?.local?.find(
           (branch) => branch.toLowerCase() === target.toLowerCase()
         );
         dispatch(setRepo({ branch: showedBranch }));
@@ -122,7 +126,11 @@ export default function Toolbar() {
                       ),
                     });
                     try {
-                      const response = await git.switchBranch(dirLocation, e);
+                      const toSwitch = e.replace(/origin\//gi, "").trim();
+                      const response = await git.switchBranch(
+                        dirLocation,
+                        toSwitch
+                      );
                       toast({
                         title: "Switched Branch",
                         description: (
@@ -160,13 +168,26 @@ export default function Toolbar() {
                     </TooltipContent>
                   </Tooltip>
                   <SelectContent className="h-fit max-h-[80dvh]">
-                    {branchList?.map((branch) => {
-                      return (
-                        <SelectItem key={branch} value={branch}>
-                          {branch}
-                        </SelectItem>
-                      );
-                    })}
+                    <SelectGroup>
+                      <SelectLabel>Local</SelectLabel>
+                      {branchList?.local?.map((branch) => {
+                        return (
+                          <SelectItem key={branch} value={branch}>
+                            {branch}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectGroup>
+                    <SelectGroup>
+                      <SelectLabel>Remote</SelectLabel>
+                      {branchList?.remote?.map((branch) => {
+                        return (
+                          <SelectItem key={branch} value={branch}>
+                            {branch}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
 
