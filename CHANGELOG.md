@@ -1,3 +1,16 @@
+# [1.2.0](https://github.com/RMalik777/git-commander/compare/v1.1.2...v1.2.0) (2024-07-05)
+
+
+### Bug Fixes
+
+* don't close dialog if rejected ([ed083c4](https://github.com/RMalik777/git-commander/commit/ed083c49639fe21596e089483fa200ed5d2b32c4))
+* split select into remote and local group ([a0f3036](https://github.com/RMalik777/git-commander/commit/a0f303604dc5e4a657bc1129ee4183e4378fba6b))
+
+
+### Features
+
+* add windows notification if app not focused ([921a1a6](https://github.com/RMalik777/git-commander/commit/921a1a6bb8edb6293954a071c7ea004884b8131e))
+
 ## [1.1.2](https://github.com/RMalik777/git-commander/compare/v1.1.1...v1.1.2) (2024-07-05)
 
 
