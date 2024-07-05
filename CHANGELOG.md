@@ -1,3 +1,12 @@
+## [1.1.2](https://github.com/RMalik777/git-commander/compare/v1.1.1...v1.1.2) (2024-07-05)
+
+
+### Bug Fixes
+
+* add validation when opening dir ([869fddc](https://github.com/RMalik777/git-commander/commit/869fddc32fedfee677d8bdeabbe00d29c7cf034c))
+* progress indicator not showing on dark mode ([d2a1ceb](https://github.com/RMalik777/git-commander/commit/d2a1cebc73a14c3bcf10d2ac2901f7ce05b9122c))
+* remove duplicate classname ([cc7dd67](https://github.com/RMalik777/git-commander/commit/cc7dd670270e657d051cb997652bd16b9e21162e))
+
 ## [1.1.1](https://github.com/RMalik777/git-commander/compare/v1.1.0...v1.1.1) (2024-07-04)
 
 
