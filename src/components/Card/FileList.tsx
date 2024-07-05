@@ -59,7 +59,7 @@ export default function FileList() {
   }, [repoName, dir]);
   return (
     <Card className="w-full">
-      <CardHeader >
+      <CardHeader>
         <CardTitle>File List</CardTitle>
         <CardDescription className="flex max-w-full flex-col text-balance leading-relaxed">
           Check the files inside the repository

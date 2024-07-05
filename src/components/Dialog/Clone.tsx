@@ -48,6 +48,7 @@ import { setRepo } from "@/lib/Redux/repoSlice";
 
 import * as db from "@/lib/database";
 import * as git from "@/lib/git";
+import * as func from "@/lib/functions";
 
 import { Command as ShellCommand } from "@tauri-apps/api/shell";
 
@@ -170,6 +171,10 @@ export default function Clone() {
       localStorage.setItem("currentRepoName", repository.repo_name);
       localStorage.setItem("repoDir", newLocation);
       dispatch(setRepo({ name: repository.repo_name, directory: newLocation }));
+      func.displayNotificationNotFocus(
+        "Repository Cloned",
+        "Git Clone Completed Successfully!"
+      );
       toast({
         title: "Repository Cloned",
         description: (
@@ -183,6 +188,10 @@ export default function Clone() {
       });
     } catch (error) {
       if (error instanceof Error) {
+        func.displayNotificationNotFocus(
+          "Error Cloning Repository",
+          "An error occurred while cloning the repository. Please try again"
+        );
         console.error(error);
         toast({
           title: "Error Cloning Repository",
