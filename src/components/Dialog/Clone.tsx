@@ -64,6 +64,7 @@ const formSchema = z.object({
 });
 export default function Clone() {
   const { toast } = useToast();
+  const theme = window.localStorage.getItem("theme") ?? "";
   const [comboOpen, setComboOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -326,9 +327,24 @@ export default function Clone() {
 
             <DialogFooter className="items-center">
               {isCloning ?
-                <ScaleLoader height={16} width={1.5} margin={1.75} radius={8} />
+                theme == "Dark" ?
+                  <ScaleLoader
+                    height={16}
+                    width={1.5}
+                    margin={1.75}
+                    radius={8}
+                    color="#d4d4d4"
+                  />
+                : <ScaleLoader
+                    height={16}
+                    width={1.5}
+                    margin={1.75}
+                    radius={8}
+                    color="#404040"
+                  />
+
               : null}
-              <p className="text-center text-gray-800 sm:text-right">
+              <p className="text-center text-neutral-700 dark:text-neutral-300 sm:text-right">
                 {progress}
               </p>
               <Button
