@@ -13,7 +13,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.7.0",
+    "@hookform/resolvers": "^3.8.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-collapsible": "^1.1.0",
