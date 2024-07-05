@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/RMalik777/git-commander/compare/v1.2.0...v1.3.0) (2024-07-05)
+
+
+### Bug Fixes
+
+* hide error message if no folder is opened ([dfe6390](https://github.com/RMalik777/git-commander/commit/dfe6390895ab268f5d12aa98a281c9025318b0b4))
+
+
+### Features
+
+* make window remember last state ([d7c68cd](https://github.com/RMalik777/git-commander/commit/d7c68cd7bdd91b2303b2b802ce8207883b37e386))
+
 # [1.2.0](https://github.com/RMalik777/git-commander/compare/v1.1.2...v1.2.0) (2024-07-05)
 
 
