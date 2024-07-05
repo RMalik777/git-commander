@@ -99,11 +99,11 @@ export default function Settings() {
   return (
     <div className="flex flex-col gap-4">
       <Card>
-        <CardHeader className="bg-gray-100 pb-3">
+        <CardHeader>
           <CardTitle>Profile</CardTitle>
           <CardDescription>Profile configuration</CardDescription>
         </CardHeader>
-        <CardContent className="pt-3">
+        <CardContent>
           <Form {...usernameForm}>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -129,13 +129,13 @@ export default function Settings() {
       </Card>
 
       <Card>
-        <CardHeader className="bg-gray-100 pb-3">
+        <CardHeader>
           <CardTitle>Remote Repositories List</CardTitle>
           <CardDescription>
             Add or remove your predefined remote repositories
           </CardDescription>
         </CardHeader>
-        <CardContent className="pt-3">
+        <CardContent>
           <RepoTable
             repos={repos}
             onDeleteRepo={handleDelete}
