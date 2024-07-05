@@ -96,13 +96,13 @@ export default function Commit() {
     <Form {...commitForm}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex-grow">
         <Card className="w-full">
-          <CardHeader className="bg-gray-100 pb-3">
+          <CardHeader>
             <CardTitle>Commit</CardTitle>
             <CardDescription>
               Commit changes made to remote repository
             </CardDescription>
           </CardHeader>
-          <CardContent className="pt-3">
+          <CardContent>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
                 <FormField
