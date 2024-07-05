@@ -56,15 +56,6 @@ export default function RepoView() {
         localStorage.setItem("currentRepoName", repoNameNew.toString());
       dispatch(setRepo({ name: repoNameNew, directory: toOpen }));
     }
-    const isExist = await exists(toOpen?.toString() ?? "");
-    if (!isExist) {
-      setIsGitRepo(isExist);
-      setErrorMsg("Error! Folder does not exist");
-    } else {
-      const data = await git.checkGit(toOpen);
-      setIsGitRepo(data.isGitRepo);
-      setErrorMsg(data.errorMsg);
-    }
   }
 
   useEffect(() => {
