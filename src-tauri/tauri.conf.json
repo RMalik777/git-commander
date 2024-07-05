@@ -12,6 +12,13 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "notification": {
+        "all": true
+      },
+      "window": {
+        "all": false,
+        "setFocus": true
+      },
       "fs": {
         "all": true,
         "scope": ["**/*"]

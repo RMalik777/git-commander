@@ -22,23 +22,27 @@ export async function addFile(path, file) {
 export async function branchList(path) {
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 2 args", ["branch", "-a"], { cwd: path });
-    const result = [];
+    const result = {
+      local: [],
+      remote: [],
+    };
     command.on("error", (error) => console.error(`command error: "${error}"`));
     command.stdout.on("data", (data) => {
-      const toPush = data
-        .replace(/[*+]/g, "")
-        .replace(/remotes\/origin\//gi, "")
-        .trim();
-      if (result.some((branch) => branch === toPush)) return;
-      if (toPush != "HEAD -> origin/main") result.push(toPush);
+      if (data.match(/remotes/gi)) {
+        if (data.match(/-> origin\/main/gi)) return;
+        result.remote.push(data.replace(/remotes\//gi, "").trim());
+      } else {
+        result.local.push(data.replace(/[*+]/g, "").trim());
+      }
     });
     command.stderr.on("data", (line) => {
       console.log(`command stderr: "${line}"`);
       reject(new Error(line));
     });
     command.on("close", () => {
-      result.sort();
-      return resolve(result);
+      result.local.sort((a, b) => a.localeCompare(b));
+      result.remote.sort((a, b) => a.localeCompare(b));
+      resolve(result);
     });
     command.spawn().catch((error) => console.error(error));
   });
