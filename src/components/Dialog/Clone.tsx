@@ -186,6 +186,8 @@ export default function Clone() {
           </p>
         ),
       });
+      reset();
+      setDialogOpen(false);
     } catch (error) {
       if (error instanceof Error) {
         func.displayNotificationNotFocus(
@@ -201,8 +203,6 @@ export default function Clone() {
       }
     } finally {
       setLocation("");
-      reset();
-      setDialogOpen(false);
     }
   }
 
