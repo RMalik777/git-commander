@@ -10,6 +10,7 @@ mod schema;
 use handler::remote_repo_handler::*;
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         .setup(|_app| {
             db::init();
             Ok(())
