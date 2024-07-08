@@ -132,7 +132,7 @@ export default function Commit() {
                             <TriangleAlert className="h-4 w-4" />
                             <AlertTitle>Warning</AlertTitle>
                             <AlertDescription>
-                              You haven&apos;t set your username
+                              You haven&apos;t set your username.
                             </AlertDescription>
                           </Alert>
                         </>
