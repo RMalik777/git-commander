@@ -203,39 +203,64 @@ export default function FileList() {
                     actionButton = null;
                   }
 
-                  return (
-                    <TableRow key={file.name}>
-                      <TableCell
-                        className={"cursor-pointer font-medium " + textColor}
-                        onClick={async () => {
-                          await open(file.path);
-                        }}>
-                        {file.name}
-                      </TableCell>
-                      <TableCell
-                        className={
-                          "hidden break-all sm:table-cell " + textColor
-                        }>
-                        {file.path}
-                      </TableCell>
-                      <TableCell className={textColor}>{fileStatus}</TableCell>
-                      <TableCell className="flex flex-col items-center justify-between gap-2 lg:flex-row">
-                        {actionButton}
-                        <ConfirmationDialog
-                          open={openDialogId === file.path}
-                          title="Warning!"
-                          setOpen={() => setOpenDialogId("")}
-                          message={
-                            <>
-                              All changes made to {file.name} will be reverted{" "}
-                              <b>permanently</b> and can&apos;t be restored. Are
-                              you sure?
-                            </>
-                          }
-                          onConfirm={async () => {
-                            if (fileStatus === "Staged") {
+                  return fileStatus == "Changed" || fileStatus == "Staged" ?
+                      <TableRow key={file.name}>
+                        <TableCell
+                          className={"cursor-pointer font-medium " + textColor}
+                          onClick={async () => {
+                            await open(file.path);
+                          }}>
+                          {file.name}
+                        </TableCell>
+                        <TableCell
+                          className={
+                            "hidden break-all sm:table-cell " + textColor
+                          }>
+                          {file.path}
+                        </TableCell>
+                        <TableCell className={textColor}>
+                          {fileStatus}
+                        </TableCell>
+                        <TableCell className="flex flex-col items-center justify-between gap-2 lg:flex-row">
+                          {actionButton}
+                          <ConfirmationDialog
+                            open={openDialogId === file.path}
+                            title="Warning!"
+                            setOpen={() => setOpenDialogId("")}
+                            message={
+                              <>
+                                All changes made to {file.name} will be reverted{" "}
+                                <b>permanently</b> and can&apos;t be restored.
+                                Are you sure?
+                              </>
+                            }
+                            onConfirm={async () => {
+                              if (fileStatus === "Staged") {
+                                try {
+                                  await git.unstageFile(dir, file.name);
+                                } catch (error) {
+                                  console.error(error);
+                                  if (error instanceof Error) {
+                                    toast({
+                                      title: "Error Reverting",
+                                      description: (
+                                        <p>
+                                          <code>{file.name}</code> can&apos;t be
+                                          reverted
+                                          <br />
+                                          <code>{error.message}</code>
+                                        </p>
+                                      ),
+                                      variant: "destructive",
+                                    });
+                                  }
+                                  return;
+                                }
+                              }
                               try {
-                                await git.unstageFile(dir, file.name);
+                                await git.revertFile(dir, file.name);
+                                await getDiff();
+                                await getStaged();
                               } catch (error) {
                                 console.error(error);
                                 if (error instanceof Error) {
@@ -254,45 +279,22 @@ export default function FileList() {
                                 }
                                 return;
                               }
-                            }
-                            try {
-                              await git.revertFile(dir, file.name);
-                              await getDiff();
-                              await getStaged();
-                            } catch (error) {
-                              console.error(error);
-                              if (error instanceof Error) {
-                                toast({
-                                  title: "Error Reverting",
-                                  description: (
-                                    <p>
-                                      <code>{file.name}</code> can&apos;t be
-                                      reverted
-                                      <br />
-                                      <code>{error.message}</code>
-                                    </p>
-                                  ),
-                                  variant: "destructive",
-                                });
-                              }
-                              return;
-                            }
-                            dispatch(setDiff([...diffList]));
-                            dispatch(setStaged([...stagedList]));
-                            toast({
-                              title: "Successfully Reverted",
-                              description: (
-                                <>
-                                  Reverted <code>{file.name}</code> to last
-                                  commit
-                                </>
-                              ),
-                            });
-                          }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
+                              dispatch(setDiff([...diffList]));
+                              dispatch(setStaged([...stagedList]));
+                              toast({
+                                title: "Successfully Reverted",
+                                description: (
+                                  <>
+                                    Reverted <code>{file.name}</code> to last
+                                    commit
+                                  </>
+                                ),
+                              });
+                            }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    : null;
                 })}
               </TableBody>
             </Table>
