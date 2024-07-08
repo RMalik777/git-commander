@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/RMalik777/git-commander/compare/v1.3.1...v1.3.2) (2024-07-08)
+
+
+### Bug Fixes
+
+* change error styling ([82157e9](https://github.com/RMalik777/git-commander/commit/82157e91476152d3959d7bcfb7d4ce28d21551de))
+
 ## [1.3.1](https://github.com/RMalik777/git-commander/compare/v1.3.0...v1.3.1) (2024-07-08)
 
 
