@@ -1,3 +1,23 @@
+## [1.3.1](https://github.com/RMalik777/git-commander/compare/v1.3.0...v1.3.1) (2024-07-08)
+
+
+### Bug Fixes
+
+* give option on what to clear ([317fef6](https://github.com/RMalik777/git-commander/commit/317fef6f6038d109f403eda39c608e2864c66f87))
+* warning will show if no username is set ([ebc48f1](https://github.com/RMalik777/git-commander/commit/ebc48f10d611d369d2dc2a0ad2a579e89f02673a))
+
+# [1.3.0](https://github.com/RMalik777/git-commander/compare/v1.2.0...v1.3.0) (2024-07-05)
+
+
+### Bug Fixes
+
+* hide error message if no folder is opened ([dfe6390](https://github.com/RMalik777/git-commander/commit/dfe6390895ab268f5d12aa98a281c9025318b0b4))
+
+
+### Features
+
+* make window remember last state ([d7c68cd](https://github.com/RMalik777/git-commander/commit/d7c68cd7bdd91b2303b2b802ce8207883b37e386))
+
 # [1.2.0](https://github.com/RMalik777/git-commander/compare/v1.1.2...v1.2.0) (2024-07-05)
 
 
