@@ -25,8 +25,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { ToastAction } from "@/components/ui/toast";
+
+import { TriangleAlert } from "lucide-react";
 
 import * as git from "@/lib/git";
 
@@ -40,6 +43,7 @@ const formSchema = z.object({
 export default function Commit() {
   const repoName = useAppSelector((state) => state.repo.name);
   const workDir = useAppSelector((state) => state.repo.directory);
+  const userName = useAppSelector((state) => state.user.value);
 
   const commitForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -112,7 +116,26 @@ export default function Commit() {
                     <FormItem>
                       <FormLabel htmlFor="name">Commit Messages</FormLabel>
                       <FormControl>
-                        <Input placeholder="RFCXXXXX name div" {...field} />
+                        <>
+                          <Input
+                            disabled={repoName == ""}
+                            placeholder={
+                              repoName == "" ?
+                                "No Repository Opened"
+                              : "RFCXXXXX name div"
+                            }
+                            {...field}
+                          />
+                          <Alert
+                            variant="warning"
+                            className={userName == "" ? "block" : "hidden"}>
+                            <TriangleAlert className="h-4 w-4" />
+                            <AlertTitle>Warning</AlertTitle>
+                            <AlertDescription>
+                              You haven&apos;t set your username
+                            </AlertDescription>
+                          </Alert>
+                        </>
                       </FormControl>
                       <FormDescription>Commit Message</FormDescription>
                       <FormMessage />
@@ -126,7 +149,7 @@ export default function Commit() {
             <Button type="reset" variant="outline" size="sm">
               Cancel
             </Button>
-            <Button type="submit" size="sm">
+            <Button type="submit" size="sm" disabled={repoName == ""}>
               Commit
             </Button>
           </CardFooter>
