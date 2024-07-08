@@ -104,7 +104,7 @@ export default function RepoView() {
             <Info className="h-4 w-4" />
             <AlertTitle>Error!</AlertTitle>
             <AlertDescription>
-              {errorMsg ?? "Not a git repository"}
+              {errorMsg ?? "Not a git repository."}
             </AlertDescription>
           </Alert>
         )}
