@@ -12,6 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Info } from "lucide-react";
 
 import * as git from "@/lib/git";
 
@@ -86,18 +88,26 @@ export default function RepoView() {
           Select your local git repository
         </CardDescription>
       </CardHeader>
-      <CardContent className="">
+      <CardContent className="flex flex-col gap-2">
         <Button
           variant="link"
           className="h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg"
           onClick={() => {
             if (dir) openFolder(dir);
           }}>
-          <code className="">{dir}</code>
+          <p className="">
+            <code>{dir}</code>
+          </p>
         </Button>
-        <p className={isGitRepo ? "text-green-600" : "text-red-600"}>
-          {isGitRepo ? "\u00A0" : errorMsg ?? "Error! Not a git repository"}
-        </p>
+        {isGitRepo ? null : (
+          <Alert variant="destructive">
+            <Info className="h-4 w-4" />
+            <AlertTitle>Error!</AlertTitle>
+            <AlertDescription>
+              {errorMsg ?? "Not a git repository"}
+            </AlertDescription>
+          </Alert>
+        )}
       </CardContent>
       <CardFooter className="flex flex-row gap-2">
         <Button
