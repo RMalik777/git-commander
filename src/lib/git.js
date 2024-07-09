@@ -74,6 +74,24 @@ export async function checkGit(path) {
   return await response;
 }
 
+export async function checkGitStatus(path) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 1 args", ["status"], { cwd: path });
+    command.on("close", (data) => resolve(false));
+    command.on("error", (error) => {
+      console.error(error);
+      reject(new Error(error));
+    });
+    command.stdout.on("data", (data) => resolve(true));
+    command.stderr.on("data", (data) => resolve(false));
+    command.spawn().catch((error) => {
+      console.error(error);
+      reject(new Error(error));
+    });
+  });
+  return await response;
+}
+
 export async function clone(localRepo, remoteRepo, username) {
   configUsername(localRepo, username);
   const response = new Promise((resolve, reject) => {

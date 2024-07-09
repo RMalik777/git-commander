@@ -1,13 +1,15 @@
-import { useState, useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 import {
-  Home,
-  ArrowRightToLine,
   ArrowLeftToLine,
-  Settings,
+  ArrowRightToLine,
+
   FolderGit2,
+  Home,
+  Settings
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -15,6 +17,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
+const menuItem = [
+  {
+    name: "Home",
+    link: "/",
+    icon: <Home />,
+  },
+  {
+    name: "Content",
+    link: "/folder",
+    icon: <FolderGit2 />,
+  },
+  {
+    name: "Settings",
+    link: "/settings",
+    icon: <Settings />,
+  }
+];
 
 export default function Navbar() {
   const [navOpen, setNavOpen] = useState(false);
@@ -39,74 +59,37 @@ export default function Navbar() {
             className={
               "flex w-full flex-col gap-4 " + (navOpen ? "self-end" : "")
             }>
-            <li className="w-full">
-              <Tooltip open={navOpen ? false : undefined}>
-                <TooltipTrigger asChild>
-                  <NavLink to="/" className="group block h-fit w-full">
-                    <Button
-                      className={
-                        "" + (navOpen ? "w-full justify-start gap-2 p-2" : "")
-                      }
-                      size="icon"
-                      variant={
-                        currentPath.pathname == "/" ? "default" : "ghost"
-                      }>
-                      <Home className="" />
-                      {navOpen ? "Home" : ""}
-                    </Button>
-                  </NavLink>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>Home</p>
-                </TooltipContent>
-              </Tooltip>
-            </li>
-            <li className="w-full">
-              <Tooltip open={navOpen ? false : undefined}>
-                <TooltipTrigger asChild>
-                  <NavLink to="/folder" className="group block h-fit w-full">
-                    <Button
-                      className={
-                        "" + (navOpen ? "w-full justify-start gap-2 p-2" : "")
-                      }
-                      size="icon"
-                      variant={
-                        currentPath.pathname == "/folder" ? "default" : "ghost"
-                      }>
-                      <FolderGit2 className="" />
-                      {navOpen ? "Content" : ""}
-                    </Button>
-                  </NavLink>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>Content</p>
-                </TooltipContent>
-              </Tooltip>
-            </li>
-            <li className="w-full">
-              <Tooltip open={navOpen ? false : undefined}>
-                <TooltipTrigger asChild>
-                  <NavLink to="/settings" className="group block h-fit w-full">
-                    <Button
-                      className={
-                        "" + (navOpen ? "w-full justify-start gap-2 p-2" : "")
-                      }
-                      size="icon"
-                      variant={
-                        currentPath.pathname == "/settings" ?
-                          "default"
-                        : "ghost"
-                      }>
-                      <Settings className="" />
-                      {navOpen ? "Settings" : ""}
-                    </Button>
-                  </NavLink>
-                </TooltipTrigger>
-                <TooltipContent side="right">
-                  <p>Settings</p>
-                </TooltipContent>
-              </Tooltip>
-            </li>
+            {menuItem.map((item) => {
+              return (
+                <li key={item.link} className="w-full">
+                  <Tooltip open={navOpen ? false : undefined}>
+                    <TooltipTrigger asChild>
+                      <NavLink
+                        to={item.link}
+                        className="group block h-fit w-full">
+                        <Button
+                          className={
+                            "" +
+                            (navOpen ? "w-full justify-start gap-2 p-2" : "")
+                          }
+                          size="icon"
+                          variant={
+                            currentPath.pathname == item.link ?
+                              "default"
+                            : "ghost"
+                          }>
+                          {item.icon}
+                          {navOpen ? item.name : ""}
+                        </Button>
+                      </NavLink>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>{item.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </li>
+              );
+            })}
           </ul>
           <Tooltip>
             <TooltipTrigger asChild>
