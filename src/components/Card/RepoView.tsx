@@ -43,6 +43,9 @@ export default function RepoView() {
   const [errorMsg, setErrorMsg] = useState(
     sessionStorage.getItem("errorMsg") ?? null
   );
+  const [showError, setShowError] = useState(
+    sessionStorage.getItem("showError") == "true"
+  );
   useEffect(() => {
     if (!dir || dir == "") return;
     async function getDiff() {
@@ -85,6 +88,8 @@ export default function RepoView() {
     const isExist = await exists(path);
     if (!isExist) {
       setIsGitRepo(isExist);
+      setShowError(true);
+      sessionStorage.setItem("showError", "true");
       sessionStorage.setItem("isGitRepo", "false");
       setErrorMsg("Error! Folder does not exist");
       sessionStorage.setItem("errorMsg", "Error! Folder does not exist");
@@ -92,19 +97,23 @@ export default function RepoView() {
       const data = await git.checkGit(path);
       if (data.isGitRepo) {
         sessionStorage.setItem("isGitRepo", data.isGitRepo.toString());
+        sessionStorage.setItem("showError", (!data.isGitRepo).toString());
         sessionStorage.setItem("errorMsg", data?.errorMsg?.toString() ?? "");
       } else {
         dispatch(setRepo({ name: "" }));
-        sessionStorage.removeItem("repoDir");
-        sessionStorage.removeItem("currentRepoName");
+        sessionStorage.setItem("showError", "true");
+        localStorage.removeItem("currentRepoName");
       }
       setIsGitRepo(data.isGitRepo);
+      setShowError(!data.isGitRepo);
+      sessionStorage.setItem("showError", (!data.isGitRepo).toString());
       setErrorMsg(data.errorMsg);
     }
   }
   useEffect(() => {
     if (!dir || dir == "") {
-      setIsGitRepo(true);
+      setShowError(false);
+      sessionStorage.setItem("showError", "false");
       sessionStorage.removeItem("isGitRepo");
       setErrorMsg(null);
       sessionStorage.removeItem("errorMsg");
@@ -153,15 +162,16 @@ export default function RepoView() {
             <code>{dir}</code>
           </p>
         </Button>
-        {isGitRepo ? null : (
+        {showError ?
           <Alert variant="destructive">
             <Info className="h-4 w-4" />
             <AlertTitle>Error!</AlertTitle>
             <AlertDescription>
-              {errorMsg?.replace("Error!", "") ?? "Not a git repository."}
+              {errorMsg?.replace("Error!", "") ??
+                "Folder is not a git repository"}
             </AlertDescription>
           </Alert>
-        )}
+        : null}
         <AlertDialog open={parentDialog} onOpenChange={setParentDialog}>
           <AlertDialogContent>
             <AlertDialogHeader>
