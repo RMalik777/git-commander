@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 import { FileEntry, readDir } from "@tauri-apps/api/fs";
@@ -22,7 +22,7 @@ export default function FileList() {
   const [dirList, setDirList] = useState<FileEntry[]>([]);
 
   const diffList = useAppSelector((state) => state.repo.diff);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (dir === "") return;
     async function getDiff() {
       const data = await git.showChanged(dir);
@@ -32,7 +32,7 @@ export default function FileList() {
   }, [dir]);
 
   const stagedList = useAppSelector((state) => state.repo.staged);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (dir === "") return;
     async function getStaged() {
       const data = await git.showStaged(dir);
@@ -41,7 +41,7 @@ export default function FileList() {
     getStaged();
   }, [dir]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (dir === "") return;
     async function getAllChildDir(repo: string) {
       try {
