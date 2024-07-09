@@ -5,6 +5,16 @@ import { exists } from "@tauri-apps/api/fs";
 
 import { Button } from "@/components/ui/button";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -13,6 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 import { Info } from "lucide-react";
 
 import * as git from "@/lib/git";
@@ -26,8 +37,12 @@ export default function RepoView() {
   const dir = useAppSelector((state) => state.repo.directory);
   const dispatch = useAppDispatch();
 
-  const [isGitRepo, setIsGitRepo] = useState(true);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isGitRepo, setIsGitRepo] = useState(
+    sessionStorage.getItem("isGitRepo") === "true"
+  );
+  const [errorMsg, setErrorMsg] = useState(
+    sessionStorage.getItem("errorMsg") ?? null
+  );
   useEffect(() => {
     if (!dir || dir == "") return;
     async function getDiff() {
@@ -57,27 +72,56 @@ export default function RepoView() {
       if (repoNameNew)
         localStorage.setItem("currentRepoName", repoNameNew.toString());
       dispatch(setRepo({ name: repoNameNew, directory: toOpen }));
+      const newParent = await getNearestParent(toOpen);
+      console.log("NEWPARENT", newParent);
+      if (newParent && toOpen != newParent) {
+        dispatch(setRepo({ name: newParent.split("\\").pop() }));
+        setParentDialog(true);
+      }
     }
   }
 
   useEffect(() => {
     if (!dir || dir == "") {
       setIsGitRepo(true);
+      sessionStorage.removeItem("isGitRepo");
       setErrorMsg(null);
+      sessionStorage.removeItem("errorMsg");
       return;
     }
     async function checkDir(path: string) {
       const isExist = await exists(path);
       if (!isExist) {
         setIsGitRepo(isExist);
+        sessionStorage.setItem("isGitRepo", "false");
         setErrorMsg("Error! Folder does not exist");
+        sessionStorage.setItem("errorMsg", "Error! Folder does not exist");
       } else {
         const data = await git.checkGit(path);
         setIsGitRepo(data.isGitRepo);
+        sessionStorage.setItem("isGitRepo", data.isGitRepo.toString());
         setErrorMsg(data.errorMsg);
+        sessionStorage.setItem("errorMsg", data?.errorMsg?.toString() ?? "");
       }
     }
     checkDir(dir);
+  }, [dir]);
+
+  const [parentDialog, setParentDialog] = useState(false);
+  const [parent, setParent] = useState(
+    sessionStorage.getItem("parent") ?? null
+  );
+  async function getNearestParent(dir: string) {
+    const data = await git.getParent(dir);
+    setParent(data);
+    sessionStorage.setItem("parent", data);
+    return data;
+  }
+  useEffect(() => {
+    if (!dir || dir == "") return;
+    if (isGitRepo) {
+      getNearestParent(dir);
+    }
   }, [dir]);
 
   return (
@@ -104,10 +148,36 @@ export default function RepoView() {
             <Info className="h-4 w-4" />
             <AlertTitle>Error!</AlertTitle>
             <AlertDescription>
-              {errorMsg ?? "Not a git repository."}
+              {errorMsg?.replace("Error!", "") ?? "Not a git repository."}
             </AlertDescription>
           </Alert>
         )}
+        <AlertDialog open={parentDialog} onOpenChange={setParentDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Git repository found in the parent directory
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                <code className="rounded border border-gray-200 bg-gray-100 p-1 dark:border-neutral-700 dark:bg-neutral-800">
+                  {parent}
+                </code>{" "}
+                is the parent of the selected directory. Do you want to open the
+                parent directory?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>No</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  dispatch(setRepo({ directory: parent?.toString() }));
+                  localStorage.setItem("repoDir", parent?.toString() ?? "");
+                }}>
+                Open
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardContent>
       <CardFooter className="flex flex-row gap-2">
         <Button
