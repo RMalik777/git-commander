@@ -211,6 +211,12 @@ export default function Toolbar() {
                       size="icon"
                       variant="outline"
                       onClick={async () => {
+                        toast({
+                          title: "Pulling Repository",
+                          description: (
+                            <PulseLoader size={6} speedMultiplier={0.8} />
+                          ),
+                        });
                         try {
                           const response = await git.pull(dirLocation);
                           if (response.toString().startsWith("fatal")) {
@@ -253,25 +259,31 @@ export default function Toolbar() {
                       size="icon"
                       variant="outline"
                       onClick={async () => {
+                        toast({
+                          title: "Pushing Repository",
+                          description: (
+                            <PulseLoader size={6} speedMultiplier={0.8} />
+                          ),
+                        });
                         try {
                           const response = await git.push(dirLocation);
-                          if (response.toString().startsWith("fatal")) {
+                          if (response.toString().includes("fatal")) {
                             toast({
-                              title: "Error",
-                              description: response,
+                              title: "Failed to push",
+                              description: response.toString().trim(),
                               variant: "destructive",
                             });
                           } else {
                             toast({
                               title: "Pushed Succesfully",
-                              description: response,
+                              description: response.toString().trim(),
                             });
                           }
                         } catch (error) {
                           if (error instanceof Error) {
                             console.error(error);
                             toast({
-                              title: "Failed to pull",
+                              title: "Failed to push",
                               description: (
                                 <p className="whitespace-pre-wrap break-words">
                                   {error.message}
