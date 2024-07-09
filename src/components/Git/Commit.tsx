@@ -29,7 +29,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { ToastAction } from "@/components/ui/toast";
 
-import { TriangleAlert } from "lucide-react";
+import { TriangleAlert, Info } from "lucide-react";
 
 import * as git from "@/lib/git";
 
@@ -44,6 +44,8 @@ export default function Commit() {
   const repoName = useAppSelector((state) => state.repo.name);
   const workDir = useAppSelector((state) => state.repo.directory);
   const userName = useAppSelector((state) => state.user.value);
+  const stagedChanges = useAppSelector((state) => state.repo.staged);
+  const diffChanges = useAppSelector((state) => state.repo.diff);
 
   const commitForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -108,7 +110,7 @@ export default function Commit() {
           </CardHeader>
           <CardContent>
             <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
+              <div className="flex flex-col space-y-2">
                 <FormField
                   control={commitForm.control}
                   name="commitMsg"
@@ -116,32 +118,38 @@ export default function Commit() {
                     <FormItem>
                       <FormLabel htmlFor="name">Commit Messages</FormLabel>
                       <FormControl>
-                        <>
-                          <Input
-                            disabled={repoName == ""}
-                            placeholder={
-                              repoName == "" ?
-                                "No Repository Opened"
-                              : "RFCXXXXX name div"
-                            }
-                            {...field}
-                          />
-                          <Alert
-                            variant="warning"
-                            className={userName == "" ? "block" : "hidden"}>
-                            <TriangleAlert className="h-4 w-4" />
-                            <AlertTitle>Warning</AlertTitle>
-                            <AlertDescription>
-                              You haven&apos;t set your username.
-                            </AlertDescription>
-                          </Alert>
-                        </>
+                        <Input
+                          disabled={repoName == ""}
+                          placeholder={
+                            repoName == "" ?
+                              "No Repository Opened"
+                            : "RFCXXXXX name div"
+                          }
+                          {...field}
+                        />
                       </FormControl>
-                      <FormDescription>Commit Message</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                <Alert
+                  variant="warning"
+                  className={userName == "" ? "block" : "hidden"}>
+                  <TriangleAlert className="h-4 w-4" />
+                  <AlertTitle>Warning</AlertTitle>
+                  <AlertDescription>
+                    You haven&apos;t set your username.
+                  </AlertDescription>
+                </Alert>
+                {diffChanges?.length != 0 ?
+                  <Alert variant="information">
+                    <Info className="h-4 w-4" />
+                    <AlertTitle>Information</AlertTitle>
+                    <AlertDescription>
+                      You have unstaged changes
+                    </AlertDescription>
+                  </Alert>
+                : null}
               </div>
             </div>
           </CardContent>

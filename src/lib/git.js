@@ -54,18 +54,17 @@ export async function checkGit(path) {
   let isGitRepo = false;
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 1 args", ["status"], { cwd: path });
-    command.on("close", (data) => {
-      console.log(
-        `command finished with code ${data.code} and signal ${data.signal}`
-      );
-      resolve({ isGitRepo, errorMsg });
-    });
+    command.on("close", (data) => resolve({ isGitRepo, errorMsg }));
     command.on("error", (error) => {
       console.error(error);
       reject(new Error(error));
     });
-    command.stdout.on("data", () => (isGitRepo = true));
-    command.stderr.on("data", () => (isGitRepo = false));
+    command.stdout.on("data", (data) => (isGitRepo = true));
+    command.stderr.on("data", (data) => {
+      isGitRepo = false;
+      if (data.match(/fatal: not a git repository/gi))
+        errorMsg = "Folder is not a git repository";
+    });
     command.spawn().catch((error) => {
       errorMsg = error;
       console.error(error);
@@ -183,6 +182,36 @@ export async function currentBranch(path) {
       reject(new Error(error));
     });
     command.stdout.on("data", (data) => (result = data.trim()));
+    command.stderr.on("data", (line) =>
+      console.log(`command stderr: "${line}"`)
+    );
+    command.spawn().catch((error) => {
+      console.error(error);
+      reject(new Error(error));
+    });
+  });
+  return await response;
+}
+
+export async function getParent(path) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command(
+      "git 2 args",
+      ["rev-parse", "--show-toplevel"],
+      {
+        cwd: path,
+      }
+    );
+    let result;
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => {
+      console.error(`command error: "${error}"`);
+      reject(new Error(error));
+    });
+    command.stdout.on(
+      "data",
+      (data) => (result = data.replace(/\//g, "\\").trim())
+    );
     command.stderr.on("data", (line) =>
       console.log(`command stderr: "${line}"`)
     );

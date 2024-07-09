@@ -225,6 +225,7 @@ List of all command:
 | `configUsername` | `path`    | `git config user.name <username>` |Only `path` used as parameter because this function is only setting the user.name on **local** config and **global** config. The username is handled by Redux.|
 |`configUsernameReplace` |`path`|`git config --replace-all user.name <username>`|For changing username, if the git require replace all parameter. <br/> **(Unused)**|
 |`currentBranch`|`path`|`git branch --show-current`|Get the current branch.|
+|`getParent`|`path`|`git rev-parse --show-toplevel`|Get the parent git repository if the current repository is not the parent|
 |`pull`|`path`|`git pull`||
 |`push`|`path`|`git push`||
 |`revertFile`|`path`, `file`|`git restore <file>`|Revert all the changes made into the file **(proceed with caution, this action is irreversible)**.|
