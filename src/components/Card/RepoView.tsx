@@ -81,6 +81,27 @@ export default function RepoView() {
     }
   }
 
+  async function checkDir(path: string) {
+    const isExist = await exists(path);
+    if (!isExist) {
+      setIsGitRepo(isExist);
+      sessionStorage.setItem("isGitRepo", "false");
+      setErrorMsg("Error! Folder does not exist");
+      sessionStorage.setItem("errorMsg", "Error! Folder does not exist");
+    } else {
+      const data = await git.checkGit(path);
+      if (data.isGitRepo) {
+        sessionStorage.setItem("isGitRepo", data.isGitRepo.toString());
+        sessionStorage.setItem("errorMsg", data?.errorMsg?.toString() ?? "");
+      } else {
+        dispatch(setRepo({ name: "" }));
+        sessionStorage.removeItem("repoDir");
+        sessionStorage.removeItem("currentRepoName");
+      }
+      setIsGitRepo(data.isGitRepo);
+      setErrorMsg(data.errorMsg);
+    }
+  }
   useEffect(() => {
     if (!dir || dir == "") {
       setIsGitRepo(true);
@@ -88,21 +109,6 @@ export default function RepoView() {
       setErrorMsg(null);
       sessionStorage.removeItem("errorMsg");
       return;
-    }
-    async function checkDir(path: string) {
-      const isExist = await exists(path);
-      if (!isExist) {
-        setIsGitRepo(isExist);
-        sessionStorage.setItem("isGitRepo", "false");
-        setErrorMsg("Error! Folder does not exist");
-        sessionStorage.setItem("errorMsg", "Error! Folder does not exist");
-      } else {
-        const data = await git.checkGit(path);
-        setIsGitRepo(data.isGitRepo);
-        sessionStorage.setItem("isGitRepo", data.isGitRepo.toString());
-        setErrorMsg(data.errorMsg);
-        sessionStorage.setItem("errorMsg", data?.errorMsg?.toString() ?? "");
-      }
     }
     checkDir(dir);
   }, [dir]);
@@ -134,8 +140,12 @@ export default function RepoView() {
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         <Button
+          disabled={dir == ""}
           variant="link"
-          className="h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg"
+          className={
+            (dir ? "" : "hidden") +
+            " h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg"
+          }
           onClick={() => {
             if (dir) openFolder(dir);
           }}>
