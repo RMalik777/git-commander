@@ -1,3 +1,12 @@
+## [1.3.3](https://github.com/RMalik777/git-commander/compare/v1.3.2...v1.3.3) (2024-07-09)
+
+
+### Bug Fixes
+
+* **git:** add detect nearest parent ([e8e1d2c](https://github.com/RMalik777/git-commander/commit/e8e1d2c12865bf7825627ddda70e8f90da00de28))
+* show warning if commit still have unstaged changes ([4e88931](https://github.com/RMalik777/git-commander/commit/4e88931395f59108b32c2092308f154a204a3a23))
+* store message in session storage ([3bb587d](https://github.com/RMalik777/git-commander/commit/3bb587d6c741ad550794d4a49f04e992b1ee2e38))
+
 ## [1.3.2](https://github.com/RMalik777/git-commander/compare/v1.3.1...v1.3.2) (2024-07-08)
 
 
