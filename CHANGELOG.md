@@ -1,3 +1,18 @@
+# [1.4.0](https://github.com/RMalik777/git-commander/compare/v1.3.3...v1.4.0) (2024-07-09)
+
+
+### Bug Fixes
+
+* change useEffect to useLayoutEffect for initial load ([fe9e75a](https://github.com/RMalik777/git-commander/commit/fe9e75a2e32b12821774e71d212a6c67d39014ce))
+* hide folder area when no repository is opened ([09afe6b](https://github.com/RMalik777/git-commander/commit/09afe6bd675257156fb6a3120cae4e408f59d772))
+* loading and confirmation when pushing and pulling ([e1027a3](https://github.com/RMalik777/git-commander/commit/e1027a35b6786f4185b13e8dc3f96ccfc207e428))
+
+
+### Features
+
+* add custom url option for cloning ([150040f](https://github.com/RMalik777/git-commander/commit/150040fdd4a166e2347c2a74f65393e7e90a230c))
+* prevent toolbar showing repository if folder opened is not git repository ([57f3a45](https://github.com/RMalik777/git-commander/commit/57f3a4594cddcdbc29a10f7db3eb1609ca3322bf))
+
 ## [1.3.3](https://github.com/RMalik777/git-commander/compare/v1.3.2...v1.3.3) (2024-07-09)
 
 
