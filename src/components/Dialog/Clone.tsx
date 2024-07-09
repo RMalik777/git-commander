@@ -34,6 +34,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 import { Check, ChevronsUpDown, CloudDownload } from "lucide-react";
@@ -56,9 +57,7 @@ import { RepoFormat } from "@/lib/Types/repo";
 import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
-  target: z.string({
-    required_error: "Please select a repository!",
-  }),
+  target: z.string().url({ message: "Please select a repository!" }),
   location: z.string().min(2, {
     message: "Please select a location!",
   }),
@@ -87,6 +86,7 @@ export default function Clone() {
   const cloneForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      target: "",
       location: "",
     },
   });
@@ -154,7 +154,9 @@ export default function Clone() {
       duration: 7000,
     });
     console.log(values.target);
-    const repository = links?.find((link) => link.repo_url === values.target);
+    const repository =
+      links?.find((link) => link.repo_url === values.target) ||
+      values.target.split("/").pop();
     if (!repository) {
       // Add Error Handling
       return;
@@ -167,25 +169,46 @@ export default function Clone() {
       ) {
         throw new Error(response.toString());
       }
-      const newLocation = values.location + "\\" + repository.repo_name;
-      localStorage.setItem("currentRepoName", repository.repo_name);
-      localStorage.setItem("repoDir", newLocation);
-      dispatch(setRepo({ name: repository.repo_name, directory: newLocation }));
+      if (typeof repository == "string") {
+        const newLocation = values.location + "\\" + repository;
+        localStorage.setItem("currentRepoName", repository);
+        localStorage.setItem("repoDir", newLocation);
+        dispatch(setRepo({ name: repository, directory: newLocation }));
+        toast({
+          title: "Repository Cloned",
+          description: (
+            <p>
+              Repository <b>{repository}</b> cloned successfully!
+              <br />
+              Location:{" "}
+              <code className="rounded bg-gray-100 p-1">{newLocation}</code>
+            </p>
+          ),
+        });
+      } else {
+        const newLocation = values.location + "\\" + repository.repo_name;
+        localStorage.setItem("currentRepoName", repository.repo_name);
+        localStorage.setItem("repoDir", newLocation);
+        dispatch(
+          setRepo({ name: repository.repo_name, directory: newLocation })
+        );
+        toast({
+          title: "Repository Cloned",
+          description: (
+            <p>
+              Repository <b>{repository.repo_name}</b> cloned successfully!
+              <br />
+              Location:{" "}
+              <code className="rounded bg-gray-100 p-1">{newLocation}</code>
+            </p>
+          ),
+        });
+      }
       func.displayNotificationNotFocus(
         "Repository Cloned",
         "Git Clone Completed Successfully!"
       );
-      toast({
-        title: "Repository Cloned",
-        description: (
-          <p>
-            Repository <b>{repository.repo_name}</b> cloned successfully!
-            <br />
-            Location:{" "}
-            <code className="rounded bg-gray-100 p-1">{newLocation}</code>
-          </p>
-        ),
-      });
+
       reset();
       setDialogOpen(false);
     } catch (error) {
@@ -242,24 +265,37 @@ export default function Clone() {
                 <FormItem className="flex flex-col">
                   <FormLabel>Repository</FormLabel>
                   <Popover open={comboOpen} onOpenChange={setComboOpen}>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          aria-expanded={comboOpen}
-                          className={cn(
-                            "h-fit w-full justify-between whitespace-normal break-all text-left",
-                            !field.value && "text-muted-foreground"
-                          )}>
-                          {field.value ?
-                            links?.find((link) => link.repo_url === field.value)
-                              ?.repo_name
-                          : "Select remote repository..."}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
+                    <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={comboOpen}
+                            className={cn(
+                              "peer h-fit w-full justify-between whitespace-normal break-all text-left",
+                              !field.value && "text-muted-foreground"
+                            )}>
+                            {field.value ?
+                              links?.find(
+                                (link) => link.repo_url === field.value
+                              )?.repo_name
+                            : "Select remote repository..."}
+
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <Separator
+                        orientation="vertical"
+                        className="hidden h-8 md:block"
+                      />
+                      <Input
+                        type="text"
+                        {...field}
+                        placeholder="https://example.com/"
+                      />
+                    </div>
                     <PopoverContent className="w-full p-0">
                       <Command>
                         <CommandInput placeholder="Search repositories..." />
@@ -292,7 +328,7 @@ export default function Clone() {
                     </PopoverContent>
                   </Popover>
                   <FormDescription>
-                    Remote repository to clone. Add more in settings
+                    Choose from dropdown or enter the repository URL.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
