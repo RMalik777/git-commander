@@ -112,8 +112,8 @@ export default function Toolbar() {
 
   return (
     <div className="flex flex-col">
-      <TooltipProvider delayDuration={50}>
-        <div className="flex w-full grow flex-row">
+      <div className="flex w-full grow flex-row">
+        <TooltipProvider delayDuration={350}>
           <div className="flex h-full w-full items-center justify-center border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
             <Tooltip>
               <TooltipTrigger asChild>
@@ -178,6 +178,7 @@ export default function Toolbar() {
                 <p>Change Branch</p>
               </TooltipContent>
             </Tooltip>
+
             <SelectContent className="h-fit max-h-[80dvh]">
               <SelectGroup>
                 <SelectLabel>Local</SelectLabel>
@@ -201,10 +202,12 @@ export default function Toolbar() {
               </SelectGroup>
             </SelectContent>
           </Select>
-        </div>
-        <div className="flex h-fit flex-row items-center justify-between border-b border-neutral-200 bg-white px-3 py-3 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950">
-          <div className="flex h-full flex-row items-center gap-2 sm:gap-4">
-            <div className="flex w-fit flex-row items-center gap-1">
+        </TooltipProvider>
+      </div>
+      <div className="flex h-fit flex-row items-center justify-between border-b border-neutral-200 bg-white px-3 py-3 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950">
+        <div className="flex h-full flex-row items-center gap-2 sm:gap-4">
+          <div className="flex w-fit flex-row items-center gap-1">
+            <TooltipProvider delayDuration={550}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -236,8 +239,10 @@ export default function Toolbar() {
                   <p>Forward</p>
                 </TooltipContent>
               </Tooltip>
-            </div>
-            <Separator orientation="vertical" className="h-full" />
+            </TooltipProvider>
+          </div>
+          <Separator orientation="vertical" className="h-full" />
+          <TooltipProvider delayDuration={100}>
             <ul className="flex flex-row items-center gap-6 sm:gap-12">
               <li>
                 <div className="flex gap-2 sm:gap-4">
@@ -364,63 +369,65 @@ export default function Toolbar() {
                 </div>
               </li>
             </ul>
-          </div>
-          <Menubar className="sm:hidden">
-            <MenubarMenu>
-              <MenubarTrigger>
-                <Menu />
-              </MenubarTrigger>
-              <MenubarContent>
-                <MenubarItem asChild>
-                  <NavLink to="/settings" className="">
-                    <p className="text-base">{username}</p>
-                  </NavLink>
-                </MenubarItem>
-                <MenubarSeparator />
-                <MenubarItem
-                  className="flex flex-row items-center gap-2"
-                  onClick={() => {
-                    // if the theme is dark, change to light
-                    if (
-                      document.documentElement.classList.contains("dark") &&
-                      window.localStorage.getItem("theme") === "Dark"
-                    ) {
-                      document.documentElement.classList.remove("dark");
-                      document.documentElement.style.colorScheme = "light";
-                      window.localStorage.setItem("theme", "Light");
-                      setThemeMode("Light");
-                    }
-                    // if the theme is light, change to follow system
-                    else if (
-                      !document.documentElement.classList.contains("dark") &&
-                      window.localStorage.getItem("theme") === "Light"
-                    ) {
-                      document.documentElement.classList.remove("dark");
-                      document.documentElement.style.removeProperty(
-                        "color-scheme"
-                      );
-                      window.localStorage.removeItem("theme");
-                      setThemeMode("System");
-                    }
-                    // if the theme is following system, change to dark
-                    else {
-                      document.documentElement.classList.add("dark");
-                      document.documentElement.style.colorScheme = "dark";
-                      window.localStorage.setItem("theme", "Dark");
-                      setThemeMode("Dark");
-                    }
-                  }}>
-                  {themeMode == "Light" ?
-                    <Sun />
-                  : themeMode == "Dark" ?
-                    <Moon />
-                  : <SunMoon />}
-                  {themeMode}
-                </MenubarItem>
-              </MenubarContent>
-            </MenubarMenu>
-          </Menubar>
-          <div className="hidden h-full w-fit flex-row items-center gap-2 sm:flex md:gap-4">
+          </TooltipProvider>
+        </div>
+        <Menubar className="sm:hidden">
+          <MenubarMenu>
+            <MenubarTrigger>
+              <Menu />
+            </MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem asChild>
+                <NavLink to="/settings" className="">
+                  <p className="text-base">{username}</p>
+                </NavLink>
+              </MenubarItem>
+              <MenubarSeparator />
+              <MenubarItem
+                className="flex flex-row items-center gap-2"
+                onClick={() => {
+                  // if the theme is dark, change to light
+                  if (
+                    document.documentElement.classList.contains("dark") &&
+                    window.localStorage.getItem("theme") === "Dark"
+                  ) {
+                    document.documentElement.classList.remove("dark");
+                    document.documentElement.style.colorScheme = "light";
+                    window.localStorage.setItem("theme", "Light");
+                    setThemeMode("Light");
+                  }
+                  // if the theme is light, change to follow system
+                  else if (
+                    !document.documentElement.classList.contains("dark") &&
+                    window.localStorage.getItem("theme") === "Light"
+                  ) {
+                    document.documentElement.classList.remove("dark");
+                    document.documentElement.style.removeProperty(
+                      "color-scheme"
+                    );
+                    window.localStorage.removeItem("theme");
+                    setThemeMode("System");
+                  }
+                  // if the theme is following system, change to dark
+                  else {
+                    document.documentElement.classList.add("dark");
+                    document.documentElement.style.colorScheme = "dark";
+                    window.localStorage.setItem("theme", "Dark");
+                    setThemeMode("Dark");
+                  }
+                }}>
+                {themeMode == "Light" ?
+                  <Sun />
+                : themeMode == "Dark" ?
+                  <Moon />
+                : <SunMoon />}
+                {themeMode}
+              </MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
+        <div className="hidden h-full w-fit flex-row items-center gap-2 sm:flex md:gap-4">
+          <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <NavLink to="/settings" className="hidden sm:block">
@@ -483,9 +490,9 @@ export default function Toolbar() {
                 <p>{themeMode}</p>
               </TooltipContent>
             </Tooltip>
-          </div>
+          </TooltipProvider>
         </div>
-      </TooltipProvider>
+      </div>
     </div>
   );
 }
