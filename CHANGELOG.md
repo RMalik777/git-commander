@@ -1,3 +1,17 @@
+# [1.5.0](https://github.com/RMalik777/git-commander/compare/v1.4.1...v1.5.0) (2024-07-10)
+
+
+### Bug Fixes
+
+* adjust toolbar sizing ([7de41ca](https://github.com/RMalik777/git-commander/commit/7de41ca5d9b5a92f6ab41acbc8e9ea3714433652))
+* fix branch flashing on initial load ([5df197c](https://github.com/RMalik777/git-commander/commit/5df197cdb6471362955d1b8db1d9051ec95e5e37))
+* icons getting smaller when window resize ([40325b4](https://github.com/RMalik777/git-commander/commit/40325b447079bfdde31bdec2c8c54e5dd57cb9a9))
+
+
+### Features
+
+* add back button and forward button ([92bd8d1](https://github.com/RMalik777/git-commander/commit/92bd8d15da46979ca2142382f48e3d14bd0ef7b7))
+
 ## [1.4.1](https://github.com/RMalik777/git-commander/compare/v1.4.0...v1.4.1) (2024-07-09)
 
 
