@@ -10,7 +10,7 @@ export interface RepoState {
 const initialState: RepoState = {
   name: localStorage.getItem("currentRepoName") ?? "",
   directory: localStorage.getItem("repoDir") ?? "",
-  branch: "",
+  branch: localStorage.getItem("currentBranch") ?? "",
   diff: [],
   staged: [],
 };
