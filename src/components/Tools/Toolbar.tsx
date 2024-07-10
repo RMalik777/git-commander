@@ -127,7 +127,7 @@ export default function Toolbar() {
                 </h1>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Current Branch</p>
+                <p>Current Repo and Branch</p>
               </TooltipContent>
             </Tooltip>
           </div>
@@ -204,7 +204,7 @@ export default function Toolbar() {
         </div>
         <div className="flex h-fit flex-row items-center justify-between border-b border-neutral-200 bg-white px-3 py-3 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950">
           <div className="flex h-full flex-row items-center gap-2 sm:gap-4">
-            <div className="flex flex-row gap-1">
+            <div className="flex w-fit flex-row items-center gap-1">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -225,6 +225,7 @@ export default function Toolbar() {
                     disabled={
                       window.history.state.idx == window.history.length - 1
                     }
+                    className="max-xs:hidden"
                     size="icon"
                     variant="ghost"
                     onClick={() => navigate(1)}>
