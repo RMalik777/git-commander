@@ -47,7 +47,7 @@ export default function Navbar() {
     <aside
       className={
         "border-r border-neutral-200 bg-white px-3 py-3 transition-all duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950 " +
-        (navOpen ? "w-1/6" : "w-fit")
+        (navOpen ? "min-w-fit w-1/6" : "w-fit")
       }>
       <nav
         className={
