@@ -5,11 +5,19 @@ import { NavLink } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+import {
   Select,
   SelectContent,
   SelectGroup,
-  SelectLabel,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
@@ -25,6 +33,7 @@ import {
   ArrowDownToLine,
   ArrowUpToLine,
   GitBranch,
+  Menu,
   Moon,
   Sun,
   SunMoon,
@@ -190,17 +199,6 @@ export default function Toolbar() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-
-                {/* <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button size="icon" variant="outline">
-                      <GitCompare />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Compare</p>
-                  </TooltipContent>
-                </Tooltip> */}
               </div>
             </li>
             <li>
@@ -328,7 +326,62 @@ export default function Toolbar() {
             </li>
           </ul>
         </div>
-        <div className="flex h-full w-fit flex-row items-center gap-2 sm:gap-4">
+        <Menubar className="sm:hidden">
+          <MenubarMenu>
+            <MenubarTrigger>
+              <Menu />
+            </MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem asChild>
+                <NavLink to="/settings" className="">
+                  <p className="text-base">{username}</p>
+                </NavLink>
+              </MenubarItem>
+              <MenubarSeparator />
+              <MenubarItem
+                className="flex flex-row items-center gap-2"
+                onClick={() => {
+                  // if the theme is dark, change to light
+                  if (
+                    document.documentElement.classList.contains("dark") &&
+                    window.localStorage.getItem("theme") === "Dark"
+                  ) {
+                    document.documentElement.classList.remove("dark");
+                    document.documentElement.style.colorScheme = "light";
+                    window.localStorage.setItem("theme", "Light");
+                    setThemeMode("Light");
+                  }
+                  // if the theme is light, change to follow system
+                  else if (
+                    !document.documentElement.classList.contains("dark") &&
+                    window.localStorage.getItem("theme") === "Light"
+                  ) {
+                    document.documentElement.classList.remove("dark");
+                    document.documentElement.style.removeProperty(
+                      "color-scheme"
+                    );
+                    window.localStorage.removeItem("theme");
+                    setThemeMode("System");
+                  }
+                  // if the theme is following system, change to dark
+                  else {
+                    document.documentElement.classList.add("dark");
+                    document.documentElement.style.colorScheme = "dark";
+                    window.localStorage.setItem("theme", "Dark");
+                    setThemeMode("Dark");
+                  }
+                }}>
+                {themeMode == "Light" ?
+                  <Sun />
+                : themeMode == "Dark" ?
+                  <Moon />
+                : <SunMoon />}
+                {themeMode}
+              </MenubarItem>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
+        <div className="hidden h-full w-fit flex-row items-center gap-2 sm:flex sm:gap-4">
           <Tooltip>
             <TooltipTrigger asChild>
               <NavLink to="/settings" className="hidden sm:block">
