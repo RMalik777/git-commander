@@ -101,7 +101,7 @@ export default function Toolbar() {
   return (
     <div className="flex h-fit flex-row items-center justify-between border-b border-neutral-200 bg-white px-3 py-3 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950">
       <TooltipProvider delayDuration={50}>
-        <div className="flex h-full flex-row items-center gap-4">
+        <div className="flex h-full flex-row items-center gap-2 sm:gap-4">
           <Button variant="outline" size="sm">
             <h1 className="">
               {repoName === "" ?
@@ -113,7 +113,7 @@ export default function Toolbar() {
             </h1>
           </Button>
           <Separator orientation="vertical" className="h-full" />
-          <ul className="flex flex-row items-center gap-12">
+          <ul className="flex flex-row items-center gap-6 sm:gap-12">
             <li>
               <div className="flex gap-4">
                 <Select
@@ -204,7 +204,7 @@ export default function Toolbar() {
               </div>
             </li>
             <li>
-              <div className="flex gap-4">
+              <div className="flex gap-2 sm:gap-4">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -328,10 +328,10 @@ export default function Toolbar() {
             </li>
           </ul>
         </div>
-        <div className="flex h-full w-fit flex-row items-center gap-4">
+        <div className="flex h-full w-fit flex-row items-center gap-2 sm:gap-4">
           <Tooltip>
             <TooltipTrigger asChild>
-              <NavLink to="/settings">
+              <NavLink to="/settings" className="hidden sm:block">
                 <Button variant="outline" size="sm">
                   <p className="text-base">{username}</p>
                 </Button>
