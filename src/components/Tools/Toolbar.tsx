@@ -102,6 +102,7 @@ export default function Toolbar() {
           (branch) => branch.toLowerCase() === target.toLowerCase()
         );
         dispatch(setRepo({ branch: showedBranch }));
+        localStorage.setItem("currentBranch", showedBranch?.toString() ?? "");
       } catch (error) {
         console.error(error);
       }
