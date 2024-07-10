@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/RMalik777/git-commander/compare/v1.4.0...v1.4.1) (2024-07-09)
+
+
+### Bug Fixes
+
+* fix flash of alert ([33261eb](https://github.com/RMalik777/git-commander/commit/33261eb72ac4a6082d0f123a286d147cbb6c601d))
+
 # [1.4.0](https://github.com/RMalik777/git-commander/compare/v1.3.3...v1.4.0) (2024-07-09)
 
 
