@@ -45,6 +45,9 @@ import {
 import * as git from "@/lib/git";
 import { PulseLoader } from "react-spinners";
 
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+
 export default function Toolbar() {
   const navigate = useNavigate();
   const [themeMode, setThemeMode] = useState<string | null>(null);
@@ -109,6 +112,8 @@ export default function Toolbar() {
     }
     getBranch();
   }, [currentBranch, repoName]);
+
+  const highlighter = driver({});
 
   return (
     <div className="flex flex-col">
@@ -430,7 +435,28 @@ export default function Toolbar() {
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <NavLink to="/settings" className="hidden sm:block">
+                <NavLink
+                  to="/settings"
+                  className="hidden sm:block"
+                  onClick={() => {
+                    if (localStorage.getItem("username") !== null) return;
+                    setTimeout(() => {
+                      highlighter.highlight({
+                        element: "#usernameInput",
+                        popover: {
+                          title: "Username Configuration",
+                          description: "Change your username here",
+                          showButtons: ["close"],
+                          onCloseClick: () => {
+                            highlighter.destroy();
+                          },
+                        },
+                      });
+                      setTimeout(() => {
+                        highlighter.destroy();
+                      }, 5000);
+                    }, 1);
+                  }}>
                   <Button variant="outline" size="sm">
                     <p className="text-base">{username}</p>
                   </Button>
