@@ -245,11 +245,11 @@ export default function Clone() {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary" size="sm">
+        <Button variant="secondary" size="sm" className="CR_1">
           Clone
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[720px]">
+      <DialogContent className="max-w-fit xs:max-w-[360px] sm:max-w-[540px] md:max-w-[640px] lg:max-w-[720px]">
         <DialogHeader>
           <DialogTitle>Clone Remote Repository</DialogTitle>
           <DialogDescription>
@@ -265,7 +265,7 @@ export default function Clone() {
                 <FormItem className="flex flex-col">
                   <FormLabel>Repository</FormLabel>
                   <Popover open={comboOpen} onOpenChange={setComboOpen}>
-                    <div className="flex flex-col items-center justify-center gap-2 md:flex-row">
+                    <div className="CR_2 flex flex-col items-center justify-center gap-1 sm:flex-row">
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
@@ -286,10 +286,17 @@ export default function Clone() {
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <Separator
-                        orientation="vertical"
-                        className="hidden h-8 md:block"
-                      />
+                      <div className="flex w-full flex-row items-center justify-center gap-4 sm:w-fit sm:gap-1">
+                        <Separator
+                          orientation="horizontal"
+                          className="block shrink grow sm:w-2"
+                        />
+                        <p>or</p>
+                        <Separator
+                          orientation="horizontal"
+                          className="block shrink grow sm:w-2"
+                        />
+                      </div>
                       <Input
                         type="text"
                         {...field}
@@ -340,7 +347,7 @@ export default function Clone() {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Location</FormLabel>
-                  <FormControl>
+                  <FormControl className="CR_3">
                     <div className="flex flex-row gap-2">
                       <Input
                         {...field}
@@ -388,7 +395,14 @@ export default function Clone() {
                     color="#404040"
                   />
 
-              : null}
+              : <Button
+                  className="CR_2A"
+                  type="button"
+                  variant="outline"
+                  onClick={() => setDialogOpen(false)}>
+                  Close
+                </Button>
+              }
               <p className="text-center text-neutral-700 dark:text-neutral-300 sm:text-right">
                 {progress}
               </p>
@@ -396,7 +410,7 @@ export default function Clone() {
                 type="submit"
                 variant="default"
                 disabled={isCloning}
-                className="flex flex-row items-center gap-2">
+                className="CR_4 flex flex-row items-center gap-2">
                 <CloudDownload size={20} />
                 Clone
               </Button>

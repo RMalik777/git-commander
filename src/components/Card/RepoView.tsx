@@ -199,8 +199,9 @@ export default function RepoView() {
           </AlertDialogContent>
         </AlertDialog>
       </CardContent>
-      <CardFooter className="flex flex-row gap-2">
+      <CardFooter className="flex flex-row flex-wrap gap-2">
         <Button
+          className="OR_1"
           size="sm"
           variant="default"
           onClick={async () => {
