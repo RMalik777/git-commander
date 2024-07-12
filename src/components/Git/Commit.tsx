@@ -119,7 +119,7 @@ export default function Commit() {
                       <FormLabel htmlFor="name">Commit Messages</FormLabel>
                       <FormControl>
                         <Input
-                        className="CMT_2"
+                          className="CMT_2"
                           disabled={repoName == ""}
                           placeholder={
                             repoName == "" ?
@@ -158,7 +158,11 @@ export default function Commit() {
             <Button type="reset" variant="outline" size="sm">
               Cancel
             </Button>
-            <Button type="submit" size="sm" disabled={repoName == ""} className="CMT_3">
+            <Button
+              type="submit"
+              size="sm"
+              disabled={repoName == ""}
+              className="CMT_3">
               Commit
             </Button>
           </CardFooter>

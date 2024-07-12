@@ -77,7 +77,11 @@ export function UsernameConfig() {
                 <FormItem className="">
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input id="usernameInput" placeholder={username} {...field} />
+                    <Input
+                      id="usernameInput"
+                      placeholder={username}
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
                     This will be the <b>user.name</b> used when committing
