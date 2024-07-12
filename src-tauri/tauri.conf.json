@@ -11,6 +11,9 @@
   },
   "tauri": {
     "allowlist": {
+      "clipboard": {
+        "all": true
+      },
       "all": false,
       "notification": {
         "all": true
