@@ -216,7 +216,7 @@ export default function Toolbar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                  className="TB_4"
+                    className="TB_4"
                     disabled={window.history.state.idx == 0}
                     size="icon"
                     variant="ghost"
@@ -228,6 +228,8 @@ export default function Toolbar() {
                   <p>Back</p>
                 </TooltipContent>
               </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider delayDuration={550}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -255,7 +257,7 @@ export default function Toolbar() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                      className="TB_6"
+                        className="TB_6"
                         size="icon"
                         variant="outline"
                         onClick={async () => {
@@ -304,7 +306,7 @@ export default function Toolbar() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                      className="TB_7"
+                        className="TB_7"
                         size="icon"
                         variant="outline"
                         onClick={async () => {
@@ -357,7 +359,7 @@ export default function Toolbar() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                      className="TB_8"
+                        className="TB_8"
                         size="icon"
                         variant="outline"
                         onClick={async () => {
@@ -476,7 +478,7 @@ export default function Toolbar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                className="TB_10"
+                  className="TB_10"
                   variant="outline"
                   size="icon"
                   onClick={() => {
