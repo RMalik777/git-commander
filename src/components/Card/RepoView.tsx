@@ -50,7 +50,13 @@ export default function RepoView() {
     if (!dir || dir == "") return;
     async function getDiff() {
       const data = await git.showChanged(dir);
-      dispatch(setRepo({ diff: data }));
+      const toEntry = data.map((item: string) => {
+        return {
+          name: item.split("/").pop(),
+          path: item,
+        } as FileEntry;
+      });
+      dispatch(setRepo({ diff: toEntry }));
     }
     getDiff();
   }, [dir]);
@@ -59,7 +65,13 @@ export default function RepoView() {
     if (!dir || dir == "") return;
     async function getStaged() {
       const data = await git.showStaged(dir);
-      dispatch(setRepo({ staged: data }));
+      const toEntry = data.map((item: string) => {
+        return {
+          name: item.split("/").pop(),
+          path: item,
+        } as FileEntry;
+      });
+      dispatch(setRepo({ staged: toEntry }));
     }
     getStaged();
   }, [dir]);

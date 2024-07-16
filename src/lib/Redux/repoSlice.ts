@@ -1,18 +1,25 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FileEntry } from "@tauri-apps/api/fs";
 
 export interface RepoState {
   name: string;
   directory: string;
   branch: string;
-  diff: string[];
-  staged: string[];
+  diff: FileEntry[];
+  staged: FileEntry[];
 }
 const initialState: RepoState = {
   name: localStorage.getItem("currentRepoName") ?? "",
   directory: localStorage.getItem("repoDir") ?? "",
   branch: localStorage.getItem("currentBranch") ?? "",
-  diff: [],
-  staged: [],
+  diff:
+    localStorage.getItem("diff") ?
+      JSON.parse(localStorage.getItem("diff") ?? "")
+    : [],
+  staged:
+    localStorage.getItem("staged") ?
+      JSON.parse(localStorage.getItem("staged") ?? "")
+    : [],
 };
 
 export const repoSlice = createSlice({
@@ -25,8 +32,8 @@ export const repoSlice = createSlice({
         name?: string;
         directory?: string;
         branch?: string;
-        diff?: string[];
-        staged?: string[];
+        diff?: FileEntry[];
+        staged?: FileEntry[];
       }>
     ) => {
       state.name = action.payload.name ?? state.name;
@@ -34,14 +41,6 @@ export const repoSlice = createSlice({
       state.branch = action.payload.branch ?? state.branch;
       state.diff = action.payload.diff ?? state.diff;
       state.staged = action.payload.staged ?? state.staged;
-    },
-    setDiff: (state, action: PayloadAction<string[]>) => {
-      state.diff = state.diff.filter((item) => !action.payload.includes(item));
-    },
-    setStaged: (state, action: PayloadAction<string[]>) => {
-      state.staged = state.staged.filter(
-        (item) => !action.payload.includes(item)
-      );
     },
     removeRepo: (state) => {
       state.name = "";
@@ -53,5 +52,5 @@ export const repoSlice = createSlice({
   },
 });
 
-export const { setRepo, setDiff, setStaged, removeRepo } = repoSlice.actions;
+export const { setRepo, removeRepo } = repoSlice.actions;
 export default repoSlice.reducer;
