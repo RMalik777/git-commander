@@ -29,7 +29,11 @@ import {
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 
+import { PulseLoader } from "react-spinners";
+
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
+
+import * as db from "@/lib/database";
 
 const FormSchema = z.object({
   all: z.boolean().default(false).optional(),
@@ -86,7 +90,12 @@ export function ClearSettings({
     }
   }, [usernameChecked, themeChecked, repoListChecked]);
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    toast({
+      title: "Clearing Settings",
+      description: <PulseLoader size={6} speedMultiplier={0.8} />,
+      duration: 3000,
+    });
     const removedItems = [];
     if (data.all) {
       localStorage.clear();
@@ -106,8 +115,21 @@ export function ClearSettings({
       if (data.repoList) {
         localStorage.removeItem("repoDir");
         localStorage.removeItem("currentRepoName");
+        sessionStorage.clear();
         dispatch(removeRepo());
         removedItems.push("Repository list");
+        try {
+          await db.deleteAllRemoteRepo();
+        } catch (error) {
+          toast({
+            title: "Error",
+            description: "An error occurred while clearing the repository list",
+            duration: 3000,
+            variant: "destructive",
+          });
+          console.error(error);
+          return;
+        }
       }
     }
     toast({

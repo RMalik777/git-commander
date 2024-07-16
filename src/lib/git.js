@@ -54,12 +54,12 @@ export async function checkGit(path) {
   let isGitRepo = false;
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 1 args", ["status"], { cwd: path });
-    command.on("close", (data) => resolve({ isGitRepo, errorMsg }));
+    command.on("close", () => resolve({ isGitRepo, errorMsg }));
     command.on("error", (error) => {
       console.error(error);
       reject(new Error(error));
     });
-    command.stdout.on("data", (data) => (isGitRepo = true));
+    command.stdout.on("data", () => (isGitRepo = true));
     command.stderr.on("data", (data) => {
       isGitRepo = false;
       if (data.match(/fatal: not a git repository/gi))
@@ -77,13 +77,13 @@ export async function checkGit(path) {
 export async function checkGitStatus(path) {
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 1 args", ["status"], { cwd: path });
-    command.on("close", (data) => resolve(false));
+    command.on("close", () => resolve(false));
     command.on("error", (error) => {
       console.error(error);
       reject(new Error(error));
     });
-    command.stdout.on("data", (data) => resolve(true));
-    command.stderr.on("data", (data) => resolve(false));
+    command.stdout.on("data", () => resolve(true));
+    command.stderr.on("data", () => resolve(false));
     command.spawn().catch((error) => {
       console.error(error);
       reject(new Error(error));

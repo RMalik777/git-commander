@@ -45,6 +45,9 @@ import {
 import * as git from "@/lib/git";
 import { PulseLoader } from "react-spinners";
 
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+
 export default function Toolbar() {
   const navigate = useNavigate();
   const [themeMode, setThemeMode] = useState<string | null>(null);
@@ -110,14 +113,16 @@ export default function Toolbar() {
     getBranch();
   }, [currentBranch, repoName]);
 
+  const highlighter = driver({});
+
   return (
-    <div className="flex flex-col">
+    <div className="TB_1 flex flex-col">
       <div className="flex w-full grow flex-row">
         <TooltipProvider delayDuration={350}>
           <div className="flex h-full w-full items-center justify-center border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
             <Tooltip>
               <TooltipTrigger asChild>
-                <h1 className="text-base font-medium">
+                <h1 className="TB_2 text-base font-medium">
                   {repoName === "" ?
                     ""
                   : <>
@@ -168,7 +173,7 @@ export default function Toolbar() {
             }}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" asChild>
+                <Button variant="outline" size="icon" asChild className="TB_3">
                   <SelectTrigger className="w-fit rounded-none">
                     <GitBranch />
                   </SelectTrigger>
@@ -211,6 +216,7 @@ export default function Toolbar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
+                    className="TB_4"
                     disabled={window.history.state.idx == 0}
                     size="icon"
                     variant="ghost"
@@ -222,13 +228,15 @@ export default function Toolbar() {
                   <p>Back</p>
                 </TooltipContent>
               </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider delayDuration={550}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     disabled={
                       window.history.state.idx == window.history.length - 1
                     }
-                    className="max-xs:hidden"
+                    className="TB_5 max-xs:hidden"
                     size="icon"
                     variant="ghost"
                     onClick={() => navigate(1)}>
@@ -249,6 +257,7 @@ export default function Toolbar() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
+                        className="TB_6"
                         size="icon"
                         variant="outline"
                         onClick={async () => {
@@ -297,6 +306,7 @@ export default function Toolbar() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
+                        className="TB_7"
                         size="icon"
                         variant="outline"
                         onClick={async () => {
@@ -349,6 +359,7 @@ export default function Toolbar() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
+                        className="TB_8"
                         size="icon"
                         variant="outline"
                         onClick={async () => {
@@ -430,8 +441,29 @@ export default function Toolbar() {
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <NavLink to="/settings" className="hidden sm:block">
-                  <Button variant="outline" size="sm">
+                <NavLink
+                  to="/settings"
+                  className="TB_9 hidden sm:block"
+                  onClick={() => {
+                    if (localStorage.getItem("username") !== null) return;
+                    setTimeout(() => {
+                      highlighter.highlight({
+                        element: "#usernameInput",
+                        popover: {
+                          title: "Username Configuration",
+                          description: "Change your username here",
+                          showButtons: ["close"],
+                          onCloseClick: () => {
+                            highlighter.destroy();
+                          },
+                        },
+                      });
+                      setTimeout(() => {
+                        highlighter.destroy();
+                      }, 5000);
+                    }, 1);
+                  }}>
+                  <Button variant="outline" size="sm" className="CMT_1">
                     <p className="text-base">{username}</p>
                   </Button>
                 </NavLink>
@@ -446,6 +478,7 @@ export default function Toolbar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
+                  className="TB_10"
                   variant="outline"
                   size="icon"
                   onClick={() => {

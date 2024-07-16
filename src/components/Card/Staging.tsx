@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
-import { setRepo, setDiff, setStaged } from "@/lib/Redux/repoSlice";
-import { FileEntry, readDir } from "@tauri-apps/api/fs";
+import { useState } from "react";
+import { useAppDispatch } from "@/lib/Redux/hooks";
+import { setRepo } from "@/lib/Redux/repoSlice";
+import { FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
+import { writeText } from "@tauri-apps/api/clipboard";
 
 import {
   Card,
@@ -12,72 +13,422 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  FolderRoot,
+  FolderContent,
+  FolderItem,
+  FolderTrigger,
+} from "@/components/ui/folder";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+} from "@/components/ui/menubar";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, File, Plus, FolderOpen, Undo, Minus } from "lucide-react";
 
 import * as git from "@/lib/git";
 
-export default function FileList() {
+export default function Staging({
+  dir,
+  dirList,
+  diffList,
+  stagedList,
+}: Readonly<{
+  dir: string;
+  dirList: FileEntry[];
+  diffList: FileEntry[];
+  stagedList: FileEntry[];
+}>) {
+  const [viewMode, setViewMode] = useState("list");
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const [openDialogId, setOpenDialogId] = useState("");
-  const repoName = useAppSelector((state) => state.repo.name);
-  const dir = useAppSelector((state) => state.repo.directory);
 
-  const diffList = useAppSelector((state) => state.repo.diff);
   async function getDiff() {
     const data = await git.showChanged(dir);
-    dispatch(setRepo({ diff: data }));
+    const toEntry = data.map((item: string) => {
+      return {
+        name: item.split("/").pop(),
+        path: item,
+      } as FileEntry;
+    });
+    dispatch(setRepo({ diff: toEntry }));
+    localStorage.setItem("diffList", JSON.stringify(toEntry));
   }
-  useEffect(() => {
-    if (dir === "") return;
-    getDiff();
-  }, [dir]);
 
-  const stagedList = useAppSelector((state) => state.repo.staged);
   async function getStaged() {
     const data = await git.showStaged(dir);
-    dispatch(setRepo({ staged: data }));
+    const toEntry = data.map((item: string) => {
+      return {
+        name: item.split("/").pop(),
+        path: item,
+      } as FileEntry;
+    });
+    dispatch(setRepo({ staged: toEntry }));
+    localStorage.setItem("stagedList", JSON.stringify(toEntry));
   }
-  useEffect(() => {
-    if (dir === "") return;
-    getStaged();
-  }, [dir]);
 
-  const [dirList, setDirList] = useState<FileEntry[]>([]);
-  async function getAllChildDir(repo: string) {
-    try {
-      const dir = await readDir(repo, {});
-      return dir;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
+  function actionButton(file: FileEntry, mode: string) {
+    return (
+      <div className="hidden flex-row items-center gap-2 group-hover:flex group-focus:flex">
+        <TooltipProvider delayDuration={250} disableHoverableContent>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <FolderOpen
+                className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                onClick={async () => {
+                  await open(file.path);
+                }}
+              />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Open</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              {mode === "Changed" ?
+                <Plus
+                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  onClick={async () => {
+                    toast({
+                      title: "Staging File",
+                    });
+                    try {
+                      await git.addFile(dir, file.path);
+                    } catch (error) {
+                      console.error(error);
+                      if (error instanceof Error) {
+                        toast({
+                          title: "Error Staging",
+                          description: (
+                            <p>
+                              <code>{file.name}</code> can&apos;t be staged
+                              <br />
+                              <code>{error.message}</code>
+                            </p>
+                          ),
+                          variant: "destructive",
+                        });
+                      }
+                      return;
+                    }
+                    await getStaged();
+                    await getDiff();
+                    toast({
+                      title: "Successfully Staged",
+                    });
+                  }}
+                />
+              : <Minus
+                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  onClick={async () => {
+                    toast({
+                      title: "Unstaging File",
+                    });
+                    try {
+                      await git.unstageFile(dir, file.path);
+                    } catch (error) {
+                      if (error instanceof Error) {
+                        toast({
+                          title: "Error Unstaging",
+                          description: (
+                            <p>
+                              <code>{file.name}</code> can&apos;t be unstaged
+                              <br />
+                              <code>{error.message}</code>
+                            </p>
+                          ),
+                          variant: "destructive",
+                        });
+                      }
+                      return;
+                    }
+                    await getStaged();
+                    await getDiff();
+                    toast({
+                      title: "Successfully Unstaged",
+                    });
+                  }}
+                />
+              }
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Stage Changes</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Undo
+                className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                onClick={() => setOpenDialogId(file.path)}
+              />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Revert Changes</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <ConfirmationDialog
+          open={openDialogId === file.path}
+          title="Warning!"
+          setOpen={() => setOpenDialogId("")}
+          message={
+            <>
+              All changes made to {file.name} will be reverted{" "}
+              <b>permanently</b> and can&apos;t be restored. Are you sure?
+            </>
+          }
+          onConfirm={async () => {
+            if (mode === "Staged") {
+              try {
+                await git.unstageFile(dir, file.name);
+              } catch (error) {
+                console.error(error);
+                if (error instanceof Error) {
+                  toast({
+                    title: "Error Reverting",
+                    description: (
+                      <p>
+                        <code>{file.name}</code> can&apos;t be reverted
+                        <br />
+                        <code>{error.message}</code>
+                      </p>
+                    ),
+                    variant: "destructive",
+                  });
+                }
+                return;
+              }
+            }
+            try {
+              await git.revertFile(dir, file.name);
+              await getStaged();
+              await getDiff();
+            } catch (error) {
+              console.error(error);
+              if (error instanceof Error) {
+                toast({
+                  title: "Error Reverting",
+                  description: (
+                    <p>
+                      <code>{file.name}</code> can&apos;t be reverted
+                      <br />
+                      <code>{error.message}</code>
+                    </p>
+                  ),
+                  variant: "destructive",
+                });
+              }
+              return;
+            }
+            dispatch(setRepo({ diff: [...diffList] }));
+            dispatch(setRepo({ staged: [...stagedList] }));
+            toast({
+              title: "Successfully Reverted",
+              description: (
+                <>
+                  Reverted <code>{file.name}</code> to last commit
+                </>
+              ),
+            });
+          }}
+        />
+      </div>
+    );
   }
-  async function setDirectory() {
-    setDirList(await getAllChildDir(dir));
+
+  function listView() {
+    return (
+      <Accordion type="multiple" defaultValue={["diff", "staged"]}>
+        {stagedList.length > 0 ?
+          <AccordionItem value="staged">
+            <AccordionTrigger>Staged</AccordionTrigger>
+            <AccordionContent>
+              {stagedList.length > 0 ?
+                stagedList?.map((target) => {
+                  return (
+                    <div
+                      key={target.path}
+                      className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                      <File className="h-4 w-4" />
+                      <button className="flex w-full items-center justify-between">
+                        <div className="flex flex-row items-center gap-4">
+                          <h4 className="font-medium">{target.name}</h4>
+                          <h4 className="text-xs italic text-neutral-400 dark:text-neutral-600">
+                            {target.path}
+                          </h4>
+                        </div>
+                        {actionButton(target, "Staged")}
+                      </button>
+                    </div>
+                  );
+                })
+              : <h4 className="text-center">Empty...</h4>}
+            </AccordionContent>
+          </AccordionItem>
+        : null}
+        {diffList.length > 0 ?
+          <AccordionItem value="diff">
+            <AccordionTrigger className="py-2">Changed</AccordionTrigger>
+            <AccordionContent>
+              {diffList?.map((target) => {
+                return (
+                  <div
+                    key={target.path}
+                    className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                    <File className="h-4 w-4" />
+                    <button className="flex w-full items-center justify-between">
+                      <div className="flex flex-row items-center gap-4">
+                        <h4 className="font-medium">{target.name}</h4>
+                        <h4 className="text-xs italic text-neutral-400 dark:text-neutral-600">
+                          {target.path}
+                        </h4>
+                      </div>
+                      {actionButton(target, "Changed")}
+                    </button>
+                  </div>
+                );
+              })}
+            </AccordionContent>
+          </AccordionItem>
+        : null}
+      </Accordion>
+    );
   }
-  useEffect(() => {
-    if (dir === "") return;
-    setDirectory();
-  }, [repoName, dir, stagedList, diffList]);
+  function treeView(parent: FileEntry[], root: boolean): React.ReactNode {
+    return (
+      <>
+        {parent.map((child) => {
+          let fileStatus = "Unchanged";
+          if (
+            diffList.some((target) => {
+              return (
+                target.path === child.name ||
+                target.path ===
+                  child.path
+                    .replace(dir, "")
+                    .replace(/\\/g, "/")
+                    .replace("/", "") ||
+                target.path.startsWith(
+                  child.path
+                    .replace(dir, "")
+                    .replace(/\\/g, "/")
+                    .replace("/", "")
+                )
+              );
+            })
+          ) {
+            fileStatus = "Changed";
+          } else if (
+            stagedList.some((target) => {
+              return (
+                target.path === child.name ||
+                target.path.split("/").shift() ===
+                  child.path.replace(dir + "\\", "") ||
+                target.path.startsWith(
+                  child.path
+                    .replace(dir, "")
+                    .replace(/\\/g, "/")
+                    .replace("/", "")
+                )
+              );
+            })
+          ) {
+            fileStatus = "Staged";
+          }
+          if (fileStatus === "Unchanged") return null;
+          else if (fileStatus === "Changed" || fileStatus === "Staged") {
+            return (
+              <div key={child.path}>
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                    {child.children ?
+                      <FolderRoot
+                        className={" " + (root ? "" : "ml-4 border-l")}
+                        type="multiple">
+                        <FolderItem value="item-1" className="">
+                          <div className="group flex w-full justify-between hover:bg-neutral-100 dark:hover:bg-neutral-900">
+                            <FolderTrigger className="p-1 pl-2">
+                              {child.name}
+                            </FolderTrigger>
+                            {actionButton(child, fileStatus)}
+                          </div>
+                          <FolderContent>
+                            {treeView(child.children, false)}
+                          </FolderContent>
+                        </FolderItem>
+                      </FolderRoot>
+                    : <div
+                        className={
+                          "group flex items-center gap-4 p-1 pl-7 hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900 " +
+                          (root ? "" : "ml-4 border-l")
+                        }>
+                        <File className="h-4 w-4" />
+                        <button className="flex w-full items-center justify-between">
+                          {child.name}
+                          {actionButton(child, fileStatus)}
+                        </button>
+                      </div>
+                    }
+                  </ContextMenuTrigger>
+                  <ContextMenuContent className="w-64">
+                    <ContextMenuItem>{child.name}</ContextMenuItem>
+                    <ContextMenuSeparator />
+                    <ContextMenuItem inset>Stage</ContextMenuItem>
+                    <ContextMenuItem inset disabled>
+                      Unstage
+                    </ContextMenuItem>
+                    <ContextMenuItem inset>Revert</ContextMenuItem>
+                    <ContextMenuSeparator />
+                    <ContextMenuItem inset>Open</ContextMenuItem>
+                    <ContextMenuItem
+                      inset
+                      onClick={async () => {
+                        await writeText(child.path);
+                      }}>
+                      Copy Path
+                    </ContextMenuItem>
+                    <ContextMenuSeparator />
+                    <ContextMenuItem
+                      inset
+                      className="font-medium text-red-500 focus:bg-red-500/10">
+                      Delete
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
+              </div>
+            );
+          }
+        })}
+      </>
+    );
+  }
   return (
     <Card className="w-full">
       <CardHeader className="">
@@ -108,565 +459,18 @@ export default function FileList() {
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-3">
-        <Tabs defaultValue="all" className="w-full">
-          <TabsList>
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="changed">Changed</TabsTrigger>
-            <TabsTrigger value="staged">Staged</TabsTrigger>
-            <TabsTrigger value="none">None</TabsTrigger>
-          </TabsList>
-          <TabsContent value="all">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>File Name</TableHead>
-                  <TableHead className="hidden sm:table-cell">Path</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead className="text-center">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {dirList.map((file) => {
-                  let fileStatus = "Unchanged";
-                  let textColor = "text-black dark:text-neutral-50";
-                  if (
-                    diffList.some((target) => {
-                      return (
-                        target === file.name ||
-                        target.split("/").shift() ===
-                          file.path.replace(dir + "\\", "")
-                      );
-                    })
-                  ) {
-                    fileStatus = "Changed";
-                    textColor = "text-blue-600 dark:text-blue-400";
-                  } else if (
-                    stagedList.some((target) => {
-                      return (
-                        target === file.name ||
-                        target.split("/").shift() ===
-                          file.path.replace(dir + "\\", "")
-                      );
-                    })
-                  ) {
-                    fileStatus = "Staged";
-                    textColor = "text-green-600 dark:text-green-400";
-                  }
-                  let actionButton;
-                  if (fileStatus === "Changed") {
-                    actionButton = (
-                      <>
-                        <Button
-                          className="flex-grow"
-                          variant="outline"
-                          size="sm"
-                          onClick={async () => {
-                            await git.addFile(dir, file.name);
-                            await getStaged();
-                            await getDiff();
-                          }}>
-                          Stage
-                        </Button>
-                        <Button
-                          className="flex-grow"
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => setOpenDialogId(file.path)}>
-                          Undo Edit
-                        </Button>
-                      </>
-                    );
-                  } else if (fileStatus === "Staged") {
-                    actionButton = (
-                      <>
-                        <Button
-                          className="flex-grow"
-                          variant="outline"
-                          size="sm"
-                          onClick={async () => {
-                            await git.unstageFile(dir, file.name);
-                            await getDiff();
-                            await getStaged();
-                          }}>
-                          Unstage
-                        </Button>
-                        <Button
-                          className="flex-grow"
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => setOpenDialogId(file.path)}>
-                          Undo Edit
-                        </Button>
-                      </>
-                    );
-                  } else {
-                    actionButton = null;
-                  }
-
-                  return fileStatus == "Changed" || fileStatus == "Staged" ?
-                      <TableRow key={file.name}>
-                        <TableCell
-                          className={"cursor-pointer font-medium " + textColor}
-                          onClick={async () => {
-                            await open(file.path);
-                          }}>
-                          {file.name}
-                        </TableCell>
-                        <TableCell
-                          className={
-                            "hidden break-all sm:table-cell " + textColor
-                          }>
-                          {file.path}
-                        </TableCell>
-                        <TableCell className={textColor}>
-                          {fileStatus}
-                        </TableCell>
-                        <TableCell className="flex flex-col items-center justify-between gap-2 lg:flex-row">
-                          {actionButton}
-                          <ConfirmationDialog
-                            open={openDialogId === file.path}
-                            title="Warning!"
-                            setOpen={() => setOpenDialogId("")}
-                            message={
-                              <>
-                                All changes made to {file.name} will be reverted{" "}
-                                <b>permanently</b> and can&apos;t be restored.
-                                Are you sure?
-                              </>
-                            }
-                            onConfirm={async () => {
-                              if (fileStatus === "Staged") {
-                                try {
-                                  await git.unstageFile(dir, file.name);
-                                } catch (error) {
-                                  console.error(error);
-                                  if (error instanceof Error) {
-                                    toast({
-                                      title: "Error Reverting",
-                                      description: (
-                                        <p>
-                                          <code>{file.name}</code> can&apos;t be
-                                          reverted
-                                          <br />
-                                          <code>{error.message}</code>
-                                        </p>
-                                      ),
-                                      variant: "destructive",
-                                    });
-                                  }
-                                  return;
-                                }
-                              }
-                              try {
-                                await git.revertFile(dir, file.name);
-                                await getDiff();
-                                await getStaged();
-                              } catch (error) {
-                                console.error(error);
-                                if (error instanceof Error) {
-                                  toast({
-                                    title: "Error Reverting",
-                                    description: (
-                                      <p>
-                                        <code>{file.name}</code> can&apos;t be
-                                        reverted
-                                        <br />
-                                        <code>{error.message}</code>
-                                      </p>
-                                    ),
-                                    variant: "destructive",
-                                  });
-                                }
-                                return;
-                              }
-                              dispatch(setDiff([...diffList]));
-                              dispatch(setStaged([...stagedList]));
-                              toast({
-                                title: "Successfully Reverted",
-                                description: (
-                                  <>
-                                    Reverted <code>{file.name}</code> to last
-                                    commit
-                                  </>
-                                ),
-                              });
-                            }}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    : null;
-                })}
-              </TableBody>
-            </Table>
-          </TabsContent>
-          <TabsContent value="changed">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-neutral-100 dark:bg-neutral-800">
-                  <TableHead>File Name</TableHead>
-                  <TableHead className="hidden sm:table-cell">Path</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead className="text-center">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {dirList.map((file) => {
-                  let fileStatus = "Unchanged";
-                  let textColor = "text-black dark:text-neutral-50";
-                  if (
-                    diffList.some((target) => {
-                      return (
-                        target === file.name ||
-                        target.split("/").shift() ===
-                          file.path.replace(dir + "\\", "")
-                      );
-                    })
-                  ) {
-                    fileStatus = "Changed";
-                    textColor = "text-blue-600 dark:text-blue-400";
-                  } else if (
-                    stagedList.some((target) => {
-                      return (
-                        target === file.name ||
-                        target.split("/").shift() ===
-                          file.path.replace(dir + "\\", "")
-                      );
-                    })
-                  ) {
-                    fileStatus = "Staged";
-                    textColor = "text-green-600 dark:text-green-400";
-                  }
-                  let actionButton;
-                  if (fileStatus == "Changed") {
-                    actionButton = (
-                      <>
-                        <Button
-                          className="flex-grow"
-                          variant="outline"
-                          size="sm"
-                          onClick={async () => {
-                            await git.addFile(dir, file.name);
-                            await getStaged();
-                            await getDiff();
-                          }}>
-                          Stage
-                        </Button>
-                        <Button
-                          className="flex-grow"
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => setOpenDialogId(file.path)}>
-                          Undo Edit
-                        </Button>
-                      </>
-                    );
-                  } else if (fileStatus == "Staged") {
-                    actionButton = (
-                      <>
-                        <Button
-                          className="flex-grow"
-                          variant="outline"
-                          size="sm"
-                          onClick={async () => {
-                            await git.unstageFile(dir, file.name);
-                            await getDiff();
-                            await getStaged();
-                          }}>
-                          Unstage
-                        </Button>
-                        <Button
-                          className="flex-grow"
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => setOpenDialogId(file.path)}>
-                          Undo Edit
-                        </Button>
-                      </>
-                    );
-                  } else {
-                    actionButton = null;
-                  }
-
-                  return fileStatus == "Changed" ?
-                      <TableRow key={file.name}>
-                        <TableCell
-                          className={"cursor-pointer font-medium " + textColor}
-                          onClick={async () => {
-                            await open(file.path);
-                          }}>
-                          {file.name}
-                        </TableCell>
-                        <TableCell
-                          className={
-                            "hidden break-all sm:table-cell " + textColor
-                          }>
-                          {file.path}
-                        </TableCell>
-                        <TableCell className={textColor}>
-                          {fileStatus}
-                        </TableCell>
-                        <TableCell className="flex flex-col items-center justify-between gap-2 lg:flex-row">
-                          {actionButton}
-                          <ConfirmationDialog
-                            open={openDialogId === file.path}
-                            title="Warning!"
-                            setOpen={() => setOpenDialogId("")}
-                            message={
-                              <>
-                                All changes made to {file.name} will be reverted{" "}
-                                <b>permanently</b> and can&apos;t be restored.
-                                Are you sure?
-                              </>
-                            }
-                            onConfirm={async () => {
-                              try {
-                                await git.unstageFile(dir, file.name);
-                              } catch (error) {
-                                console.error(error);
-                                if (error instanceof Error) {
-                                  toast({
-                                    title: "Error Reverting",
-                                    description: (
-                                      <p>
-                                        <code>{file.name}</code> can&apos;t be
-                                        reverted
-                                        <br />
-                                        <code>{error.message}</code>
-                                      </p>
-                                    ),
-                                    variant: "destructive",
-                                  });
-                                }
-                                return;
-                              }
-
-                              try {
-                                await git.revertFile(dir, file.name);
-                                await getDiff();
-                                await getStaged();
-                              } catch (error) {
-                                console.error(error);
-                                if (error instanceof Error) {
-                                  toast({
-                                    title: "Error Reverting",
-                                    description: (
-                                      <p>
-                                        <code>{file.name}</code> can&apos;t be
-                                        reverted
-                                        <br />
-                                        <code>{error.message}</code>
-                                      </p>
-                                    ),
-                                    variant: "destructive",
-                                  });
-                                }
-                                return;
-                              }
-                              await getDiff();
-                              await getStaged();
-                              toast({
-                                title: "Successfully Reverted",
-                                description: (
-                                  <>
-                                    Reverted <code>{file.name}</code> to last
-                                    commit
-                                  </>
-                                ),
-                              });
-                            }}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    : null;
-                })}
-              </TableBody>
-            </Table>
-          </TabsContent>
-          <TabsContent value="staged">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-neutral-100 dark:bg-neutral-800">
-                  <TableHead>File Name</TableHead>
-                  <TableHead className="hidden sm:table-cell">Path</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead className="text-center">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {dirList.map((file) => {
-                  let fileStatus = "Unchanged";
-                  let textColor = "text-black dark:text-neutral-50";
-                  if (
-                    diffList.some((target) => {
-                      return (
-                        target === file.name ||
-                        target.split("/").shift() ===
-                          file.path.replace(dir + "\\", "")
-                      );
-                    })
-                  ) {
-                    fileStatus = "Changed";
-                    textColor = "text-blue-600 dark:text-blue-400";
-                  } else if (
-                    stagedList.some((target) => {
-                      return (
-                        target === file.name ||
-                        target.split("/").shift() ===
-                          file.path.replace(dir + "\\", "")
-                      );
-                    })
-                  ) {
-                    fileStatus = "Staged";
-                    textColor = "text-green-600 dark:text-green-400";
-                  }
-                  let actionButton;
-                  if (fileStatus === "Changed") {
-                    actionButton = (
-                      <>
-                        <Button
-                          className="flex-grow"
-                          variant="outline"
-                          size="sm"
-                          onClick={async () => {
-                            await git.addFile(dir, file.name);
-                            await getStaged();
-                            await getDiff();
-                          }}>
-                          Stage
-                        </Button>
-                        <Button
-                          className="flex-grow"
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => setOpenDialogId(file.path)}>
-                          Undo Edit
-                        </Button>
-                      </>
-                    );
-                  } else if (fileStatus === "Staged") {
-                    actionButton = (
-                      <>
-                        <Button
-                          className="flex-grow"
-                          variant="outline"
-                          size="sm"
-                          onClick={async () => {
-                            await git.unstageFile(dir, file.name);
-                            await getDiff();
-                            await getStaged();
-                          }}>
-                          Unstage
-                        </Button>
-                        <Button
-                          className="flex-grow"
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => setOpenDialogId(file.path)}>
-                          Undo Edit
-                        </Button>
-                      </>
-                    );
-                  } else {
-                    actionButton = null;
-                  }
-
-                  return fileStatus == "Staged" ?
-                      <TableRow key={file.name}>
-                        <TableCell
-                          className={"cursor-pointer font-medium " + textColor}
-                          onClick={async () => {
-                            await open(file.path);
-                          }}>
-                          {file.name}
-                        </TableCell>
-                        <TableCell
-                          className={
-                            "hidden break-all sm:table-cell " + textColor
-                          }>
-                          {file.path}
-                        </TableCell>
-                        <TableCell className={textColor}>
-                          {fileStatus}
-                        </TableCell>
-                        <TableCell className="flex flex-col items-center justify-between gap-2 lg:flex-row">
-                          {actionButton}
-                          <ConfirmationDialog
-                            open={openDialogId === file.path}
-                            title="Warning!"
-                            setOpen={() => setOpenDialogId("")}
-                            message={
-                              <>
-                                All changes made to {file.name} will be reverted{" "}
-                                <b>permanently</b> and can&apos;t be restored.
-                                Are you sure?
-                              </>
-                            }
-                            onConfirm={async () => {
-                              try {
-                                await git.unstageFile(dir, file.name);
-                              } catch (error) {
-                                console.error(error);
-                                if (error instanceof Error) {
-                                  toast({
-                                    title: "Error Reverting",
-                                    description: (
-                                      <p>
-                                        <code>{file.name}</code> can&apos;t be
-                                        reverted
-                                        <br />
-                                        <code>{error.message}</code>
-                                      </p>
-                                    ),
-                                    variant: "destructive",
-                                  });
-                                }
-                                return;
-                              }
-
-                              try {
-                                await git.revertFile(dir, file.name);
-                                await getDiff();
-                                await getStaged();
-                              } catch (error) {
-                                console.error(error);
-                                if (error instanceof Error) {
-                                  toast({
-                                    title: "Error Reverting",
-                                    description: (
-                                      <p>
-                                        <code>{file.name}</code> can&apos;t be
-                                        reverted
-                                        <br />
-                                        <code>{error.message}</code>
-                                      </p>
-                                    ),
-                                    variant: "destructive",
-                                  });
-                                }
-                                return;
-                              }
-                              await getDiff();
-                              await getStaged();
-                              toast({
-                                title: "Successfully Reverted",
-                                description: (
-                                  <>
-                                    Reverted <code>{file.name}</code> to last
-                                    commit
-                                  </>
-                                ),
-                              });
-                            }}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    : null;
-                })}
-              </TableBody>
-            </Table>
-          </TabsContent>
-          <TabsContent value="none"></TabsContent>
-        </Tabs>
+        <Menubar className="w-fit">
+          <MenubarMenu>
+            <MenubarTrigger>View</MenubarTrigger>
+            <MenubarContent>
+              <MenubarRadioGroup value={viewMode} onValueChange={setViewMode}>
+                <MenubarRadioItem value="list">List</MenubarRadioItem>
+                <MenubarRadioItem value="tree">Tree</MenubarRadioItem>
+              </MenubarRadioGroup>
+            </MenubarContent>
+          </MenubarMenu>
+        </Menubar>
+        {viewMode === "list" ? listView() : treeView(dirList, true)}
       </CardContent>
     </Card>
   );

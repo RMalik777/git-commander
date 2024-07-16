@@ -19,7 +19,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -44,7 +43,6 @@ export default function Commit() {
   const repoName = useAppSelector((state) => state.repo.name);
   const workDir = useAppSelector((state) => state.repo.directory);
   const userName = useAppSelector((state) => state.user.value);
-  const stagedChanges = useAppSelector((state) => state.repo.staged);
   const diffChanges = useAppSelector((state) => state.repo.diff);
 
   const commitForm = useForm<z.infer<typeof formSchema>>({
@@ -119,6 +117,7 @@ export default function Commit() {
                       <FormLabel htmlFor="name">Commit Messages</FormLabel>
                       <FormControl>
                         <Input
+                          className="CMT_2"
                           disabled={repoName == ""}
                           placeholder={
                             repoName == "" ?
@@ -157,7 +156,11 @@ export default function Commit() {
             <Button type="reset" variant="outline" size="sm">
               Cancel
             </Button>
-            <Button type="submit" size="sm" disabled={repoName == ""}>
+            <Button
+              type="submit"
+              size="sm"
+              disabled={repoName == ""}
+              className="CMT_3">
               Commit
             </Button>
           </CardFooter>

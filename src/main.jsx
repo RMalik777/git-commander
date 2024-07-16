@@ -4,9 +4,17 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
 import Layout from "./routes/Layout";
+
 import Index from "./routes/index";
 import Settings from "./routes/pages/settings";
 import Folder from "./routes/pages/folder";
+import Help from "./routes/pages/help";
+
+import HelpLayout from "./routes/pages/help/layout";
+import Changelog from "./routes/pages/help/changelog";
+import Tutorial from "./routes/pages/help/tutorial";
+import Resource from "./routes/pages/help/resource";
+import Faq from "./routes/pages/help/faq";
 
 import ErrorPage from "./error-page";
 
@@ -28,8 +36,33 @@ const router = createBrowserRouter([
         element: <Settings />,
       },
       {
-        path: "/Folder",
+        path: "/folder",
         element: <Folder />,
+      },
+      {
+        path: "/help",
+        element: <Help />,
+      },
+      {
+        element: <HelpLayout />,
+        children: [
+          {
+            path: "/help/tutorial",
+            element: <Tutorial />,
+          },
+          {
+            path: "/help/faq",
+            element: <Faq />,
+          },
+          {
+            path: "/help/resource",
+            element: <Resource />,
+          },
+          {
+            path: "/help/changelog",
+            element: <Changelog />,
+          },
+        ],
       },
     ],
   },

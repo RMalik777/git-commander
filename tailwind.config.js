@@ -32,7 +32,7 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       screens: {
-        "2xs": "320px",
+        "2xs": "360px",
         xs: "480px",
       },
     },

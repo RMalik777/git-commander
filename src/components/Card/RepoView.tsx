@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
 import { open as openFolder } from "@tauri-apps/api/shell";
-import { exists } from "@tauri-apps/api/fs";
+import { exists, FileEntry } from "@tauri-apps/api/fs";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -50,7 +50,13 @@ export default function RepoView() {
     if (!dir || dir == "") return;
     async function getDiff() {
       const data = await git.showChanged(dir);
-      dispatch(setRepo({ diff: data }));
+      const toEntry = data.map((item: string) => {
+        return {
+          name: item.split("/").pop(),
+          path: item,
+        } as FileEntry;
+      });
+      dispatch(setRepo({ diff: toEntry }));
     }
     getDiff();
   }, [dir]);
@@ -59,7 +65,13 @@ export default function RepoView() {
     if (!dir || dir == "") return;
     async function getStaged() {
       const data = await git.showStaged(dir);
-      dispatch(setRepo({ staged: data }));
+      const toEntry = data.map((item: string) => {
+        return {
+          name: item.split("/").pop(),
+          path: item,
+        } as FileEntry;
+      });
+      dispatch(setRepo({ staged: toEntry }));
     }
     getStaged();
   }, [dir]);
@@ -199,8 +211,9 @@ export default function RepoView() {
           </AlertDialogContent>
         </AlertDialog>
       </CardContent>
-      <CardFooter className="flex flex-row gap-2">
+      <CardFooter className="flex flex-row flex-wrap gap-2">
         <Button
+          className="OR_1"
           size="sm"
           variant="default"
           onClick={async () => {

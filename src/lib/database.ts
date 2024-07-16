@@ -24,7 +24,7 @@ export async function deleteAllRemoteRepo() {
     await invoke("delete_all_remote_repo");
   } catch (error) {
     console.error(error);
-    throw Error(error as string);
+    throw new Error(error as string);
   }
 }
 export async function deleteRemoteRepoById(id: string) {

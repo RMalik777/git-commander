@@ -4,10 +4,10 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   ArrowLeftToLine,
   ArrowRightToLine,
-
+  CircleHelp,
   FolderGit2,
   Home,
-  Settings
+  Settings,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -33,7 +33,12 @@ const menuItem = [
     name: "Settings",
     link: "/settings",
     icon: <Settings />,
-  }
+  },
+  {
+    name: "Help",
+    link: "/help",
+    icon: <CircleHelp />,
+  },
 ];
 
 export default function Navbar() {
@@ -47,7 +52,7 @@ export default function Navbar() {
     <aside
       className={
         "border-r border-neutral-200 bg-white px-3 py-3 transition-all duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950 " +
-        (navOpen ? "min-w-fit w-1/6" : "w-fit")
+        (navOpen ? "w-1/6 min-w-fit" : "w-fit")
       }>
       <nav
         className={
