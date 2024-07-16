@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
 import { open as openFolder } from "@tauri-apps/api/shell";
-import { exists } from "@tauri-apps/api/fs";
+import { exists, FileEntry } from "@tauri-apps/api/fs";
 
 import { Button } from "@/components/ui/button";
 import {
