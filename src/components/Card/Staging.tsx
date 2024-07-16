@@ -314,20 +314,78 @@ export default function Staging({
               {stagedList.length > 0 ?
                 stagedList?.map((target) => {
                   return (
-                    <div
-                      key={target.path}
-                      className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
-                      <File className="h-4 w-4" />
-                      <button className="flex w-full items-center justify-between">
-                        <div className="flex flex-row items-center gap-4">
-                          <h4 className="font-medium">{target.name}</h4>
-                          <h4 className="text-xs italic text-neutral-400 dark:text-neutral-600">
-                            {target.path}
-                          </h4>
+                    <ContextMenu key={target.path}>
+                      <ContextMenuTrigger>
+                        <div className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                          <File className="h-4 w-4" />
+                          <button className="flex w-full items-center justify-between">
+                            <div className="flex flex-row items-center gap-4">
+                              <h4 className="font-medium">{target.name}</h4>
+                              <h4 className="text-xs italic text-neutral-400 dark:text-neutral-600">
+                                {target.path}
+                              </h4>
+                            </div>
+                            {actionButton(target, "Staged")}
+                          </button>
                         </div>
-                        {actionButton(target, "Staged")}
-                      </button>
-                    </div>
+                      </ContextMenuTrigger>
+                      <ContextMenuContent className="w-64">
+                        <ContextMenuItem>{target.name}</ContextMenuItem>
+                        <ContextMenuSeparator />
+                        <ContextMenuItem inset disabled>
+                          Stage
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                          inset
+                          onClick={async () => {
+                            toast({
+                              title: "Unstaging File",
+                            });
+                            try {
+                              await git.unstageFile(dir, target.path);
+                            } catch (error) {
+                              if (error instanceof Error) {
+                                toast({
+                                  title: "Error Unstaging",
+                                  description: (
+                                    <p>
+                                      <code>{target.name}</code> can&apos;t be
+                                      unstaged
+                                      <br />
+                                      <code>{error.message}</code>
+                                    </p>
+                                  ),
+                                  variant: "destructive",
+                                });
+                              }
+                              return;
+                            }
+                            await getStaged();
+                            await getDiff();
+                            toast({
+                              title: "Successfully Unstaged",
+                            });
+                          }}>
+                          Unstage
+                        </ContextMenuItem>
+                        <ContextMenuItem inset>Revert</ContextMenuItem>
+                        <ContextMenuSeparator />
+                        <ContextMenuItem inset>Open</ContextMenuItem>
+                        <ContextMenuItem
+                          inset
+                          onClick={async () => {
+                            await writeText(target.path);
+                          }}>
+                          Copy Path
+                        </ContextMenuItem>
+                        <ContextMenuSeparator />
+                        <ContextMenuItem
+                          inset
+                          className="font-medium text-red-500 focus:bg-red-500/10">
+                          Delete
+                        </ContextMenuItem>
+                      </ContextMenuContent>
+                    </ContextMenu>
                   );
                 })
               : <h4 className="text-center">Empty...</h4>}
@@ -381,20 +439,81 @@ export default function Staging({
             <ListContent>
               {diffList?.map((target) => {
                 return (
-                  <div
-                    key={target.path}
-                    className="group flex cursor-pointer items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
-                    <File className="h-4 w-4" />
-                    <button className="flex w-full items-center justify-between">
-                      <div className="flex flex-row items-center gap-4">
-                        <h4 className="font-medium">{target.name}</h4>
-                        <h4 className="text-xs italic text-neutral-400 dark:text-neutral-600">
-                          {target.path}
-                        </h4>
+                  <ContextMenu key={target.path}>
+                    <ContextMenuTrigger>
+                      <div
+                        key={target.path}
+                        className="group flex cursor-pointer items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                        <File className="h-4 w-4" />
+                        <button className="flex w-full items-center justify-between">
+                          <div className="flex flex-row items-center gap-4">
+                            <h4 className="font-medium">{target.name}</h4>
+                            <h4 className="text-xs italic text-neutral-400 dark:text-neutral-600">
+                              {target.path}
+                            </h4>
+                          </div>
+                          {actionButton(target, "Changed")}
+                        </button>
                       </div>
-                      {actionButton(target, "Changed")}
-                    </button>
-                  </div>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className="w-64">
+                      <ContextMenuItem>{target.name}</ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem
+                        inset
+                        onClick={async () => {
+                          toast({
+                            title: "Staging File",
+                          });
+                          try {
+                            await git.addFile(dir, target.path);
+                          } catch (error) {
+                            console.error(error);
+                            if (error instanceof Error) {
+                              toast({
+                                title: "Error Staging",
+                                description: (
+                                  <p>
+                                    <code>{target.name}</code> can&apos;t be
+                                    staged
+                                    <br />
+                                    <code>{error.message}</code>
+                                  </p>
+                                ),
+                                variant: "destructive",
+                              });
+                            }
+                            return;
+                          }
+                          await getDiff();
+                          await getStaged();
+                          toast({
+                            title: "Successfully Staged",
+                          });
+                        }}>
+                        Stage
+                      </ContextMenuItem>
+                      <ContextMenuItem inset disabled>
+                        Unstage
+                      </ContextMenuItem>
+                      <ContextMenuItem inset>Revert</ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem inset>Open</ContextMenuItem>
+                      <ContextMenuItem
+                        inset
+                        onClick={async () => {
+                          await writeText(target.path);
+                        }}>
+                        Copy Path
+                      </ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem
+                        inset
+                        className="font-medium text-red-500 focus:bg-red-500/10">
+                        Delete
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                 );
               })}
             </ListContent>
