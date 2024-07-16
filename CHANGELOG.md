@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/RMalik777/git-commander/compare/v1.6.0...v1.6.1) (2024-07-16)
+
+
+### Bug Fixes
+
+* **ci:** fix build failing in ubuntu because capitalization ([f261279](https://github.com/RMalik777/git-commander/commit/f2612793bb8a965116b71f7a58cb96a8374b5852))
+
 # [1.6.0](https://github.com/RMalik777/git-commander/compare/v1.5.0...v1.6.0) (2024-07-16)
 
 
