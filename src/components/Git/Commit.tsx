@@ -19,7 +19,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -44,7 +43,6 @@ export default function Commit() {
   const repoName = useAppSelector((state) => state.repo.name);
   const workDir = useAppSelector((state) => state.repo.directory);
   const userName = useAppSelector((state) => state.user.value);
-  const stagedChanges = useAppSelector((state) => state.repo.staged);
   const diffChanges = useAppSelector((state) => state.repo.diff);
 
   const commitForm = useForm<z.infer<typeof formSchema>>({
