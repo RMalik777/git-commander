@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
+import { useAppDispatch } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
-import { FileEntry, readDir } from "@tauri-apps/api/fs";
+import { FileEntry } from "@tauri-apps/api/fs";
 import { writeText } from "@tauri-apps/api/clipboard";
 
 import {
@@ -36,12 +35,19 @@ import { RefreshCw, File } from "lucide-react";
 
 import * as git from "@/lib/git";
 
-export default function FileList() {
+export default function FileList({
+  dir,
+  dirList,
+  diffList,
+  stagedList,
+}: Readonly<{
+  dir: string;
+  dirList: FileEntry[];
+  diffList: FileEntry[];
+  stagedList: FileEntry[];
+}>) {
   const dispatch = useAppDispatch();
-  const repoName = useAppSelector((state) => state.repo.name);
-  const dir = useAppSelector((state) => state.repo.directory);
 
-  const diffList = useAppSelector((state) => state.repo.diff);
   async function getDiff() {
     const data = await git.showChanged(dir);
     const toEntry = data.map((item: string) => {
@@ -52,12 +58,7 @@ export default function FileList() {
     });
     dispatch(setRepo({ diff: toEntry }));
   }
-  useEffect(() => {
-    if (dir === "") return;
-    getDiff();
-  }, [dir]);
 
-  const stagedList = useAppSelector((state) => state.repo.staged);
   async function getStaged() {
     const data = await git.showStaged(dir);
     const toEntry = data.map((item: string) => {
@@ -68,52 +69,7 @@ export default function FileList() {
     });
     dispatch(setRepo({ staged: toEntry }));
   }
-  useEffect(() => {
-    if (dir === "") return;
-    getStaged();
-  }, [dir]);
 
-  const [dirList, setDirList] = useState<FileEntry[]>(
-    JSON.parse(localStorage.getItem("dirList") ?? "[]")
-  );
-  function recursiveSort(parent: FileEntry[]) {
-    parent.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-    parent.sort((a, b) => {
-      if (a.children && !b.children) return -1;
-      if (!a.children && b.children) return 1;
-      return 0;
-    });
-    parent.forEach((child) => {
-      if (child.children) {
-        child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-        child.children.sort((a, b) => {
-          if (a.children && !b.children) return -1;
-          if (!a.children && b.children) return 1;
-          return 0;
-        });
-        recursiveSort(child.children);
-      }
-    });
-    return parent;
-  }
-  async function getAllChildDir(repo: string) {
-    try {
-      const dir = await readDir(repo, { recursive: true });
-      recursiveSort(dir);
-      localStorage.setItem("dirList", JSON.stringify(dir));
-      return dir;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  }
-  async function setDirectory() {
-    setDirList(await getAllChildDir(dir));
-  }
-  useEffect(() => {
-    if (dir === "") return;
-    setDirectory();
-  }, [repoName, dir, stagedList, diffList]);
   function actionButton(file: FileEntry) {
     let fileStatus = "Unchanged";
     if (
@@ -202,7 +158,7 @@ export default function FileList() {
                       className={"group " + (root ? "" : "ml-4 border-l")}
                       type="multiple">
                       <FolderItem value="item-1" className="">
-                        <FolderTrigger className="group p-1 pl-2">
+                        <FolderTrigger className="group p-1 pl-2 hover:bg-neutral-100 dark:hover:bg-neutral-900">
                           <div className="flex w-full justify-between">
                             {child.name}
                             {actionButton(child)}

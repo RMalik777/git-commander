@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
+import { useState } from "react";
+import { useAppDispatch } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
-import { FileEntry, readDir } from "@tauri-apps/api/fs";
+import { FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
 import { writeText } from "@tauri-apps/api/clipboard";
 
@@ -53,15 +53,22 @@ import { RefreshCw, File, Plus, FolderOpen, Undo, Minus } from "lucide-react";
 
 import * as git from "@/lib/git";
 
-export default function Staging() {
+export default function Staging({
+  dir,
+  dirList,
+  diffList,
+  stagedList,
+}: Readonly<{
+  dir: string;
+  dirList: FileEntry[];
+  diffList: FileEntry[];
+  stagedList: FileEntry[];
+}>) {
   const [viewMode, setViewMode] = useState("list");
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const [openDialogId, setOpenDialogId] = useState("");
-  const repoName = useAppSelector((state) => state.repo.name);
-  const dir = useAppSelector((state) => state.repo.directory);
 
-  const diffList = useAppSelector((state) => state.repo.diff);
   async function getDiff() {
     const data = await git.showChanged(dir);
     const toEntry = data.map((item: string) => {
@@ -73,12 +80,7 @@ export default function Staging() {
     dispatch(setRepo({ diff: toEntry }));
     localStorage.setItem("diffList", JSON.stringify(toEntry));
   }
-  useEffect(() => {
-    if (dir === "") return;
-    getDiff();
-  }, [dir]);
 
-  const stagedList = useAppSelector((state) => state.repo.staged);
   async function getStaged() {
     const data = await git.showStaged(dir);
     const toEntry = data.map((item: string) => {
@@ -90,52 +92,7 @@ export default function Staging() {
     dispatch(setRepo({ staged: toEntry }));
     localStorage.setItem("stagedList", JSON.stringify(toEntry));
   }
-  useEffect(() => {
-    if (dir === "") return;
-    getStaged();
-  }, [dir]);
 
-  const [dirList, setDirList] = useState<FileEntry[]>(
-    JSON.parse(localStorage.getItem("dirList") ?? "[]")
-  );
-  function recursiveSort(parent: FileEntry[]) {
-    parent.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-    parent.sort((a, b) => {
-      if (a.children && !b.children) return -1;
-      if (!a.children && b.children) return 1;
-      return 0;
-    });
-    parent.forEach((child) => {
-      if (child.children) {
-        child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-        child.children.sort((a, b) => {
-          if (a.children && !b.children) return -1;
-          if (!a.children && b.children) return 1;
-          return 0;
-        });
-        recursiveSort(child.children);
-      }
-    });
-    return parent;
-  }
-  async function getAllChildDir(repo: string) {
-    try {
-      const dir = await readDir(repo, { recursive: true });
-      recursiveSort(dir);
-      localStorage.setItem("dirList", JSON.stringify(dir));
-      return dir;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  }
-  useEffect(() => {
-    async function setDirectory() {
-      setDirList(await getAllChildDir(dir));
-    }
-    if (dir === "") return;
-    setDirectory();
-  }, [repoName, dir, stagedList, diffList]);
   function actionButton(file: FileEntry, mode: string) {
     return (
       <div className="hidden flex-row items-center gap-2 group-hover:flex group-focus:flex">
@@ -143,7 +100,7 @@ export default function Staging() {
           <Tooltip>
             <TooltipTrigger asChild>
               <FolderOpen
-                className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200"
+                className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                 onClick={async () => {
                   await open(file.path);
                 }}
@@ -157,7 +114,7 @@ export default function Staging() {
             <TooltipTrigger asChild>
               {mode === "Changed" ?
                 <Plus
-                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200"
+                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
                     toast({
                       title: "Staging File",
@@ -189,7 +146,7 @@ export default function Staging() {
                   }}
                 />
               : <Minus
-                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200"
+                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
                     toast({
                       title: "Unstaging File",
@@ -228,7 +185,7 @@ export default function Staging() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Undo
-                className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200"
+                className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                 onClick={() => setOpenDialogId(file.path)}
               />
             </TooltipTrigger>
@@ -318,7 +275,7 @@ export default function Staging() {
                   return (
                     <div
                       key={target.path}
-                      className="group flex items-center gap-2 p-1 hover:bg-neutral-100">
+                      className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
                       <File className="h-4 w-4" />
                       <button className="flex w-full items-center justify-between">
                         <div className="flex flex-row items-center gap-4">
@@ -344,7 +301,7 @@ export default function Staging() {
                 return (
                   <div
                     key={target.path}
-                    className="group flex items-center gap-2 p-1 hover:bg-neutral-100">
+                    className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
                     <File className="h-4 w-4" />
                     <button className="flex w-full items-center justify-between">
                       <div className="flex flex-row items-center gap-4">
@@ -416,7 +373,7 @@ export default function Staging() {
                         className={" " + (root ? "" : "ml-4 border-l")}
                         type="multiple">
                         <FolderItem value="item-1" className="">
-                          <div className="group flex w-full justify-between hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                          <div className="group flex w-full justify-between hover:bg-neutral-100 dark:hover:bg-neutral-900">
                             <FolderTrigger className="p-1 pl-2">
                               {child.name}
                             </FolderTrigger>
@@ -429,7 +386,7 @@ export default function Staging() {
                       </FolderRoot>
                     : <div
                         className={
-                          "group flex items-center gap-4 p-1 pl-7 hover:bg-neutral-100 hover:underline " +
+                          "group flex items-center gap-4 p-1 pl-7 hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900 " +
                           (root ? "" : "ml-4 border-l")
                         }>
                         <File className="h-4 w-4" />
