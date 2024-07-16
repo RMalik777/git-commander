@@ -74,7 +74,6 @@ export default function Staging({
 
   async function getDiff() {
     const data = await git.showChanged(dir);
-    console.log("DIFF", data);
     const toEntry = await data.map((item: string) => {
       return {
         name: item.split("/").pop(),
@@ -87,7 +86,6 @@ export default function Staging({
 
   async function getStaged() {
     const data = await git.showStaged(dir);
-    console.log("STAGED", data);
     const toEntry = await data.map((item: string) => {
       return {
         name: item.split("/").pop(),
@@ -100,16 +98,17 @@ export default function Staging({
 
   function actionButton(file: FileEntry, mode: string) {
     return (
-      <div className="hidden flex-row items-center gap-2 group-hover:flex group-focus:flex">
+      <div className="STG_5A STG_5 UST_5 UST_5A hidden flex-row items-center gap-2 group-hover:flex group-focus:flex">
         <TooltipProvider delayDuration={250} disableHoverableContent>
           <Tooltip>
             <TooltipTrigger asChild>
-              <FolderOpen
-                className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+              <button
+                className="STG_6 UST_6 h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                 onClick={async () => {
                   await open(file.path);
-                }}
-              />
+                }}>
+                <FolderOpen className="h-full w-full" />
+              </button>
             </TooltipTrigger>
             <TooltipContent>
               <p>Open</p>
@@ -118,12 +117,9 @@ export default function Staging({
           <Tooltip>
             <TooltipTrigger asChild>
               {mode === "Changed" ?
-                <Plus
-                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                <button
+                  className="STG_7 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
-                    toast({
-                      title: "Staging File",
-                    });
                     try {
                       await git.addFile(dir, file.path);
                     } catch (error) {
@@ -145,17 +141,12 @@ export default function Staging({
                     }
                     await getDiff();
                     await getStaged();
-                    toast({
-                      title: "Successfully Staged",
-                    });
-                  }}
-                />
-              : <Minus
-                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  }}>
+                  <Plus className="h-full w-full" />
+                </button>
+              : <button
+                  className="UST_7 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
-                    toast({
-                      title: "Unstaging File",
-                    });
                     try {
                       await git.unstageFile(dir, file.path);
                     } catch (error) {
@@ -176,11 +167,9 @@ export default function Staging({
                     }
                     await getStaged();
                     await getDiff();
-                    toast({
-                      title: "Successfully Unstaged",
-                    });
-                  }}
-                />
+                  }}>
+                  <Minus className="h-full w-full" />
+                </button>
               }
             </TooltipTrigger>
             <TooltipContent>
@@ -189,10 +178,11 @@ export default function Staging({
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Undo
+              <button
                 className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
-                onClick={() => setOpenDialogId(file.path)}
-              />
+                onClick={() => setOpenDialogId(file.path)}>
+                <Undo className="h-full w-full" />
+              </button>
             </TooltipTrigger>
             <TooltipContent>
               <p>Revert Changes</p>
@@ -232,9 +222,7 @@ export default function Staging({
               }
             }
             try {
-              await git.revertFile(dir, file.name);
-              await getDiff();
-              await getStaged();
+              await git.revertFile(dir, file.path);
             } catch (error) {
               console.error(error);
               if (error instanceof Error) {
@@ -251,9 +239,12 @@ export default function Staging({
                 });
               }
               return;
+            } finally {
+              dispatch(setRepo({ diff: [...diffList] }));
+              dispatch(setRepo({ staged: [...stagedList] }));
+              await getDiff();
+              await getStaged();
             }
-            dispatch(setRepo({ diff: [...diffList] }));
-            dispatch(setRepo({ staged: [...stagedList] }));
             toast({
               title: "Successfully Reverted",
               description: (
@@ -275,14 +266,10 @@ export default function Staging({
           <ListItem value="staged">
             <ListHeader className="group">
               <ListTrigger>Staged</ListTrigger>
-              <div className="hidden flex-row items-center gap-2 px-1 group-hover:flex">
-                <FolderOpen className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800" />
-                <Minus
-                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+              <div className="UST_8A hidden flex-row items-center gap-2 px-1 group-hover:flex">
+                <button
+                  className="UST_8 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
-                    toast({
-                      title: "Unstaging File",
-                    });
                     try {
                       await git.unstageAll(dir);
                     } catch (error) {
@@ -304,15 +291,15 @@ export default function Staging({
                       await getDiff();
                       await getStaged();
                     }
-                    toast({
-                      title: "Successfully Unstaged",
-                    });
-                  }}
-                />
-                <Undo className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800" />
+                  }}>
+                  <Minus className="h-full w-full" />
+                </button>
+                <button className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800">
+                  <Undo className="h-full w-full" />
+                </button>
               </div>
             </ListHeader>
-            <ListContent>
+            <ListContent className="UST_2">
               {stagedList.length > 0 ?
                 stagedList?.map((target) => {
                   return (
@@ -320,15 +307,17 @@ export default function Staging({
                       <ContextMenuTrigger>
                         <div className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
                           <File className="h-4 w-4" />
-                          <button className="flex w-full items-center justify-between">
+                          <div className="flex w-full items-center justify-between">
                             <div className="flex flex-row items-center gap-4">
-                              <h4 className="font-medium">{target.name}</h4>
-                              <h4 className="text-xs italic text-neutral-400 dark:text-neutral-600">
+                              <h4 className="UST_3 font-medium">
+                                {target.name}
+                              </h4>
+                              <h4 className="UST_4 text-xs italic text-neutral-400 dark:text-neutral-600">
                                 {target.path}
                               </h4>
                             </div>
                             {actionButton(target, "Staged")}
-                          </button>
+                          </div>
                         </div>
                       </ContextMenuTrigger>
                       <ContextMenuContent className="w-64">
@@ -340,9 +329,6 @@ export default function Staging({
                         <ContextMenuItem
                           inset
                           onClick={async () => {
-                            toast({
-                              title: "Unstaging File",
-                            });
                             try {
                               await git.unstageFile(dir, target.path);
                             } catch (error) {
@@ -364,9 +350,6 @@ export default function Staging({
                             }
                             await getStaged();
                             await getDiff();
-                            toast({
-                              title: "Successfully Unstaged",
-                            });
                           }}>
                           Unstage
                         </ContextMenuItem>
@@ -398,14 +381,10 @@ export default function Staging({
           <ListItem value="diff">
             <ListHeader className="group">
               <ListTrigger>Changed</ListTrigger>
-              <div className="hidden flex-row items-center gap-2 px-1 group-hover:flex">
-                <FolderOpen className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800" />
-                <Plus
-                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+              <div className="STG_8A hidden flex-row items-center gap-2 px-1 group-hover:flex">
+                <button
+                  className="STG_8 STG_9A h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
-                    toast({
-                      title: "Staging File",
-                    });
                     try {
                       await git.addAll(dir);
                     } catch (error) {
@@ -430,32 +409,32 @@ export default function Staging({
                       await getStaged();
                       await getDiff();
                     }
-                    toast({
-                      title: "Successfully Staged",
-                    });
-                  }}
-                />
-                <Undo className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800" />
+                  }}>
+                  <Plus className="h-full w-full" />
+                </button>
+                <button className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800">
+                  <Undo className="h-full w-full" />
+                </button>
               </div>
             </ListHeader>
-            <ListContent>
+            <ListContent className="STG_2">
               {diffList?.map((target) => {
                 return (
                   <ContextMenu key={target.path}>
                     <ContextMenuTrigger>
                       <div
                         key={target.path}
-                        className="group flex cursor-pointer items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                        className="group flex cursor-default items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
                         <File className="h-4 w-4" />
-                        <button className="flex w-full items-center justify-between">
+                        <div className="flex w-full items-center justify-between">
                           <div className="flex flex-row items-center gap-4">
-                            <h4 className="font-medium">{target.name}</h4>
-                            <h4 className="text-xs italic text-neutral-400 dark:text-neutral-600">
+                            <h4 className="STG_3 font-medium">{target.name}</h4>
+                            <h4 className="STG_4 text-xs italic text-neutral-400 dark:text-neutral-600">
                               {target.path}
                             </h4>
                           </div>
                           {actionButton(target, "Changed")}
-                        </button>
+                        </div>
                       </div>
                     </ContextMenuTrigger>
                     <ContextMenuContent className="w-64">
@@ -464,9 +443,6 @@ export default function Staging({
                       <ContextMenuItem
                         inset
                         onClick={async () => {
-                          toast({
-                            title: "Staging File",
-                          });
                           try {
                             await git.addFile(dir, target.path);
                           } catch (error) {
@@ -489,9 +465,6 @@ export default function Staging({
                           }
                           await getDiff();
                           await getStaged();
-                          toast({
-                            title: "Successfully Staged",
-                          });
                         }}>
                         Stage
                       </ContextMenuItem>
@@ -593,10 +566,10 @@ export default function Staging({
                           (root ? "" : "ml-4 border-l")
                         }>
                         <File className="h-4 w-4" />
-                        <button className="flex w-full items-center justify-between">
+                        <div className="flex w-full items-center justify-between">
                           {child.name}
                           {actionButton(child, fileStatus)}
-                        </button>
+                        </div>
                       </div>
                     }
                   </ContextMenuTrigger>
@@ -633,7 +606,7 @@ export default function Staging({
     );
   }
   return (
-    <Card className="w-full">
+    <Card className="STG_1 UST_1 w-full">
       <CardHeader className="">
         <CardTitle className="flex items-center gap-4">
           Staging Area{" "}
