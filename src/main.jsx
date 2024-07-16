@@ -10,7 +10,7 @@ import Settings from "./routes/pages/settings";
 import Folder from "./routes/pages/folder";
 import Help from "./routes/pages/help";
 
-import HelpLayout from "./routes/pages/help/layout";
+import HelpLayout from "./routes/pages/help/Layout";
 import Changelog from "./routes/pages/help/changelog";
 import Tutorial from "./routes/pages/help/tutorial";
 import Resource from "./routes/pages/help/resource";
