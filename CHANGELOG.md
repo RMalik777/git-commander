@@ -1,3 +1,19 @@
+# [1.6.0](https://github.com/RMalik777/git-commander/compare/v1.5.0...v1.6.0) (2024-07-16)
+
+
+### Bug Fixes
+
+* deleting repository not deleting table ([d8329c8](https://github.com/RMalik777/git-commander/commit/d8329c866172738b40c435b8ab100a91cd3e9821))
+* highlight username input when button is clicked ([c78c157](https://github.com/RMalik777/git-commander/commit/c78c157b6d71b030f5689f9673b025ea06d64fd6))
+* split tooltip provider ([8d77b2c](https://github.com/RMalik777/git-commander/commit/8d77b2c57a6a8cf68d1126f109716665eb63814e))
+
+
+### Features
+
+* add help page with multiple sub pages ([7d163b7](https://github.com/RMalik777/git-commander/commit/7d163b7e0409b3076a01ace58ffcd23cf0c8d79e))
+* add tutorial material ([c07e32f](https://github.com/RMalik777/git-commander/commit/c07e32f6b6f12da5890de1e6d8850fe15752aef7))
+* adjust file list and staging view ([fb5cccb](https://github.com/RMalik777/git-commander/commit/fb5cccb71633422fd651108de069dede464658bd))
+
 # [1.5.0](https://github.com/RMalik777/git-commander/compare/v1.4.1...v1.5.0) (2024-07-10)
 
 
