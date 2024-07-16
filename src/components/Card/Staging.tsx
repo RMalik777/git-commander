@@ -32,11 +32,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+  List,
+  ListContent,
+  ListItem,
+  ListHeader,
+  ListTrigger,
+} from "@/components/ui/accordion-list";
 import {
   Menubar,
   MenubarContent,
@@ -71,7 +72,8 @@ export default function Staging({
 
   async function getDiff() {
     const data = await git.showChanged(dir);
-    const toEntry = data.map((item: string) => {
+    console.log("DIFF", data);
+    const toEntry = await data.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item,
@@ -83,7 +85,8 @@ export default function Staging({
 
   async function getStaged() {
     const data = await git.showStaged(dir);
-    const toEntry = data.map((item: string) => {
+    console.log("STAGED", data);
+    const toEntry = await data.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item,
@@ -138,8 +141,8 @@ export default function Staging({
                       }
                       return;
                     }
-                    await getStaged();
                     await getDiff();
+                    await getStaged();
                     toast({
                       title: "Successfully Staged",
                     });
@@ -228,8 +231,8 @@ export default function Staging({
             }
             try {
               await git.revertFile(dir, file.name);
-              await getStaged();
               await getDiff();
+              await getStaged();
             } catch (error) {
               console.error(error);
               if (error instanceof Error) {
@@ -265,11 +268,49 @@ export default function Staging({
 
   function listView() {
     return (
-      <Accordion type="multiple" defaultValue={["diff", "staged"]}>
+      <List type="multiple" defaultValue={["diff", "staged"]}>
         {stagedList.length > 0 ?
-          <AccordionItem value="staged">
-            <AccordionTrigger>Staged</AccordionTrigger>
-            <AccordionContent>
+          <ListItem value="staged">
+            <ListHeader className="group">
+              <ListTrigger>Staged</ListTrigger>
+              <div className="hidden flex-row items-center gap-2 px-1 group-hover:flex">
+                <FolderOpen className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800" />
+                <Minus
+                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  onClick={async () => {
+                    toast({
+                      title: "Unstaging File",
+                    });
+                    try {
+                      await git.unstageAll(dir);
+                    } catch (error) {
+                      if (error instanceof Error) {
+                        toast({
+                          title: "Error Unstaging",
+                          description: (
+                            <p>
+                              can&apos;t unstage file
+                              <br />
+                              <code>{error.message}</code>
+                            </p>
+                          ),
+                          variant: "destructive",
+                        });
+                      }
+                      return;
+                    } finally {
+                      await getDiff();
+                      await getStaged();
+                    }
+                    toast({
+                      title: "Successfully Unstaged",
+                    });
+                  }}
+                />
+                <Undo className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800" />
+              </div>
+            </ListHeader>
+            <ListContent>
               {stagedList.length > 0 ?
                 stagedList?.map((target) => {
                   return (
@@ -290,18 +331,59 @@ export default function Staging({
                   );
                 })
               : <h4 className="text-center">Empty...</h4>}
-            </AccordionContent>
-          </AccordionItem>
+            </ListContent>
+          </ListItem>
         : null}
         {diffList.length > 0 ?
-          <AccordionItem value="diff">
-            <AccordionTrigger className="py-2">Changed</AccordionTrigger>
-            <AccordionContent>
+          <ListItem value="diff">
+            <ListHeader className="group">
+              <ListTrigger>Changed</ListTrigger>
+              <div className="hidden flex-row items-center gap-2 px-1 group-hover:flex">
+                <FolderOpen className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800" />
+                <Plus
+                  className="h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  onClick={async () => {
+                    toast({
+                      title: "Staging File",
+                    });
+                    try {
+                      await git.addAll(dir);
+                    } catch (error) {
+                      console.error(error);
+                      if (error instanceof Error) {
+                        toast({
+                          title: "Error Staging",
+                          description: (
+                            <p>
+                              can&apos;t stage file
+                              <br />
+                              <code>{error.message}</code>
+                            </p>
+                          ),
+                          variant: "destructive",
+                        });
+                      }
+                      return;
+                    } finally {
+                      // THIS IS TEMPORARY FIX
+                      await getDiff();
+                      await getStaged();
+                      await getDiff();
+                    }
+                    toast({
+                      title: "Successfully Staged",
+                    });
+                  }}
+                />
+                <Undo className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800" />
+              </div>
+            </ListHeader>
+            <ListContent>
               {diffList?.map((target) => {
                 return (
                   <div
                     key={target.path}
-                    className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                    className="group flex cursor-pointer items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
                     <File className="h-4 w-4" />
                     <button className="flex w-full items-center justify-between">
                       <div className="flex flex-row items-center gap-4">
@@ -315,10 +397,10 @@ export default function Staging({
                   </div>
                 );
               })}
-            </AccordionContent>
-          </AccordionItem>
+            </ListContent>
+          </ListItem>
         : null}
-      </Accordion>
+      </List>
     );
   }
   function treeView(parent: FileEntry[], root: boolean): React.ReactNode {
