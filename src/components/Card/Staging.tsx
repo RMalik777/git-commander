@@ -65,7 +65,9 @@ export default function Staging({
   diffList: FileEntry[];
   stagedList: FileEntry[];
 }>) {
-  const [viewMode, setViewMode] = useState("list");
+  const [viewMode, setViewMode] = useState(
+    localStorage.getItem("viewMode")?.toString() ?? "list"
+  );
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const [openDialogId, setOpenDialogId] = useState("");
@@ -664,7 +666,12 @@ export default function Staging({
           <MenubarMenu>
             <MenubarTrigger>View</MenubarTrigger>
             <MenubarContent>
-              <MenubarRadioGroup value={viewMode} onValueChange={setViewMode}>
+              <MenubarRadioGroup
+                value={viewMode}
+                onValueChange={(e) => {
+                  localStorage.setItem("viewMode", e);
+                  setViewMode(e);
+                }}>
                 <MenubarRadioItem value="list">List</MenubarRadioItem>
                 <MenubarRadioItem value="tree">Tree</MenubarRadioItem>
               </MenubarRadioGroup>
