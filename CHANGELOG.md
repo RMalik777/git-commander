@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/RMalik777/git-commander/compare/v1.7.0...v1.7.1) (2024-07-17)
+
+
+### Bug Fixes
+
+* change os version explanation ([7aa3205](https://github.com/RMalik777/git-commander/commit/7aa32055a2bc090fe3ef8830fa904cef663dbffd))
+
 # [1.7.0](https://github.com/RMalik777/git-commander/compare/v1.6.1...v1.7.0) (2024-07-17)
 
 
