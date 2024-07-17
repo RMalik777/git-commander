@@ -1,12 +1,11 @@
 import { useAppSelector } from "@/lib/Redux/hooks";
 import { NavLink } from "react-router-dom";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { useToast } from "@/components/ui/use-toast";
-
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,11 +23,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
-import { TriangleAlert, Info } from "lucide-react";
+import { Info, TriangleAlert } from "lucide-react";
 
 import * as git from "@/lib/git";
 
@@ -39,7 +38,7 @@ const formSchema = z.object({
     .max(75, { message: "Commit message too long" }),
 });
 
-export default function Commit() {
+export function Commit() {
   const repoName = useAppSelector((state) => state.repo.name);
   const workDir = useAppSelector((state) => state.repo.directory);
   const userName = useAppSelector((state) => state.user.value);

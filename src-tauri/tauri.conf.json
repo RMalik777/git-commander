@@ -11,10 +11,17 @@
   },
   "tauri": {
     "allowlist": {
+      "app": {
+        "all": true,
+        "hide": false,
+        "show": false
+      },
+      "os": {
+        "all": true
+      },
       "clipboard": {
         "all": true
       },
-      "all": false,
       "notification": {
         "all": true
       },

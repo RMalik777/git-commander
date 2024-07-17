@@ -6,7 +6,11 @@ import path from "path";
 export default defineConfig(async () => ({
   plugins: [react()],
   assetsInclude: ["**/*.md"],
-
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
+    __APP_NAME__: JSON.stringify(process.env.npm_package_name),
+    __REACT_VER__: JSON.stringify((await import("react")).version),
+  },
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
   // 1. prevent vite from obscuring rust errors

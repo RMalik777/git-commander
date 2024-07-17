@@ -1,7 +1,6 @@
 import Markdown from "react-markdown";
 
 import { History } from "lucide-react";
-import { open } from "@tauri-apps/api/shell";
 
 import { HelpNavbar } from "@/components/Navbar/HelpNavbar";
 

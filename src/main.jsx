@@ -15,6 +15,7 @@ import Changelog from "./routes/pages/help/changelog";
 import Tutorial from "./routes/pages/help/tutorial";
 import Resource from "./routes/pages/help/resource";
 import Faq from "./routes/pages/help/faq";
+import Info from "./routes/pages/help/info";
 
 import ErrorPage from "./error-page";
 
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
           {
             path: "/help/changelog",
             element: <Changelog />,
+          },
+          {
+            path: "/help/info",
+            element: <Info />,
           },
         ],
       },

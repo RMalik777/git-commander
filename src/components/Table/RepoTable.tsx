@@ -1,4 +1,7 @@
 import { useState } from "react";
+
+import { open } from "@tauri-apps/api/shell";
+
 import {
   Table,
   TableBody,
@@ -7,17 +10,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { open } from "@tauri-apps/api/shell";
+
+import { Trash2 } from "lucide-react";
+
+import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
+import { EditRepo } from "@/components/Dialog/EditRepo";
 
 import type { RepoFormat } from "@/lib/Types/repo";
 
-import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
-import EditRepo from "@/components/Dialog/EditRepo";
-
-export default function RepoTable({
+export function RepoTable({
   repos,
   onDeleteRepo,
   fetchData,

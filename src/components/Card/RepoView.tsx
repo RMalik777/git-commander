@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { open } from "@tauri-apps/api/dialog";
-import { open as openFolder } from "@tauri-apps/api/shell";
-import { exists, FileEntry } from "@tauri-apps/api/fs";
 
-import { Button } from "@/components/ui/button";
+import { open } from "@tauri-apps/api/dialog";
+import { exists, FileEntry } from "@tauri-apps/api/fs";
+import { open as openFolder } from "@tauri-apps/api/shell";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -22,18 +24,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { Info } from "lucide-react";
 
 import * as git from "@/lib/git";
 
-import Clone from "@/components/Dialog/Clone";
+import { Clone } from "@/components/Dialog/Clone";
 
-import { useAppSelector, useAppDispatch } from "@/lib/Redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { removeRepo, setRepo } from "@/lib/Redux/repoSlice";
 
-export default function RepoView() {
+export function RepoView() {
   const dir = useAppSelector((state) => state.repo.directory);
   const dispatch = useAppDispatch();
 

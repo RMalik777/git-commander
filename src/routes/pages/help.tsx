@@ -2,9 +2,10 @@ import { NavLink } from "react-router-dom";
 
 import {
   CircleArrowRight,
+  Files,
   GraduationCap,
   History,
-  Files,
+  Info,
   MessageCircleQuestion,
 } from "lucide-react";
 
@@ -29,11 +30,16 @@ const items = [
     link: "changelog",
     icon: <History size={20} />,
   },
+  {
+    name: "Info",
+    link: "info",
+    icon: <Info size={20} />,
+  },
 ];
 
 export default function Help() {
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex w-full flex-col items-center gap-4">
       {items.map((item) => {
         return (
           <NavLink

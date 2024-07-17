@@ -1,8 +1,10 @@
+import { writeText } from "@tauri-apps/api/clipboard";
+import { FileEntry } from "@tauri-apps/api/fs";
+
 import { useAppDispatch } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
-import { FileEntry } from "@tauri-apps/api/fs";
-import { writeText } from "@tauri-apps/api/clipboard";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,12 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  FolderRoot,
-  FolderContent,
-  FolderItem,
-  FolderTrigger,
-} from "@/components/ui/folder";
-import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
@@ -24,18 +20,23 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import {
+  FolderContent,
+  FolderItem,
+  FolderRoot,
+  FolderTrigger,
+} from "@/components/ui/folder";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
 
-import { RefreshCw, File } from "lucide-react";
+import { File, RefreshCw } from "lucide-react";
 
 import * as git from "@/lib/git";
 
-export default function FileList({
+export function FileList({
   dir,
   dirList,
   diffList,
@@ -152,7 +153,7 @@ export default function FileList({
           return (
             <div key={child.path}>
               <ContextMenu>
-                <ContextMenuTrigger>
+                <ContextMenuTrigger className="FE_2">
                   {child.children ?
                     <FolderRoot
                       className={"group " + (root ? "" : "ml-4 border-l")}
@@ -217,17 +218,17 @@ export default function FileList({
     );
   }
   return (
-    <Card className="w-full">
+    <Card className="FE_1 w-full">
       <CardHeader className="">
         <CardTitle className="flex items-center gap-4">
-          File List{" "}
+          File List
           <TooltipProvider delayDuration={50}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-fit w-fit"
+                  className="FE_3 h-fit w-fit"
                   onClick={async () => {
                     await getDiff();
                     await getStaged();

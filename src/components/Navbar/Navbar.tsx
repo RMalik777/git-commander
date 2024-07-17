@@ -1,6 +1,14 @@
 import { useLayoutEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import {
   ArrowLeftToLine,
   ArrowRightToLine,
@@ -9,14 +17,6 @@ import {
   Home,
   Settings,
 } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 const menuItem = [
   {
@@ -41,7 +41,7 @@ const menuItem = [
   },
 ];
 
-export default function Navbar() {
+export function Navbar() {
   const [navOpen, setNavOpen] = useState(false);
   const currentPath = useLocation();
   useLayoutEffect(() => {

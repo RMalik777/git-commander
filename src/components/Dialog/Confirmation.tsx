@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,7 +10,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ReactNode } from "react";
 
 interface ConfirmationDialogProps {
   open: boolean;

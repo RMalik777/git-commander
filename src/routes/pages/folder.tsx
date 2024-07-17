@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
-import { setRepo } from "@/lib/Redux/repoSlice";
+
 import { FileEntry, readDir } from "@tauri-apps/api/fs";
 
-import FileList from "@/components/Card/FileList";
-import Staging from "@/components/Card/Staging";
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
+import { setRepo } from "@/lib/Redux/repoSlice";
+
+import { FileList } from "@/components/Card/FileList";
+import { Staging } from "@/components/Card/Staging";
 
 import * as git from "@/lib/git";
 

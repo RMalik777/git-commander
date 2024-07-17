@@ -4,7 +4,6 @@ import { HelpNavbar } from "@/components/Navbar/HelpNavbar";
 import { Separator } from "@/components/ui/separator";
 
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -12,7 +11,6 @@ import "./popover.css";
 
 export default function Tutorial() {
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const tutorialApp = [
     {
@@ -105,6 +103,54 @@ export default function Tutorial() {
           ],
         });
         tour.drive();
+      },
+    },
+    {
+      id: "FE",
+      title: "File Explorer",
+      description: "Quick guide on how to use the file explorer.",
+      tour: () => {
+        navigate("/folder");
+        setTimeout(() => {
+          const tour = driver({
+            showProgress: true,
+            steps: [
+              {
+                element: ".FE_1",
+                popover: {
+                  title: "File Explorer",
+                  description:
+                    "This is the file explorer, you can see all the files and folders that are in the repository.",
+                },
+              },
+              {
+                element: ".FE_2",
+                popover: {
+                  title: "Action",
+                  description:
+                    "Right click on the file or folder to open the context menu and see the available actions.",
+                },
+              },
+              {
+                element: ".FE_3",
+                popover: {
+                  title: "Refresh",
+                  description:
+                    "Click the refresh button to refresh the file explorer.",
+                },
+              },
+              {
+                popover: {
+                  title: "Done",
+                  description:
+                    "You can now navigate through the files and folders.",
+                },
+              },
+            ],
+            onDestroyed: () => navigate("/help/tutorial"),
+          });
+          tour.drive();
+        }, 1);
       },
     },
   ];
@@ -217,6 +263,258 @@ export default function Tutorial() {
       },
     },
     {
+      id: "STG",
+      title: "Staging Changes",
+      description: "Guide on how to stage changes to a git repository.",
+      tour: () => {
+        navigate("/folder");
+        setTimeout(() => {
+          const tour = driver({
+            showProgress: true,
+            steps: [
+              {
+                element: ".STG_1",
+                popover: {
+                  title: "Staging Changes",
+                  description:
+                    "This is the page where you can stage your changes before committing.",
+                },
+              },
+              {
+                element: ".STG_2",
+                popover: {
+                  title: "File List",
+                  description: "This show the list of files that are changed.",
+                },
+              },
+              {
+                element: ".STG_3",
+                popover: {
+                  title: "File Name",
+                  description: "This is the name of the file that is changed.",
+                },
+              },
+              {
+                element: ".STG_4",
+                popover: {
+                  title: "File Path",
+                  description:
+                    "The path of the file relative to the repository.",
+                  onNextClick: () => {
+                    const el = document.querySelector(".STG_5A");
+                    el?.classList.add("flex");
+                    el?.classList.remove("hidden");
+                    setTimeout(() => tour.moveNext(), 1);
+                  },
+                },
+              },
+              {
+                element: ".STG_5",
+                popover: {
+                  title: "Action Button",
+                  description:
+                    "Hover over the file name to see the action available.",
+                  onPrevClick: () => {
+                    const el = document.querySelector(".STG_5A");
+                    el?.classList.add("hidden");
+                    el?.classList.remove("flex");
+                    setTimeout(() => tour.movePrevious(), 1);
+                  },
+                },
+              },
+              {
+                element: ".STG_6",
+                popover: {
+                  title: "Open File",
+                  description: "Click to open the file.",
+                },
+              },
+              {
+                element: ".STG_7",
+                popover: {
+                  title: "Stage File",
+                  description:
+                    "Clicking the plus icon beside the file name to stage (add) file.",
+                  onNextClick: () => {
+                    const item = document.querySelector(".STG_5A");
+                    item?.classList.add("hidden");
+                    item?.classList.remove("flex");
+                    const el = document.querySelector(".STG_8A");
+                    el?.classList.add("flex");
+                    el?.classList.remove("hidden");
+                    setTimeout(() => tour.moveNext(), 1);
+                  },
+                },
+              },
+              {
+                element: ".STG_8",
+                popover: {
+                  title: "Select All",
+                  description:
+                    "Click to plus icon on dropdown to stage all the changes at once. This is equivalent to git add .",
+                  onPrevClick: () => {
+                    const item = document.querySelector(".STG_5A");
+                    item?.classList.add("flex");
+                    item?.classList.remove("hidden");
+                    const el = document.querySelector(".STG_8A");
+                    el?.classList.add("hidden");
+                    el?.classList.remove("flex");
+                    setTimeout(() => tour.movePrevious(), 1);
+                  },
+                  onNextClick: () => {
+                    const el = document.querySelector(".STG_5A");
+                    el?.classList.add("hidden");
+                    el?.classList.remove("flex");
+                    setTimeout(() => tour.moveNext(), 1);
+                  },
+                },
+              },
+              {
+                popover: {
+                  title: "Staging Done",
+                  description: "You can now commit the changes.",
+                  onPrevClick: () => {
+                    const item = document.querySelector(".STG_5A");
+                    item?.classList.add("flex");
+                    item?.classList.remove("hidden");
+                    setTimeout(() => tour.movePrevious(), 1);
+                  },
+                },
+              },
+            ],
+            onDestroyed: () => navigate("/help/tutorial"),
+          });
+          tour.drive();
+        }, 1);
+      },
+    },
+    {
+      id: "UST",
+      title: "Unstaging Changes",
+      description: "Guide on how to unstage changes from a git repository.",
+      tour: () => {
+        navigate("/folder");
+        setTimeout(() => {
+          const tour = driver({
+            showProgress: true,
+            steps: [
+              {
+                element: ".UST_1",
+                popover: {
+                  title: "Staging Changes",
+                  description:
+                    "This is the page where you can unstage your changes.",
+                },
+              },
+              {
+                element: ".UST_2",
+                popover: {
+                  title: "File List",
+                  description: "This show the list of files that are staged.",
+                },
+              },
+              {
+                element: ".UST_3",
+                popover: {
+                  title: "File Name",
+                  description: "This is the name of the file that is changed.",
+                },
+              },
+              {
+                element: ".UST_4",
+                popover: {
+                  title: "File Path",
+                  description:
+                    "The path of the file relative to the repository.",
+                  onNextClick: () => {
+                    const el = document.querySelector(".UST_5A");
+                    el?.classList.add("flex");
+                    el?.classList.remove("hidden");
+                    setTimeout(() => tour.moveNext(), 1);
+                  },
+                },
+              },
+              {
+                element: ".UST_5",
+                popover: {
+                  title: "Action Button",
+                  description:
+                    "Hover over the file name to see the action available.",
+                  onPrevClick: () => {
+                    const el = document.querySelector(".UST_5A");
+                    el?.classList.add("hidden");
+                    el?.classList.remove("flex");
+                    setTimeout(() => tour.movePrevious(), 1);
+                  },
+                },
+              },
+              {
+                element: ".UST_6",
+                popover: {
+                  title: "Open File",
+                  description: "Click to open the file.",
+                },
+              },
+              {
+                element: ".UST_7",
+                popover: {
+                  title: "Unstage File",
+                  description:
+                    "Clicking the minus icon beside the file name to unstage file.",
+                  onNextClick: () => {
+                    const item = document.querySelector(".UST_5A");
+                    item?.classList.add("hidden");
+                    item?.classList.remove("flex");
+                    const el = document.querySelector(".UST_8A");
+                    el?.classList.add("flex");
+                    el?.classList.remove("hidden");
+                    setTimeout(() => tour.moveNext(), 1);
+                  },
+                },
+              },
+              {
+                element: ".UST_8",
+                popover: {
+                  title: "Select All",
+                  description:
+                    "Click to minus icon on dropdown to unstage all the changes at once.",
+                  onPrevClick: () => {
+                    const item = document.querySelector(".UST_5A");
+                    item?.classList.add("flex");
+                    item?.classList.remove("hidden");
+                    const el = document.querySelector(".UST_8A");
+                    el?.classList.add("hidden");
+                    el?.classList.remove("flex");
+                    setTimeout(() => tour.movePrevious(), 1);
+                  },
+                  onNextClick: () => {
+                    const el = document.querySelector(".UST_5A");
+                    el?.classList.add("hidden");
+                    el?.classList.remove("flex");
+                    setTimeout(() => tour.moveNext(), 1);
+                  },
+                },
+              },
+              {
+                popover: {
+                  title: "Unstaging Done",
+                  description: "You can now continue working on the changes.",
+                  onPrevClick: () => {
+                    const item = document.querySelector(".UST_5A");
+                    item?.classList.add("flex");
+                    item?.classList.remove("hidden");
+                    setTimeout(() => tour.movePrevious(), 1);
+                  },
+                },
+              },
+            ],
+            onDestroyed: () => navigate("/help/tutorial"),
+          });
+          tour.drive();
+        }, 1);
+      },
+    },
+    {
       id: "CMT",
       title: "Committing Changes",
       description: "Guide on how to commit changes to a git repository.",
@@ -266,11 +564,6 @@ export default function Tutorial() {
           tour.drive();
         });
       },
-    },
-    {
-      id: "STG",
-      title: "Staging Changes",
-      description: "Guide on how to stage changes to a git repository.",
     },
   ];
   return (

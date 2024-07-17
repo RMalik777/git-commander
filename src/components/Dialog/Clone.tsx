@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
+
 import { open } from "@tauri-apps/api/dialog";
+import { Command as ShellCommand } from "@tauri-apps/api/shell";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
+import { setRepo } from "@/lib/Redux/repoSlice";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,10 +20,14 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -24,37 +37,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 
 import { Check, ChevronsUpDown, CloudDownload } from "lucide-react";
 import { ScaleLoader } from "react-spinners";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
-import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
-import { setRepo } from "@/lib/Redux/repoSlice";
-
 import * as db from "@/lib/database";
-import * as git from "@/lib/git";
 import * as func from "@/lib/functions";
-
-import { Command as ShellCommand } from "@tauri-apps/api/shell";
+import * as git from "@/lib/git";
 
 import { RepoFormat } from "@/lib/Types/repo";
-import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   target: z.string().url({ message: "Please select a repository!" }),
@@ -62,7 +62,7 @@ const formSchema = z.object({
     message: "Please select a location!",
   }),
 });
-export default function Clone() {
+export function Clone() {
   const { toast } = useToast();
   const theme = window.localStorage.getItem("theme") ?? "";
   const [comboOpen, setComboOpen] = useState(false);

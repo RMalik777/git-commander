@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -24,11 +25,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 import { useToast } from "@/components/ui/use-toast";
 
+import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
+
 import * as db from "@/lib/database";
-import { useState } from "react";
 
 const formSchema = z.object({
   name: z
@@ -38,9 +39,7 @@ const formSchema = z.object({
   link: z.string().url({ message: "Please enter a valid URL" }),
 });
 
-export default function AddRepo({
-  afterAdd,
-}: Readonly<{ afterAdd: () => void }>) {
+export function AddRepo({ afterAdd }: Readonly<{ afterAdd: () => void }>) {
   const [formOpen, setFormOpen] = useState(false);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [agree, setAgree] = useState(false);

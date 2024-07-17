@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-import Commit from "@/components/Git/Commit";
-import RepoView from "@/components/Card/RepoView";
+import { RepoView } from "@/components/Card/RepoView";
+import { Commit } from "@/components/Git/Commit";
 
 import * as git from "@/lib/git";
 
