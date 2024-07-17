@@ -610,7 +610,7 @@ export default function Staging({
     <Card className="STG_1 UST_1 w-full">
       <CardHeader className="">
         <CardTitle className="flex items-center gap-4">
-          Staging Area{" "}
+          Staging Area
           <TooltipProvider delayDuration={50}>
             <Tooltip>
               <TooltipTrigger asChild>

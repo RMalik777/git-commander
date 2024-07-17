@@ -106,6 +106,54 @@ export default function Tutorial() {
         tour.drive();
       },
     },
+    {
+      id: "FE",
+      title: "File Explorer",
+      description: "Quick guide on how to use the file explorer.",
+      tour: () => {
+        navigate("/folder");
+        setTimeout(() => {
+          const tour = driver({
+            showProgress: true,
+            steps: [
+              {
+                element: ".FE_1",
+                popover: {
+                  title: "File Explorer",
+                  description:
+                    "This is the file explorer, you can see all the files and folders that are in the repository.",
+                },
+              },
+              {
+                element: ".FE_2",
+                popover: {
+                  title: "Action",
+                  description:
+                    "Right click on the file or folder to open the context menu and see the available actions.",
+                },
+              },
+              {
+                element: ".FE_3",
+                popover: {
+                  title: "Refresh",
+                  description:
+                    "Click the refresh button to refresh the file explorer.",
+                },
+              },
+              {
+                popover: {
+                  title: "Done",
+                  description:
+                    "You can now navigate through the files and folders.",
+                },
+              },
+            ],
+            onDestroyed: () => navigate("/help/tutorial"),
+          });
+          tour.drive();
+        }, 1);
+      },
+    },
   ];
   const tutorialGit = [
     {

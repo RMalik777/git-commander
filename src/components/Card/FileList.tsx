@@ -152,7 +152,7 @@ export default function FileList({
           return (
             <div key={child.path}>
               <ContextMenu>
-                <ContextMenuTrigger>
+                <ContextMenuTrigger className="FE_2">
                   {child.children ?
                     <FolderRoot
                       className={"group " + (root ? "" : "ml-4 border-l")}
@@ -217,17 +217,17 @@ export default function FileList({
     );
   }
   return (
-    <Card className="w-full">
+    <Card className="FE_1 w-full">
       <CardHeader className="">
         <CardTitle className="flex items-center gap-4">
-          File List{" "}
+          File List
           <TooltipProvider delayDuration={50}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-fit w-fit"
+                  className="FE_3 h-fit w-fit"
                   onClick={async () => {
                     await getDiff();
                     await getStaged();
