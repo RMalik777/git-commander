@@ -543,12 +543,13 @@ export default function Staging({
             return (
               <div key={child.path}>
                 <ContextMenu>
-                  <ContextMenuTrigger>
+                  <ContextMenuTrigger className="STG_2 UST_2 STG_4 UST_4">
                     {child.children ?
                       <FolderRoot
                         className={" " + (root ? "" : "ml-4 border-l")}
-                        type="multiple">
-                        <FolderItem value="item-1" className="">
+                        type="multiple"
+                        defaultValue={["item"]}>
+                        <FolderItem value="item" className="">
                           <div className="group flex w-full justify-between hover:bg-neutral-100 dark:hover:bg-neutral-900">
                             <FolderTrigger className="p-1 pl-2">
                               {child.name}
@@ -566,7 +567,7 @@ export default function Staging({
                           (root ? "" : "ml-4 border-l")
                         }>
                         <File className="h-4 w-4" />
-                        <div className="flex w-full items-center justify-between">
+                        <div className="STG_3 UST_3 flex w-full items-center justify-between">
                           {child.name}
                           {actionButton(child, fileStatus)}
                         </div>
