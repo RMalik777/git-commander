@@ -15,16 +15,16 @@ const items = [
     link: "tutorial",
     icon: <GraduationCap size={20} />,
   },
-  {
-    name: "FAQ",
-    link: "faq",
-    icon: <MessageCircleQuestion size={20} />,
-  },
-  {
-    name: "Resource",
-    link: "resource",
-    icon: <Files size={20} />,
-  },
+  // {
+  //   name: "FAQ",
+  //   link: "faq",
+  //   icon: <MessageCircleQuestion size={20} />,
+  // },
+  // {
+  //   name: "Resource",
+  //   link: "resource",
+  //   icon: <Files size={20} />,
+  // },
   {
     name: "Changelog",
     link: "changelog",
