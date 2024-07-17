@@ -549,7 +549,12 @@ export function Staging({
                   <ContextMenuTrigger className="STG_2 UST_2 STG_4 UST_4">
                     {child.children ?
                       <FolderRoot
-                        className={" " + (root ? "" : "ml-4 border-l")}
+                        className={
+                          "duration-200 ease-out " +
+                          (root ? "" : (
+                            "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                          ))
+                        }
                         type="multiple"
                         defaultValue={["item"]}>
                         <FolderItem value="item" className="">
@@ -566,8 +571,10 @@ export function Staging({
                       </FolderRoot>
                     : <div
                         className={
-                          "group flex items-center gap-4 p-1 pl-7 hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900 " +
-                          (root ? "" : "ml-4 border-l")
+                          "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900 " +
+                          (root ? "" : (
+                            "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                          ))
                         }>
                         <File className="h-4 w-4" />
                         <div className="STG_3 UST_3 flex w-full items-center justify-between">

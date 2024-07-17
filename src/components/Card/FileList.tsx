@@ -156,7 +156,12 @@ export function FileList({
                 <ContextMenuTrigger className="FE_2">
                   {child.children ?
                     <FolderRoot
-                      className={"group " + (root ? "" : "ml-4 border-l")}
+                      className={
+                        "group duration-200 ease-out " +
+                        (root ? "" : (
+                          "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                        ))
+                      }
                       type="multiple">
                       <FolderItem value="item-1" className="">
                         <FolderTrigger className="group p-1 pl-2 hover:bg-neutral-100 dark:hover:bg-neutral-900">
@@ -172,8 +177,10 @@ export function FileList({
                     </FolderRoot>
                   : <div
                       className={
-                        "group flex items-center gap-4 p-1 pl-7 hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
-                        (root ? "" : "ml-4 border-l")
+                        "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
+                        (root ? "" : (
+                          "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                        ))
                       }>
                       <File className="h-4 w-4" />
                       <button className="flex w-full items-center justify-between">
