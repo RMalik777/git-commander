@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useAppDispatch } from "@/lib/Redux/hooks";
-import { removeUser } from "@/lib/Redux/userSlice";
 import { removeRepo } from "@/lib/Redux/repoSlice";
+import { removeUser } from "@/lib/Redux/userSlice";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,

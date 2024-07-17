@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
+
 import {
-  Info,
   CircleArrowRight,
+  Files,
   GraduationCap,
   History,
-  Files,
+  Info,
   MessageCircleQuestion,
 } from "lucide-react";
 

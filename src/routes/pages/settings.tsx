@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-
 import {
   Card,
   CardContent,
@@ -13,9 +12,9 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 
 import { UsernameConfig } from "@/components/Card/Username";
-import RepoTable from "@/components/Table/RepoTable";
-import AddRepo from "@/components/Dialog/AddRepo";
+import { AddRepo } from "@/components/Dialog/AddRepo";
 import { ClearSettings } from "@/components/Dialog/ClearSettings";
+import { RepoTable } from "@/components/Table/RepoTable";
 
 import type { RepoFormat } from "@/lib/Types/repo";
 

@@ -1,9 +1,11 @@
 import { Outlet } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import Navbar from "@/components/Navbar/Navbar";
-import Toolbar from "@/components/Tools/Toolbar";
+
 import { store } from "@/lib/Redux/store";
 import { Provider } from "react-redux";
+
+import { Navbar } from "@/components/Navbar/Navbar";
+import { Toolbar } from "@/components/Tools/Toolbar";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Layout({
   children,

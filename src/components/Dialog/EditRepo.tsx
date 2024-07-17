@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -24,12 +25,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "../ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+
 import { Pencil } from "lucide-react";
 
 import * as db from "@/lib/database";
-import { useState, useEffect } from "react";
-import { ToastAction } from "../ui/toast";
 
 const formSchema = z.object({
   name: z
@@ -39,7 +40,7 @@ const formSchema = z.object({
   link: z.string().url({ message: "Please enter a valid URL" }),
 });
 
-export default function EditRepo({
+export function EditRepo({
   repoId,
   oldRepoName,
   oldRepoUrl,

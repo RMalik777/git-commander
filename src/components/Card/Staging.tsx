@@ -1,10 +1,20 @@
 import { useState } from "react";
-import { useAppDispatch } from "@/lib/Redux/hooks";
-import { setRepo } from "@/lib/Redux/repoSlice";
+
+import { writeText } from "@tauri-apps/api/clipboard";
 import { FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
-import { writeText } from "@tauri-apps/api/clipboard";
 
+import { useAppDispatch } from "@/lib/Redux/hooks";
+import { setRepo } from "@/lib/Redux/repoSlice";
+
+import {
+  List,
+  ListContent,
+  ListHeader,
+  ListItem,
+  ListTrigger,
+} from "@/components/ui/accordion-list";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,12 +23,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  FolderRoot,
-  FolderContent,
-  FolderItem,
-  FolderTrigger,
-} from "@/components/ui/folder";
-import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
@@ -26,35 +30,34 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import {
+  FolderContent,
+  FolderItem,
+  FolderRoot,
+  FolderTrigger,
+} from "@/components/ui/folder";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarMenu,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  List,
-  ListContent,
-  ListItem,
-  ListHeader,
-  ListTrigger,
-} from "@/components/ui/accordion-list";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarMenu,
-  MenubarTrigger,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-} from "@/components/ui/menubar";
 import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
-import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
-import { RefreshCw, File, Plus, FolderOpen, Undo, Minus } from "lucide-react";
+import { File, FolderOpen, Minus, Plus, RefreshCw, Undo } from "lucide-react";
+
+import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
 import * as git from "@/lib/git";
 
-export default function Staging({
+export function Staging({
   dir,
   dirList,
   diffList,

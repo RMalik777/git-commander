@@ -4,7 +4,6 @@ import { HelpNavbar } from "@/components/Navbar/HelpNavbar";
 import { Separator } from "@/components/ui/separator";
 
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";

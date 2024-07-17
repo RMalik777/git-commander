@@ -1,7 +1,8 @@
-import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
-import { setRepo } from "@/lib/Redux/repoSlice";
 import { useLayoutEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
+import { setRepo } from "@/lib/Redux/repoSlice";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,23 +33,23 @@ import { useToast } from "@/components/ui/use-toast";
 import {
   ArrowDownToLine,
   ArrowUpToLine,
+  ChevronLeft,
+  ChevronRight,
   GitBranch,
   Menu,
   Moon,
   Sun,
   SunMoon,
   Undo2,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
+import { PulseLoader } from "react-spinners";
 
 import * as git from "@/lib/git";
-import { PulseLoader } from "react-spinners";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
-export default function Toolbar() {
+export function Toolbar() {
   const navigate = useNavigate();
   const [themeMode, setThemeMode] = useState<string | null>(null);
   useLayoutEffect(() => {
