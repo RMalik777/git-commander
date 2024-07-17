@@ -1,3 +1,19 @@
+# [1.7.0](https://github.com/RMalik777/git-commander/compare/v1.6.1...v1.7.0) (2024-07-17)
+
+
+### Bug Fixes
+
+* add more tutorial ([891133b](https://github.com/RMalik777/git-commander/commit/891133b4bffcc0a8566cc9d784712a986960c188))
+* fix context menu not available in list view ([f7d3e98](https://github.com/RMalik777/git-commander/commit/f7d3e98e8a91767f9690c7040398697e2919a3c6))
+* persistent list view state ([ac8dbc5](https://github.com/RMalik777/git-commander/commit/ac8dbc5f3adcb4e2ddcdf8c2e943f4091be95fe2))
+* show add all function ([c7dac18](https://github.com/RMalik777/git-commander/commit/c7dac18391c54003fa28a0f988490d334fa38726))
+* wrap icon inside button ([69195e6](https://github.com/RMalik777/git-commander/commit/69195e612450474e2ccf678be46934016275dfdc))
+
+
+### Features
+
+* add info page to show os information ([dde7b38](https://github.com/RMalik777/git-commander/commit/dde7b38f0e883e7777ce6848728fadc679050d5b))
+
 ## [1.6.1](https://github.com/RMalik777/git-commander/compare/v1.6.0...v1.6.1) (2024-07-16)
 
 
