@@ -85,7 +85,7 @@ export default function Info() {
           Arch: <span className="font-medium">{osArch}</span>
         </h3>
         <h3>
-          OS Version:<span className="font-medium"> {osVersion}</span>
+          OS SDK Version:<span className="font-medium"> {osVersion}</span>
         </h3>
         <h3>
           Locale: <span className="font-medium">{osLocale}</span>
