@@ -60,7 +60,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: lts/*
           cache: "npm"
 
       - name: install Rust stable
