@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { writeText } from "@tauri-apps/api/clipboard";
 import { FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
 
@@ -23,13 +22,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu";
-import {
   FolderContent,
   FolderItem,
   FolderRoot,
@@ -51,11 +43,21 @@ import {
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 
-import { File, FolderOpen, Minus, Plus, RefreshCw, Undo } from "lucide-react";
+import {
+  File,
+  FolderOpen,
+  Minus,
+  Plus,
+  RefreshCw,
+  Undo,
+  List as ListIcon,
+} from "lucide-react";
 
+import { FileMenu } from "@/components/ContextMenu/FileMenu";
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
 import * as git from "@/lib/git";
+import { PulseLoader } from "react-spinners";
 
 export function Staging({
   dir,
@@ -74,15 +76,24 @@ export function Staging({
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const [openDialogId, setOpenDialogId] = useState("");
+  const [revertDialog, setRevertDialog] = useState(false);
 
   async function getDiff() {
     const data = await git.showChanged(dir);
+    const data2 = await git.untrackedFiles(dir);
     const toEntry = await data.map((item: string) => {
       return {
         name: item.split("/").pop(),
-        path: item,
+        path: item.replace(/\//gi, "\\"),
       } as FileEntry;
     });
+    const toEntry2 = await data2.map((item: string) => {
+      return {
+        name: item.split("/").pop(),
+        path: item.replace(/\//gi, "\\"),
+      } as FileEntry;
+    });
+    toEntry.push(...toEntry2);
     dispatch(setRepo({ diff: toEntry }));
     localStorage.setItem("diffList", JSON.stringify(toEntry));
   }
@@ -92,7 +103,7 @@ export function Staging({
     const toEntry = await data.map((item: string) => {
       return {
         name: item.split("/").pop(),
-        path: item,
+        path: item.replace(/\//gi, "\\"),
       } as FileEntry;
     });
     dispatch(setRepo({ staged: toEntry }));
@@ -108,7 +119,19 @@ export function Staging({
               <button
                 className="STG_6 UST_6 h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                 onClick={async () => {
-                  await open(file.path);
+                  if (file.path.includes(dir)) {
+                    if (file.children) {
+                      await open(file.path);
+                    } else {
+                      const newPath = file.path.split("\\");
+                      newPath.pop();
+                      await open(newPath.join("\\"));
+                    }
+                  } else {
+                    const newPath = file.path.split("\\");
+                    newPath.pop();
+                    await open(dir + "\\" + newPath.join("\\"));
+                  }
                 }}>
                 <FolderOpen className="h-full w-full" />
               </button>
@@ -205,7 +228,7 @@ export function Staging({
           onConfirm={async () => {
             if (mode === "Staged") {
               try {
-                await git.unstageFile(dir, file.name);
+                await git.unstageFile(dir, file.path);
               } catch (error) {
                 console.error(error);
                 if (error instanceof Error) {
@@ -264,7 +287,10 @@ export function Staging({
 
   function listView() {
     return (
-      <List type="multiple" defaultValue={["diff", "staged"]}>
+      <List
+        type="multiple"
+        defaultValue={["diff", "staged"]}
+        className="w-full">
         {stagedList.length > 0 ?
           <ListItem value="staged">
             <ListHeader className="group">
@@ -297,83 +323,32 @@ export function Staging({
                   }}>
                   <Minus className="h-full w-full" />
                 </button>
-                <button className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800">
-                  <Undo className="h-full w-full" />
-                </button>
               </div>
             </ListHeader>
             <ListContent className="UST_2">
               {stagedList.length > 0 ?
                 stagedList?.map((target) => {
                   return (
-                    <ContextMenu key={target.path}>
-                      <ContextMenuTrigger>
-                        <div className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
-                          <File className="h-4 w-4" />
-                          <div className="flex w-full items-center justify-between">
-                            <div className="flex flex-row items-center gap-4">
-                              <h4 className="UST_3 font-medium">
-                                {target.name}
-                              </h4>
-                              <h4 className="UST_4 text-xs italic text-neutral-400 dark:text-neutral-600">
-                                {target.path}
-                              </h4>
-                            </div>
-                            {actionButton(target, "Staged")}
+                    <FileMenu
+                      key={target.path}
+                      dir={dir}
+                      status="Staged"
+                      target={target}
+                      getDiff={getDiff}
+                      getStaged={getStaged}>
+                      <div className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                        <File className="h-4 w-4" />
+                        <div className="flex w-full items-center justify-between">
+                          <div className="flex flex-row items-center gap-4">
+                            <h4 className="UST_3 font-medium">{target.name}</h4>
+                            <h4 className="UST_4 text-xs text-neutral-400 dark:text-neutral-600">
+                              {target.path}
+                            </h4>
                           </div>
+                          {actionButton(target, "Staged")}
                         </div>
-                      </ContextMenuTrigger>
-                      <ContextMenuContent className="w-64">
-                        <ContextMenuItem>{target.name}</ContextMenuItem>
-                        <ContextMenuSeparator />
-                        <ContextMenuItem inset disabled>
-                          Stage
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                          inset
-                          onClick={async () => {
-                            try {
-                              await git.unstageFile(dir, target.path);
-                            } catch (error) {
-                              if (error instanceof Error) {
-                                toast({
-                                  title: "Error Unstaging",
-                                  description: (
-                                    <p>
-                                      <code>{target.name}</code> can&apos;t be
-                                      unstaged
-                                      <br />
-                                      <code>{error.message}</code>
-                                    </p>
-                                  ),
-                                  variant: "destructive",
-                                });
-                              }
-                              return;
-                            }
-                            await getStaged();
-                            await getDiff();
-                          }}>
-                          Unstage
-                        </ContextMenuItem>
-                        <ContextMenuItem inset>Revert</ContextMenuItem>
-                        <ContextMenuSeparator />
-                        <ContextMenuItem inset>Open</ContextMenuItem>
-                        <ContextMenuItem
-                          inset
-                          onClick={async () => {
-                            await writeText(target.path);
-                          }}>
-                          Copy Path
-                        </ContextMenuItem>
-                        <ContextMenuSeparator />
-                        <ContextMenuItem
-                          inset
-                          className="font-medium text-red-500 focus:bg-red-500/10">
-                          Delete
-                        </ContextMenuItem>
-                      </ContextMenuContent>
-                    </ContextMenu>
+                      </div>
+                    </FileMenu>
                   );
                 })
               : <h4 className="text-center">Empty...</h4>}
@@ -415,83 +390,78 @@ export function Staging({
                   }}>
                   <Plus className="h-full w-full" />
                 </button>
-                <button className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800">
+                <button
+                  className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  onClick={() => setRevertDialog(true)}>
                   <Undo className="h-full w-full" />
                 </button>
+                <ConfirmationDialog
+                  title="Warning!"
+                  message={
+                    <p>
+                      All changes made will be reverted <b>permanently</b> and
+                      can&apos;t be restored. Are you sure?
+                    </p>
+                  }
+                  open={revertDialog}
+                  setOpen={setRevertDialog}
+                  onConfirm={async () => {
+                    toast({
+                      title: "Reverting...",
+                      description: (
+                        <PulseLoader size={6} speedMultiplier={0.8} />
+                      ),
+                    });
+                    try {
+                      const response = await git.revertAll(dir);
+                      toast({
+                        title: "Revert Success",
+                        description: <p>{response}</p>,
+                      });
+                    } catch (error) {
+                      if (error instanceof Error) {
+                        toast({
+                          title: "Error Reverting",
+                          description: (
+                            <p>
+                              can&apos;t revert file
+                              <br />
+                              <code>{error.message}</code>
+                            </p>
+                          ),
+                          variant: "destructive",
+                        });
+                      }
+                    }
+                    await getDiff();
+                    await getStaged();
+                  }}
+                />
               </div>
             </ListHeader>
             <ListContent className="STG_2">
               {diffList?.map((target) => {
                 return (
-                  <ContextMenu key={target.path}>
-                    <ContextMenuTrigger>
-                      <div
-                        key={target.path}
-                        className="group flex cursor-default items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
-                        <File className="h-4 w-4" />
-                        <div className="flex w-full items-center justify-between">
-                          <div className="flex flex-row items-center gap-4">
-                            <h4 className="STG_3 font-medium">{target.name}</h4>
-                            <h4 className="STG_4 text-xs italic text-neutral-400 dark:text-neutral-600">
-                              {target.path}
-                            </h4>
-                          </div>
-                          {actionButton(target, "Changed")}
+                  <FileMenu
+                    key={target.path}
+                    target={target}
+                    dir={dir}
+                    status="Changed"
+                    getDiff={getDiff}
+                    getStaged={getStaged}>
+                    <div className="group flex cursor-default items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                      <File className="h-4 w-4" />
+                      <div className="flex w-full items-center justify-between">
+                        <div className="flex flex-row items-center gap-4">
+                          <h4 className="STG_3 font-medium">{target.name}</h4>
+                          <h4 className="STG_4 text-xs text-neutral-400 dark:text-neutral-500">
+                            {target.path}
+                          </h4>
                         </div>
+                        {actionButton(target, "Changed")}
                       </div>
-                    </ContextMenuTrigger>
-                    <ContextMenuContent className="w-64">
-                      <ContextMenuItem>{target.name}</ContextMenuItem>
-                      <ContextMenuSeparator />
-                      <ContextMenuItem
-                        inset
-                        onClick={async () => {
-                          try {
-                            await git.addFile(dir, target.path);
-                          } catch (error) {
-                            console.error(error);
-                            if (error instanceof Error) {
-                              toast({
-                                title: "Error Staging",
-                                description: (
-                                  <p>
-                                    <code>{target.name}</code> can&apos;t be
-                                    staged
-                                    <br />
-                                    <code>{error.message}</code>
-                                  </p>
-                                ),
-                                variant: "destructive",
-                              });
-                            }
-                            return;
-                          }
-                          await getDiff();
-                          await getStaged();
-                        }}>
-                        Stage
-                      </ContextMenuItem>
-                      <ContextMenuItem inset disabled>
-                        Unstage
-                      </ContextMenuItem>
-                      <ContextMenuItem inset>Revert</ContextMenuItem>
-                      <ContextMenuSeparator />
-                      <ContextMenuItem inset>Open</ContextMenuItem>
-                      <ContextMenuItem
-                        inset
-                        onClick={async () => {
-                          await writeText(target.path);
-                        }}>
-                        Copy Path
-                      </ContextMenuItem>
-                      <ContextMenuSeparator />
-                      <ContextMenuItem
-                        inset
-                        className="font-medium text-red-500 focus:bg-red-500/10">
-                        Delete
-                      </ContextMenuItem>
-                    </ContextMenuContent>
-                  </ContextMenu>
+                    </div>
+                  </FileMenu>
                 );
               })}
             </ListContent>
@@ -509,16 +479,9 @@ export function Staging({
             diffList.some((target) => {
               return (
                 target.path === child.name ||
-                target.path ===
-                  child.path
-                    .replace(dir, "")
-                    .replace(/\\/g, "/")
-                    .replace("/", "") ||
+                target.path === child.path.replace(dir, "").replace("\\", "") ||
                 target.path.startsWith(
-                  child.path
-                    .replace(dir, "")
-                    .replace(/\\/g, "/")
-                    .replace("/", "")
+                  child.path.replace(dir, "").replace("\\", "")
                 )
               );
             })
@@ -528,13 +491,9 @@ export function Staging({
             stagedList.some((target) => {
               return (
                 target.path === child.name ||
-                target.path.split("/").shift() ===
-                  child.path.replace(dir + "\\", "") ||
+                target.path === child.path.replace(dir, "").replace("\\", "") ||
                 target.path.startsWith(
-                  child.path
-                    .replace(dir, "")
-                    .replace(/\\/g, "/")
-                    .replace("/", "")
+                  child.path.replace(dir, "").replace("\\", "")
                 )
               );
             })
@@ -544,12 +503,23 @@ export function Staging({
           if (fileStatus === "Unchanged") return null;
           else if (fileStatus === "Changed" || fileStatus === "Staged") {
             return (
-              <div key={child.path}>
-                <ContextMenu>
-                  <ContextMenuTrigger className="STG_2 UST_2 STG_4 UST_4">
+              <FileMenu
+                key={child.path}
+                dir={dir}
+                status={fileStatus}
+                target={child}
+                getDiff={getDiff}
+                getStaged={getStaged}>
+                <div className="w-full">
+                  <div className="STG_2 UST_2 STG_4 UST_4">
                     {child.children ?
                       <FolderRoot
-                        className={" " + (root ? "" : "ml-4 border-l")}
+                        className={
+                          "duration-200 ease-out " +
+                          (root ? "-ml-1" : (
+                            "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                          ))
+                        }
                         type="multiple"
                         defaultValue={["item"]}>
                         <FolderItem value="item" className="">
@@ -566,8 +536,10 @@ export function Staging({
                       </FolderRoot>
                     : <div
                         className={
-                          "group flex items-center gap-4 p-1 pl-7 hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900 " +
-                          (root ? "" : "ml-4 border-l")
+                          "group flex items-center gap-4 p-1 duration-200 ease-out hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900 " +
+                          (root ? "pl-6" : (
+                            "ml-4 border-l border-neutral-200 pl-7 dark:border-neutral-800"
+                          ))
                         }>
                         <File className="h-4 w-4" />
                         <div className="STG_3 UST_3 flex w-full items-center justify-between">
@@ -576,33 +548,9 @@ export function Staging({
                         </div>
                       </div>
                     }
-                  </ContextMenuTrigger>
-                  <ContextMenuContent className="w-64">
-                    <ContextMenuItem>{child.name}</ContextMenuItem>
-                    <ContextMenuSeparator />
-                    <ContextMenuItem inset>Stage</ContextMenuItem>
-                    <ContextMenuItem inset disabled>
-                      Unstage
-                    </ContextMenuItem>
-                    <ContextMenuItem inset>Revert</ContextMenuItem>
-                    <ContextMenuSeparator />
-                    <ContextMenuItem inset>Open</ContextMenuItem>
-                    <ContextMenuItem
-                      inset
-                      onClick={async () => {
-                        await writeText(child.path);
-                      }}>
-                      Copy Path
-                    </ContextMenuItem>
-                    <ContextMenuSeparator />
-                    <ContextMenuItem
-                      inset
-                      className="font-medium text-red-500 focus:bg-red-500/10">
-                      Delete
-                    </ContextMenuItem>
-                  </ContextMenuContent>
-                </ContextMenu>
-              </div>
+                  </div>
+                </div>
+              </FileMenu>
             );
           }
         })}
@@ -638,10 +586,13 @@ export function Staging({
           Stage your file before committing to the repository.
         </CardDescription>
       </CardHeader>
-      <CardContent className="pt-3">
-        <Menubar className="w-fit">
+      <CardContent className="flex w-full flex-col items-start pt-3">
+        <Menubar className="w-fit self-end">
           <MenubarMenu>
-            <MenubarTrigger>View</MenubarTrigger>
+            <MenubarTrigger className="flex items-center gap-1">
+              <ListIcon className="h-5 w-5 p-px" />
+              View
+            </MenubarTrigger>
             <MenubarContent>
               <MenubarRadioGroup
                 value={viewMode}

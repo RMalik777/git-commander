@@ -19,8 +19,8 @@ export default function Layout({
           <main className="flex-grow overflow-y-auto bg-white p-3 duration-200 ease-out dark:bg-neutral-950">
             {children ?? <Outlet />}
           </main>
-          <Toaster />
         </div>
+        <Toaster />
       </Provider>
     </div>
   );

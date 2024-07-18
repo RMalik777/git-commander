@@ -266,6 +266,37 @@ export async function pull(path) {
   return await response;
 }
 
+export async function removeUntrackedAll(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 2 args", ["clean", "-f"], {
+      cwd: path,
+    });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line));
+    command.stderr.on("data", (line) => result.push(line));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
+export async function revertAll(path) {
+  await removeUntrackedAll(path);
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 2 args", ["restore", "."], {
+      cwd: path,
+    });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line));
+    command.stderr.on("data", (line) => result.push(line));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
 export async function revertFile(path, file) {
   const response = new Promise((resolve, reject) => {
     const result = [];
@@ -366,6 +397,25 @@ export async function undoLastCommit(path) {
     command.spawn().catch((error) => {
       reject(new Error(error));
     });
+  });
+  return await response;
+}
+
+export async function untrackedFiles(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 2 args", ["ls-files", "--others"], {
+      cwd: path,
+    });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) =>
+      result.push(line.replace(/[\n\r]/g, ""))
+    );
+    command.stderr.on("data", (line) =>
+      result.push(line.replace(/[\n\r]/g, ""))
+    );
+    command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
 }

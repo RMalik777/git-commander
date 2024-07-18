@@ -51,13 +51,22 @@ export function FileList({
 
   async function getDiff() {
     const data = await git.showChanged(dir);
+    const data2 = await git.untrackedFiles(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
-        path: item,
+        path: item.replace(/\//gi, "\\"),
       } as FileEntry;
     });
+    const toEntry2 = await data2.map((item: string) => {
+      return {
+        name: item.split("/").pop(),
+        path: item.replace(/\//gi, "\\"),
+      } as FileEntry;
+    });
+    toEntry.push(...toEntry2);
     dispatch(setRepo({ diff: toEntry }));
+    localStorage.setItem("stagedList", JSON.stringify(toEntry));
   }
 
   async function getStaged() {
@@ -65,7 +74,7 @@ export function FileList({
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
-        path: item,
+        path: item.replace(/\//gi, "\\"),
       } as FileEntry;
     });
     dispatch(setRepo({ staged: toEntry }));
@@ -77,11 +86,8 @@ export function FileList({
       diffList.some((target) => {
         return (
           target.path === file.name ||
-          target.path ===
-            file.path.replace(dir, "").replaceAll("\\", "/").replace("/", "") ||
-          target.path.startsWith(
-            file.path.replace(dir, "").replaceAll("\\", "/").replace("/", "")
-          )
+          target.path === file.path.replace(dir, "").replace("\\", "") ||
+          target.path.startsWith(file.path.replace(dir, "").replace("\\", ""))
         );
       })
     ) {
@@ -90,25 +96,24 @@ export function FileList({
       stagedList.some((target) => {
         return (
           target.path === file.name ||
-          target.path === file.path.replace(dir + "\\", "")
+          target.path === file.path.replace(dir, "").replace("\\", "") ||
+          target.path.startsWith(file.path.replace(dir, "").replace("\\", ""))
         );
       })
     ) {
       fileStatus = "Staged";
     }
     return (
-      <div className="flex flex-row items-center gap-2">
-        <TooltipProvider delayDuration={250} disableHoverableContent>
-          {fileStatus === "Changed" ?
-            <h4 className="text-sm text-neutral-300 duration-200 dark:text-neutral-600">
-              Edited
-            </h4>
-          : fileStatus === "Staged" ?
-            <h4 className="dark:text-neutal-600 text-sm text-neutral-300 duration-200">
-              Staged
-            </h4>
-          : null}
-        </TooltipProvider>
+      <div className="hidden flex-row items-center gap-2 2xs:flex">
+        {fileStatus === "Changed" ?
+          <h4 className="text-sm text-neutral-300 duration-200 dark:text-neutral-600">
+            Edited
+          </h4>
+        : fileStatus === "Staged" ?
+          <h4 className="dark:text-neutal-600 text-sm text-neutral-300 duration-200">
+            Staged
+          </h4>
+        : null}
       </div>
     );
   }
@@ -156,11 +161,16 @@ export function FileList({
                 <ContextMenuTrigger className="FE_2">
                   {child.children ?
                     <FolderRoot
-                      className={"group " + (root ? "" : "ml-4 border-l")}
+                      className={
+                        "group duration-200 ease-out " +
+                        (root ? "" : (
+                          "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                        ))
+                      }
                       type="multiple">
                       <FolderItem value="item-1" className="">
                         <FolderTrigger className="group p-1 pl-2 hover:bg-neutral-100 dark:hover:bg-neutral-900">
-                          <div className="flex w-full justify-between">
+                          <div className="flex w-full justify-between text-left">
                             {child.name}
                             {actionButton(child)}
                           </div>
@@ -172,11 +182,13 @@ export function FileList({
                     </FolderRoot>
                   : <div
                       className={
-                        "group flex items-center gap-4 p-1 pl-7 hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
-                        (root ? "" : "ml-4 border-l")
+                        "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
+                        (root ? "" : (
+                          "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                        ))
                       }>
-                      <File className="h-4 w-4" />
-                      <button className="flex w-full items-center justify-between">
+                      <File className="h-4 min-h-4 w-4 min-w-4" />
+                      <button className="flex w-full items-center justify-between text-left">
                         {child.name}
                         {actionButton(child)}
                       </button>
@@ -246,7 +258,7 @@ export function FileList({
           Stage your file before committing to the repository.
         </CardDescription>
       </CardHeader>
-      <CardContent className="pl-4 pt-3">
+      <CardContent className="overflow-auto pl-4 pt-3">
         {dirList ? recursiveDirRenderer(dirList, true) : null}
       </CardContent>
     </Card>

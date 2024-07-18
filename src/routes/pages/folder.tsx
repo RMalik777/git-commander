@@ -17,13 +17,22 @@ export default function Git() {
 
   async function getDiff() {
     const data = await git.showChanged(dir);
+    const data2 = await git.untrackedFiles(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
-        path: item,
+        path: item.replace(/\//gi, "\\"),
       } as FileEntry;
     });
+    const toEntry2 = await data2.map((item: string) => {
+      return {
+        name: item.split("/").pop(),
+        path: item.replace(/\//gi, "\\"),
+      } as FileEntry;
+    });
+    toEntry.push(...toEntry2);
     dispatch(setRepo({ diff: toEntry }));
+    localStorage.setItem("diffList", JSON.stringify(toEntry));
   }
   useEffect(() => {
     if (dir === "") return;
@@ -36,10 +45,11 @@ export default function Git() {
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
-        path: item,
+        path: item.replace(/\//gi, "\\"),
       } as FileEntry;
     });
     dispatch(setRepo({ staged: toEntry }));
+    localStorage.setItem("stagedList", JSON.stringify(toEntry));
   }
   useEffect(() => {
     if (dir === "") return;
