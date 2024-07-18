@@ -43,7 +43,15 @@ import {
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 
-import { File, FolderOpen, Minus, Plus, RefreshCw, Undo } from "lucide-react";
+import {
+  File,
+  FolderOpen,
+  Minus,
+  Plus,
+  RefreshCw,
+  Undo,
+  List as ListIcon,
+} from "lucide-react";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
@@ -279,7 +287,10 @@ export function Staging({
 
   function listView() {
     return (
-      <List type="multiple" defaultValue={["diff", "staged"]}>
+      <List
+        type="multiple"
+        defaultValue={["diff", "staged"]}
+        className="w-full">
         {stagedList.length > 0 ?
           <ListItem value="staged">
             <ListHeader className="group">
@@ -499,13 +510,13 @@ export function Staging({
                 target={child}
                 getDiff={getDiff}
                 getStaged={getStaged}>
-                <div>
+                <div className="w-full">
                   <div className="STG_2 UST_2 STG_4 UST_4">
                     {child.children ?
                       <FolderRoot
                         className={
                           "duration-200 ease-out " +
-                          (root ? "" : (
+                          (root ? "-ml-1" : (
                             "ml-4 border-l border-neutral-200 dark:border-neutral-800"
                           ))
                         }
@@ -525,9 +536,9 @@ export function Staging({
                       </FolderRoot>
                     : <div
                         className={
-                          "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900 " +
-                          (root ? "" : (
-                            "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                          "group flex items-center gap-4 p-1 duration-200 ease-out hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900 " +
+                          (root ? "pl-6" : (
+                            "ml-4 border-l border-neutral-200 pl-7 dark:border-neutral-800"
                           ))
                         }>
                         <File className="h-4 w-4" />
@@ -575,10 +586,13 @@ export function Staging({
           Stage your file before committing to the repository.
         </CardDescription>
       </CardHeader>
-      <CardContent className="pt-3">
-        <Menubar className="w-fit">
+      <CardContent className="flex w-full flex-col items-start pt-3">
+        <Menubar className="w-fit self-end">
           <MenubarMenu>
-            <MenubarTrigger>View</MenubarTrigger>
+            <MenubarTrigger className="flex items-center gap-1">
+              <ListIcon className="h-5 w-5 p-px" />
+              View
+            </MenubarTrigger>
             <MenubarContent>
               <MenubarRadioGroup
                 value={viewMode}
