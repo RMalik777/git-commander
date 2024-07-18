@@ -49,6 +49,7 @@ import { FileMenu } from "@/components/ContextMenu/FileMenu";
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
 import * as git from "@/lib/git";
+import { PulseLoader } from "react-spinners";
 
 export function Staging({
   dir,
@@ -67,6 +68,7 @@ export function Staging({
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const [openDialogId, setOpenDialogId] = useState("");
+  const [revertDialog, setRevertDialog] = useState(false);
 
   async function getDiff() {
     const data = await git.showChanged(dir);
@@ -218,7 +220,7 @@ export function Staging({
           onConfirm={async () => {
             if (mode === "Staged") {
               try {
-                await git.unstageFile(dir, file.name);
+                await git.unstageFile(dir, file.path);
               } catch (error) {
                 console.error(error);
                 if (error instanceof Error) {
@@ -310,9 +312,6 @@ export function Staging({
                   }}>
                   <Minus className="h-full w-full" />
                 </button>
-                <button className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800">
-                  <Undo className="h-full w-full" />
-                </button>
               </div>
             </ListHeader>
             <ListContent className="UST_2">
@@ -380,9 +379,53 @@ export function Staging({
                   }}>
                   <Plus className="h-full w-full" />
                 </button>
-                <button className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800">
+                <button
+                  className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  onClick={() => setRevertDialog(true)}>
                   <Undo className="h-full w-full" />
                 </button>
+                <ConfirmationDialog
+                  title="Warning!"
+                  message={
+                    <p>
+                      All changes made will be reverted <b>permanently</b> and
+                      can&apos;t be restored. Are you sure?
+                    </p>
+                  }
+                  open={revertDialog}
+                  setOpen={setRevertDialog}
+                  onConfirm={async () => {
+                    toast({
+                      title: "Reverting...",
+                      description: (
+                        <PulseLoader size={6} speedMultiplier={0.8} />
+                      ),
+                    });
+                    try {
+                      const response = await git.revertAll(dir);
+                      toast({
+                        title: "Revert Success",
+                        description: <p>{response}</p>,
+                      });
+                    } catch (error) {
+                      if (error instanceof Error) {
+                        toast({
+                          title: "Error Reverting",
+                          description: (
+                            <p>
+                              can&apos;t revert file
+                              <br />
+                              <code>{error.message}</code>
+                            </p>
+                          ),
+                          variant: "destructive",
+                        });
+                      }
+                    }
+                    await getDiff();
+                    await getStaged();
+                  }}
+                />
               </div>
             </ListHeader>
             <ListContent className="STG_2">

@@ -154,7 +154,6 @@ export function FileMenu({
           await removeFile(dir + "\\" + target.path);
           await getStaged();
           await getDiff();
-          setOpenDialog(false);
         }}
       />
     </>
