@@ -36,7 +36,7 @@ export function FileMenu({
   return (
     <>
       <ContextMenu key={target.path}>
-        <ContextMenuTrigger>{children}</ContextMenuTrigger>
+        <ContextMenuTrigger className="w-full">{children}</ContextMenuTrigger>
         <ContextMenuContent className="w-64">
           <ContextMenuItem>{target.name}</ContextMenuItem>
           <ContextMenuSeparator />

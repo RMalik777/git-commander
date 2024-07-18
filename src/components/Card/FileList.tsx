@@ -104,18 +104,16 @@ export function FileList({
       fileStatus = "Staged";
     }
     return (
-      <div className="flex flex-row items-center gap-2">
-        <TooltipProvider delayDuration={250} disableHoverableContent>
-          {fileStatus === "Changed" ?
-            <h4 className="text-sm text-neutral-300 duration-200 dark:text-neutral-600">
-              Edited
-            </h4>
-          : fileStatus === "Staged" ?
-            <h4 className="dark:text-neutal-600 text-sm text-neutral-300 duration-200">
-              Staged
-            </h4>
-          : null}
-        </TooltipProvider>
+      <div className="hidden flex-row items-center gap-2 2xs:flex">
+        {fileStatus === "Changed" ?
+          <h4 className="text-sm text-neutral-300 duration-200 dark:text-neutral-600">
+            Edited
+          </h4>
+        : fileStatus === "Staged" ?
+          <h4 className="dark:text-neutal-600 text-sm text-neutral-300 duration-200">
+            Staged
+          </h4>
+        : null}
       </div>
     );
   }
@@ -172,7 +170,7 @@ export function FileList({
                       type="multiple">
                       <FolderItem value="item-1" className="">
                         <FolderTrigger className="group p-1 pl-2 hover:bg-neutral-100 dark:hover:bg-neutral-900">
-                          <div className="flex w-full justify-between">
+                          <div className="flex w-full justify-between text-left">
                             {child.name}
                             {actionButton(child)}
                           </div>
@@ -189,8 +187,8 @@ export function FileList({
                           "ml-4 border-l border-neutral-200 dark:border-neutral-800"
                         ))
                       }>
-                      <File className="h-4 w-4" />
-                      <button className="flex w-full items-center justify-between">
+                      <File className="h-4 min-h-4 w-4 min-w-4" />
+                      <button className="flex w-full items-center justify-between text-left">
                         {child.name}
                         {actionButton(child)}
                       </button>
@@ -260,7 +258,7 @@ export function FileList({
           Stage your file before committing to the repository.
         </CardDescription>
       </CardHeader>
-      <CardContent className="pl-4 pt-3">
+      <CardContent className="overflow-auto pl-4 pt-3">
         {dirList ? recursiveDirRenderer(dirList, true) : null}
       </CardContent>
     </Card>
