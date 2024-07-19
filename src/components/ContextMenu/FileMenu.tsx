@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useAppDispatch } from "@/lib/Redux/hooks";
+
 import { writeText } from "@tauri-apps/api/clipboard";
 import { removeFile, type FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
@@ -15,6 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
 import * as git from "@/lib/git";
+import { PulseLoader } from "react-spinners";
 
 export function FileMenu({
   children,
@@ -27,12 +30,14 @@ export function FileMenu({
   children: React.ReactNode;
   target: FileEntry;
   dir: string;
-  status: "Staged" | "Changed";
+  status: "Staged" | "Changed" | "Unchanged";
   getStaged: () => Promise<void>;
   getDiff: () => Promise<void>;
 }>) {
   const { toast } = useToast();
-  const [openDialog, setOpenDialog] = useState(false);
+  const dispatch = useAppDispatch();
+  const [openDialogRevert, setOpenDialogRevert] = useState(false);
+  const [openDialogDelete, setOpenDialogDelete] = useState(false);
   return (
     <>
       <ContextMenu key={target.path}>
@@ -42,7 +47,7 @@ export function FileMenu({
           <ContextMenuSeparator />
           <ContextMenuItem
             inset
-            disabled={status == "Staged"}
+            disabled={status != "Changed"}
             onClick={async () => {
               try {
                 await git.addFile(dir, target.path);
@@ -70,7 +75,7 @@ export function FileMenu({
           </ContextMenuItem>
           <ContextMenuItem
             inset
-            disabled={status == "Changed"}
+            disabled={status != "Staged"}
             onClick={async () => {
               try {
                 await git.unstageFile(dir, target.path);
@@ -95,7 +100,14 @@ export function FileMenu({
             }}>
             Unstage
           </ContextMenuItem>
-          <ContextMenuItem inset>Revert</ContextMenuItem>
+          <ContextMenuItem
+            disabled={status == "Unchanged"}
+            inset
+            onClick={() => {
+              setOpenDialogRevert(true);
+            }}>
+            Revert
+          </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem
             inset
@@ -134,7 +146,7 @@ export function FileMenu({
             inset
             className="font-medium text-red-500 focus:bg-red-500/10"
             onClick={() => {
-              setOpenDialog(true);
+              setOpenDialogDelete(true);
             }}>
             Delete
           </ContextMenuItem>
@@ -143,13 +155,81 @@ export function FileMenu({
       <ConfirmationDialog
         title="Warning!"
         message={
+          <p>
+            All changes made will be reverted <b>permanently</b> and can&apos;t
+            be restored. Are you sure?
+          </p>
+        }
+        open={openDialogRevert}
+        setOpen={setOpenDialogRevert}
+        onConfirm={async () => {
+          toast({
+            title: "Reverting...",
+            description: <PulseLoader size={6} speedMultiplier={0.8} />,
+          });
+          if (status === "Staged") {
+            try {
+              await git.unstageFile(dir, target.path);
+            } catch (error) {
+              console.error(error);
+              if (error instanceof Error) {
+                toast({
+                  title: "Error Reverting",
+                  description: (
+                    <p>
+                      <code>{target.name}</code> can&apos;t be reverted
+                      <br />
+                      <code>{error.message}</code>
+                    </p>
+                  ),
+                  variant: "destructive",
+                });
+              }
+              return;
+            }
+          }
+          try {
+            await git.revertFile(dir, target.path);
+          } catch (error) {
+            console.error(error);
+            if (error instanceof Error) {
+              toast({
+                title: "Error Reverting",
+                description: (
+                  <p>
+                    <code>{target.name}</code> can&apos;t be reverted
+                    <br />
+                    <code>{error.message}</code>
+                  </p>
+                ),
+                variant: "destructive",
+              });
+            }
+            return;
+          } finally {
+            await getDiff();
+            await getStaged();
+          }
+          toast({
+            title: "Successfully Reverted",
+            description: (
+              <>
+                Reverted <code>{target.name}</code> to last commit
+              </>
+            ),
+          });
+        }}
+      />
+      <ConfirmationDialog
+        title="Warning!"
+        message={
           <>
             This will <b>permanently</b> delete <code>{target.name}</code>. Are
             you sure?
           </>
         }
-        open={openDialog}
-        setOpen={setOpenDialog}
+        open={openDialogDelete}
+        setOpen={setOpenDialogDelete}
         onConfirm={async () => {
           await removeFile(dir + "\\" + target.path);
           await getStaged();

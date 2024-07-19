@@ -226,6 +226,10 @@ export function Staging({
             </>
           }
           onConfirm={async () => {
+            toast({
+              title: "Reverting...",
+              description: <PulseLoader size={6} speedMultiplier={0.8} />,
+            });
             if (mode === "Staged") {
               try {
                 await git.unstageFile(dir, file.path);
