@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAppDispatch } from "@/lib/Redux/hooks";
 
 import { writeText } from "@tauri-apps/api/clipboard";
 import { removeFile, type FileEntry } from "@tauri-apps/api/fs";
@@ -35,7 +34,6 @@ export function FileMenu({
   getDiff: () => Promise<void>;
 }>) {
   const { toast } = useToast();
-  const dispatch = useAppDispatch();
   const [openDialogRevert, setOpenDialogRevert] = useState(false);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
   return (
