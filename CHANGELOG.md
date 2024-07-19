@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/RMalik777/git-commander/compare/v1.7.1...v1.7.2) (2024-07-18)
+
+
+### Bug Fixes
+
+* cant revert file ([2043d17](https://github.com/RMalik777/git-commander/commit/2043d17e83e9743c682fe2c00a3ef51d70e73e83))
+
 ## [1.7.1](https://github.com/RMalik777/git-commander/compare/v1.7.0...v1.7.1) (2024-07-17)
 
 
