@@ -1,4 +1,3 @@
-import { writeText } from "@tauri-apps/api/clipboard";
 import { FileEntry } from "@tauri-apps/api/fs";
 
 import { useAppDispatch } from "@/lib/Redux/hooks";
@@ -13,13 +12,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu";
-import {
   FolderContent,
   FolderItem,
   FolderRoot,
@@ -33,6 +25,8 @@ import {
 } from "@/components/ui/tooltip";
 
 import { File, RefreshCw } from "lucide-react";
+
+import { FileMenu } from "@/components/ContextMenu/FileMenu";
 
 import * as git from "@/lib/git";
 
@@ -124,7 +118,7 @@ export function FileList({
     return (
       <>
         {parent.map((child) => {
-          let fileStatus = "Unchanged";
+          let fileStatus: "Unchanged" | "Changed" | "Staged" = "Unchanged";
           if (
             diffList.some((target) => {
               return (
@@ -157,72 +151,48 @@ export function FileList({
           }
           return (
             <div key={child.path}>
-              <ContextMenu>
-                <ContextMenuTrigger className="FE_2">
-                  {child.children ?
-                    <FolderRoot
-                      className={
-                        "group duration-200 ease-out " +
-                        (root ? "" : (
-                          "ml-4 border-l border-neutral-200 dark:border-neutral-800"
-                        ))
-                      }
-                      type="multiple">
-                      <FolderItem value="item-1" className="">
-                        <FolderTrigger className="group p-1 pl-2 hover:bg-neutral-100 dark:hover:bg-neutral-900">
-                          <div className="flex w-full justify-between text-left">
-                            {child.name}
-                            {actionButton(child)}
-                          </div>
-                        </FolderTrigger>
-                        <FolderContent>
-                          {recursiveDirRenderer(child.children, false)}
-                        </FolderContent>
-                      </FolderItem>
-                    </FolderRoot>
-                  : <div
-                      className={
-                        "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
-                        (root ? "" : (
-                          "ml-4 border-l border-neutral-200 dark:border-neutral-800"
-                        ))
-                      }>
-                      <File className="h-4 min-h-4 w-4 min-w-4" />
-                      <button className="flex w-full items-center justify-between text-left">
-                        {child.name}
-                        {actionButton(child)}
-                      </button>
-                    </div>
-                  }
-                </ContextMenuTrigger>
-
-                <ContextMenuContent className="w-64">
-                  <ContextMenuItem>{child.name}</ContextMenuItem>
-                  <ContextMenuSeparator />
-                  <ContextMenuItem inset disabled={fileStatus != "Changed"}>
-                    Stage
-                  </ContextMenuItem>
-                  <ContextMenuItem inset disabled={fileStatus != "Staged"}>
-                    Unstage
-                  </ContextMenuItem>
-                  <ContextMenuItem inset>Revert</ContextMenuItem>
-                  <ContextMenuSeparator />
-                  <ContextMenuItem inset>Open</ContextMenuItem>
-                  <ContextMenuItem
-                    inset
-                    onClick={async () => {
-                      await writeText(child.path);
-                    }}>
-                    Copy Path
-                  </ContextMenuItem>
-                  <ContextMenuSeparator />
-                  <ContextMenuItem
-                    inset
-                    className="font-medium text-red-500 focus:bg-red-500/10">
-                    Delete
-                  </ContextMenuItem>
-                </ContextMenuContent>
-              </ContextMenu>
+              <FileMenu
+                dir={dir}
+                target={child}
+                status={fileStatus}
+                getDiff={getDiff}
+                getStaged={getStaged}>
+                {child.children ?
+                  <FolderRoot
+                    className={
+                      "group duration-200 ease-out " +
+                      (root ? "" : (
+                        "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                      ))
+                    }
+                    type="multiple">
+                    <FolderItem value="item-1" className="">
+                      <FolderTrigger className="group p-1 pl-2 hover:bg-neutral-100 dark:hover:bg-neutral-900">
+                        <div className="flex w-full justify-between text-left">
+                          {child.name}
+                          {actionButton(child)}
+                        </div>
+                      </FolderTrigger>
+                      <FolderContent>
+                        {recursiveDirRenderer(child.children, false)}
+                      </FolderContent>
+                    </FolderItem>
+                  </FolderRoot>
+                : <div
+                    className={
+                      "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
+                      (root ? "" : (
+                        "ml-4 border-l border-neutral-200 dark:border-neutral-800"
+                      ))
+                    }>
+                    <File className="h-4 min-h-4 w-4 min-w-4" />
+                    <button className="flex w-full items-center justify-between text-left">
+                      {child.name}
+                      {actionButton(child)}
+                    </button>
+                  </div>
+                }
+              </FileMenu>
             </div>
           );
         })}
