@@ -377,7 +377,7 @@ export function Clone() {
               )}
             />
 
-            <DialogFooter className="items-center">
+            <DialogFooter>
               {isCloning ?
                 theme == "Dark" ?
                   <ScaleLoader
@@ -403,14 +403,17 @@ export function Clone() {
                   Close
                 </Button>
               }
-              <p className="text-center text-neutral-700 dark:text-neutral-300 sm:text-right">
-                {progress}
-              </p>
+              {progress ?
+                <p className="text-center text-neutral-700 dark:text-neutral-300 sm:text-right">
+                  {progress}
+                </p>
+              : null}
+
               <Button
                 type="submit"
                 variant="default"
                 disabled={isCloning}
-                className="CR_4 flex flex-row items-center gap-2">
+                className="CR_4 flex flex-row items-center gap-1">
                 <CloudDownload size={20} />
                 Clone
               </Button>
