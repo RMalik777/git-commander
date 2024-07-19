@@ -143,9 +143,14 @@ export function AddRepo({ afterAdd }: Readonly<{ afterAdd: () => void }>) {
                 )}
               />
               <DialogFooter className="items-center">
-                <Button variant="outline" onClick={() => reset()}>
-                  Cancel
-                </Button>
+                <DialogClose asChild>
+                  <Button
+                    variant="outline"
+                    type="reset"
+                    onClick={() => reset()}>
+                    Cancel
+                  </Button>
+                </DialogClose>
                 <Button variant="default" type="submit">
                   Add
                 </Button>
