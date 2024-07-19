@@ -350,6 +350,29 @@ export async function showStaged(path) {
   return await response;
 }
 
+export async function ShowUntrackedFiles(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command(
+      "git 3 args",
+      ["ls-files", "--others", "--exclude-standard"],
+      {
+        cwd: path,
+      }
+    );
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) =>
+      result.push(line.replace(/[\n\r]/g, ""))
+    );
+    command.stderr.on("data", (line) =>
+      result.push(line.replace(/[\n\r]/g, ""))
+    );
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
 export async function setSSLFalse() {
   const command = new Command("git ssl", [
     "config --global http.sslVerify false",
@@ -397,25 +420,6 @@ export async function undoLastCommit(path) {
     command.spawn().catch((error) => {
       reject(new Error(error));
     });
-  });
-  return await response;
-}
-
-export async function untrackedFiles(path) {
-  const response = new Promise((resolve, reject) => {
-    const result = [];
-    const command = new Command("git 2 args", ["ls-files", "--others"], {
-      cwd: path,
-    });
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) =>
-      result.push(line.replace(/[\n\r]/g, ""))
-    );
-    command.stderr.on("data", (line) =>
-      result.push(line.replace(/[\n\r]/g, ""))
-    );
-    command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
 }

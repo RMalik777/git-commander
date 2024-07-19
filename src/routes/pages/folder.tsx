@@ -17,7 +17,7 @@ export default function Git() {
 
   async function getDiff() {
     const data = await git.showChanged(dir);
-    const data2 = await git.untrackedFiles(dir);
+    const data2 = await git.ShowUntrackedFiles(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
