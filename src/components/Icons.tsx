@@ -7,18 +7,23 @@ import {
   Image,
   SquareTerminal,
   TypeOutline,
+  Scale,
+  FileCode,
 } from "lucide-react";
 
 import {
+  siAstro,
   siC,
   siCplusplus,
   siCss3,
+  siDependabot,
   siDotenv,
   siDotnet,
   siEslint,
   siGit,
   siHtml5,
   siJavascript,
+  siJenkins,
   siJson,
   siKotlin,
   siLess,
@@ -48,9 +53,9 @@ import {
   siVitest,
   siVuedotjs,
   siYaml,
-  siAstro,
-  siDependabot,
-  siJenkins,
+  siTauri,
+  siBun,
+  siComposer,
 } from "simple-icons";
 
 interface Params {
@@ -182,13 +187,17 @@ export function Icons(params: Readonly<Params>) {
   }
   // TEXT
   else if (extension === "txt") {
-    return <FileText className={iconsClass} />;
+    return <FileCode className={iconsClass} />;
   }
 
   //? -------- CONFIGURATION FILES ---------
   // ENV
   else if (extension === "env") {
     iconsVar = siDotenv;
+  } else if (extension === "example" || extension === "local") {
+    if (fileName?.startsWith(".env")) {
+      iconsVar = siDotenv;
+    }
   }
   // JSON
   else if (extension === "json") {
@@ -199,11 +208,14 @@ export function Icons(params: Readonly<Params>) {
       fileName === "tsconfig-base"
     ) {
       iconsVar = siTypescript;
+    } else if (fileName === "tauri") {
+      iconsVar = siTauri;
+    } else if (fileName === "composer") {
+      iconsVar = siComposer;
     } else {
       iconsVar = siJson;
     }
   }
-
   // TOML
   else if (extension === "toml") {
     iconsVar = siToml;
@@ -226,6 +238,10 @@ export function Icons(params: Readonly<Params>) {
     } else {
       iconsVar = siYaml;
     }
+  }
+  // XML
+  else if (extension === "xml") {
+    return <FileCode className={iconsClass} />;
   }
   //PRETTIER
   else if (
@@ -293,6 +309,12 @@ export function Icons(params: Readonly<Params>) {
   } else if (extension === "astro") {
     iconsVar = siAstro;
   }
+  // COMPOSER
+  else if (extension === "lock") {
+    if (fileName === "composer") {
+      iconsVar = siComposer;
+    }
+  }
 
   // --------- MISCELLANEOUS ---------
   else if (
@@ -304,6 +326,10 @@ export function Icons(params: Readonly<Params>) {
     extension === "webp"
   ) {
     return <Image className={iconsClass} />;
+  }
+  // PDF
+  else if (extension === "pdf") {
+    return <FileText className={iconsClass} />;
   }
   // TYPE
   else if (
@@ -317,6 +343,14 @@ export function Icons(params: Readonly<Params>) {
   // JENKINS
   else if (extension === "jenkinsfile" || fileName === "jenkinsfile") {
     iconsVar = siJenkins;
+  }
+  // BUN
+  else if (extension === "lockb") {
+    iconsVar = siBun;
+  }
+  // LICENSE
+  else if (extension === "license") {
+    return <Scale className={iconsClass} />;
   }
 
   return iconsVar ?
