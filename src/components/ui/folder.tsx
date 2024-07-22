@@ -28,7 +28,7 @@ const FolderTrigger = React.forwardRef<
       {...props}>
       <div className="flex w-full items-center gap-1">
         <ChevronDown className="h-4 w-4 shrink-0 -rotate-90 transition-transform" />
-        <Folder className="h-4 w-4 shrink-0" />
+        <Folder className="h-4 w-4 shrink-0 fill-yellow-400 text-yellow-400 duration-150 ease-out dark:fill-yellow-500 dark:text-yellow-500" />
         {children}
       </div>
     </AccordionPrimitive.Trigger>
