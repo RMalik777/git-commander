@@ -14,10 +14,11 @@ export default function Git() {
   const dispatch = useAppDispatch();
   const dir = useAppSelector((state) => state.repo.directory);
   const diffList = useAppSelector((state) => state.repo.diff);
+  const currentRepoName = useAppSelector((state) => state.repo.name);
 
   async function getDiff() {
     const data = await git.showChanged(dir);
-    const data2 = await git.untrackedFiles(dir);
+    const data2 = await git.ShowUntrackedFiles(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
@@ -66,7 +67,9 @@ export default function Git() {
       if (!a.children && b.children) return 1;
       return 0;
     });
+
     parent.forEach((child) => {
+      child.path = child.path?.replace(dir, "");
       if (child.children) {
         child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
         child.children.sort((a, b) => {
@@ -97,7 +100,7 @@ export default function Git() {
     }
     if (dir === "") return;
     setDirectory();
-  }, [dir, stagedList, diffList]);
+  }, [dir, currentRepoName]);
   return (
     <div className="flex flex-col items-center gap-4">
       <Staging

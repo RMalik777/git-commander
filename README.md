@@ -228,10 +228,13 @@ List of all command:
 |`getParent`|`path`|`git rev-parse --show-toplevel`|Get the parent git repository if the current repository is not the parent|
 |`pull`|`path`|`git pull`||
 |`push`|`path`|`git push`||
+|`removeUntrackedFile`|`path`|`git clean -f`|Remove untracked file (new file that hasn't been committed)|
+|`removeAll`|`path`|`git restore .`|Revert all changes (including untracked files). This function also call `removeUntrackedFile`|
 |`revertFile`|`path`, `file`|`git restore <file>`|Revert all the changes made into the file **(proceed with caution, this action is irreversible)**.|
 |`setSSLFalse`|`-`|`git config --global http.sslVerify false`|For disabling SSL Verification.|
 |`showChanged`|`path`|`git diff --name-only`|Show all changed file made.|
 |`showStaged`|`path`|`git diff --name-only --cached`|Show all staged files.|
+|`showUntracked`|`path`|`git ls-files --others --exclude-standard`|Show all untracked files.|
 |`switchBranch`|`path`, `branch`|`git switch <branch>`|Change branch.|
 |`undoLastCommit`|`path`|`git reset --soft HEAD^`|Undo last commit to a last commit known. Option `--soft` to keep all the files untouched. Option `HEAD^` refer to a last commit.|
 |`unstageAll`|`path`|`git reset HEAD`|Undo all staged file. No option so the method is default (`--mixed`). HEAD is refering to the current HEAD.|

@@ -24,11 +24,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { File, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
-
 import * as git from "@/lib/git";
+
+import { Icons } from "@/components/Icons";
 
 export function FileList({
   dir,
@@ -45,7 +46,7 @@ export function FileList({
 
   async function getDiff() {
     const data = await git.showChanged(dir);
-    const data2 = await git.untrackedFiles(dir);
+    const data2 = await git.ShowUntrackedFiles(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
@@ -117,7 +118,7 @@ export function FileList({
   ): React.ReactNode {
     return (
       <>
-        {parent.map((child) => {
+        {parent?.map((child) => {
           let fileStatus: "Unchanged" | "Changed" | "Staged" = "Unchanged";
           if (
             diffList.some((target) => {
@@ -185,7 +186,7 @@ export function FileList({
                         "ml-4 border-l border-neutral-200 dark:border-neutral-800"
                       ))
                     }>
-                    <File className="h-4 min-h-4 w-4 min-w-4" />
+                    <Icons name={child.name} />
                     <button className="flex w-full items-center justify-between text-left">
                       {child.name}
                       {actionButton(child)}

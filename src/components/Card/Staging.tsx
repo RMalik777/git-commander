@@ -59,6 +59,8 @@ import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 import * as git from "@/lib/git";
 import { PulseLoader } from "react-spinners";
 
+import { Icons } from "@/components/Icons";
+
 export function Staging({
   dir,
   dirList,
@@ -80,7 +82,7 @@ export function Staging({
 
   async function getDiff() {
     const data = await git.showChanged(dir);
-    const data2 = await git.untrackedFiles(dir);
+    const data2 = await git.ShowUntrackedFiles(dir);
     const toEntry = await data.map((item: string) => {
       return {
         name: item.split("/").pop(),
@@ -341,7 +343,7 @@ export function Staging({
                       getDiff={getDiff}
                       getStaged={getStaged}>
                       <div className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
-                        <File className="h-4 w-4" />
+                        <Icons name={target.name} />
                         <div className="flex w-full items-center justify-between">
                           <div className="flex flex-row items-center gap-4">
                             <h4 className="UST_3 font-medium">{target.name}</h4>
