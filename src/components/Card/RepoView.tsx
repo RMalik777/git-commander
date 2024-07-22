@@ -103,6 +103,9 @@ export function RepoView() {
         dispatch(setRepo({ name: newParent.split("\\").pop() }));
         setParentDialog(true);
       }
+      localStorage.removeItem("diffList");
+      localStorage.removeItem("stagedList");
+      localStorage.removeItem("dirList");
     }
   }
 
@@ -238,6 +241,9 @@ export function RepoView() {
           onClick={() => {
             localStorage.removeItem("repoDir");
             localStorage.removeItem("currentRepoName");
+            localStorage.removeItem("diffList");
+            localStorage.removeItem("stagedList");
+            localStorage.removeItem("dirList");
             dispatch(removeRepo());
             dispatch(setRepo({ directory: "" }));
           }}>
