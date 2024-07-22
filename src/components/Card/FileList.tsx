@@ -118,7 +118,7 @@ export function FileList({
   ): React.ReactNode {
     return (
       <>
-        {parent.map((child) => {
+        {parent?.map((child) => {
           let fileStatus: "Unchanged" | "Changed" | "Staged" = "Unchanged";
           if (
             diffList.some((target) => {
