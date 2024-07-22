@@ -162,7 +162,7 @@ export function Icons(params: Readonly<Params>) {
     iconsVar = siMdx;
   }
   // SHELL
-  else if (extension === "sh") {
+  else if (extension === "sh" || extension === "bat") {
     return <SquareTerminal className={iconsClass} />;
   }
   // PHP
