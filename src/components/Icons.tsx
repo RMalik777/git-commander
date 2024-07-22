@@ -204,6 +204,10 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siDotenv;
     }
   }
+  // NODE
+  else if (extension === "node" || extension === "lock") {
+    iconsVar = siNodedotjs;
+  }
   // JSON
   else if (extension === "json") {
     if (fileName === "package" || fileName === "package-lock") {
@@ -267,7 +271,7 @@ export function Icons(params: Readonly<Params>) {
     iconsVar = siGit;
   }
   // NPM
-  else if (extension === "npm" || extension === "npmrc") {
+  else if (extension === "npm" || extension === "npmrc" || extension === "npmignore") {
     iconsVar = siNpm;
   }
 
