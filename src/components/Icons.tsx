@@ -3,17 +3,24 @@ import DOMPurify from "dompurify";
 import {
   Database,
   File,
+  FileCode,
   FileText,
   Image,
+  Scale,
+  SquarePlay,
+  FileMusic,
   SquareTerminal,
   TypeOutline,
-  Scale,
-  FileCode,
+  AppWindow,
+  FolderArchive,
 } from "lucide-react";
 
 import {
+  si7zip,
   siAstro,
+  siBun,
   siC,
+  siComposer,
   siCplusplus,
   siCss3,
   siDependabot,
@@ -47,15 +54,13 @@ import {
   siSvelte,
   siSwift,
   siTailwindcss,
+  siTauri,
   siToml,
   siTypescript,
   siVite,
   siVitest,
   siVuedotjs,
   siYaml,
-  siTauri,
-  siBun,
-  siComposer,
 } from "simple-icons";
 
 interface Params {
@@ -323,13 +328,62 @@ export function Icons(params: Readonly<Params>) {
     extension === "jpg" ||
     extension === "jpeg" ||
     extension === "gif" ||
-    extension === "webp"
+    extension === "webp" ||
+    extension === "avif"
   ) {
     return <Image className={iconsClass} />;
+  }
+  // VIDEO
+  else if (
+    extension === "mp4" ||
+    extension === "webm" ||
+    extension === "hevc" ||
+    extension === "mkv" ||
+    extension === "mov" ||
+    extension === "avi"
+  ) {
+    return <SquarePlay className={iconsClass} />;
+  }
+  // AUDIO
+  else if (
+    extension === "mp3" ||
+    extension === "wav" ||
+    extension === "flac" ||
+    extension === "m4a" ||
+    extension === "aac" ||
+    extension === "ogg"
+  ) {
+    return <FileMusic className={iconsClass} />;
+  }
+  // APP
+  else if (
+    extension === "exe" ||
+    extension === "dmg" ||
+    extension === "app" ||
+    extension === "apk" ||
+    extension === "msi"
+  ) {
+    return <AppWindow className={iconsClass} />;
   }
   // PDF
   else if (extension === "pdf") {
     return <FileText className={iconsClass} />;
+  }
+  // ZIP
+  else if (
+    extension === "zip" ||
+    extension === "rar" ||
+    extension === "tar" ||
+    extension === "gz" ||
+    extension === "bz2" ||
+    extension === "xz" ||
+    extension === "zst"
+  ) {
+    return <FolderArchive className={iconsClass} />;
+  }
+  // 7ZIP
+  else if (extension === "7z") {
+    iconsVar = si7zip;
   }
   // TYPE
   else if (
