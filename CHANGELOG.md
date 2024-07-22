@@ -1,3 +1,18 @@
+# [1.8.0](https://github.com/RMalik777/git-commander/compare/v1.7.2...v1.8.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* delete localstorage on change ([59ba52b](https://github.com/RMalik777/git-commander/commit/59ba52b4d0db070623368842194daf4ad1103f54))
+* prevent error if no parent ([ce43c98](https://github.com/RMalik777/git-commander/commit/ce43c9817d1d7c0ec4f53e8e2d422d623b3652fc))
+* re render on repo change ([4e9a823](https://github.com/RMalik777/git-commander/commit/4e9a8235c2b7f8a817819f4ac2975e42dbb3f972))
+
+
+### Features
+
+* add icons in file list and staging ([3c82bef](https://github.com/RMalik777/git-commander/commit/3c82bef7b8d7a1ae1af44cf1284025edc41722bc))
+* add more icons ([f784184](https://github.com/RMalik777/git-commander/commit/f78418457b07ec2d396146611e4f754b749b08f5))
+
 ## [1.7.2](https://github.com/RMalik777/git-commander/compare/v1.7.1...v1.7.2) (2024-07-18)
 
 
