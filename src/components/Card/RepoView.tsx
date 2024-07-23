@@ -66,7 +66,7 @@ export function RepoView() {
       });
       toEntry.push(...toEntry2);
       dispatch(setRepo({ diff: toEntry }));
-      localStorage.setItem("stagedList", JSON.stringify(toEntry));
+      localStorage.setItem("diffList", JSON.stringify(toEntry));
     }
     getDiff();
   }, [dir]);
@@ -82,6 +82,7 @@ export function RepoView() {
         } as FileEntry;
       });
       dispatch(setRepo({ staged: toEntry }));
+      localStorage.setItem("stagedList", JSON.stringify(toEntry));
     }
     getStaged();
   }, [dir]);
