@@ -1,3 +1,19 @@
+## [1.8.1](https://github.com/RMalik777/git-commander/compare/v1.8.0...v1.8.1) (2024-07-23)
+
+
+### Bug Fixes
+
+* change wrong lock file logo ([e9fb60e](https://github.com/RMalik777/git-commander/commit/e9fb60eba4eab5712b4bd241d9b537cbf7c792de))
+* changed doesnt use new icon ([c3ff166](https://github.com/RMalik777/git-commander/commit/c3ff166390ab8222b6a6e3b9522ed911b71e2ffc))
+* fix wrong staged and diff storage ([f1b1981](https://github.com/RMalik777/git-commander/commit/f1b1981f036748f8e44d5125bb8d8fff70051f9e))
+* wrong path copied using context menu ([30771fb](https://github.com/RMalik777/git-commander/commit/30771fb58eaf90de20b1f56037d98dc6c82c2e01))
+
+
+### Performance Improvements
+
+* delete dir name from store ([fa98d64](https://github.com/RMalik777/git-commander/commit/fa98d643a8dff94ee3bc37b33fcb4addf2f62824))
+* remove directory name before storing ([6cea02e](https://github.com/RMalik777/git-commander/commit/6cea02e6de9587548741e6e2decdada241d93e4f))
+
 # [1.8.0](https://github.com/RMalik777/git-commander/compare/v1.7.2...v1.8.0) (2024-07-22)
 
 
