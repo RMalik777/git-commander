@@ -27,9 +27,11 @@ import {
   siDependabot,
   siDotenv,
   siDotnet,
+  siEditorconfig,
   siEslint,
   siGit,
   siGo,
+  siHaskell,
   siHtml5,
   siJavascript,
   siJenkins,
@@ -59,6 +61,7 @@ import {
   siTauri,
   siToml,
   siTypescript,
+  siVercel,
   siVite,
   siVitest,
   siVuedotjs,
@@ -204,6 +207,10 @@ export function Icons(params: Readonly<Params>) {
   else if (extension === "r") {
     iconsVar = siR;
   }
+  // HASKELL
+  else if (extension === "hs" || extension === "hsc") {
+    iconsVar = siHaskell;
+  }
 
   //? -------- CONFIGURATION FILES ---------
   // ENV
@@ -246,6 +253,8 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siTauri;
     } else if (fileName === "composer") {
       iconsVar = siComposer;
+    } else if (fileName === "vercel") {
+      iconsVar = siVercel;
     } else {
       return <Braces className={iconsClass} />;
     }
@@ -302,6 +311,10 @@ export function Icons(params: Readonly<Params>) {
     extension === "npmignore"
   ) {
     iconsVar = siNpm;
+  }
+  // EDITORCONFIG
+  else if (extension === "editorconfig") {
+    iconsVar = siEditorconfig;
   }
 
   //? -------- FRAMEWORK ---------
