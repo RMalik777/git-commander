@@ -13,9 +13,10 @@ import {
   ArrowLeftToLine,
   ArrowRightToLine,
   CircleHelp,
-  FolderGit2,
+  FolderOpen,
   Home,
   Settings,
+  GitBranchPlus,
 } from "lucide-react";
 
 const menuItem = [
@@ -25,9 +26,14 @@ const menuItem = [
     icon: <Home />,
   },
   {
+    name: "Source Control",
+    link: "/repo",
+    icon: <GitBranchPlus />,
+  },
+  {
     name: "Content",
     link: "/folder",
-    icon: <FolderGit2 />,
+    icon: <FolderOpen />,
   },
   {
     name: "Settings",
