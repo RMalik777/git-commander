@@ -455,7 +455,7 @@ export function Staging({
                     status="Changed"
                     getDiff={getDiff}
                     getStaged={getStaged}>
-                    <div className="group flex cursor-default items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                    <div className="group flex cursor-default items-center gap-2 p-1 pl-3 hover:bg-neutral-100 hover:dark:bg-neutral-900">
                       <Icons name={target.name} />
                       <div className="flex w-full items-center justify-between">
                         <div className="flex flex-row items-center gap-4">

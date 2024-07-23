@@ -62,7 +62,7 @@ const ListContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-    className="ml-3 overflow-hidden border-l border-neutral-200 pl-2 text-sm transition-all duration-200 ease-out data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down dark:border-neutral-800"
+    className="ml-3 overflow-hidden border-l border-neutral-200 text-sm transition-all duration-200 ease-out data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down dark:border-neutral-800"
     {...props}>
     <div className={cn("pb-2 pt-0", className)}>{children}</div>
   </AccordionPrimitive.Content>
