@@ -456,7 +456,7 @@ export function Staging({
                     getDiff={getDiff}
                     getStaged={getStaged}>
                     <div className="group flex cursor-default items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
-                      <File className="h-4 w-4" />
+                      <Icons name={target.name} />
                       <div className="flex w-full items-center justify-between">
                         <div className="flex flex-row items-center gap-4">
                           <h4 className="STG_3 font-medium">{target.name}</h4>
@@ -547,7 +547,7 @@ export function Staging({
                             "ml-4 border-l border-neutral-200 pl-7 dark:border-neutral-800"
                           ))
                         }>
-                        <File className="h-4 w-4" />
+                        <Icons name={child.name} />
                         <div className="STG_3 UST_3 flex w-full items-center justify-between">
                           {child.name}
                           {actionButton(child, fileStatus)}
