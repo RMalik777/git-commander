@@ -38,7 +38,7 @@ const router = createBrowserRouter([
         element: <Settings />,
       },
       {
-        path: "/repo",
+        path: "/staging",
         element: <Staging />,
       },
       {

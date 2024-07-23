@@ -27,7 +27,7 @@ const menuItem = [
   },
   {
     name: "Source Control",
-    link: "/repo",
+    link: "/staging",
     icon: <GitBranchPlus />,
   },
   {

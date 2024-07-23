@@ -267,7 +267,7 @@ export default function Tutorial() {
       title: "Staging Changes",
       description: "Guide on how to stage changes to a git repository.",
       tour: () => {
-        navigate("/folder");
+        navigate("/staging");
         setTimeout(() => {
           const tour = driver({
             showProgress: true,
@@ -393,7 +393,7 @@ export default function Tutorial() {
       title: "Unstaging Changes",
       description: "Guide on how to unstage changes from a git repository.",
       tour: () => {
-        navigate("/folder");
+        navigate("/staging");
         setTimeout(() => {
           const tour = driver({
             showProgress: true,
