@@ -119,6 +119,7 @@ export function FileList({
     return (
       <>
         {parent?.map((child) => {
+          child.name = child.name ?? child.path.split("\\").pop();
           let fileStatus: "Unchanged" | "Changed" | "Staged" = "Unchanged";
           if (
             diffList.some((target) => {

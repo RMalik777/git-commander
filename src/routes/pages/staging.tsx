@@ -67,6 +67,7 @@ export default function Git() {
     });
 
     parent.forEach((child) => {
+      delete child.name;
       child.path = child.path?.replace(dir, "");
       if (child.children) {
         child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
