@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { open } from "@tauri-apps/api/dialog";
-import { exists, FileEntry } from "@tauri-apps/api/fs";
+import { exists, FileEntry, readDir } from "@tauri-apps/api/fs";
 import { open as openFolder } from "@tauri-apps/api/shell";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -66,7 +66,7 @@ export function RepoView() {
       });
       toEntry.push(...toEntry2);
       dispatch(setRepo({ diff: toEntry }));
-      localStorage.setItem("stagedList", JSON.stringify(toEntry));
+      localStorage.setItem("diffList", JSON.stringify(toEntry));
     }
     getDiff();
   }, [dir]);
@@ -82,9 +82,33 @@ export function RepoView() {
         } as FileEntry;
       });
       dispatch(setRepo({ staged: toEntry }));
+      localStorage.setItem("stagedList", JSON.stringify(toEntry));
     }
     getStaged();
   }, [dir]);
+  function recursiveSort(parent: FileEntry[]) {
+    parent.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
+    parent.sort((a, b) => {
+      if (a.children && !b.children) return -1;
+      if (!a.children && b.children) return 1;
+      return 0;
+    });
+
+    parent.forEach((child) => {
+      delete child.name;
+      child.path = child.path?.replace(dir, "");
+      if (child.children) {
+        child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
+        child.children.sort((a, b) => {
+          if (a.children && !b.children) return -1;
+          if (!a.children && b.children) return 1;
+          return 0;
+        });
+        recursiveSort(child.children);
+      }
+    });
+    return parent;
+  }
 
   async function openFile() {
     const toOpen = await open({
@@ -103,9 +127,13 @@ export function RepoView() {
         dispatch(setRepo({ name: newParent.split("\\").pop() }));
         setParentDialog(true);
       }
-      localStorage.removeItem("diffList");
-      localStorage.removeItem("stagedList");
-      localStorage.removeItem("dirList");
+      try {
+        const dir = await readDir(toOpen, { recursive: true });
+        recursiveSort(dir);
+        localStorage.setItem("dirList", JSON.stringify(dir));
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
@@ -241,9 +269,11 @@ export function RepoView() {
           onClick={() => {
             localStorage.removeItem("repoDir");
             localStorage.removeItem("currentRepoName");
-            localStorage.removeItem("diffList");
+            localStorage.removeItem("currentBranch");
             localStorage.removeItem("stagedList");
             localStorage.removeItem("dirList");
+            localStorage.removeItem("diffList");
+            localStorage.removeItem("stagedList");
             dispatch(removeRepo());
             dispatch(setRepo({ directory: "" }));
           }}>

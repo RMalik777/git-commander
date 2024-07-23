@@ -44,7 +44,6 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 
 import {
-  File,
   FolderOpen,
   Minus,
   Plus,
@@ -332,32 +331,30 @@ export function Staging({
               </div>
             </ListHeader>
             <ListContent className="UST_2">
-              {stagedList.length > 0 ?
-                stagedList?.map((target) => {
-                  return (
-                    <FileMenu
-                      key={target.path}
-                      dir={dir}
-                      status="Staged"
-                      target={target}
-                      getDiff={getDiff}
-                      getStaged={getStaged}>
-                      <div className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
-                        <Icons name={target.name} />
-                        <div className="flex w-full items-center justify-between">
-                          <div className="flex flex-row items-center gap-4">
-                            <h4 className="UST_3 font-medium">{target.name}</h4>
-                            <h4 className="UST_4 text-xs text-neutral-400 dark:text-neutral-600">
-                              {target.path}
-                            </h4>
-                          </div>
-                          {actionButton(target, "Staged")}
+              {stagedList?.map((target) => {
+                return (
+                  <FileMenu
+                    key={target.path}
+                    dir={dir}
+                    status="Staged"
+                    target={target}
+                    getDiff={getDiff}
+                    getStaged={getStaged}>
+                    <div className="group flex items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                      <Icons name={target.name} />
+                      <div className="flex w-full items-center justify-between">
+                        <div className="flex flex-row items-center gap-4">
+                          <h4 className="UST_3 font-medium">{target.name}</h4>
+                          <h4 className="UST_4 text-xs text-neutral-400 dark:text-neutral-600">
+                            {target.path}
+                          </h4>
                         </div>
+                        {actionButton(target, "Staged")}
                       </div>
-                    </FileMenu>
-                  );
-                })
-              : <h4 className="text-center">Empty...</h4>}
+                    </div>
+                  </FileMenu>
+                );
+              })}
             </ListContent>
           </ListItem>
         : null}
@@ -455,8 +452,8 @@ export function Staging({
                     status="Changed"
                     getDiff={getDiff}
                     getStaged={getStaged}>
-                    <div className="group flex cursor-default items-center gap-2 p-1 hover:bg-neutral-100 hover:dark:bg-neutral-900">
-                      <File className="h-4 w-4" />
+                    <div className="group flex cursor-default items-center gap-2 p-1 pl-3 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                      <Icons name={target.name} />
                       <div className="flex w-full items-center justify-between">
                         <div className="flex flex-row items-center gap-4">
                           <h4 className="STG_3 font-medium">{target.name}</h4>
@@ -480,6 +477,7 @@ export function Staging({
     return (
       <>
         {parent.map((child) => {
+          child.name = child.name ?? child.path.split("\\").pop();
           let fileStatus = "Unchanged";
           if (
             diffList.some((target) => {
@@ -547,7 +545,7 @@ export function Staging({
                             "ml-4 border-l border-neutral-200 pl-7 dark:border-neutral-800"
                           ))
                         }>
-                        <File className="h-4 w-4" />
+                        <Icons name={child.name} />
                         <div className="STG_3 UST_3 flex w-full items-center justify-between">
                           {child.name}
                           {actionButton(child, fileStatus)}
@@ -612,7 +610,14 @@ export function Staging({
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
-        {viewMode === "list" ? listView() : treeView(dirList, true)}
+        {stagedList?.length > 0 || diffList?.length > 0 ?
+          viewMode === "list" ?
+            listView()
+          : treeView(dirList, true)
+        : <h1 className="w-full text-center text-lg font-medium text-neutral-500 dark:text-neutral-400">
+            Empty...
+          </h1>
+        }
       </CardContent>
     </Card>
   );

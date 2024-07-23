@@ -1,18 +1,19 @@
 import DOMPurify from "dompurify";
 
 import {
+  AppWindow,
+  Braces,
   Database,
   File,
   FileCode,
+  FileMusic,
   FileText,
+  FolderArchive,
   Image,
   Scale,
   SquarePlay,
-  FileMusic,
   SquareTerminal,
   TypeOutline,
-  AppWindow,
-  FolderArchive,
 } from "lucide-react";
 
 import {
@@ -26,12 +27,14 @@ import {
   siDependabot,
   siDotenv,
   siDotnet,
+  siEditorconfig,
   siEslint,
   siGit,
+  siGo,
+  siHaskell,
   siHtml5,
   siJavascript,
   siJenkins,
-  siJson,
   siKotlin,
   siLess,
   siLit,
@@ -47,6 +50,7 @@ import {
   siPrettier,
   siPython,
   siQwik,
+  siR,
   siReact,
   siRust,
   siSass,
@@ -57,6 +61,7 @@ import {
   siTauri,
   siToml,
   siTypescript,
+  siVercel,
   siVite,
   siVitest,
   siVuedotjs,
@@ -192,7 +197,19 @@ export function Icons(params: Readonly<Params>) {
   }
   // TEXT
   else if (extension === "txt") {
-    return <FileCode className={iconsClass} />;
+    return <FileText className={iconsClass} />;
+  }
+  // GO
+  else if (extension === "go") {
+    iconsVar = siGo;
+  }
+  // R
+  else if (extension === "r") {
+    iconsVar = siR;
+  }
+  // HASKELL
+  else if (extension === "hs" || extension === "hsc") {
+    iconsVar = siHaskell;
   }
 
   //? -------- CONFIGURATION FILES ---------
@@ -204,12 +221,27 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siDotenv;
     }
   }
-  // NODE
+  // LOCKFILE
   else if (extension === "node" || extension === "lock") {
-    iconsVar = siNodedotjs;
+    // COMPOSER
+    if (fileName === "composer") {
+      iconsVar = siComposer;
+    }
+    // CARGO
+    else if (fileName === "cargo") {
+      iconsVar = siRust;
+    }
+    // NODE
+    else {
+      iconsVar = siNodedotjs;
+    }
   }
   // JSON
-  else if (extension === "json") {
+  else if (
+    extension === "json" ||
+    extension === "json5" ||
+    extension === "jsonc"
+  ) {
     if (fileName === "package" || fileName === "package-lock") {
       iconsVar = siNodedotjs;
     } else if (
@@ -217,12 +249,14 @@ export function Icons(params: Readonly<Params>) {
       fileName === "tsconfig-base"
     ) {
       iconsVar = siTypescript;
-    } else if (fileName === "tauri") {
+    } else if (fileName?.startsWith("tauri")) {
       iconsVar = siTauri;
     } else if (fileName === "composer") {
       iconsVar = siComposer;
+    } else if (fileName === "vercel") {
+      iconsVar = siVercel;
     } else {
-      iconsVar = siJson;
+      return <Braces className={iconsClass} />;
     }
   }
   // TOML
@@ -271,8 +305,16 @@ export function Icons(params: Readonly<Params>) {
     iconsVar = siGit;
   }
   // NPM
-  else if (extension === "npm" || extension === "npmrc" || extension === "npmignore") {
+  else if (
+    extension === "npm" ||
+    extension === "npmrc" ||
+    extension === "npmignore"
+  ) {
     iconsVar = siNpm;
+  }
+  // EDITORCONFIG
+  else if (extension === "editorconfig") {
+    iconsVar = siEditorconfig;
   }
 
   //? -------- FRAMEWORK ---------
@@ -317,12 +359,6 @@ export function Icons(params: Readonly<Params>) {
     iconsVar = siVuedotjs;
   } else if (extension === "astro") {
     iconsVar = siAstro;
-  }
-  // COMPOSER
-  else if (extension === "lock") {
-    if (fileName === "composer") {
-      iconsVar = siComposer;
-    }
   }
 
   // --------- MISCELLANEOUS ---------

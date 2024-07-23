@@ -5,7 +5,7 @@ import { FileEntry, readDir } from "@tauri-apps/api/fs";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
-import { FileList } from "@/components/Card/FileList";
+import { Staging } from "@/components/Card/Staging";
 
 import * as git from "@/lib/git";
 
@@ -67,8 +67,8 @@ export default function Git() {
     });
 
     parent.forEach((child) => {
-      child.path = child.path?.replace(dir, "");
       delete child.name;
+      child.path = child.path?.replace(dir, "");
       if (child.children) {
         child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
         child.children.sort((a, b) => {
@@ -102,7 +102,7 @@ export default function Git() {
   }, [dir]);
   return (
     <div className="flex flex-col items-center gap-4">
-      <FileList
+      <Staging
         diffList={diffList}
         dir={dir}
         dirList={dirList}

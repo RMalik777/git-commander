@@ -11,8 +11,8 @@ export default function Layout({
   children,
 }: Readonly<{ children?: React.ReactNode }>) {
   return (
-    <div className="flex h-dvh max-h-dvh min-h-dvh flex-col overflow-hidden scroll-smooth antialiased">
-      <Provider store={store}>
+    <Provider store={store}>
+      <div className="flex h-dvh max-h-dvh min-h-dvh flex-col overflow-hidden scroll-smooth antialiased">
         <Toolbar />
         <div className="min-w-dvw flex h-fit flex-grow flex-row overflow-hidden">
           <Navbar />
@@ -21,7 +21,7 @@ export default function Layout({
           </main>
         </div>
         <Toaster />
-      </Provider>
-    </div>
+      </div>
+    </Provider>
   );
 }
