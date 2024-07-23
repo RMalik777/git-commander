@@ -6,8 +6,9 @@ import "./index.css";
 import Layout from "./routes/Layout";
 
 import Index from "./routes/index";
-import Settings from "./routes/pages/settings";
+import Staging from "./routes/pages/staging";
 import Folder from "./routes/pages/folder";
+import Settings from "./routes/pages/settings";
 import Help from "./routes/pages/help";
 
 import HelpLayout from "./routes/pages/help/Layout";
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/settings",
         element: <Settings />,
+      },
+      {
+        path: "/repo",
+        element: <Staging />,
       },
       {
         path: "/folder",
