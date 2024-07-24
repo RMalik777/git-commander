@@ -29,6 +29,8 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { Info, TriangleAlert } from "lucide-react";
 
+import { driver } from "driver.js";
+
 import * as git from "@/lib/git";
 
 const formSchema = z.object({
@@ -39,6 +41,8 @@ const formSchema = z.object({
 });
 
 export function Commit() {
+  const highlighter = driver({});
+
   const repoName = useAppSelector((state) => state.repo.name);
   const workDir = useAppSelector((state) => state.repo.directory);
   const userName = useAppSelector((state) => state.user.value);
@@ -135,8 +139,35 @@ export function Commit() {
                   className={userName == "" ? "block" : "hidden"}>
                   <TriangleAlert className="h-4 w-4" />
                   <AlertTitle>Warning</AlertTitle>
-                  <AlertDescription>
+                  <AlertDescription className="flex flex-col items-start gap-1">
                     You haven&apos;t set your username.
+                    <NavLink to="/settings">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className=""
+                        onClick={() => {
+                          setTimeout(() => {
+                            highlighter.highlight({
+                              element: "#usernameInput",
+                              popover: {
+                                title: "Username Configuration",
+                                description: "Add your username here",
+                                showButtons: ["close"],
+                                onCloseClick: () => {
+                                  highlighter.destroy();
+                                },
+                              },
+                            });
+                            setTimeout(() => {
+                              highlighter.destroy();
+                            }, 5000);
+                          }, 1);
+                        }}>
+                        Add Username
+                      </Button>
+                    </NavLink>
                   </AlertDescription>
                 </Alert>
                 {diffChanges?.length != 0 ?
