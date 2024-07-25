@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { open } from "@tauri-apps/api/dialog";
-import { exists, FileEntry, readDir } from "@tauri-apps/api/fs";
+import { exists, FileEntry } from "@tauri-apps/api/fs";
 import { open as openFolder } from "@tauri-apps/api/shell";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -27,9 +27,8 @@ import {
 
 import { Info } from "lucide-react";
 
-import * as git from "@/lib/git";
-import * as func from "@/lib/functions";
 import * as dirFunc from "@/lib/directory";
+import * as git from "@/lib/git";
 
 import { Clone } from "@/components/Dialog/Clone";
 

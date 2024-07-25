@@ -7,8 +7,8 @@ import { setRepo } from "@/lib/Redux/repoSlice";
 
 import { FileList } from "@/components/Card/FileList";
 
-import * as git from "@/lib/git";
 import * as dirFunc from "@/lib/directory";
+import * as git from "@/lib/git";
 
 export default function Git() {
   const dispatch = useAppDispatch();

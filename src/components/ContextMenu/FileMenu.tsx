@@ -135,7 +135,7 @@ export function FileMenu({
           <ContextMenuItem
             inset
             onClick={async () => {
-              await writeText(dir  + target.path);
+              await writeText(dir + target.path);
             }}>
             Copy Path
           </ContextMenuItem>

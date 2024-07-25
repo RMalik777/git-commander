@@ -25,7 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { RefreshCw, Lightbulb } from "lucide-react";
+import { Lightbulb, RefreshCw } from "lucide-react";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
 import * as git from "@/lib/git";

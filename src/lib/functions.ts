@@ -1,4 +1,4 @@
-import { readTextFile, FileEntry, exists, readDir } from "@tauri-apps/api/fs";
+import { FileEntry, exists, readTextFile } from "@tauri-apps/api/fs";
 import {
   isPermissionGranted,
   requestPermission,
