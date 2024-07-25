@@ -129,13 +129,13 @@ export function FileMenu({
           <ContextMenuItem
             inset
             disabled={target.children ? true : false}
-            onClick={async () => await open(dir + "\\" + target.path)}>
+            onClick={async () => await open(dir + target.path)}>
             Open File
           </ContextMenuItem>
           <ContextMenuItem
             inset
             onClick={async () => {
-              await writeText(dir + "\\" + target.path);
+              await writeText(dir  + target.path);
             }}>
             Copy Path
           </ContextMenuItem>
