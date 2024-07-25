@@ -29,6 +29,7 @@ import { Info } from "lucide-react";
 
 import * as git from "@/lib/git";
 import * as func from "@/lib/functions";
+import * as dirFunc from "@/lib/directory";
 
 import { Clone } from "@/components/Dialog/Clone";
 
@@ -105,13 +106,7 @@ export function RepoView() {
         dispatch(setRepo({ name: newParent.split("\\").pop() }));
         setParentDialog(true);
       }
-      try {
-        const dir = await readDir(toOpen, { recursive: true });
-        const sorted = await func.sortAndFilter(dir, toOpen);
-        localStorage.setItem("dirList", JSON.stringify(sorted));
-      } catch (error) {
-        console.error(error);
-      }
+      await dirFunc.getAllChildDir(toOpen);
     }
   }
 

@@ -1,15 +1,10 @@
-import { readTextFile, FileEntry, exists } from "@tauri-apps/api/fs";
+import { readTextFile, FileEntry, exists, readDir } from "@tauri-apps/api/fs";
 import {
   isPermissionGranted,
   requestPermission,
   sendNotification,
 } from "@tauri-apps/api/notification";
-import { Command } from "@tauri-apps/api/shell";
 import { appWindow } from "@tauri-apps/api/window";
-
-export async function cd(path: string) {
-  return await new Command("cd", [path]).execute();
-}
 
 export async function displayNotificationNotFocus(
   title: string,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { FileEntry, readDir } from "@tauri-apps/api/fs";
+import { FileEntry } from "@tauri-apps/api/fs";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
@@ -8,7 +8,7 @@ import { setRepo } from "@/lib/Redux/repoSlice";
 import { FileList } from "@/components/Card/FileList";
 
 import * as git from "@/lib/git";
-import * as func from "@/lib/functions";
+import * as dirFunc from "@/lib/directory";
 
 export default function Git() {
   const dispatch = useAppDispatch();
@@ -59,22 +59,10 @@ export default function Git() {
   const [dirList, setDirList] = useState<FileEntry[]>(
     JSON.parse(localStorage.getItem("dirList") ?? "[]")
   );
- 
-  async function getAllChildDir(repo: string) {
-    try {
-      const directory = await readDir(repo, { recursive: true });
-      const sorted = await func.sortAndFilter(directory, dir);
-      localStorage.setItem("dirList", JSON.stringify(sorted));
-      return sorted;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  }
 
   useEffect(() => {
     async function setDirectory() {
-      setDirList(await getAllChildDir(dir));
+      setDirList(await dirFunc.getAllChildDir(dir));
     }
     if (dir === "") return;
     setDirectory();
