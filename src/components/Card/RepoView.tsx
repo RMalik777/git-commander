@@ -28,6 +28,7 @@ import {
 import { Info } from "lucide-react";
 
 import * as git from "@/lib/git";
+import * as func from "@/lib/functions";
 
 import { Clone } from "@/components/Dialog/Clone";
 
@@ -86,29 +87,6 @@ export function RepoView() {
     }
     getStaged();
   }, [dir]);
-  function recursiveSort(parent: FileEntry[]) {
-    parent.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-    parent.sort((a, b) => {
-      if (a.children && !b.children) return -1;
-      if (!a.children && b.children) return 1;
-      return 0;
-    });
-
-    parent.forEach((child) => {
-      delete child.name;
-      child.path = child.path?.replace(dir, "");
-      if (child.children) {
-        child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-        child.children.sort((a, b) => {
-          if (a.children && !b.children) return -1;
-          if (!a.children && b.children) return 1;
-          return 0;
-        });
-        recursiveSort(child.children);
-      }
-    });
-    return parent;
-  }
 
   async function openFile() {
     const toOpen = await open({
@@ -129,8 +107,8 @@ export function RepoView() {
       }
       try {
         const dir = await readDir(toOpen, { recursive: true });
-        recursiveSort(dir);
-        localStorage.setItem("dirList", JSON.stringify(dir));
+        const sorted = await func.sortAndFilter(dir, toOpen);
+        localStorage.setItem("dirList", JSON.stringify(sorted));
       } catch (error) {
         console.error(error);
       }

@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,7 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Lightbulb } from "lucide-react";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
 import * as git from "@/lib/git";
@@ -233,6 +234,21 @@ export function FileList({
       <CardContent className="overflow-auto pl-4 pt-3">
         {dirList ? recursiveDirRenderer(dirList, true) : null}
       </CardContent>
+      <CardFooter className="flex justify-center">
+        <div className="flex w-fit flex-col items-center justify-center gap-1 rounded border border-blue-500 bg-blue-200/20 p-2 dark:bg-blue-700/20 xs:flex-row">
+          <Lightbulb
+            size={20}
+            className="min-w-fit text-blue-600 dark:text-blue-500"
+          />
+          <p className="text-center text-neutral-600 dark:text-neutral-300">
+            File and folder referenced inside{" "}
+            <code className="rounded bg-neutral-100/50 p-1 dark:bg-neutral-900/50">
+              .gitignore
+            </code>{" "}
+            will not be shown.
+          </p>
+        </div>
+      </CardFooter>
     </Card>
   );
 }
