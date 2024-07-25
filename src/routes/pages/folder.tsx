@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
-import { FileEntry, readDir } from "@tauri-apps/api/fs";
+import { FileEntry } from "@tauri-apps/api/fs";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
 import { FileList } from "@/components/Card/FileList";
 
+import * as dirFunc from "@/lib/directory";
 import * as git from "@/lib/git";
 
 export default function Git() {
@@ -58,44 +59,10 @@ export default function Git() {
   const [dirList, setDirList] = useState<FileEntry[]>(
     JSON.parse(localStorage.getItem("dirList") ?? "[]")
   );
-  function recursiveSort(parent: FileEntry[]) {
-    parent.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-    parent.sort((a, b) => {
-      if (a.children && !b.children) return -1;
-      if (!a.children && b.children) return 1;
-      return 0;
-    });
-
-    parent.forEach((child) => {
-      child.path = child.path?.replace(dir, "");
-      delete child.name;
-      if (child.children) {
-        child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-        child.children.sort((a, b) => {
-          if (a.children && !b.children) return -1;
-          if (!a.children && b.children) return 1;
-          return 0;
-        });
-        recursiveSort(child.children);
-      }
-    });
-    return parent;
-  }
-  async function getAllChildDir(repo: string) {
-    try {
-      const dir = await readDir(repo, { recursive: true });
-      recursiveSort(dir);
-      localStorage.setItem("dirList", JSON.stringify(dir));
-      return dir;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  }
 
   useEffect(() => {
     async function setDirectory() {
-      setDirList(await getAllChildDir(dir));
+      setDirList(await dirFunc.getAllChildDir(dir));
     }
     if (dir === "") return;
     setDirectory();

@@ -2,11 +2,13 @@ import DOMPurify from "dompurify";
 
 import {
   AppWindow,
+  Box,
   Braces,
   Database,
   File,
   FileCode,
   FileMusic,
+  FileSpreadsheet,
   FileText,
   FolderArchive,
   Image,
@@ -35,6 +37,7 @@ import {
   siHtml5,
   siJavascript,
   siJenkins,
+  siJupyter,
   siKotlin,
   siLess,
   siLit,
@@ -127,6 +130,8 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siVite;
     } else if (fileName?.startsWith("vitest")) {
       iconsVar = siVitest;
+    } else if (fileName?.startsWith(".prettier")) {
+      iconsVar = siPrettier;
     } else if (fileName?.startsWith("eslint") || fileName === "eslintrc") {
       iconsVar = siEslint;
     } else if (
@@ -139,12 +144,14 @@ export function Icons(params: Readonly<Params>) {
       fileName === "postcss.config"
     ) {
       iconsVar = siPostcss;
+    } else if (fileName?.startsWith("astro") || fileName === "astro.config") {
+      iconsVar = siAstro;
     } else {
       iconsVar = siTypescript;
     }
   }
   // MARKDOWN
-  else if (extension === "md") {
+  else if (extension === "md" || extension === "markdown") {
     iconsVar = siMarkdown;
   }
   // C
@@ -183,6 +190,10 @@ export function Icons(params: Readonly<Params>) {
   else if (extension === "py") {
     iconsVar = siPython;
   }
+  // JUPYTER
+  else if (extension === "ipynb") {
+    iconsVar = siJupyter;
+  }
   // KOTLIN
   else if (extension === "kt") {
     iconsVar = siKotlin;
@@ -196,7 +207,7 @@ export function Icons(params: Readonly<Params>) {
     iconsVar = siSwift;
   }
   // TEXT
-  else if (extension === "txt") {
+  else if (extension === "txt" || extension === "docx" || extension === "doc") {
     return <FileText className={iconsClass} />;
   }
   // GO
@@ -445,6 +456,19 @@ export function Icons(params: Readonly<Params>) {
   // LICENSE
   else if (extension === "license") {
     return <Scale className={iconsClass} />;
+  }
+  // 3D
+  else if (extension === "3d" || extension === "obj") {
+    return <Box className={iconsClass} />;
+  }
+  // CSV
+  else if (
+    extension === "csv" ||
+    extension === "tsv" ||
+    extension === "xls" ||
+    extension === "xlsx"
+  ) {
+    return <FileSpreadsheet className={iconsClass} />;
   }
 
   return iconsVar ?

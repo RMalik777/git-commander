@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { open } from "@tauri-apps/api/dialog";
-import { exists, FileEntry, readDir } from "@tauri-apps/api/fs";
+import { exists, FileEntry } from "@tauri-apps/api/fs";
 import { open as openFolder } from "@tauri-apps/api/shell";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -27,6 +27,7 @@ import {
 
 import { Info } from "lucide-react";
 
+import * as dirFunc from "@/lib/directory";
 import * as git from "@/lib/git";
 
 import { Clone } from "@/components/Dialog/Clone";
@@ -86,29 +87,6 @@ export function RepoView() {
     }
     getStaged();
   }, [dir]);
-  function recursiveSort(parent: FileEntry[]) {
-    parent.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-    parent.sort((a, b) => {
-      if (a.children && !b.children) return -1;
-      if (!a.children && b.children) return 1;
-      return 0;
-    });
-
-    parent.forEach((child) => {
-      delete child.name;
-      child.path = child.path?.replace(dir, "");
-      if (child.children) {
-        child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-        child.children.sort((a, b) => {
-          if (a.children && !b.children) return -1;
-          if (!a.children && b.children) return 1;
-          return 0;
-        });
-        recursiveSort(child.children);
-      }
-    });
-    return parent;
-  }
 
   async function openFile() {
     const toOpen = await open({
@@ -127,13 +105,7 @@ export function RepoView() {
         dispatch(setRepo({ name: newParent.split("\\").pop() }));
         setParentDialog(true);
       }
-      try {
-        const dir = await readDir(toOpen, { recursive: true });
-        recursiveSort(dir);
-        localStorage.setItem("dirList", JSON.stringify(dir));
-      } catch (error) {
-        console.error(error);
-      }
+      await dirFunc.getAllChildDir(toOpen);
     }
   }
 
