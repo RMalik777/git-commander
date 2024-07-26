@@ -1,3 +1,19 @@
+## [1.8.3](https://github.com/RMalik777/git-commander/compare/v1.8.2...v1.8.3) (2024-07-25)
+
+
+### Bug Fixes
+
+* double slash when copying path ([b7c3b66](https://github.com/RMalik777/git-commander/commit/b7c3b66e5bd8fe0bfd1f8e23f4f3fc21178887d5))
+* ignore file and folder inside git ignore ([06ca94e](https://github.com/RMalik777/git-commander/commit/06ca94e7adcc5abd012b62f4576460f38ad331dd))
+* show button to guide when no username is present ([891a4c9](https://github.com/RMalik777/git-commander/commit/891a4c9410106186f36e393c25b6dbaf9bc82a99))
+
+## [1.8.2](https://github.com/RMalik777/git-commander/compare/v1.8.1...v1.8.2) (2024-07-23)
+
+
+### Bug Fixes
+
+* **tutorial:** change tutorial address ([bdac7f5](https://github.com/RMalik777/git-commander/commit/bdac7f57d93c4968ddd9fb3940c6ce804252f35e))
+
 ## [1.8.1](https://github.com/RMalik777/git-commander/compare/v1.8.0...v1.8.1) (2024-07-23)
 
 
