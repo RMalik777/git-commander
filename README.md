@@ -51,6 +51,8 @@ If you haven't download the app, you can download the latest version from the [r
 
 ### Initial Setup
 
+Interactive tutorial available inside the application. Access the tutorial by clicking the `Help` button or ![HelpIcon](https://unpkg.com/lucide-static@latest/icons/circle-help.svg) on the left menu bar.
+
 ### Functionality
 
 There are a couple things you can do with Git Commander:
@@ -82,19 +84,31 @@ Undo last commit but keeping the changes made.
 
 ##### From Local Repo
 
-If you already clone a repository, you can open it by clicking the `Open Repository` button.
+If you already clone a repository, you can open it by clicking the `Open Repository` button. A dialog will pop up and you can select location where you store your repository.
 
 ##### From Remote Repo
 
-If you haven't clone a repository, you can clone it by clicking the `Clone Repository` button. A dialog will appear and you can input the repository URL and the local directory you want to clone the repository to.
+If you haven't clone a repository, you can clone it by clicking the `Clone Repository` button. A dialog will appear and you can input the repository URL or choose from dropdown (which you can add your own) and the local directory you want to clone the repository to.
+
+##### Close Repo
+
+If you close the repo, it won't delete the repo. The repo will still be stored in the same location you saved it. To delete your repo, you have to delete it manually from the file explorer.
+
+#### Staging
+
+Before you can commit a file, you need to stage (add) it first. To stage the changes you've made, go to staging page and click the plus icon beside the file you want to stage.
 
 #### Commit
 
-To commit changes, enter the commit message in the input field and click the `Commit` button. The changes will be committed to the local repository. After you commit the changes, you can push the changes to the remote repository by clicking the `Push` icon.
+To commit changes, enter the commit message in the input field, make sure you follow the commit message format. After that, click the `Commit` button. The changes will be committed to the local repository. After you commit the changes, you can push the changes to the remote repository by clicking the `Push` icon.
 
 ## Development
 
 ### Prerequisite
+
+### IDE
+
+Recommended IDE: [Visual Studio Code](https://code.visualstudio.com/)
 
 #### Dependencies
 
