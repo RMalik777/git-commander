@@ -6,11 +6,13 @@
 version: 2
 updates:
   - package-ecosystem: "npm" # See documentation for possible values
+    target-branch: "dev"
     directory: "/" # Location of package manifests
     schedule:
       interval: "monthly"
 
   - package-ecosystem: "cargo" # See documentation for possible values
+    target-branch: "dev"
     directory: "/src-tauri" # Location of package manifests
     schedule:
       interval: "monthly"
