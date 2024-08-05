@@ -61,6 +61,10 @@ There are a couple things you can do with Git Commander:
 
 The quick access toolbar is located at the top of the app. It contains the following buttons:
 
+##### Current Repository and Branch
+
+The top centre of the app displays the current repository and branch you are in. If you haven't opened any repository, it will display `No Repository Opened`.
+
 ##### Branch ![Branch](https://unpkg.com/lucide-static@latest/icons/git-branch.svg)
 
 To change branch in the repository, click the icon. After that, the popup will appear and you can choose the branch you want to switch to. If there are still unstaged changes, you can't switch branch before committing the changes.
@@ -88,7 +92,7 @@ If you already clone a repository, you can open it by clicking the `Open Reposit
 
 ##### From Remote Repo
 
-If you haven't clone a repository, you can clone it by clicking the `Clone Repository` button. A dialog will appear and you can input the repository URL or choose from dropdown (which you can add your own) and the local directory you want to clone the repository to.
+If you haven't cloned a repository, you can clone it by clicking the `Clone` button. A dialog will appear, and you can input the repository URL or choose from dropdown (which you can add your own) and the local directory you want to clone the repository to.
 
 ##### Close Repo
 
