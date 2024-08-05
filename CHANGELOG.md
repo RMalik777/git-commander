@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/RMalik777/git-commander/compare/v1.8.3...v1.9.0) (2024-08-05)
+
+
+### Features
+
+* add document for guide ([273db1c](https://github.com/RMalik777/git-commander/commit/273db1cb01cd248a05e044828f282b6789033e38))
+
 ## [1.8.3](https://github.com/RMalik777/git-commander/compare/v1.8.2...v1.8.3) (2024-07-25)
 
 
