@@ -1,7 +1,8 @@
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, FileText } from "lucide-react";
 
 import { HelpNavbar } from "@/components/Navbar/HelpNavbar";
 import { Separator } from "@/components/ui/separator";
+import { buttonVariants } from "@/components/ui/button";
 
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +12,18 @@ import "./popover.css";
 
 export default function Tutorial() {
   const navigate = useNavigate();
-
+  const document = [
+    {
+      id: "EN",
+      title: "User Documentation (EN)",
+      download: "/src/assets/Documentation (EN).pdf",
+    },
+    {
+      id: "ID",
+      title: "User Documentation (ID)",
+      download: "/src/assets/Documentation (ID).pdf",
+    },
+  ];
   const tutorialApp = [
     {
       id: "TB",
@@ -570,44 +582,76 @@ export default function Tutorial() {
     <>
       <HelpNavbar page="Tutorial" Icon={GraduationCap} />
       <div className="mt-8 flex flex-col gap-8">
-        <div className="flex flex-col gap-1">
-          <h2 className="px-4 text-xl font-medium">App</h2>
-          <Separator className="" />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {tutorialApp.map((item) => {
+        <div className="flex flex-col gap-1 px-4">
+          <h1 className="text-3xl font-medium">Document</h1>
+          <div className="flex flex-row items-center gap-2">
+            {document.map((item) => {
               return (
-                <button
+                <div
                   key={item.id}
-                  className="flex flex-col items-start gap-1 rounded p-4 duration-200 ease-out hover:bg-neutral-50 hover:dark:bg-neutral-900"
-                  onClick={item.tour}>
-                  <h3 className="text-left text-lg font-medium tracking-tight">
-                    {item.title}
-                  </h3>
-                  <p className="text-left">{item.description}</p>
-                </button>
+                  className="flex w-full flex-col items-start gap-2 rounded border p-2">
+                  <div className="flex items-center gap-1">
+                    <FileText className="" size={18} />
+                    <p className="text-lg font-medium">{item.title}</p>
+                  </div>
+                  {/* Add file size information */}
+                  <a
+                    className={
+                      buttonVariants({
+                        variant: "outline",
+                        size: "sm",
+                      }) + " ml-6"
+                    }
+                    href={item.download}
+                    download>
+                    Download
+                  </a>
+                </div>
               );
             })}
           </div>
         </div>
-        <div className="flex flex-col gap-1">
-          <h2 className="px-4 text-xl font-medium sm:col-span-2">
-            Git Command
-          </h2>
-          <Separator className="" />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {tutorialGit.map((item) => {
-              return (
-                <button
-                  key={item.id}
-                  className="flex flex-col items-start gap-1 rounded p-4 duration-200 ease-out hover:bg-neutral-50 hover:dark:bg-neutral-900"
-                  onClick={item.tour}>
-                  <h3 className="text-left text-lg font-medium tracking-tight">
-                    {item.title}
-                  </h3>
-                  <p className="text-left">{item.description}</p>
-                </button>
-              );
-            })}
+        <div className="flex flex-col gap-4">
+          <h1 className="px-4 text-3xl font-medium">Interactive Tutorial</h1>
+          <div className="flex flex-col gap-1">
+            <h2 className="px-4 text-xl font-medium">App</h2>
+            <Separator className="" />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {tutorialApp.map((item) => {
+                return (
+                  <button
+                    key={item.id}
+                    className="flex flex-col items-start gap-1 rounded p-4 duration-200 ease-out hover:bg-neutral-50 hover:dark:bg-neutral-900"
+                    onClick={item.tour}>
+                    <h3 className="text-left text-lg font-medium tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-left">{item.description}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <h2 className="px-4 text-xl font-medium sm:col-span-2">
+              Git Command
+            </h2>
+            <Separator className="" />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {tutorialGit.map((item) => {
+                return (
+                  <button
+                    key={item.id}
+                    className="flex flex-col items-start gap-1 rounded p-4 duration-200 ease-out hover:bg-neutral-50 hover:dark:bg-neutral-900"
+                    onClick={item.tour}>
+                    <h3 className="text-left text-lg font-medium tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-left">{item.description}</p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
