@@ -224,7 +224,7 @@ export default function Tutorial() {
                   description:
                     "Click on the Clone button to clone a git repository from a remote server.",
                   onNextClick: () => {
-                    (document.querySelector(".CR_1") as HTMLElement)?.click();
+                    (window.document.querySelector(".CR_1") as HTMLElement)?.click();
                     setTimeout(() => tour.moveNext(), 1);
                   },
                 },
@@ -236,7 +236,7 @@ export default function Tutorial() {
                   description:
                     "Choose the repository URL you want clone from the dropdown. Or you can enter the repository URL you want to clone from the remote server.",
                   onPrevClick: () => {
-                    (document.querySelector("CR_2A") as HTMLElement)?.click();
+                    (window.document.querySelector("CR_2A") as HTMLElement)?.click();
                     tour.movePrevious();
                   },
                 },
@@ -313,7 +313,7 @@ export default function Tutorial() {
                   description:
                     "The path of the file relative to the repository.",
                   onNextClick: () => {
-                    const el = document.querySelector(".STG_5A");
+                    const el = window.document.querySelector(".STG_5A");
                     el?.classList.add("flex");
                     el?.classList.remove("hidden");
                     setTimeout(() => tour.moveNext(), 1);
@@ -327,7 +327,7 @@ export default function Tutorial() {
                   description:
                     "Hover over the file name to see the action available.",
                   onPrevClick: () => {
-                    const el = document.querySelector(".STG_5A");
+                    const el = window.document.querySelector(".STG_5A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
                     setTimeout(() => tour.movePrevious(), 1);
@@ -348,10 +348,10 @@ export default function Tutorial() {
                   description:
                     "Clicking the plus icon beside the file name to stage (add) file.",
                   onNextClick: () => {
-                    const item = document.querySelector(".STG_5A");
+                    const item = window.document.querySelector(".STG_5A");
                     item?.classList.add("hidden");
                     item?.classList.remove("flex");
-                    const el = document.querySelector(".STG_8A");
+                    const el = window.document.querySelector(".STG_8A");
                     el?.classList.add("flex");
                     el?.classList.remove("hidden");
                     setTimeout(() => tour.moveNext(), 1);
@@ -365,16 +365,16 @@ export default function Tutorial() {
                   description:
                     "Click to plus icon on dropdown to stage all the changes at once. This is equivalent to git add .",
                   onPrevClick: () => {
-                    const item = document.querySelector(".STG_5A");
+                    const item = window.document.querySelector(".STG_5A");
                     item?.classList.add("flex");
                     item?.classList.remove("hidden");
-                    const el = document.querySelector(".STG_8A");
+                    const el = window.document.querySelector(".STG_8A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
                     setTimeout(() => tour.movePrevious(), 1);
                   },
                   onNextClick: () => {
-                    const el = document.querySelector(".STG_5A");
+                    const el = window.document.querySelector(".STG_5A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
                     setTimeout(() => tour.moveNext(), 1);
@@ -386,7 +386,7 @@ export default function Tutorial() {
                   title: "Staging Done",
                   description: "You can now commit the changes.",
                   onPrevClick: () => {
-                    const item = document.querySelector(".STG_5A");
+                    const item = window.document.querySelector(".STG_5A");
                     item?.classList.add("flex");
                     item?.classList.remove("hidden");
                     setTimeout(() => tour.movePrevious(), 1);
@@ -439,7 +439,7 @@ export default function Tutorial() {
                   description:
                     "The path of the file relative to the repository.",
                   onNextClick: () => {
-                    const el = document.querySelector(".UST_5A");
+                    const el = window.document.querySelector(".UST_5A");
                     el?.classList.add("flex");
                     el?.classList.remove("hidden");
                     setTimeout(() => tour.moveNext(), 1);
@@ -453,7 +453,7 @@ export default function Tutorial() {
                   description:
                     "Hover over the file name to see the action available.",
                   onPrevClick: () => {
-                    const el = document.querySelector(".UST_5A");
+                    const el = window.document.querySelector(".UST_5A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
                     setTimeout(() => tour.movePrevious(), 1);
@@ -474,10 +474,10 @@ export default function Tutorial() {
                   description:
                     "Clicking the minus icon beside the file name to unstage file.",
                   onNextClick: () => {
-                    const item = document.querySelector(".UST_5A");
+                    const item = window.document.querySelector(".UST_5A");
                     item?.classList.add("hidden");
                     item?.classList.remove("flex");
-                    const el = document.querySelector(".UST_8A");
+                    const el = window.document.querySelector(".UST_8A");
                     el?.classList.add("flex");
                     el?.classList.remove("hidden");
                     setTimeout(() => tour.moveNext(), 1);
@@ -491,16 +491,16 @@ export default function Tutorial() {
                   description:
                     "Click to minus icon on dropdown to unstage all the changes at once.",
                   onPrevClick: () => {
-                    const item = document.querySelector(".UST_5A");
+                    const item = window.document.querySelector(".UST_5A");
                     item?.classList.add("flex");
                     item?.classList.remove("hidden");
-                    const el = document.querySelector(".UST_8A");
+                    const el = window.document.querySelector(".UST_8A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
                     setTimeout(() => tour.movePrevious(), 1);
                   },
                   onNextClick: () => {
-                    const el = document.querySelector(".UST_5A");
+                    const el = window.document.querySelector(".UST_5A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
                     setTimeout(() => tour.moveNext(), 1);
@@ -512,7 +512,7 @@ export default function Tutorial() {
                   title: "Unstaging Done",
                   description: "You can now continue working on the changes.",
                   onPrevClick: () => {
-                    const item = document.querySelector(".UST_5A");
+                    const item = window.document.querySelector(".UST_5A");
                     item?.classList.add("flex");
                     item?.classList.remove("hidden");
                     setTimeout(() => tour.movePrevious(), 1);
