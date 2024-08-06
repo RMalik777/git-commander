@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/RMalik777/git-commander/compare/v1.9.0...v1.9.1) (2024-08-06)
+
+
+### Bug Fixes
+
+* tutorial not highlight the desired items ([fcb095a](https://github.com/RMalik777/git-commander/commit/fcb095a0dafa3262f9fb2cfb64ffd27101101529))
+
 # [1.9.0](https://github.com/RMalik777/git-commander/compare/v1.8.3...v1.9.0) (2024-08-05)
 
 
