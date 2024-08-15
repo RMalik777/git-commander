@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { Toolbar } from "@/components/Tools/Toolbar";
 import { Toaster } from "@/components/ui/toaster";
+import { TerminalView } from "@/components/Tools/TerminalView";
 
 export default function Layout({
   children,
@@ -20,6 +21,7 @@ export default function Layout({
             {children ?? <Outlet />}
           </main>
         </div>
+        <TerminalView />
         <Toaster />
       </div>
     </Provider>

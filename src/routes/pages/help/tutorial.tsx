@@ -224,7 +224,9 @@ export default function Tutorial() {
                   description:
                     "Click on the Clone button to clone a git repository from a remote server.",
                   onNextClick: () => {
-                    (window.document.querySelector(".CR_1") as HTMLElement)?.click();
+                    (
+                      window.document.querySelector(".CR_1") as HTMLElement
+                    )?.click();
                     setTimeout(() => tour.moveNext(), 1);
                   },
                 },
@@ -236,7 +238,9 @@ export default function Tutorial() {
                   description:
                     "Choose the repository URL you want clone from the dropdown. Or you can enter the repository URL you want to clone from the remote server.",
                   onPrevClick: () => {
-                    (window.document.querySelector("CR_2A") as HTMLElement)?.click();
+                    (
+                      window.document.querySelector("CR_2A") as HTMLElement
+                    )?.click();
                     tour.movePrevious();
                   },
                 },
