@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/RMalik777/git-commander/compare/v1.9.1...v1.10.0) (2024-08-15)
+
+
+### Features
+
+* add integrated terminal ([52ffccf](https://github.com/RMalik777/git-commander/commit/52ffccfdb9133933e8cf098a5bb35dac481a93e9))
+
 ## [1.9.1](https://github.com/RMalik777/git-commander/compare/v1.9.0...v1.9.1) (2024-08-06)
 
 
