@@ -6,9 +6,9 @@ mod handler;
 mod model;
 mod repository;
 mod schema;
+mod terminal;
 
 use handler::remote_repo_handler::*;
-mod terminal;
 use portable_pty::{native_pty_system, PtySize};
 use std::{io::BufReader, sync::Arc};
 use tauri::async_runtime::Mutex as AsyncMutex;

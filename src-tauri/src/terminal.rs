@@ -19,20 +19,20 @@ pub async fn async_create_shell(
     state: State<'_, AppState>,
     directory: String,
 ) -> Result<(), String> {
-    #[cfg(target_os = "windows")]
-    let mut cmd = CommandBuilder::new("cmd.exe");
-    cmd.cwd(directory);
-
-    #[cfg(not(target_os = "windows"))]
-    let mut cmd = CommandBuilder::new("bash");
-
-    // add the $TERM env variable so we can use clear and other commands
+    let mut cmd;
 
     #[cfg(target_os = "windows")]
-    cmd.env("TERM", "cygwin");
+    {
+        cmd = CommandBuilder::new("cmd.exe");
+        cmd.cwd(directory);
+        cmd.env("TERM", "cygwin");
+    }
 
     #[cfg(not(target_os = "windows"))]
-    cmd.env("TERM", "xterm-256color");
+    {
+        cmd = CommandBuilder::new("bash");
+        cmd.env("TERM", "xterm-256color");
+    }
 
     let mut child = state
         .pty_pair
