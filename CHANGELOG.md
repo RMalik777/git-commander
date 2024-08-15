@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/RMalik777/git-commander/compare/v1.10.0...v1.10.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* terminal cant be closed ([d52f8c4](https://github.com/RMalik777/git-commander/commit/d52f8c48e73beb9393677fabf641a3ff7b31b8e4))
+
 # [1.10.0](https://github.com/RMalik777/git-commander/compare/v1.9.1...v1.10.0) (2024-08-15)
 
 
