@@ -65,7 +65,7 @@ export function TerminalView() {
         id="terminal"
         ref={terminalElement}
         className={
-          (openTerminal ? "block" : "hidden") + "h-full max-h-60 w-full"
+          (openTerminal ? "block" : "hidden") + " h-full max-h-60 w-full"
         }></div>
     </footer>
   );
