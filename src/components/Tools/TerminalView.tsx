@@ -50,13 +50,18 @@ export function TerminalView() {
     fitTerminal(term, fitAddon);
   }, [dir]);
 
-  const [openTerminal, setOpenTerminal] = useState(true);
+  const [openTerminal, setOpenTerminal] = useState(
+    localStorage.getItem("openTerminal") === "true"
+  );
   return (
     <footer className="flex h-fit max-h-72 flex-col items-end gap-1 border">
       <Button
         variant="outline"
         className="flex w-fit gap-1 rounded-none font-mono"
-        onClick={() => setOpenTerminal(!openTerminal)}>
+        onClick={() => {
+          setOpenTerminal(!openTerminal);
+          localStorage.setItem("openTerminal", (!openTerminal).toString());
+        }}>
         <TerminalIcon size={20} />
         Terminal
       </Button>
