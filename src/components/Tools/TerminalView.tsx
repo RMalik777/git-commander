@@ -54,7 +54,7 @@ export function TerminalView() {
     localStorage.getItem("openTerminal") === "true"
   );
   return (
-    <footer className="flex h-fit max-h-72 flex-col items-end gap-1 border">
+    <footer className="flex h-fit max-h-72 flex-col items-end gap-1 border dark:border-neutral-700">
       <Button
         variant="outline"
         className="flex w-fit gap-1 rounded-none font-mono"
@@ -70,7 +70,8 @@ export function TerminalView() {
         id="terminal"
         ref={terminalElement}
         className={
-          (openTerminal ? "block" : "hidden") + " h-full max-h-60 w-full"
+          (openTerminal ? "block" : "hidden") +
+          " h-full max-h-60 min-h-52 w-full"
         }></div>
     </footer>
   );
