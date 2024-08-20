@@ -274,6 +274,60 @@ Types available inside `/src/lib/Types/repo.ts`
 | `getRepoById`          | `id`                 | `Promise<RepoFormat>`   |
 | `insertIntoRepo`       | `repoName`,`repoUrl` | `Promise<void>`         |
 
+### Terminal
+
+Adapted from [tauri-terminal](https://github.com/marc2332/tauri-terminal).\
+This use [xterm.js](https://xtermjs.org/) for the terminal. The terminal is located inside `/src/components/Tools/TerminalView.tsx` for the View Components, `/src/lib/terminalFunc.ts` for the Terminal Function. Terminal Function will invoke the handler function inside rust file located in `/src-tauri/src/terminal.rs`.
+
+Before you start development, turn off [React Strict Mode](https://react.dev/reference/react/StrictMode). React Strict Mode will cause the terminal to run twice. To turn off React Strict Mode, go to `/src/index.tsx` and remove the `<React.StrictMode>` tag in `/src/main.tsx`.
+
+```diff
+ReactDOM.createRoot(document.getElementById("root")!).render(
+-  <React.StrictMode>
+    <RouterProvider router={router} />
+-  </React.StrictMode>
+);
+```
+
+> [!NOTE]
+> Remember to add `<React.StrictMode>` again after you done with the terminal development to continue using Strict Mode.
+
+#### Default Behaviour
+
+##### Windows
+
+The default terminal on Windows is `cmd.exe`. If you want to change the terminal to `powershell` or `bash`, you can change the terminal inside `/src-tauri/src/terminal.rs`.
+
+```rust
+#[cfg(target_os = "windows")]
+    {
+        cmd = CommandBuilder::new("cmd.exe");
+        cmd.cwd(directory);
+        cmd.env("TERM", "cygwin");
+    }
+```
+
+##### Linux and MacOS
+
+> [!IMPORTANT]
+> The terminal is only tested in Windows. Linux and MacOS is untested and may not work at all.
+
+The default terminal on Linux and MacOS is `bash`. If you want to change the terminal, you can change it inside `/src-tauri/src/terminal.rs`.
+
+```rust
+ #[cfg(not(target_os = "windows"))]
+    {
+        cmd = CommandBuilder::new("bash");
+        cmd.env("TERM", "xterm-256color");
+    }
+```
+
+#### Known Issue
+
+- Terminal sizing will be off if you hide the terminal, resize the window and the show terminal again. To fix this, resize the window after you show the terminal, it should automatically resize the terminal.
+- Spacing between the terminal and the input field is not consistent.
+- After changing repository, the terminal will not clear the screen.
+
 ### Backend (Rust)
 
 ### Database
