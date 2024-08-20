@@ -324,7 +324,7 @@ The default terminal on Linux and MacOS is `bash`. If you want to change the ter
 
 #### Known Issue
 
-- Terminal sizing will be off if you hide the terminal, resize the window and the show terminal again. To fix this, resize the window after you show the terminal, it should automatically resize the terminal.
+- Terminal sizing will be off if you hide the terminal, resize the window, and then show terminal again. **Workaround:** resize the window after you show the terminal, it should automatically resize the terminal.
 - Spacing between the terminal and the input field is not consistent.
 - After changing repository, the terminal will not clear the screen.
 
