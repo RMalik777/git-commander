@@ -247,7 +247,6 @@ export function RepoView() {
             localStorage.removeItem("diffList");
             localStorage.removeItem("stagedList");
             dispatch(removeRepo());
-            dispatch(setRepo({ directory: "" }));
           }}>
           Close Repository
         </Button>

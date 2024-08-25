@@ -95,7 +95,9 @@ export function Toolbar() {
   const repoName = useAppSelector((state) => state.repo.name);
   const dirLocation = useAppSelector((state) => state.repo.directory);
   useLayoutEffect(() => {
-    if (repoName === "") return;
+    if (repoName === "" || currentBranch === "") {
+      setBranchList({ local: [], remote: [] });
+    }
     async function getBranch() {
       try {
         const target: string = await git.currentBranch(dirLocation);
@@ -429,10 +431,10 @@ export function Toolbar() {
                   }
                 }}>
                 {themeMode == "Light" ?
-                  <Sun />
+                  <Sun className="duration-200" />
                 : themeMode == "Dark" ?
-                  <Moon />
-                : <SunMoon />}
+                  <Moon className="duration-200" />
+                : <SunMoon className="duration-200" />}
                 {themeMode}
               </MenubarItem>
             </MenubarContent>
@@ -513,11 +515,28 @@ export function Toolbar() {
                       setThemeMode("Dark");
                     }
                   }}>
-                  {themeMode == "Light" ?
-                    <Sun />
-                  : themeMode == "Dark" ?
-                    <Moon />
-                  : <SunMoon />}
+                  <Sun
+                    className={
+                      (themeMode == "Light" ? "rotate-0 scale-100" : (
+                        "rotate-90 scale-0"
+                      )) + " absolute duration-200 ease-out"
+                    }
+                  />
+                  <Moon
+                    className={
+                      (themeMode == "Dark" ? "rotate-0 scale-100" : (
+                        "rotate-90 scale-0"
+                      )) + " absolute duration-200 ease-out"
+                    }
+                  />
+                  <SunMoon
+                    className={
+                      (themeMode !== "Dark" && themeMode !== "Light" ?
+                        "rotate-0 scale-100"
+                      : "-rotate-90 scale-0") +
+                      " absolute duration-200 ease-out"
+                    }
+                  />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">

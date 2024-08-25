@@ -21,7 +21,6 @@ export function TerminalView() {
   const terminalElement = useRef<HTMLDivElement>(null);
   const term = useRef(
     new Terminal({
-      fontFamily: "Geist Mono",
       theme: {
         background: "rgb(5, 5, 5)",
       },
@@ -50,13 +49,18 @@ export function TerminalView() {
     fitTerminal(term, fitAddon);
   }, [dir]);
 
-  const [openTerminal, setOpenTerminal] = useState(true);
+  const [openTerminal, setOpenTerminal] = useState(
+    localStorage.getItem("openTerminal") === "true"
+  );
   return (
-    <footer className="flex h-fit max-h-72 flex-col items-end gap-1 border">
+    <footer className="flex h-fit max-h-72 flex-col items-end gap-1 border dark:border-neutral-700">
       <Button
         variant="outline"
         className="flex w-fit gap-1 rounded-none font-mono"
-        onClick={() => setOpenTerminal(!openTerminal)}>
+        onClick={() => {
+          setOpenTerminal(!openTerminal);
+          localStorage.setItem("openTerminal", (!openTerminal).toString());
+        }}>
         <TerminalIcon size={20} />
         Terminal
       </Button>
@@ -65,7 +69,8 @@ export function TerminalView() {
         id="terminal"
         ref={terminalElement}
         className={
-          (openTerminal ? "block" : "hidden") + " h-full max-h-60 w-full"
+          (openTerminal ? "block" : "hidden") +
+          " h-full max-h-60 min-h-52 w-full"
         }></div>
     </footer>
   );
