@@ -95,7 +95,9 @@ export function Toolbar() {
   const repoName = useAppSelector((state) => state.repo.name);
   const dirLocation = useAppSelector((state) => state.repo.directory);
   useLayoutEffect(() => {
-    if (repoName === "") return;
+    if (repoName === "" || currentBranch === "") {
+      setBranchList({ local: [], remote: [] });
+    }
     async function getBranch() {
       try {
         const target: string = await git.currentBranch(dirLocation);

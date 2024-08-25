@@ -247,15 +247,6 @@ export function RepoView() {
             localStorage.removeItem("diffList");
             localStorage.removeItem("stagedList");
             dispatch(removeRepo());
-            dispatch(
-              setRepo({
-                directory: "",
-                name: "",
-                branch: "",
-                diff: [],
-                staged: [],
-              })
-            );
           }}>
           Close Repository
         </Button>
