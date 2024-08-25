@@ -21,7 +21,6 @@ export function TerminalView() {
   const terminalElement = useRef<HTMLDivElement>(null);
   const term = useRef(
     new Terminal({
-      fontFamily: "Geist Mono",
       theme: {
         background: "rgb(5, 5, 5)",
       },
