@@ -1,3 +1,13 @@
+## [1.10.2](https://github.com/RMalik777/git-commander/compare/v1.10.1...v1.10.2) (2024-08-25)
+
+
+### Bug Fixes
+
+* branch list not updating when repo is closed ([a9ee75a](https://github.com/RMalik777/git-commander/commit/a9ee75a33456ad82ea3edcb648a816d1db310d4e))
+* branch list wont update ([72d980e](https://github.com/RMalik777/git-commander/commit/72d980e6541733c5261569f7b9c372da75acf9ab))
+* persist open terminal status ([57008ff](https://github.com/RMalik777/git-commander/commit/57008ff89158b89e6040bf3bff42b4180b8e6876))
+* remove custom font ([f637936](https://github.com/RMalik777/git-commander/commit/f63793679a10da8ca0863edf8f54b4096f2fb00f))
+
 ## [1.10.1](https://github.com/RMalik777/git-commander/compare/v1.10.0...v1.10.1) (2024-08-15)
 
 
