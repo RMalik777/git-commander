@@ -1,6 +1,7 @@
+import { invoke } from "@tauri-apps/api";
+
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import { invoke } from "@tauri-apps/api";
 
 export async function fitTerminal(term: Terminal, fitAddon: FitAddon) {
   fitAddon.fit();
