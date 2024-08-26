@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
+import { setPullMsg } from "@/lib/Redux/pullMsg";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -272,6 +273,28 @@ export function Toolbar() {
                           });
                           try {
                             const response = await git.pull(dirLocation);
+                            const toCompare = response.toString().trim();
+                            const regexTag = new RegExp(
+                              String.raw`From[\s\S]+${repoName}\s, ([\s\S]+),updating \d\w+`,
+                              "i"
+                            );
+                            const regexChanges =
+                              /Fast-forward\s([\s\S]+)\s\d+ files changed, \d+ insertions\(\+\), \d+ deletions\(-\)/i;
+                            const regexSummary =
+                              /(\d+) files changed, (\d+) insertions\(\+\), (\d+) deletions\(-\)/i;
+                            const matchTag = toCompare.match(regexTag);
+                            const matchChanges = toCompare.match(regexChanges);
+                            const matchSummary = toCompare.match(regexSummary);
+                            console.log(toCompare);
+                            dispatch(
+                              setPullMsg({
+                                tagBranch: matchTag[1].toString() ?? "",
+                                changes: matchChanges[1].toString() ?? "",
+                                filesChanged: parseInt(matchSummary[1]),
+                                insertions: parseInt(matchSummary[2]),
+                                deletions: parseInt(matchSummary[3]),
+                              })
+                            );
                             if (response.toString().startsWith("fatal")) {
                               toast({
                                 title: "Error",
@@ -281,7 +304,7 @@ export function Toolbar() {
                             } else {
                               toast({
                                 title: "Pulled Succesfully",
-                                description: response,
+                                description: `${matchSummary[1]} files changed, ${matchSummary[2]} insertions (+), ${matchSummary[3]} deletions (-)`,
                               });
                             }
                           } catch (error) {
