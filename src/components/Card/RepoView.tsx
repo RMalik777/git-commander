@@ -34,6 +34,7 @@ import { Clone } from "@/components/Dialog/Clone";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { removeRepo, setRepo } from "@/lib/Redux/repoSlice";
+import { removePullMsg } from "@/lib/Redux/pullMsg";
 
 export function RepoView() {
   const dir = useAppSelector((state) => state.repo.directory);
@@ -247,6 +248,7 @@ export function RepoView() {
             localStorage.removeItem("diffList");
             localStorage.removeItem("stagedList");
             dispatch(removeRepo());
+            dispatch(removePullMsg());
           }}>
           Close Repository
         </Button>

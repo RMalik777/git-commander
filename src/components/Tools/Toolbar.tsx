@@ -288,11 +288,11 @@ export function Toolbar() {
                             console.log(toCompare);
                             dispatch(
                               setPullMsg({
-                                tagBranch: matchTag[1].toString() ?? "",
-                                changes: matchChanges[1].toString() ?? "",
-                                filesChanged: parseInt(matchSummary[1]),
-                                insertions: parseInt(matchSummary[2]),
-                                deletions: parseInt(matchSummary[3]),
+                                tagBranch: matchTag?.[1].toString() ?? "",
+                                changes: matchChanges?.[1].toString() ?? "",
+                                filesChanged: parseInt(matchSummary?.[1] ?? 0),
+                                insertions: parseInt(matchSummary?.[2] ?? 0),
+                                deletions: parseInt(matchSummary?.[3] ?? 0),
                               })
                             );
                             if (response.toString().startsWith("fatal")) {
@@ -302,9 +302,18 @@ export function Toolbar() {
                                 variant: "destructive",
                               });
                             } else {
+                              const desc = (): string => {
+                                if (
+                                  response.toString().includes("up to date")
+                                ) {
+                                  return response;
+                                } else {
+                                  return `${matchSummary?.[1] ?? 0} files changed, ${matchSummary?.[2] ?? 0} insertions (+), ${matchSummary?.[3] ?? 0} deletions (-)`;
+                                }
+                              };
                               toast({
                                 title: "Pulled Succesfully",
-                                description: `${matchSummary[1]} files changed, ${matchSummary[2]} insertions (+), ${matchSummary[3]} deletions (-)`,
+                                description: desc(),
                               });
                             }
                           } catch (error) {
