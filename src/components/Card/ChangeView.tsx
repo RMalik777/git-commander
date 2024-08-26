@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { useAppSelector } from "@/lib/Redux/hooks";
+import { useEffect, useState } from "react";
 
 import {
   Card,
@@ -40,24 +40,24 @@ export function ChangeView() {
     incomingDeletions,
   ]);
 
-  return (
-    <Card>
-      <CardHeader className="bg-white dark:bg-neutral-950">
-        <CardDescription>Latest Changes Since Last Pull</CardDescription>
-        <CardTitle>
-          {filesChanged} files changed, {insertions} insertions (+), {deletions}{" "}
-          deletions (-)
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="whitespace-pre">
-        <span className="text-xl font-semibold">Changes:</span>
-        <br />
-        {changes}
-        <br />
-        <span className="text-xl font-semibold">Tag Changes:</span>
-        <br />
-        {tagBranch}
-      </CardContent>
-    </Card>
-  );
+  return incomingChanges || incomingTagBranch ?
+      <Card>
+        <CardHeader className="bg-white dark:bg-neutral-950">
+          <CardDescription>Latest Changes Since Last Pull</CardDescription>
+          <CardTitle>
+            {filesChanged} files changed, {insertions} insertions (+),{" "}
+            {deletions} deletions (-)
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="whitespace-pre-wrap leading-7">
+          <span className="text-xl font-semibold">Changes:</span>
+          <br />
+          {changes}
+          <br />
+          <span className="text-xl font-semibold">Tag and Branch Update:</span>
+          <br />
+          {tagBranch}
+        </CardContent>
+      </Card>
+    : null;
 }
