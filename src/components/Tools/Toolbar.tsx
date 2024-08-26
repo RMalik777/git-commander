@@ -303,12 +303,10 @@ export function Toolbar() {
                               });
                             } else {
                               const desc = (): string => {
-                                if (
-                                  response.toString().includes("up to date")
-                                ) {
-                                  return response;
-                                } else {
+                                if (matchSummary) {
                                   return `${matchSummary?.[1] ?? 0} files changed, ${matchSummary?.[2] ?? 0} insertions (+), ${matchSummary?.[3] ?? 0} deletions (-)`;
+                                } else {
+                                  return response;
                                 }
                               };
                               toast({
