@@ -1,3 +1,17 @@
+# [1.11.0](https://github.com/RMalik777/git-commander/compare/v1.10.2...v1.11.0) (2024-08-26)
+
+
+### Bug Fixes
+
+* clear message when repo is closed ([a02e643](https://github.com/RMalik777/git-commander/commit/a02e643998262a39baeb50545a766682e291db0d))
+* use redux and tauri store to store folder ([cd7d17e](https://github.com/RMalik777/git-commander/commit/cd7d17e288ecf92fcaa0336b5542948fce19b31c))
+* wrong pull response ([7175c30](https://github.com/RMalik777/git-commander/commit/7175c309e48274bc2fc60e5b6f0011075e69605c))
+
+
+### Features
+
+* add simple response after success pull ([d466583](https://github.com/RMalik777/git-commander/commit/d4665832b9d2b6ffc510ec29d6e0a42774409477))
+
 ## [1.10.2](https://github.com/RMalik777/git-commander/compare/v1.10.1...v1.10.2) (2024-08-25)
 
 
