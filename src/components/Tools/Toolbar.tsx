@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
+import { setPullMsg } from "@/lib/Redux/pullMsg";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -105,7 +106,7 @@ export function Toolbar() {
           await git.branchList(dirLocation);
         setBranchList(newBranchList);
         const showedBranch = newBranchList?.local?.find(
-          (branch) => branch.toLowerCase() === target.toLowerCase()
+          (branch) => branch?.toLowerCase() === target?.toLowerCase()
         );
         dispatch(setRepo({ branch: showedBranch }));
         localStorage.setItem("currentBranch", showedBranch?.toString() ?? "");
@@ -272,6 +273,28 @@ export function Toolbar() {
                           });
                           try {
                             const response = await git.pull(dirLocation);
+                            const toCompare = response.toString().trim();
+                            const regexTag = new RegExp(
+                              String.raw`From[\s\S]+${repoName}\s, ([\s\S]+),updating \d\w+`,
+                              "i"
+                            );
+                            const regexChanges =
+                              /Fast-forward\s([\s\S]+)\s\d+ files changed, \d+ insertions\(\+\), \d+ deletions\(-\)/i;
+                            const regexSummary =
+                              /(\d+) files changed, (\d+) insertions\(\+\), (\d+) deletions\(-\)/i;
+                            const matchTag = toCompare.match(regexTag);
+                            const matchChanges = toCompare.match(regexChanges);
+                            const matchSummary = toCompare.match(regexSummary);
+                            console.log(toCompare);
+                            dispatch(
+                              setPullMsg({
+                                tagBranch: matchTag?.[1].toString() ?? "",
+                                changes: matchChanges?.[1].toString() ?? "",
+                                filesChanged: parseInt(matchSummary?.[1] ?? 0),
+                                insertions: parseInt(matchSummary?.[2] ?? 0),
+                                deletions: parseInt(matchSummary?.[3] ?? 0),
+                              })
+                            );
                             if (response.toString().startsWith("fatal")) {
                               toast({
                                 title: "Error",
@@ -279,9 +302,16 @@ export function Toolbar() {
                                 variant: "destructive",
                               });
                             } else {
+                              const desc = (): string => {
+                                if (matchSummary) {
+                                  return `${matchSummary?.[1] ?? 0} files changed, ${matchSummary?.[2] ?? 0} insertions (+), ${matchSummary?.[3] ?? 0} deletions (-)`;
+                                } else {
+                                  return response;
+                                }
+                              };
                               toast({
                                 title: "Pulled Succesfully",
-                                description: response,
+                                description: desc(),
                               });
                             }
                           } catch (error) {

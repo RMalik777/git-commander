@@ -35,6 +35,7 @@ fn main() {
             reader: Arc::new(AsyncMutex::new(BufReader::new(reader))),
         })
         .plugin(tauri_plugin_window_state::Builder::default().build())
+        .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|_app| {
             db::init();
             Ok(())
