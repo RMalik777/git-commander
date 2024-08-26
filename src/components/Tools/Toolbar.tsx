@@ -106,7 +106,7 @@ export function Toolbar() {
           await git.branchList(dirLocation);
         setBranchList(newBranchList);
         const showedBranch = newBranchList?.local?.find(
-          (branch) => branch.toLowerCase() === target.toLowerCase()
+          (branch) => branch?.toLowerCase() === target?.toLowerCase()
         );
         dispatch(setRepo({ branch: showedBranch }));
         localStorage.setItem("currentBranch", showedBranch?.toString() ?? "");
