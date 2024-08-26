@@ -65,11 +65,15 @@ export function Staging({
   dirList,
   diffList,
   stagedList,
+  getDiff,
+  getStaged,
 }: Readonly<{
   dir: string;
   dirList: FileEntry[];
   diffList: FileEntry[];
   stagedList: FileEntry[];
+  getDiff: () => Promise<void>;
+  getStaged: () => Promise<void>;
 }>) {
   const [viewMode, setViewMode] = useState(
     localStorage.getItem("viewMode")?.toString() ?? "list"
@@ -78,38 +82,6 @@ export function Staging({
   const dispatch = useAppDispatch();
   const [openDialogId, setOpenDialogId] = useState("");
   const [revertDialog, setRevertDialog] = useState(false);
-
-  async function getDiff() {
-    const data = await git.showChanged(dir);
-    const data2 = await git.ShowUntrackedFiles(dir);
-    const toEntry = await data.map((item: string) => {
-      return {
-        name: item.split("/").pop(),
-        path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
-    });
-    const toEntry2 = await data2.map((item: string) => {
-      return {
-        name: item.split("/").pop(),
-        path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
-    });
-    toEntry.push(...toEntry2);
-    dispatch(setRepo({ diff: toEntry }));
-    localStorage.setItem("diffList", JSON.stringify(toEntry));
-  }
-
-  async function getStaged() {
-    const data = await git.showStaged(dir);
-    const toEntry = await data.map((item: string) => {
-      return {
-        name: item.split("/").pop(),
-        path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
-    });
-    dispatch(setRepo({ staged: toEntry }));
-    localStorage.setItem("stagedList", JSON.stringify(toEntry));
-  }
 
   function actionButton(file: FileEntry, mode: string) {
     return (

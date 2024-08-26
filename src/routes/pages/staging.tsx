@@ -107,6 +107,8 @@ export default function Git() {
         dir={dir}
         dirList={dirList}
         stagedList={stagedList}
+        getDiff={getDiff}
+        getStaged={getStaged}
       />
     </div>
   );
