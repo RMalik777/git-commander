@@ -170,7 +170,7 @@ export function Clone() {
         throw new Error(response.toString());
       }
       if (typeof repository == "string") {
-        const newLocation = values.location + "\\" + repository;
+        const newLocation = values.location + "\\" + repository.replace(/.git$/, "");
         localStorage.setItem("currentRepoName", repository);
         localStorage.setItem("repoDir", newLocation);
         dispatch(setRepo({ name: repository, directory: newLocation }));
