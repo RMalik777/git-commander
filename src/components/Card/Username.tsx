@@ -53,7 +53,7 @@ export function UsernameConfig() {
       description: (
         <>
           Your username has been changed to{" "}
-          <code className="rounded bg-gray-100 p-1">{values.username}</code>
+          <code className="rounded bg-gray-100 dark:bg-neutral-800 p-1">{values.username}</code>
         </>
       ),
     });
