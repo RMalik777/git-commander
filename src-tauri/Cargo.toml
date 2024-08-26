@@ -21,8 +21,9 @@ dotenvy = "0.15"
 libsqlite3-sys = { version = "0.28.0", features = ["bundled"] }
 chrono = { version = "0.4.38", features = ["serde"] }
 uuid = "1.8.0"
-tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 portable-pty = "0.8.1"
+tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

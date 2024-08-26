@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { open } from "@tauri-apps/api/dialog";
 import { exists, FileEntry } from "@tauri-apps/api/fs";
 import { open as openFolder } from "@tauri-apps/api/shell";
+import { Store } from "tauri-plugin-store-api";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -35,6 +36,7 @@ import { Clone } from "@/components/Dialog/Clone";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { removeRepo, setRepo } from "@/lib/Redux/repoSlice";
 import { removePullMsg } from "@/lib/Redux/pullMsg";
+import { removeFiles } from "@/lib/Redux/fileList";
 
 export function RepoView() {
   const dir = useAppSelector((state) => state.repo.directory);
@@ -240,6 +242,7 @@ export function RepoView() {
           size="sm"
           variant="destructive"
           onClick={() => {
+            const store = new Store(".fileList.json");
             localStorage.removeItem("repoDir");
             localStorage.removeItem("currentRepoName");
             localStorage.removeItem("currentBranch");
@@ -249,6 +252,8 @@ export function RepoView() {
             localStorage.removeItem("stagedList");
             dispatch(removeRepo());
             dispatch(removePullMsg());
+            dispatch(removeFiles());
+            store.clear();
           }}>
           Close Repository
         </Button>

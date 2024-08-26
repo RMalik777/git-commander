@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { FileEntry } from "@tauri-apps/api/fs";
-
-import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
-import { setRepo } from "@/lib/Redux/repoSlice";
+import { Store } from "tauri-plugin-store-api";
 
 import { FileList } from "@/components/Card/FileList";
+import { setFiles } from "@/lib/Redux/fileList";
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
+import { setRepo } from "@/lib/Redux/repoSlice";
 
 import * as dirFunc from "@/lib/directory";
 import * as git from "@/lib/git";
@@ -14,6 +15,8 @@ export default function Git() {
   const dispatch = useAppDispatch();
   const dir = useAppSelector((state) => state.repo.directory);
   const diffList = useAppSelector((state) => state.repo.diff);
+  const fileList = useAppSelector((state) => state.fileList.files);
+  const refFile = useRef("");
 
   async function getDiff() {
     const data = await git.showChanged(dir);
@@ -56,24 +59,29 @@ export default function Git() {
     getStaged();
   }, [dir]);
 
-  const [dirList, setDirList] = useState<FileEntry[]>(
-    JSON.parse(localStorage.getItem("dirList") ?? "[]")
-  );
-
   useEffect(() => {
+    const store = new Store(".fileList.json");
     async function setDirectory() {
-      setDirList(await dirFunc.getAllChildDir(dir));
+      refFile.current = dir;
+      const allChild = await dirFunc.getAllChildDir(dir);
+      dispatch(setFiles(allChild));
+      store.set("fileList", allChild);
+      store.save();
     }
     if (dir === "") return;
+    // if (dir == refFile.current) return;
     setDirectory();
   }, [dir]);
+
   return (
     <div className="flex flex-col items-center gap-4">
       <FileList
         diffList={diffList}
         dir={dir}
-        dirList={dirList}
+        dirList={fileList}
         stagedList={stagedList}
+        getDiff={getDiff}
+        getStaged={getStaged}
       />
     </div>
   );

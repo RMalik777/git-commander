@@ -1,8 +1,5 @@
 import { FileEntry } from "@tauri-apps/api/fs";
 
-import { useAppDispatch } from "@/lib/Redux/hooks";
-import { setRepo } from "@/lib/Redux/repoSlice";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -28,7 +25,6 @@ import {
 import { Lightbulb, RefreshCw } from "lucide-react";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
-import * as git from "@/lib/git";
 
 import { Icons } from "@/components/Icons";
 
@@ -37,53 +33,24 @@ export function FileList({
   dirList,
   diffList,
   stagedList,
+  getDiff,
+  getStaged,
 }: Readonly<{
   dir: string;
   dirList: FileEntry[];
   diffList: FileEntry[];
   stagedList: FileEntry[];
+  getDiff: () => Promise<void>;
+  getStaged: () => Promise<void>;
 }>) {
-  const dispatch = useAppDispatch();
-
-  async function getDiff() {
-    const data = await git.showChanged(dir);
-    const data2 = await git.ShowUntrackedFiles(dir);
-    const toEntry = data.map((item: string) => {
-      return {
-        name: item.split("/").pop(),
-        path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
-    });
-    const toEntry2 = await data2.map((item: string) => {
-      return {
-        name: item.split("/").pop(),
-        path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
-    });
-    toEntry.push(...toEntry2);
-    dispatch(setRepo({ diff: toEntry }));
-    localStorage.setItem("stagedList", JSON.stringify(toEntry));
-  }
-
-  async function getStaged() {
-    const data = await git.showStaged(dir);
-    const toEntry = data.map((item: string) => {
-      return {
-        name: item.split("/").pop(),
-        path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
-    });
-    dispatch(setRepo({ staged: toEntry }));
-  }
-
   function actionButton(file: FileEntry) {
     let fileStatus = "Unchanged";
     if (
       diffList.some((target) => {
         return (
           target.path === file.name ||
-          target.path === file.path.replace(dir, "").replace("\\", "") ||
-          target.path.startsWith(file.path.replace(dir, "").replace("\\", ""))
+          target.path === file.path ||
+          target.path.startsWith(file.path.replace(dir, ""))
         );
       })
     ) {
@@ -92,8 +59,8 @@ export function FileList({
       stagedList.some((target) => {
         return (
           target.path === file.name ||
-          target.path === file.path.replace(dir, "").replace("\\", "") ||
-          target.path.startsWith(file.path.replace(dir, "").replace("\\", ""))
+          target.path === file.path ||
+          target.path.startsWith(file.path.replace(dir, ""))
         );
       })
     ) {
@@ -119,24 +86,17 @@ export function FileList({
   ): React.ReactNode {
     return (
       <>
-        {parent?.map((child) => {
+        {parent?.map((placeholder) => {
+          const child = { ...placeholder };
+          child.path = child.path.replace(/^\\/g, "");
           child.name = child.name ?? child.path.split("\\").pop();
           let fileStatus: "Unchanged" | "Changed" | "Staged" = "Unchanged";
           if (
             diffList.some((target) => {
               return (
                 target.path === child.name ||
-                target.path ===
-                  child.path
-                    .replace(dir, "")
-                    .replace(/\\/g, "/")
-                    .replace("/", "") ||
-                target.path.startsWith(
-                  child.path
-                    .replace(dir, "")
-                    .replace(/\\/g, "/")
-                    .replace("/", "")
-                )
+                target.path === child.path ||
+                target.path.startsWith(child.path.replace(dir, ""))
               );
             })
           ) {
@@ -145,8 +105,8 @@ export function FileList({
             stagedList.some((target) => {
               return (
                 target.path === child.name ||
-                target.path.split("/").shift() ===
-                  child.path.replace(dir + "\\", "")
+                target.path === child.path ||
+                target.path.startsWith(child.path.replace(dir, ""))
               );
             })
           ) {
