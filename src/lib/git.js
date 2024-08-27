@@ -386,22 +386,26 @@ export async function switchBranch(path, branch) {
   const response = new Promise((resolve, reject) => {
     const resultNormal = [],
       resultReject = [];
-    const command = new Command("git 2 args", ["switch", branch], {
-      cwd: path,
-    });
+    const command = new Command(
+      "git 3 args",
+      ["switch", branch, "--progress"],
+      {
+        cwd: path,
+      }
+    );
     command.on("close", () => {
       if (resultReject.length > 1) {
         const result = resultReject.join("").trim();
         const leadingError = /(^error:)([\S\s]+)(aborting)/gi;
-        const newError = RegExp(leadingError).exec(result)[2];
-        if (newError) reject(new Error(newError.trim()));
-        else reject(new Error(result));
+        const newError = RegExp(leadingError).exec(result);
+        if (newError) reject(new Error(newError?.[2].trim()));
+        else resolve(result);
       }
       resolve(resultNormal);
     });
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (data) => resultNormal.push(data));
-    command.stderr.on("data", (line) => resultReject.push(line));
+    command.stderr.on("data", (data) => resultReject.push(data));
     command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;

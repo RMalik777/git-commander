@@ -58,7 +58,9 @@ export function AddRepo({ afterAdd }: Readonly<{ afterAdd: () => void }>) {
       setConfirmationOpen(true);
     } else {
       try {
-        await db.insertIntoRepo(values.name, values.link);
+        let formattedLink = values.link.trim().replaceAll(" ", "");
+        if (!formattedLink.endsWith(".git")) formattedLink += ".git";
+        await db.insertIntoRepo(values.name, formattedLink);
         reset();
         toast({
           title: "Repository added",

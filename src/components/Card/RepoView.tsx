@@ -109,6 +109,8 @@ export function RepoView() {
         setParentDialog(true);
       }
       await dirFunc.getAllChildDir(toOpen);
+      dispatch(removeFiles());
+      dispatch(removePullMsg());
     }
   }
 
@@ -247,7 +249,6 @@ export function RepoView() {
             localStorage.removeItem("currentRepoName");
             localStorage.removeItem("currentBranch");
             localStorage.removeItem("stagedList");
-            localStorage.removeItem("dirList");
             localStorage.removeItem("diffList");
             localStorage.removeItem("stagedList");
             dispatch(removeRepo());

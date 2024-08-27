@@ -45,11 +45,11 @@ import { useToast } from "@/components/ui/use-toast";
 
 import {
   FolderOpen,
+  List as ListIcon,
   Minus,
   Plus,
   RefreshCw,
   Undo,
-  List as ListIcon,
 } from "lucide-react";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
@@ -448,7 +448,8 @@ export function Staging({
   function treeView(parent: FileEntry[], root: boolean): React.ReactNode {
     return (
       <>
-        {parent.map((child) => {
+        {parent.map((placeholder) => {
+          const child = { ...placeholder };
           child.name = child.name ?? child.path.split("\\").pop();
           let fileStatus = "Unchanged";
           if (
