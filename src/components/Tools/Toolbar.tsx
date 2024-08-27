@@ -4,8 +4,8 @@ import { useLayoutEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
-import { setRepo } from "@/lib/Redux/repoSlice";
 import { setPullMsg } from "@/lib/Redux/pullMsg";
+import { setRepo } from "@/lib/Redux/repoSlice";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -45,7 +45,7 @@ import {
   SunMoon,
   Undo2,
 } from "lucide-react";
-import { PulseLoader } from "react-spinners";
+import { HashLoader, PulseLoader } from "react-spinners";
 
 import * as git from "@/lib/git";
 
@@ -163,6 +163,8 @@ export function Toolbar() {
     });
     return (await response) as string;
   }
+
+  const [isPulling, setIsPulling] = useState(false);
 
   const highlighter = driver({});
 
@@ -340,15 +342,28 @@ export function Toolbar() {
                         size="icon"
                         variant="outline"
                         onClick={async () => {
+                          setIsPulling(true);
                           toast({
                             title: "Pulling Repository",
                             description: (
-                              <PulseLoader size={6} speedMultiplier={0.8} />
+                              <>
+                                {themeMode === "Dark" ?
+                                  <PulseLoader
+                                    size={6}
+                                    speedMultiplier={0.8}
+                                    color="#ffffff"
+                                  />
+                                : <PulseLoader
+                                    size={6}
+                                    speedMultiplier={0.8}
+                                    color="#000000"
+                                  />
+                                }
+                              </>
                             ),
                           });
                           try {
                             const response = await git.pull(dirLocation);
-
                             if (response.toString().startsWith("fatal")) {
                               toast({
                                 title: "Error",
@@ -412,9 +427,27 @@ export function Toolbar() {
                                 variant: "destructive",
                               });
                             }
+                          } finally {
+                            setIsPulling(false);
                           }
                         }}>
-                        <ArrowDownToLine />
+                        <HashLoader
+                          size={24}
+                          className={
+                            (isPulling ?
+                              "!scale-100 !opacity-100"
+                            : "!scale-0 !opacity-0") +
+                            " relative duration-300 ease-out"
+                          }
+                        />
+                        <ArrowDownToLine
+                          className={
+                            (isPulling ?
+                              "rotate-90 scale-0 opacity-0"
+                            : "rotate-0 scale-100 opacity-100") +
+                            " absolute duration-300 ease-out"
+                          }
+                        />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
@@ -431,7 +464,20 @@ export function Toolbar() {
                           toast({
                             title: "Pushing Repository",
                             description: (
-                              <PulseLoader size={6} speedMultiplier={0.8} />
+                              <>
+                                {themeMode === "Dark" ?
+                                  <PulseLoader
+                                    size={6}
+                                    speedMultiplier={0.8}
+                                    color="#ffffff"
+                                  />
+                                : <PulseLoader
+                                    size={6}
+                                    speedMultiplier={0.8}
+                                    color="#000000"
+                                  />
+                                }
+                              </>
                             ),
                           });
                           try {
