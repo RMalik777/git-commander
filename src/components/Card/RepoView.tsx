@@ -54,6 +54,7 @@ export function RepoView() {
   useEffect(() => {
     if (!dir || dir == "") return;
     async function getDiff() {
+      const diffStore = new Store(".diffList.json");
       const data = await git.showChanged(dir);
       const data2 = await git.ShowUntrackedFiles(dir);
       const toEntry = data.map((item: string) => {
@@ -70,7 +71,8 @@ export function RepoView() {
       });
       toEntry.push(...toEntry2);
       dispatch(setRepo({ diff: toEntry }));
-      localStorage.setItem("diffList", JSON.stringify(toEntry));
+      diffStore.set("diffList", toEntry);
+      diffStore.save();
     }
     getDiff();
   }, [dir]);
@@ -78,6 +80,7 @@ export function RepoView() {
   useEffect(() => {
     if (!dir || dir == "") return;
     async function getStaged() {
+      const stagedStore = new Store(".stagedList.json");
       const data = await git.showStaged(dir);
       const toEntry = data.map((item: string) => {
         return {
@@ -86,7 +89,8 @@ export function RepoView() {
         } as FileEntry;
       });
       dispatch(setRepo({ staged: toEntry }));
-      localStorage.setItem("stagedList", JSON.stringify(toEntry));
+      stagedStore.set("stagedList", toEntry);
+      stagedStore.save();
     }
     getStaged();
   }, [dir]);
@@ -244,17 +248,19 @@ export function RepoView() {
           size="sm"
           variant="destructive"
           onClick={() => {
-            const store = new Store(".fileList.json");
+            const fileStore = new Store(".fileList.json");
+            const diffStore = new Store(".diffList.json");
+            const stagedStore = new Store(".stagedList.json");
             localStorage.removeItem("repoDir");
             localStorage.removeItem("currentRepoName");
             localStorage.removeItem("currentBranch");
             localStorage.removeItem("stagedList");
-            localStorage.removeItem("diffList");
-            localStorage.removeItem("stagedList");
             dispatch(removeRepo());
             dispatch(removePullMsg());
             dispatch(removeFiles());
-            store.clear();
+            fileStore.clear();
+            diffStore.clear();
+            stagedStore.clear();
           }}>
           Close Repository
         </Button>
