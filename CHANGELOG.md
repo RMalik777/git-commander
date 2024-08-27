@@ -1,3 +1,20 @@
+# [1.12.0](https://github.com/RMalik777/git-commander/compare/v1.11.0...v1.12.0) (2024-08-27)
+
+
+### Bug Fixes
+
+* background text color in notification not changing on dark mode ([193f826](https://github.com/RMalik777/git-commander/commit/193f8261321440c8349074536fc5047a4df92e07))
+* make url uniform when inserting ([e6283e3](https://github.com/RMalik777/git-commander/commit/e6283e3a23f02cb6db021021ecedac8016e0c641))
+* remove message when new repo is opened ([8a60300](https://github.com/RMalik777/git-commander/commit/8a6030097ab85d1135895cab7706210f272999e4))
+* update regex to better capture text ([e00d2c6](https://github.com/RMalik777/git-commander/commit/e00d2c69247aa7fe593e990b35ca689c91a0a9a7))
+* wrong folder name if cloning from custom repo ([b36aec7](https://github.com/RMalik777/git-commander/commit/b36aec7b4b8d26e39dc86bb182b729847e895cc7))
+
+
+### Features
+
+* add loading information when switching branch ([6e3002e](https://github.com/RMalik777/git-commander/commit/6e3002e533098ec0bf585edc9ebc6c9b7a15fb1b))
+* insert custom url to remote repository list after clone ([cfd25f6](https://github.com/RMalik777/git-commander/commit/cfd25f6513bc3921992164ad013be01b35f9b9ec))
+
 # [1.11.0](https://github.com/RMalik777/git-commander/compare/v1.10.2...v1.11.0) (2024-08-26)
 
 
