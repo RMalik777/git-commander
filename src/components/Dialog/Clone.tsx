@@ -380,7 +380,7 @@ export function Clone() {
               control={cloneForm.control}
               name="addToDB"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start gap-2 space-y-0 rounded border p-2">
+                <FormItem className="flex flex-row items-start gap-2 space-y-0 rounded border p-2 dark:border-neutral-800">
                   <FormControl>
                     <Checkbox
                       checked={field.value}

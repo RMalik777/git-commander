@@ -101,8 +101,8 @@ export function Copy() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        <CardTitle>Copy File</CardTitle>
+        <CardDescription>Quickly Copy File</CardDescription>
       </CardHeader>
       <CardContent className="">
         <Form {...copyForm}>
@@ -190,7 +190,7 @@ export function Copy() {
                 control={copyForm.control}
                 name="rememberSource"
                 render={({ field }) => (
-                  <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 md:w-1/2">
+                  <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
@@ -209,7 +209,7 @@ export function Copy() {
                 control={copyForm.control}
                 name="rememberDestination"
                 render={({ field }) => (
-                  <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 md:w-1/2">
+                  <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
