@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import { Store } from "tauri-plugin-store-api";
-import { FileEntry, readDir } from "@tauri-apps/api/fs";
+import { FileEntry } from "@tauri-apps/api/fs";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
@@ -62,30 +62,6 @@ export default function Git() {
     if (dir === "") return;
     getStaged();
   }, [dir]);
-
-  function recursiveSort(parent: FileEntry[]) {
-    parent.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-    parent.sort((a, b) => {
-      if (a.children && !b.children) return -1;
-      if (!a.children && b.children) return 1;
-      return 0;
-    });
-
-    parent.forEach((child) => {
-      delete child.name;
-      child.path = child.path?.replace(dir, "");
-      if (child.children) {
-        child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
-        child.children.sort((a, b) => {
-          if (a.children && !b.children) return -1;
-          if (!a.children && b.children) return 1;
-          return 0;
-        });
-        recursiveSort(child.children);
-      }
-    });
-    return parent;
-  }
 
   useEffect(() => {
     async function setDirectory() {
