@@ -348,34 +348,45 @@ export function Toolbar() {
                           });
                           try {
                             const response = await git.pull(dirLocation);
-                            const toCompare = response.toString().trim();
-                            const regexTag = new RegExp(
-                              String.raw`From[\s\S]+${repoName}\s, ([\s\S]+),Already up to date|updating \d\w+`,
-                              "i"
-                            );
-                            const regexChanges =
-                              /Fast-forward\s([\s\S]+)\s\d+ files changed, \d+ insertions\(\+\), \d+ deletions\(-\)/i;
-                            const regexSummary =
-                              /(\d+) files changed, (\d+) insertions\(\+\), (\d+) deletions\(-\)/i;
-                            const matchTag = toCompare.match(regexTag);
-                            const matchChanges = toCompare.match(regexChanges);
-                            const matchSummary = toCompare.match(regexSummary);
-                            dispatch(
-                              setPullMsg({
-                                tagBranch: matchTag?.[1].toString() ?? "",
-                                changes: matchChanges?.[1].toString() ?? "",
-                                filesChanged: parseInt(matchSummary?.[1] ?? 0),
-                                insertions: parseInt(matchSummary?.[2] ?? 0),
-                                deletions: parseInt(matchSummary?.[3] ?? 0),
-                              })
-                            );
+
                             if (response.toString().startsWith("fatal")) {
                               toast({
                                 title: "Error",
                                 description: response,
                                 variant: "destructive",
                               });
+                            } else if (
+                              response.toString().includes("Already up to date")
+                            ) {
+                              toast({
+                                title: "Already up to date",
+                              });
                             } else {
+                              const toCompare = response.toString().trim();
+                              const regexTag = new RegExp(
+                                String.raw`From[\s\S]+${repoName}\s, ([\s\S]+),Already up to date|updating \d\w+`,
+                                "i"
+                              );
+                              const regexChanges =
+                                /Fast-forward\s([\s\S]+)\s\d+ files changed, \d+ insertions\(\+\), \d+ deletions\(-\)/i;
+                              const regexSummary =
+                                /(\d+) files changed, (\d+) insertions\(\+\), (\d+) deletions\(-\)/i;
+                              const matchTag = toCompare.match(regexTag);
+                              const matchChanges =
+                                toCompare.match(regexChanges);
+                              const matchSummary =
+                                toCompare.match(regexSummary);
+                              dispatch(
+                                setPullMsg({
+                                  tagBranch: matchTag?.[1]?.toString() ?? "",
+                                  changes: matchChanges?.[1]?.toString() ?? "",
+                                  filesChanged: parseInt(
+                                    matchSummary?.[1] ?? 0
+                                  ),
+                                  insertions: parseInt(matchSummary?.[2] ?? 0),
+                                  deletions: parseInt(matchSummary?.[3] ?? 0),
+                                })
+                              );
                               const desc = (): string => {
                                 if (matchSummary) {
                                   return `${matchSummary?.[1] ?? 0} files changed, ${matchSummary?.[2] ?? 0} insertions (+), ${matchSummary?.[3] ?? 0} deletions (-)`;
