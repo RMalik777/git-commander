@@ -1,3 +1,65 @@
+# [1.12.0](https://github.com/RMalik777/git-commander/compare/v1.11.0...v1.12.0) (2024-08-27)
+
+
+### Bug Fixes
+
+* background text color in notification not changing on dark mode ([193f826](https://github.com/RMalik777/git-commander/commit/193f8261321440c8349074536fc5047a4df92e07))
+* make url uniform when inserting ([e6283e3](https://github.com/RMalik777/git-commander/commit/e6283e3a23f02cb6db021021ecedac8016e0c641))
+* remove message when new repo is opened ([8a60300](https://github.com/RMalik777/git-commander/commit/8a6030097ab85d1135895cab7706210f272999e4))
+* update regex to better capture text ([e00d2c6](https://github.com/RMalik777/git-commander/commit/e00d2c69247aa7fe593e990b35ca689c91a0a9a7))
+* wrong folder name if cloning from custom repo ([b36aec7](https://github.com/RMalik777/git-commander/commit/b36aec7b4b8d26e39dc86bb182b729847e895cc7))
+
+
+### Features
+
+* add loading information when switching branch ([6e3002e](https://github.com/RMalik777/git-commander/commit/6e3002e533098ec0bf585edc9ebc6c9b7a15fb1b))
+* insert custom url to remote repository list after clone ([cfd25f6](https://github.com/RMalik777/git-commander/commit/cfd25f6513bc3921992164ad013be01b35f9b9ec))
+
+# [1.11.0](https://github.com/RMalik777/git-commander/compare/v1.10.2...v1.11.0) (2024-08-26)
+
+
+### Bug Fixes
+
+* clear message when repo is closed ([a02e643](https://github.com/RMalik777/git-commander/commit/a02e643998262a39baeb50545a766682e291db0d))
+* use redux and tauri store to store folder ([cd7d17e](https://github.com/RMalik777/git-commander/commit/cd7d17e288ecf92fcaa0336b5542948fce19b31c))
+* wrong pull response ([7175c30](https://github.com/RMalik777/git-commander/commit/7175c309e48274bc2fc60e5b6f0011075e69605c))
+
+
+### Features
+
+* add simple response after success pull ([d466583](https://github.com/RMalik777/git-commander/commit/d4665832b9d2b6ffc510ec29d6e0a42774409477))
+
+## [1.10.2](https://github.com/RMalik777/git-commander/compare/v1.10.1...v1.10.2) (2024-08-25)
+
+
+### Bug Fixes
+
+* branch list not updating when repo is closed ([a9ee75a](https://github.com/RMalik777/git-commander/commit/a9ee75a33456ad82ea3edcb648a816d1db310d4e))
+* branch list wont update ([72d980e](https://github.com/RMalik777/git-commander/commit/72d980e6541733c5261569f7b9c372da75acf9ab))
+* persist open terminal status ([57008ff](https://github.com/RMalik777/git-commander/commit/57008ff89158b89e6040bf3bff42b4180b8e6876))
+* remove custom font ([f637936](https://github.com/RMalik777/git-commander/commit/f63793679a10da8ca0863edf8f54b4096f2fb00f))
+
+## [1.10.1](https://github.com/RMalik777/git-commander/compare/v1.10.0...v1.10.1) (2024-08-15)
+
+
+### Bug Fixes
+
+* terminal cant be closed ([d52f8c4](https://github.com/RMalik777/git-commander/commit/d52f8c48e73beb9393677fabf641a3ff7b31b8e4))
+
+# [1.10.0](https://github.com/RMalik777/git-commander/compare/v1.9.1...v1.10.0) (2024-08-15)
+
+
+### Features
+
+* add integrated terminal ([52ffccf](https://github.com/RMalik777/git-commander/commit/52ffccfdb9133933e8cf098a5bb35dac481a93e9))
+
+## [1.9.1](https://github.com/RMalik777/git-commander/compare/v1.9.0...v1.9.1) (2024-08-06)
+
+
+### Bug Fixes
+
+* tutorial not highlight the desired items ([fcb095a](https://github.com/RMalik777/git-commander/commit/fcb095a0dafa3262f9fb2cfb64ffd27101101529))
+
 # [1.9.0](https://github.com/RMalik777/git-commander/compare/v1.8.3...v1.9.0) (2024-08-05)
 
 
