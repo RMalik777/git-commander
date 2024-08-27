@@ -1,3 +1,5 @@
+import { Command } from "@tauri-apps/api/shell";
+
 import { useLayoutEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -117,18 +119,67 @@ export function Toolbar() {
     getBranch();
   }, [currentBranch, repoName]);
 
+  const [isSwitching, setIsSwitching] = useState(false);
+  const [switchPercentage, setSwitchPercentage] = useState(0);
+  const [switchMessage, setSwitchMessage] = useState(
+    `${repoName}/${currentBranch}`
+  );
+
+  async function switchBranch(path: string, branch: string) {
+    const response = new Promise((resolve, reject) => {
+      const resultNormal: string[] = [],
+        resultReject: string[] = [];
+      const command = new Command(
+        "git 3 args",
+        ["switch", branch, "--progress"],
+        {
+          cwd: path,
+        }
+      );
+      command.on("close", () => {
+        setSwitchPercentage(0);
+        if (resultReject.length > 1) {
+          const result = resultReject.join("").trim();
+          const leadingError = /(^error:)([\S\s]+)(aborting)/gi;
+          const newError = RegExp(leadingError).exec(result);
+          if (newError) reject(new Error(newError?.[2].trim()));
+          else resolve(result);
+        }
+        resolve(resultNormal);
+      });
+      command.on("error", (error) => reject(new Error(error)));
+      command.stdout.on("data", (data) => resultNormal.push(data));
+      command.stderr.on("data", (data) => {
+        const output: string = data.toString();
+        if (output.startsWith("Updating")) {
+          const percentage = /(\d+)%/g;
+          setSwitchMessage(output);
+          setSwitchPercentage(parseInt(percentage.exec(output)?.[1] ?? "0"));
+        } else {
+          resultReject.push(output);
+        }
+      });
+      command.spawn().catch((error) => reject(new Error(error)));
+    });
+    return (await response) as string;
+  }
+
   const highlighter = driver({});
 
   return (
     <div className="TB_1 flex flex-col">
       <div className="flex w-full grow flex-row">
         <TooltipProvider delayDuration={350}>
-          <div className="flex h-full w-full items-center justify-center border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
+          <div className="relative flex h-full w-full items-center justify-center border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
             <Tooltip>
               <TooltipTrigger asChild>
                 <h1 className="TB_2 text-base font-medium">
                   {repoName === "" ?
                     ""
+                  : isSwitching ?
+                    <>
+                      <span>{switchMessage}</span>
+                    </>
                   : <>
                       <span>{repoName}</span>/{currentBranch}
                     </>
@@ -139,17 +190,37 @@ export function Toolbar() {
                 <p>Current Repo and Branch</p>
               </TooltipContent>
             </Tooltip>
+            <span
+              className="absolute bottom-0 left-0 h-[2px] animate-pulse bg-black dark:bg-white"
+              style={{ width: `${switchPercentage}%` }}></span>
           </div>
           <Select
             value={currentBranch}
             onValueChange={async (e) => {
+              setIsSwitching(true);
+              const toSwitch = e.replace(/origin\//gi, "").trim();
               toast({
                 title: "Switching Branch",
-                description: <PulseLoader size={6} speedMultiplier={0.8} />,
+                description: (
+                  <>
+                    {themeMode === "Dark" ?
+                      <PulseLoader
+                        size={6}
+                        speedMultiplier={0.8}
+                        color="#ffffff"
+                      />
+                    : <PulseLoader
+                        size={6}
+                        speedMultiplier={0.8}
+                        color="#000000"
+                      />
+                    }
+                  </>
+                ),
+                duration: 6000,
               });
               try {
-                const toSwitch = e.replace(/origin\//gi, "").trim();
-                const response = await git.switchBranch(dirLocation, toSwitch);
+                const response = await switchBranch(dirLocation, toSwitch);
                 toast({
                   title: "Switched Branch",
                   description: (
@@ -158,6 +229,7 @@ export function Toolbar() {
                     </p>
                   ),
                 });
+                setIsSwitching(false);
                 dispatch(setRepo({ branch: e }));
                 localStorage.setItem("currentBranch", e);
               } catch (error) {
@@ -173,6 +245,9 @@ export function Toolbar() {
                     variant: "destructive",
                   });
                 }
+              } finally {
+                setIsSwitching(false);
+                setSwitchMessage(`${repoName}/${toSwitch}`);
               }
             }}>
             <Tooltip>
@@ -285,7 +360,6 @@ export function Toolbar() {
                             const matchTag = toCompare.match(regexTag);
                             const matchChanges = toCompare.match(regexChanges);
                             const matchSummary = toCompare.match(regexSummary);
-                            console.log(toCompare);
                             dispatch(
                               setPullMsg({
                                 tagBranch: matchTag?.[1].toString() ?? "",
@@ -445,10 +519,17 @@ export function Toolbar() {
                     !document.documentElement.classList.contains("dark") &&
                     window.localStorage.getItem("theme") === "Light"
                   ) {
-                    document.documentElement.classList.remove("dark");
-                    document.documentElement.style.removeProperty(
-                      "color-scheme"
-                    );
+                    if (
+                      window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ) {
+                      document.documentElement.classList.add("dark");
+                      document.documentElement.style.colorScheme = "dark";
+                    } else {
+                      document.documentElement.classList.remove("dark");
+                      document.documentElement.style.removeProperty(
+                        "color-scheme"
+                      );
+                    }
                     window.localStorage.removeItem("theme");
                     setThemeMode("System");
                   }
