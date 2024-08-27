@@ -10,6 +10,7 @@ import { z } from "zod";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -61,6 +62,7 @@ const formSchema = z.object({
   location: z.string().min(2, {
     message: "Please select a location!",
   }),
+  addToDB: z.boolean().default(false).optional(),
 });
 export function Clone() {
   const { toast } = useToast();
@@ -88,6 +90,7 @@ export function Clone() {
     defaultValues: {
       target: "",
       location: "",
+      addToDB: false,
     },
   });
   const { handleSubmit, reset } = cloneForm;
@@ -122,7 +125,6 @@ export function Clone() {
         reject(new Error(error));
       });
       command.stdout.on("data", (line) => {
-        console.log(`stdout: "${line}"`);
         result.push(line);
         setIsCloning(true);
       });
@@ -132,7 +134,6 @@ export function Clone() {
           line.toString().includes("error")
         )
           reject(new Error(line));
-        console.log(`stderr: "${line}"`);
         setProgress(line);
         setIsCloning(true);
         result.push(line);
@@ -154,6 +155,7 @@ export function Clone() {
       duration: 7000,
     });
     console.log(values.target);
+    values.target = values.target.trim().replaceAll(" ", "");
     const repository =
       links?.find((link) => link.repo_url === values.target) ||
       values.target.split("/").pop();
@@ -170,7 +172,8 @@ export function Clone() {
         throw new Error(response.toString());
       }
       if (typeof repository == "string") {
-        const newLocation = values.location + "\\" + repository.replace(/.git$/, "");
+        const newLocation =
+          values.location + "\\" + repository.replace(/.git$/, "");
         localStorage.setItem("currentRepoName", repository);
         localStorage.setItem("repoDir", newLocation);
         dispatch(setRepo({ name: repository, directory: newLocation }));
@@ -208,9 +211,43 @@ export function Clone() {
         "Repository Cloned",
         "Git Clone Completed Successfully!"
       );
-
+      if (values.addToDB) {
+        let repoName = values.target.split("/").pop() ?? "";
+        if (!(await db.checkUrlDup(values.target))) {
+          if (!repoName?.endsWith(".git")) {
+            repoName += ".git";
+          }
+          try {
+            await db.insertIntoRepo(repoName, values.target);
+            setTimeout(() => {
+              toast({
+                title: "Repository added",
+                description: `Repository ${repoName} added successfully`,
+              });
+            }, 3000);
+          } catch (error) {
+            console.error(error);
+            setTimeout(() => {
+              toast({
+                title: "Error",
+                description: "Failed to save repository URL",
+                variant: "destructive",
+              });
+            }, 3000);
+          }
+        } else {
+          setTimeout(() => {
+            toast({
+              title: "Repository is not saved",
+              description: "Repository with same URL already exists.",
+              variant: "destructive",
+            });
+          }, 3000);
+        }
+      }
       reset();
       setDialogOpen(false);
+      setLocation("");
     } catch (error) {
       if (error instanceof Error) {
         func.displayNotificationNotFocus(
@@ -224,8 +261,6 @@ export function Clone() {
           variant: "destructive",
         });
       }
-    } finally {
-      setLocation("");
     }
   }
 
@@ -338,6 +373,27 @@ export function Clone() {
                     Choose from dropdown or enter the repository URL.
                   </FormDescription>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={cloneForm.control}
+              name="addToDB"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start gap-2 space-y-0 rounded border p-2">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Save URL</FormLabel>
+                    <FormDescription>
+                      Save the URL from the input field to the remote repository
+                      list.
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
