@@ -350,7 +350,7 @@ export function Toolbar() {
                             const response = await git.pull(dirLocation);
                             const toCompare = response.toString().trim();
                             const regexTag = new RegExp(
-                              String.raw`From[\s\S]+${repoName}\s, ([\s\S]+),updating \d\w+`,
+                              String.raw`From[\s\S]+${repoName}\s, ([\s\S]+),Already up to date|updating \d\w+`,
                               "i"
                             );
                             const regexChanges =
