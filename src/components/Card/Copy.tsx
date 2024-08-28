@@ -91,11 +91,19 @@ export function Copy() {
         throw Error(error as string);
       }
     } catch (error) {
-      toast({
-        title: "Error Copying File",
-        description: error.message,
-        variant: "destructive",
-      });
+      if (error instanceof Error) {
+        toast({
+          title: "Error Copying File",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error Copying File",
+          description: "An unknown error occured while copying the file",
+          variant: "destructive",
+        });
+      }
     }
   }
   return (
