@@ -183,12 +183,13 @@ export function Clone() {
       }
       func.displayNotificationNotFocus("Repository Cloned", "Git Clone Completed Successfully!");
       if (values.addToDB) {
-        let repoName = values.target.split("/").pop() ?? "";
+        const repoName = values.target.split("/").pop() ?? "";
         if (!(await db.checkUrlDup(values.target))) {
-          if (!repoName?.endsWith(".git")) {
-            repoName += ".git";
+          if (!values.target?.endsWith(".git")) {
+            values.target += ".git";
           }
           try {
+            console.log("repoName: ", repoName, "\n", "values.target: ", values.target);
             await db.insertIntoRepo(repoName, values.target);
             setTimeout(() => {
               toast({
