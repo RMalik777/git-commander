@@ -6,6 +6,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setPullMsg } from "@/lib/Redux/pullMsg";
 import { setRepo } from "@/lib/Redux/repoSlice";
+import { setLastCommitMessage } from "@/lib/Redux/gitSlice";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -481,11 +482,33 @@ export function Toolbar() {
                         size="icon"
                         variant="outline"
                         onClick={async () => {
-                          const response = await git.undoLastCommit(dirLocation);
-                          toast({
-                            title: "Undo Succesfully",
-                            description: response,
-                          });
+                          const lastCommitMessage = await git.getLastCommitMessage(dirLocation);
+                          dispatch(
+                            setLastCommitMessage(
+                              lastCommitMessage.toString().trim().replace(/,$/g, "")
+                            )
+                          );
+                          try {
+                            const response = await git.undoLastCommit(dirLocation);
+                            toast({
+                              title: "Undo Succesfully",
+                              description: response,
+                            });
+                          } catch (error) {
+                            console.error(error);
+                            if (error instanceof Error) {
+                              toast({
+                                title: "Failed to undo",
+                                description: error.message,
+                                variant: "destructive",
+                              });
+                            }
+                            toast({
+                              title: "Failed to undo",
+                              description: "An unknown error occured while undoing last commit",
+                              variant: "destructive",
+                            });
+                          }
                         }}>
                         <Undo2 />
                       </Button>

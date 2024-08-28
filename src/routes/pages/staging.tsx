@@ -79,7 +79,7 @@ export default function Git() {
   }, [dir]);
   return (
     <div className="flex flex-col items-stretch gap-4">
-      <Commit />
+      <Commit getDiff={getDiff} getStaged={getStaged} />
       <Staging
         diffList={diffList}
         dir={dir}

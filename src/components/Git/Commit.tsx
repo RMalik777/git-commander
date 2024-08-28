@@ -1,4 +1,5 @@
-import { useAppSelector } from "@/lib/Redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/lib/Redux/hooks";
+import { removeLastCommitMessage } from "@/lib/Redux/gitSlice";
 import { NavLink } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,6 +33,7 @@ import { Info, TriangleAlert } from "lucide-react";
 import { driver } from "driver.js";
 
 import * as git from "@/lib/git";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   commitMsg: z
@@ -43,6 +45,8 @@ const formSchema = z.object({
 export function Commit({ getDiff, getStaged }: { getDiff: () => void; getStaged: () => void }) {
   const highlighter = driver({});
 
+  const lastCommitMessage = useAppSelector((state) => state.git.lastCommitMessage);
+
   const repoName = useAppSelector((state) => state.repo.name);
   const currentBranch = useAppSelector((state) => state.repo.branch);
   const workDir = useAppSelector((state) => state.repo.directory);
@@ -52,14 +56,21 @@ export function Commit({ getDiff, getStaged }: { getDiff: () => void; getStaged:
   const commitForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      commitMsg: "",
+      commitMsg: lastCommitMessage ?? "",
     },
   });
+  useEffect(() => {
+    if (!lastCommitMessage || lastCommitMessage == "") return;
+    commitForm.reset({ commitMsg: lastCommitMessage });
+  }, [lastCommitMessage]);
+
   const { toast } = useToast();
+  const dispatch = useAppDispatch();
   const { handleSubmit, reset } = commitForm;
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const response = await git.commit(workDir, values.commitMsg);
+      dispatch(removeLastCommitMessage());
       getDiff();
       getStaged();
       if (RegExp(/no changes/gi).test(response)) {
@@ -97,7 +108,7 @@ export function Commit({ getDiff, getStaged }: { getDiff: () => void; getStaged:
           ),
         });
       }
-      reset();
+      reset({ commitMsg: "" });
     } catch (error) {
       if (error instanceof Error) {
         toast({
@@ -138,6 +149,10 @@ export function Commit({ getDiff, getStaged }: { getDiff: () => void; getStaged:
                             repoName == "" ? "No Repository Opened" : "RFCXXXXX name div"
                           }
                           {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            dispatch(removeLastCommitMessage());
+                          }}
                         />
                       </FormControl>
                       <FormMessage />

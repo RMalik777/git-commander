@@ -198,6 +198,21 @@ export async function currentBranch(path) {
   return await response;
 }
 
+export async function getLastCommitMessage(path) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 3 args", ["log", "-1", "--pretty=%B"], {
+      cwd: path,
+    });
+    const result = [];
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (data) => result.push(data.trim()));
+    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
 export async function getParent(path) {
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 2 args", ["rev-parse", "--show-toplevel"], {
