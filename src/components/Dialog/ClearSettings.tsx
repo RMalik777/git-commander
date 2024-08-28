@@ -97,6 +97,7 @@ export function ClearSettings({
     const removedItems = [];
     if (data.all) {
       localStorage.clear();
+      sessionStorage.clear();
       dispatch(removeUser());
       dispatch(removeRepo());
       dispatch(removeFiles());
