@@ -88,37 +88,58 @@ export function Staging({
               <p>Open</p>
             </TooltipContent>
           </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              {mode === "Changed" ?
-                <button
-                  className="STG_7 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
-                  onClick={async () => {
-                    try {
-                      await git.addFile(dir, file.path);
-                    } catch (error) {
-                      console.error(error);
-                      if (error instanceof Error) {
-                        toast({
-                          title: "Error Staging",
-                          description: (
-                            <p>
-                              <code>{file.name}</code> can&apos;t be staged
-                              <br />
-                              <code>{error.message}</code>
-                            </p>
-                          ),
-                          variant: "destructive",
-                        });
+          {mode === "Changed" ?
+            <>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="STG_7 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                    onClick={async () => {
+                      try {
+                        await git.addFile(dir, file.path);
+                      } catch (error) {
+                        console.error(error);
+                        if (error instanceof Error) {
+                          toast({
+                            title: "Error Staging",
+                            description: (
+                              <p>
+                                <code>{file.name}</code> can&apos;t be staged
+                                <br />
+                                <code>{error.message}</code>
+                              </p>
+                            ),
+                            variant: "destructive",
+                          });
+                        }
+                        return;
                       }
-                      return;
-                    }
-                    await getDiff();
-                    await getStaged();
-                  }}>
-                  <Plus className="h-full w-full" />
-                </button>
-              : <button
+                      await getDiff();
+                      await getStaged();
+                    }}>
+                    <Plus className="h-full w-full" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Stage Changes</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                    onClick={() => setOpenDialogId(file.path)}>
+                    <Undo className="h-full w-full" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Revert Changes</p>
+                </TooltipContent>
+              </Tooltip>
+            </>
+          : <Tooltip>
+              <TooltipTrigger asChild>
+                <button
                   className="UST_7 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
                     try {
@@ -144,24 +165,12 @@ export function Staging({
                   }}>
                   <Minus className="h-full w-full" />
                 </button>
-              }
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Stage Changes</p>
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
-                onClick={() => setOpenDialogId(file.path)}>
-                <Undo className="h-full w-full" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Revert Changes</p>
-            </TooltipContent>
-          </Tooltip>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Unstage Changes</p>
+              </TooltipContent>
+            </Tooltip>
+          }
         </TooltipProvider>
         <ConfirmationDialog
           open={openDialogId === file.path}
