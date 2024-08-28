@@ -137,7 +137,6 @@ export function Clone() {
       description: "Please wait while we clone the repository...",
       duration: 7000,
     });
-    console.log(values.target);
     values.target = values.target.trim().replaceAll(" ", "");
     const repository =
       links?.find((link) => link.repo_url === values.target) || values.target.split("/").pop();
@@ -189,7 +188,6 @@ export function Clone() {
             values.target += ".git";
           }
           try {
-            console.log("repoName: ", repoName, "\n", "values.target: ", values.target);
             await db.insertIntoRepo(repoName, values.target);
             setTimeout(() => {
               toast({
