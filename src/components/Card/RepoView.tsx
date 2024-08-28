@@ -153,6 +153,17 @@ export function RepoView() {
       sessionStorage.removeItem("errorMsg");
       return;
     }
+    const fileStore = new Store(".fileList.json");
+    const diffStore = new Store(".diffList.json");
+    const stagedStore = new Store(".stagedList.json");
+    dispatch(removePullMsg());
+    dispatch(removeFiles());
+    fileStore.clear();
+    diffStore.clear();
+    stagedStore.clear();
+    fileStore.save();
+    diffStore.save();
+    stagedStore.save();
     checkDir(dir);
   }, [dir]);
 
@@ -261,6 +272,9 @@ export function RepoView() {
             fileStore.clear();
             diffStore.clear();
             stagedStore.clear();
+            fileStore.save();
+            diffStore.save();
+            stagedStore.save();
           }}>
           Close Repository
         </Button>
