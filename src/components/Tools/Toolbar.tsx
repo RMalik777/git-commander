@@ -165,6 +165,7 @@ export function Toolbar() {
   }
 
   const [isPulling, setIsPulling] = useState(false);
+  const [isPushing, setIsPushing] = useState(false);
 
   const highlighter = driver({});
 
@@ -379,7 +380,7 @@ export function Toolbar() {
                             } else {
                               const toCompare = response.toString().trim();
                               const regexTag = new RegExp(
-                                String.raw`From[\s\S]+${repoName}\s, ([\s\S]+),Already up to date|updating \d\w+`,
+                                String.raw`From[\s\S]+${repoName}}\s, ([\s\S]+),(?:already up to date|updating \w+)`,
                                 "i"
                               );
                               const regexChanges =
@@ -433,6 +434,7 @@ export function Toolbar() {
                         }}>
                         <HashLoader
                           size={24}
+                          speedMultiplier={1.2}
                           className={
                             (isPulling ?
                               "!scale-100 !opacity-100"
@@ -443,7 +445,7 @@ export function Toolbar() {
                         <ArrowDownToLine
                           className={
                             (isPulling ?
-                              "rotate-90 scale-0 opacity-0"
+                              "-rotate-90 scale-0 opacity-0"
                             : "rotate-0 scale-100 opacity-100") +
                             " absolute duration-300 ease-out"
                           }
@@ -461,6 +463,7 @@ export function Toolbar() {
                         size="icon"
                         variant="outline"
                         onClick={async () => {
+                          setIsPushing(true);
                           toast({
                             title: "Pushing Repository",
                             description: (
@@ -507,9 +510,28 @@ export function Toolbar() {
                                 variant: "destructive",
                               });
                             }
+                          } finally {
+                            setIsPushing(false);
                           }
                         }}>
-                        <ArrowUpToLine />
+                        <HashLoader
+                          size={24}
+                          speedMultiplier={1.2}
+                          className={
+                            (isPushing ?
+                              "!scale-100 !opacity-100"
+                            : "!scale-0 !opacity-0") +
+                            " relative duration-300 ease-out"
+                          }
+                        />
+                        <ArrowUpToLine
+                          className={
+                            (isPushing ?
+                              "-rotate-90 scale-0 opacity-0"
+                            : "rotate-0 scale-100 opacity-100") +
+                            " absolute duration-300 ease-out"
+                          }
+                        />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
