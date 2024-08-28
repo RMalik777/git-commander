@@ -7,6 +7,9 @@ import { z } from "zod";
 import { useAppDispatch } from "@/lib/Redux/hooks";
 import { removeRepo } from "@/lib/Redux/repoSlice";
 import { removeUser } from "@/lib/Redux/userSlice";
+import { removeFiles } from "@/lib/Redux/fileList";
+import { removeLastCommitMessage } from "@/lib/Redux/gitSlice";
+import { removePullMsg } from "@/lib/Redux/pullMsg";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -96,6 +99,9 @@ export function ClearSettings({
       localStorage.clear();
       dispatch(removeUser());
       dispatch(removeRepo());
+      dispatch(removeFiles());
+      dispatch(removeLastCommitMessage());
+      dispatch(removePullMsg());
       removedItems.push("All settings");
     } else {
       if (data.username) {
