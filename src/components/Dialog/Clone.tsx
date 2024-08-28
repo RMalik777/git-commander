@@ -361,8 +361,8 @@ export function Clone() {
                       <Input
                         {...field}
                         onChange={(e) => {
-                          field.onChange(e); // Handle field change
-                          setLocation(e.target.value); // Also update local state
+                          field.onChange(e);
+                          setLocation(e.target.value);
                         }}
                         value={location}
                         placeholder="Location"
@@ -372,7 +372,7 @@ export function Clone() {
                         type="button"
                         onClick={async () => {
                           const newLocation = await openFile();
-                          field.onChange({ target: { value: newLocation } }); // Update form control's value
+                          field.onChange({ target: { value: newLocation } });
                         }}>
                         Open
                       </Button>
