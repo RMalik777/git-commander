@@ -4,6 +4,8 @@ import { open as openFolder } from "@tauri-apps/api/shell";
 
 import { useState } from "react";
 
+import { useAppSelector } from "@/lib/Redux/hooks";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -45,6 +47,8 @@ export function Copy() {
     localStorage.getItem("destination") ?? ""
   );
 
+  const currentRepoDir = useAppSelector((state) => state.repo.directory);
+
   const copyForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,7 +64,14 @@ export function Copy() {
     const targetFileName = values.source.split("\\").pop();
     try {
       if (await exists(values.destination + "\\" + targetFileName)) {
-        throw new Error("File with same name already exists");
+        throw new Error(
+          "File with same name already exists in destination folder."
+        );
+      }
+      if (!(await exists(values.source))) {
+        throw new Error(
+          "Source file does not exist. Make sure the file is not moved or deleted."
+        );
       }
       try {
         await copyFile(
@@ -140,6 +151,7 @@ export function Copy() {
                           onClick={async () => {
                             const toOpen = await open({
                               multiple: true,
+                              defaultPath: currentRepoDir,
                             });
                             if (toOpen) {
                               setSource(toOpen.toString());
