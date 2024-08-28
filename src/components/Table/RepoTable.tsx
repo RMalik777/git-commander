@@ -51,9 +51,7 @@ export function RepoTable({
             </TableCell>
             <TableCell>
               <a href={repo.repo_url} target="_blank" rel="noopener noreferrer">
-                <code className="whitespace-normal break-all">
-                  {repo.repo_url}
-                </code>
+                <code className="whitespace-normal break-all">{repo.repo_url}</code>
               </a>
             </TableCell>
             <TableCell align="center">
@@ -82,8 +80,7 @@ export function RepoTable({
                 setOpen={() => setOpenDialogId("")}
                 message={
                   <>
-                    {repo.repo_name} will be deleted <b>permanently</b>. Are you
-                    sure?
+                    {repo.repo_name} will be deleted <b>permanently</b>. Are you sure?
                   </>
                 }
                 onConfirm={() => onDeleteRepo(repo.id, repo.repo_name)}

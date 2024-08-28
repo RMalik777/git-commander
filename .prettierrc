@@ -3,5 +3,6 @@
   "tabWidth": 2,
   "bracketSameLine": true,
   "experimentalTernaries": true,
+  "printWidth": 100,
   "plugins": ["prettier-plugin-tailwindcss"]
 }

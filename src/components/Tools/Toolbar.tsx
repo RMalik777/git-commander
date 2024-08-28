@@ -25,12 +25,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 
 import {
@@ -58,33 +53,29 @@ export function Toolbar() {
   useLayoutEffect(() => {
     setThemeMode(window.localStorage.getItem("theme") ?? "System");
   }, []);
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", (e) => {
-      if (e.matches && !localStorage.theme) {
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          document.documentElement.className = "dark";
-          document.documentElement.style.colorScheme = "dark";
-        } else {
-          document.documentElement.classList.remove("dark");
-          document.documentElement.style.colorScheme = "light";
-        }
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    if (e.matches && !localStorage.theme) {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.className = "dark";
+        document.documentElement.style.colorScheme = "dark";
+      } else {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.style.colorScheme = "light";
       }
-    });
+    }
+  });
 
-  window
-    .matchMedia("(prefers-color-scheme: light)")
-    .addEventListener("change", (e) => {
-      if (e.matches && !localStorage.theme) {
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          document.documentElement.className = "dark";
-          document.documentElement.style.colorScheme = "dark";
-        } else {
-          document.documentElement.classList.remove("dark");
-          document.documentElement.style.colorScheme = "light";
-        }
+  window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e) => {
+    if (e.matches && !localStorage.theme) {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.className = "dark";
+        document.documentElement.style.colorScheme = "dark";
+      } else {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.style.colorScheme = "light";
       }
-    });
+    }
+  });
 
   const { toast } = useToast();
   const dispatch = useAppDispatch();
@@ -121,21 +112,15 @@ export function Toolbar() {
 
   const [isSwitching, setIsSwitching] = useState(false);
   const [switchPercentage, setSwitchPercentage] = useState(0);
-  const [switchMessage, setSwitchMessage] = useState(
-    `${repoName}/${currentBranch}`
-  );
+  const [switchMessage, setSwitchMessage] = useState(`${repoName}/${currentBranch}`);
 
   async function switchBranch(path: string, branch: string) {
     const response = new Promise((resolve, reject) => {
       const resultNormal: string[] = [],
         resultReject: string[] = [];
-      const command = new Command(
-        "git 3 args",
-        ["switch", branch, "--progress"],
-        {
-          cwd: path,
-        }
-      );
+      const command = new Command("git 3 args", ["switch", branch, "--progress"], {
+        cwd: path,
+      });
       command.on("close", () => {
         setSwitchPercentage(0);
         if (resultReject.length > 1) {
@@ -207,17 +192,8 @@ export function Toolbar() {
                 description: (
                   <>
                     {themeMode === "Dark" ?
-                      <PulseLoader
-                        size={6}
-                        speedMultiplier={0.8}
-                        color="#ffffff"
-                      />
-                    : <PulseLoader
-                        size={6}
-                        speedMultiplier={0.8}
-                        color="#000000"
-                      />
-                    }
+                      <PulseLoader size={6} speedMultiplier={0.8} color="#ffffff" />
+                    : <PulseLoader size={6} speedMultiplier={0.8} color="#000000" />}
                   </>
                 ),
                 duration: 6000,
@@ -226,11 +202,7 @@ export function Toolbar() {
                 const response = await switchBranch(dirLocation, toSwitch);
                 toast({
                   title: "Switched Branch",
-                  description: (
-                    <p className="whitespace-pre-wrap break-words">
-                      {response}
-                    </p>
-                  ),
+                  description: <p className="whitespace-pre-wrap break-words">{response}</p>,
                 });
                 setIsSwitching(false);
                 dispatch(setRepo({ branch: e }));
@@ -240,11 +212,7 @@ export function Toolbar() {
                   console.error(error);
                   toast({
                     title: "Failed to switch branch",
-                    description: (
-                      <p className="whitespace-pre-wrap break-words">
-                        {error.message}
-                      </p>
-                    ),
+                    description: <p className="whitespace-pre-wrap break-words">{error.message}</p>,
                     variant: "destructive",
                   });
                 }
@@ -315,9 +283,7 @@ export function Toolbar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    disabled={
-                      window.history.state.idx == window.history.length - 1
-                    }
+                    disabled={window.history.state.idx == window.history.length - 1}
                     className="TB_5 max-xs:hidden"
                     size="icon"
                     variant="ghost"
@@ -349,17 +315,8 @@ export function Toolbar() {
                             description: (
                               <>
                                 {themeMode === "Dark" ?
-                                  <PulseLoader
-                                    size={6}
-                                    speedMultiplier={0.8}
-                                    color="#ffffff"
-                                  />
-                                : <PulseLoader
-                                    size={6}
-                                    speedMultiplier={0.8}
-                                    color="#000000"
-                                  />
-                                }
+                                  <PulseLoader size={6} speedMultiplier={0.8} color="#ffffff" />
+                                : <PulseLoader size={6} speedMultiplier={0.8} color="#000000" />}
                               </>
                             ),
                           });
@@ -371,9 +328,7 @@ export function Toolbar() {
                                 description: response,
                                 variant: "destructive",
                               });
-                            } else if (
-                              response.toString().includes("Already up to date")
-                            ) {
+                            } else if (response.toString().includes("Already up to date")) {
                               toast({
                                 title: "Already up to date",
                               });
@@ -388,17 +343,13 @@ export function Toolbar() {
                               const regexSummary =
                                 /(\d+) files changed, (\d+) insertions\(\+\), (\d+) deletions\(-\)/i;
                               const matchTag = toCompare.match(regexTag);
-                              const matchChanges =
-                                toCompare.match(regexChanges);
-                              const matchSummary =
-                                toCompare.match(regexSummary);
+                              const matchChanges = toCompare.match(regexChanges);
+                              const matchSummary = toCompare.match(regexSummary);
                               dispatch(
                                 setPullMsg({
                                   tagBranch: matchTag?.[1]?.toString() ?? "",
                                   changes: matchChanges?.[1]?.toString() ?? "",
-                                  filesChanged: parseInt(
-                                    matchSummary?.[1] ?? 0
-                                  ),
+                                  filesChanged: parseInt(matchSummary?.[1] ?? 0),
                                   insertions: parseInt(matchSummary?.[2] ?? 0),
                                   deletions: parseInt(matchSummary?.[3] ?? 0),
                                 })
@@ -421,9 +372,7 @@ export function Toolbar() {
                               toast({
                                 title: "Failed to pull",
                                 description: (
-                                  <p className="whitespace-pre-wrap break-words">
-                                    {error.message}
-                                  </p>
+                                  <p className="whitespace-pre-wrap break-words">{error.message}</p>
                                 ),
                                 variant: "destructive",
                               });
@@ -436,9 +385,7 @@ export function Toolbar() {
                           size={24}
                           speedMultiplier={1.2}
                           className={
-                            (isPulling ?
-                              "!scale-100 !opacity-100"
-                            : "!scale-0 !opacity-0") +
+                            (isPulling ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0") +
                             " relative duration-300 ease-out"
                           }
                         />
@@ -446,8 +393,7 @@ export function Toolbar() {
                           className={
                             (isPulling ?
                               "-rotate-90 scale-0 opacity-0"
-                            : "rotate-0 scale-100 opacity-100") +
-                            " absolute duration-300 ease-out"
+                            : "rotate-0 scale-100 opacity-100") + " absolute duration-300 ease-out"
                           }
                         />
                       </Button>
@@ -469,17 +415,8 @@ export function Toolbar() {
                             description: (
                               <>
                                 {themeMode === "Dark" ?
-                                  <PulseLoader
-                                    size={6}
-                                    speedMultiplier={0.8}
-                                    color="#ffffff"
-                                  />
-                                : <PulseLoader
-                                    size={6}
-                                    speedMultiplier={0.8}
-                                    color="#000000"
-                                  />
-                                }
+                                  <PulseLoader size={6} speedMultiplier={0.8} color="#ffffff" />
+                                : <PulseLoader size={6} speedMultiplier={0.8} color="#000000" />}
                               </>
                             ),
                           });
@@ -503,9 +440,7 @@ export function Toolbar() {
                               toast({
                                 title: "Failed to push",
                                 description: (
-                                  <p className="whitespace-pre-wrap break-words">
-                                    {error.message}
-                                  </p>
+                                  <p className="whitespace-pre-wrap break-words">{error.message}</p>
                                 ),
                                 variant: "destructive",
                               });
@@ -518,9 +453,7 @@ export function Toolbar() {
                           size={24}
                           speedMultiplier={1.2}
                           className={
-                            (isPushing ?
-                              "!scale-100 !opacity-100"
-                            : "!scale-0 !opacity-0") +
+                            (isPushing ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0") +
                             " relative duration-300 ease-out"
                           }
                         />
@@ -528,8 +461,7 @@ export function Toolbar() {
                           className={
                             (isPushing ?
                               "-rotate-90 scale-0 opacity-0"
-                            : "rotate-0 scale-100 opacity-100") +
-                            " absolute duration-300 ease-out"
+                            : "rotate-0 scale-100 opacity-100") + " absolute duration-300 ease-out"
                           }
                         />
                       </Button>
@@ -549,8 +481,7 @@ export function Toolbar() {
                         size="icon"
                         variant="outline"
                         onClick={async () => {
-                          const response =
-                            await git.undoLastCommit(dirLocation);
+                          const response = await git.undoLastCommit(dirLocation);
                           toast({
                             title: "Undo Succesfully",
                             description: response,
@@ -598,16 +529,12 @@ export function Toolbar() {
                     !document.documentElement.classList.contains("dark") &&
                     window.localStorage.getItem("theme") === "Light"
                   ) {
-                    if (
-                      window.matchMedia("(prefers-color-scheme: dark)").matches
-                    ) {
+                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
                       document.documentElement.classList.add("dark");
                       document.documentElement.style.colorScheme = "dark";
                     } else {
                       document.documentElement.classList.remove("dark");
-                      document.documentElement.style.removeProperty(
-                        "color-scheme"
-                      );
+                      document.documentElement.style.removeProperty("color-scheme");
                     }
                     window.localStorage.removeItem("theme");
                     setThemeMode("System");
@@ -691,9 +618,7 @@ export function Toolbar() {
                       window.localStorage.getItem("theme") === "Light"
                     ) {
                       document.documentElement.classList.remove("dark");
-                      document.documentElement.style.removeProperty(
-                        "color-scheme"
-                      );
+                      document.documentElement.style.removeProperty("color-scheme");
                       window.localStorage.removeItem("theme");
                       setThemeMode("System");
                     }
@@ -707,24 +632,21 @@ export function Toolbar() {
                   }}>
                   <Sun
                     className={
-                      (themeMode == "Light" ? "rotate-0 scale-100" : (
-                        "rotate-90 scale-0"
-                      )) + " absolute duration-200 ease-out"
+                      (themeMode == "Light" ? "rotate-0 scale-100" : "rotate-90 scale-0") +
+                      " absolute duration-200 ease-out"
                     }
                   />
                   <Moon
                     className={
-                      (themeMode == "Dark" ? "rotate-0 scale-100" : (
-                        "rotate-90 scale-0"
-                      )) + " absolute duration-200 ease-out"
+                      (themeMode == "Dark" ? "rotate-0 scale-100" : "rotate-90 scale-0") +
+                      " absolute duration-200 ease-out"
                     }
                   />
                   <SunMoon
                     className={
                       (themeMode !== "Dark" && themeMode !== "Light" ?
                         "rotate-0 scale-100"
-                      : "-rotate-90 scale-0") +
-                      " absolute duration-200 ease-out"
+                      : "-rotate-90 scale-0") + " absolute duration-200 ease-out"
                     }
                   />
                 </Button>

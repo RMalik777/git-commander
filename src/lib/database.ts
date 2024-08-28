@@ -74,11 +74,7 @@ export async function insertIntoRepo(repoName: string, repoUrl: string) {
   }
 }
 
-export async function updateRemoteRepoById(
-  id: string,
-  newRepoName: string,
-  newRepoUrl: string
-) {
+export async function updateRemoteRepoById(id: string, newRepoName: string, newRepoUrl: string) {
   try {
     await invoke("edit_remote_repo", {
       id: id,

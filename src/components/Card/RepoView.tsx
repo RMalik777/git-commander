@@ -42,15 +42,9 @@ export function RepoView() {
   const dir = useAppSelector((state) => state.repo.directory);
   const dispatch = useAppDispatch();
 
-  const [isGitRepo, setIsGitRepo] = useState(
-    sessionStorage.getItem("isGitRepo") === "true"
-  );
-  const [errorMsg, setErrorMsg] = useState(
-    sessionStorage.getItem("errorMsg") ?? null
-  );
-  const [showError, setShowError] = useState(
-    sessionStorage.getItem("showError") == "true"
-  );
+  const [isGitRepo, setIsGitRepo] = useState(sessionStorage.getItem("isGitRepo") === "true");
+  const [errorMsg, setErrorMsg] = useState(sessionStorage.getItem("errorMsg") ?? null);
+  const [showError, setShowError] = useState(sessionStorage.getItem("showError") == "true");
   useEffect(() => {
     if (!dir || dir == "") return;
     async function getDiff() {
@@ -103,8 +97,7 @@ export function RepoView() {
     if (typeof toOpen === "string") {
       localStorage.setItem("repoDir", toOpen.toString());
       const repoNameNew = toOpen.split("\\").pop();
-      if (repoNameNew)
-        localStorage.setItem("currentRepoName", repoNameNew.toString());
+      if (repoNameNew) localStorage.setItem("currentRepoName", repoNameNew.toString());
       dispatch(setRepo({ name: repoNameNew, directory: toOpen }));
       const newParent = await getNearestParent(toOpen);
       console.log("NEWPARENT", newParent);
@@ -168,9 +161,7 @@ export function RepoView() {
   }, [dir]);
 
   const [parentDialog, setParentDialog] = useState(false);
-  const [parent, setParent] = useState(
-    sessionStorage.getItem("parent") ?? null
-  );
+  const [parent, setParent] = useState(sessionStorage.getItem("parent") ?? null);
   async function getNearestParent(dir: string) {
     const data = await git.getParent(dir);
     setParent(data);
@@ -212,23 +203,19 @@ export function RepoView() {
             <Info className="h-4 w-4" />
             <AlertTitle>Error!</AlertTitle>
             <AlertDescription>
-              {errorMsg?.replace("Error!", "") ??
-                "Folder is not a git repository"}
+              {errorMsg?.replace("Error!", "") ?? "Folder is not a git repository"}
             </AlertDescription>
           </Alert>
         : null}
         <AlertDialog open={parentDialog} onOpenChange={setParentDialog}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>
-                Git repository found in the parent directory
-              </AlertDialogTitle>
+              <AlertDialogTitle>Git repository found in the parent directory</AlertDialogTitle>
               <AlertDialogDescription>
                 <code className="rounded border border-gray-200 bg-gray-100 p-1 dark:border-neutral-700 dark:bg-neutral-800">
                   {parent}
                 </code>{" "}
-                is the parent of the selected directory. Do you want to open the
-                parent directory?
+                is the parent of the selected directory. Do you want to open the parent directory?
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

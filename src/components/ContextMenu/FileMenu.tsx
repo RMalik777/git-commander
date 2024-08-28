@@ -154,8 +154,8 @@ export function FileMenu({
         title="Warning!"
         message={
           <p>
-            All changes made will be reverted <b>permanently</b> and can&apos;t
-            be restored. Are you sure?
+            All changes made will be reverted <b>permanently</b> and can&apos;t be restored. Are you
+            sure?
           </p>
         }
         open={openDialogRevert}
@@ -222,8 +222,7 @@ export function FileMenu({
         title="Warning!"
         message={
           <>
-            This will <b>permanently</b> delete <code>{target.name}</code>. Are
-            you sure?
+            This will <b>permanently</b> delete <code>{target.name}</code>. Are you sure?
           </>
         }
         open={openDialogDelete}

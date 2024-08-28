@@ -11,13 +11,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
@@ -46,9 +40,7 @@ const formSchema = z.object({
 export function Copy() {
   const { toast } = useToast();
   const [source, setSource] = useState(localStorage.getItem("source") ?? "");
-  const [destination, setDestination] = useState(
-    localStorage.getItem("destination") ?? ""
-  );
+  const [destination, setDestination] = useState(localStorage.getItem("destination") ?? "");
 
   const currentRepoDir = useAppSelector((state) => state.repo.directory);
 
@@ -80,9 +72,8 @@ export function Copy() {
             title: "Copying Cancelled",
             description: (
               <>
-                File <code className="rounded bg-red-700 p-1">{file}</code> does
-                not exist in the source folder. Please check the file name and
-                location
+                File <code className="rounded bg-red-700 p-1">{file}</code> does not exist in the
+                source folder. Please check the file name and location
               </>
             ),
             variant: "destructive",
@@ -98,10 +89,7 @@ export function Copy() {
           });
           return;
         }
-        if (
-          (await exists(`${values.destination}/${file}`)) &&
-          !values.overwrite
-        ) {
+        if ((await exists(`${values.destination}/${file}`)) && !values.overwrite) {
           duplicateList.push(file);
         }
       }
@@ -141,13 +129,9 @@ export function Copy() {
     }
     list.forEach(async (item) => {
       try {
-        await copyFile(
-          `${values.source}/${item}`,
-          `${values.destination}/${item}`,
-          {
-            append: false,
-          }
-        );
+        await copyFile(`${values.source}/${item}`, `${values.destination}/${item}`, {
+          append: false,
+        });
         toast({
           title: "File Copied",
           description: "The file has been copied successfully",
@@ -189,9 +173,7 @@ export function Copy() {
       </CardHeader>
       <CardContent className="">
         <Form {...copyForm}>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col items-end gap-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-end gap-4">
             <FormField
               control={copyForm.control}
               name="fileList"
@@ -223,14 +205,9 @@ export function Copy() {
               render={({ field }) => (
                 <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start">
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
-                  <FormLabel>
-                    Overwrite Files with Same Name in Destination
-                  </FormLabel>
+                  <FormLabel>Overwrite Files with Same Name in Destination</FormLabel>
                 </FormItem>
               )}></FormField>
             <div className="flex w-full flex-col items-start justify-between gap-4 md:flex-row">
@@ -283,8 +260,7 @@ export function Copy() {
                         <div className="w-full">
                           <Input {...field} />
                           <FormDescription>
-                            Choose the destination folder where the file will
-                            be.
+                            Choose the destination folder where the file will be.
                           </FormDescription>
                           <FormMessage />
                         </div>
@@ -298,10 +274,7 @@ export function Copy() {
                             });
                             if (toOpen) {
                               setDestination(toOpen.toString());
-                              localStorage.setItem(
-                                "destination",
-                                toOpen.toString()
-                              );
+                              localStorage.setItem("destination", toOpen.toString());
                               field.onChange(toOpen.toString());
                             }
                           }}>
@@ -319,16 +292,11 @@ export function Copy() {
                 render={({ field }) => (
                   <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
                     <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
                     <div className="space-y-1 leading-none">
                       <FormLabel>Remember Source</FormLabel>
-                      <FormDescription>
-                        Remember the source file for next time
-                      </FormDescription>
+                      <FormDescription>Remember the source file for next time</FormDescription>
                     </div>
                   </FormItem>
                 )}></FormField>
@@ -338,10 +306,7 @@ export function Copy() {
                 render={({ field }) => (
                   <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
                     <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
                     <div className="space-y-1 leading-none">
                       <FormLabel>Remember Destination</FormLabel>
@@ -363,10 +328,7 @@ export function Copy() {
                 }>
                 <TriangleAlert size={16} />
                 <p className="text-center font-medium">
-                  Warning!{" "}
-                  <span className="font-normal">
-                    Overwrite option is turned on
-                  </span>
+                  Warning! <span className="font-normal">Overwrite option is turned on</span>
                 </p>
               </div>
               <Button type="submit">Copy</Button>

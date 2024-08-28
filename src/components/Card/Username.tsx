@@ -6,13 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -53,9 +47,7 @@ export function UsernameConfig() {
       description: (
         <>
           Your username has been changed to{" "}
-          <code className="rounded bg-gray-100 p-1 dark:bg-neutral-800">
-            {values.username}
-          </code>
+          <code className="rounded bg-gray-100 p-1 dark:bg-neutral-800">{values.username}</code>
         </>
       ),
     });
@@ -78,11 +70,7 @@ export function UsernameConfig() {
                 <FormItem className="">
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input
-                      id="usernameInput"
-                      placeholder={username}
-                      {...field}
-                    />
+                    <Input id="usernameInput" placeholder={username} {...field} />
                   </FormControl>
                   <FormDescription>
                     This will be the <b>user.name</b> used when committing

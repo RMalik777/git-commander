@@ -111,14 +111,10 @@ export function EditRepo({
       <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
         <DialogHeader>
           <DialogTitle>Edit Repository</DialogTitle>
-          <DialogDescription>
-            Change the repository name or link.
-          </DialogDescription>
+          <DialogDescription>Change the repository name or link.</DialogDescription>
         </DialogHeader>
         <Form {...addRepoForm}>
-          <form
-            className="flex flex-col gap-4"
-            onSubmit={handleSubmit(onSubmit)}>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
             <FormField
               control={addRepoForm.control}
               name="name"
@@ -126,16 +122,10 @@ export function EditRepo({
                 <FormItem>
                   <FormLabel>Repository Name</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="New Repository Name"
-                      type="search"
-                    />
+                    <Input {...field} placeholder="New Repository Name" type="search" />
                   </FormControl>
                   <div>
-                    <FormDescription>
-                      Repository name that will be shown
-                    </FormDescription>
+                    <FormDescription>Repository name that will be shown</FormDescription>
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -148,16 +138,10 @@ export function EditRepo({
                 <FormItem>
                   <FormLabel>Repository Link</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="New Repository URL"
-                      type="search"
-                    />
+                    <Input {...field} placeholder="New Repository URL" type="search" />
                   </FormControl>
                   <div>
-                    <FormDescription>
-                      Link to corresponding remote repository
-                    </FormDescription>
+                    <FormDescription>Link to corresponding remote repository</FormDescription>
                     <FormMessage />
                   </div>
                 </FormItem>

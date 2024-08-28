@@ -8,9 +8,7 @@ import { Toolbar } from "@/components/Tools/Toolbar";
 import { Toaster } from "@/components/ui/toaster";
 import { TerminalView } from "@/components/Tools/TerminalView";
 
-export default function Layout({
-  children,
-}: Readonly<{ children?: React.ReactNode }>) {
+export default function Layout({ children }: Readonly<{ children?: React.ReactNode }>) {
   return (
     <Provider store={store}>
       <div className="flex h-dvh max-h-dvh min-h-dvh flex-col overflow-hidden scroll-smooth antialiased">

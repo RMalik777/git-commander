@@ -14,19 +14,8 @@ import {
   ListTrigger,
 } from "@/components/ui/accordion-list";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  FolderContent,
-  FolderItem,
-  FolderRoot,
-  FolderTrigger,
-} from "@/components/ui/folder";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { FolderContent, FolderItem, FolderRoot, FolderTrigger } from "@/components/ui/folder";
 import {
   Menubar,
   MenubarContent,
@@ -35,22 +24,10 @@ import {
   MenubarRadioItem,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 
-import {
-  FolderOpen,
-  List as ListIcon,
-  Minus,
-  Plus,
-  RefreshCw,
-  Undo,
-} from "lucide-react";
+import { FolderOpen, List as ListIcon, Minus, Plus, RefreshCw, Undo } from "lucide-react";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
@@ -75,9 +52,7 @@ export function Staging({
   getDiff: () => Promise<void>;
   getStaged: () => Promise<void>;
 }>) {
-  const [viewMode, setViewMode] = useState(
-    localStorage.getItem("viewMode")?.toString() ?? "list"
-  );
+  const [viewMode, setViewMode] = useState(localStorage.getItem("viewMode")?.toString() ?? "list");
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const [openDialogId, setOpenDialogId] = useState("");
@@ -194,8 +169,8 @@ export function Staging({
           setOpen={() => setOpenDialogId("")}
           message={
             <>
-              All changes made to {file.name} will be reverted{" "}
-              <b>permanently</b> and can&apos;t be restored. Are you sure?
+              All changes made to {file.name} will be reverted <b>permanently</b> and can&apos;t be
+              restored. Are you sure?
             </>
           }
           onConfirm={async () => {
@@ -264,10 +239,7 @@ export function Staging({
 
   function listView() {
     return (
-      <List
-        type="multiple"
-        defaultValue={["diff", "staged"]}
-        className="w-full">
+      <List type="multiple" defaultValue={["diff", "staged"]} className="w-full">
         {stagedList.length > 0 ?
           <ListItem value="staged">
             <ListHeader className="group">
@@ -374,8 +346,8 @@ export function Staging({
                   title="Warning!"
                   message={
                     <p>
-                      All changes made will be reverted <b>permanently</b> and
-                      can&apos;t be restored. Are you sure?
+                      All changes made will be reverted <b>permanently</b> and can&apos;t be
+                      restored. Are you sure?
                     </p>
                   }
                   open={revertDialog}
@@ -383,9 +355,7 @@ export function Staging({
                   onConfirm={async () => {
                     toast({
                       title: "Reverting...",
-                      description: (
-                        <PulseLoader size={6} speedMultiplier={0.8} />
-                      ),
+                      description: <PulseLoader size={6} speedMultiplier={0.8} />,
                     });
                     try {
                       const response = await git.revertAll(dir);
@@ -457,9 +427,7 @@ export function Staging({
               return (
                 target.path === child.name ||
                 target.path === child.path.replace(dir, "").replace("\\", "") ||
-                target.path.startsWith(
-                  child.path.replace(dir, "").replace("\\", "")
-                )
+                target.path.startsWith(child.path.replace(dir, "").replace("\\", ""))
               );
             })
           ) {
@@ -469,9 +437,7 @@ export function Staging({
               return (
                 target.path === child.name ||
                 target.path === child.path.replace(dir, "").replace("\\", "") ||
-                target.path.startsWith(
-                  child.path.replace(dir, "").replace("\\", "")
-                )
+                target.path.startsWith(child.path.replace(dir, "").replace("\\", ""))
               );
             })
           ) {
@@ -501,14 +467,10 @@ export function Staging({
                         defaultValue={["item"]}>
                         <FolderItem value="item" className="">
                           <div className="group flex w-full justify-between hover:bg-neutral-100 dark:hover:bg-neutral-900">
-                            <FolderTrigger className="p-1 pl-2">
-                              {child.name}
-                            </FolderTrigger>
+                            <FolderTrigger className="p-1 pl-2">{child.name}</FolderTrigger>
                             {actionButton(child, fileStatus)}
                           </div>
-                          <FolderContent>
-                            {treeView(child.children, false)}
-                          </FolderContent>
+                          <FolderContent>{treeView(child.children, false)}</FolderContent>
                         </FolderItem>
                       </FolderRoot>
                     : <div

@@ -39,11 +39,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
@@ -97,25 +93,15 @@ export function Clone() {
   const username = useAppSelector((state) => state.user.value);
   const [progress, setProgress] = useState("");
   const [isCloning, setIsCloning] = useState(false);
-  async function clone(
-    localRepo: string,
-    remoteRepo: string,
-    username: string
-  ) {
+  async function clone(localRepo: string, remoteRepo: string, username: string) {
     git.configUsername(localRepo, username);
     const response: Promise<string[]> = new Promise((resolve, reject) => {
       const result: string[] = [];
-      const command = new ShellCommand(
-        "git 3 args",
-        ["clone", "--progress", remoteRepo],
-        {
-          cwd: localRepo,
-        }
-      );
+      const command = new ShellCommand("git 3 args", ["clone", "--progress", remoteRepo], {
+        cwd: localRepo,
+      });
       command.on("close", (data) => {
-        console.log(
-          `command finished with code ${data.code} and signal ${data.signal}`
-        );
+        console.log(`command finished with code ${data.code} and signal ${data.signal}`);
         setProgress("");
         setIsCloning(false);
         resolve(result);
@@ -129,10 +115,7 @@ export function Clone() {
         setIsCloning(true);
       });
       command.stderr.on("data", (line) => {
-        if (
-          line.toString().includes("fatal") ||
-          line.toString().includes("error")
-        )
+        if (line.toString().includes("fatal") || line.toString().includes("error"))
           reject(new Error(line));
         setProgress(line);
         setIsCloning(true);
@@ -157,23 +140,18 @@ export function Clone() {
     console.log(values.target);
     values.target = values.target.trim().replaceAll(" ", "");
     const repository =
-      links?.find((link) => link.repo_url === values.target) ||
-      values.target.split("/").pop();
+      links?.find((link) => link.repo_url === values.target) || values.target.split("/").pop();
     if (!repository) {
       // Add Error Handling
       return;
     }
     try {
       const response = await clone(values.location, values.target, username);
-      if (
-        response.toString().startsWith("fatal") ||
-        response.toString().startsWith("error")
-      ) {
+      if (response.toString().startsWith("fatal") || response.toString().startsWith("error")) {
         throw new Error(response.toString());
       }
       if (typeof repository == "string") {
-        const newLocation =
-          values.location + "\\" + repository.replace(/.git$/, "");
+        const newLocation = values.location + "\\" + repository.replace(/.git$/, "");
         localStorage.setItem("currentRepoName", repository);
         localStorage.setItem("repoDir", newLocation);
         dispatch(setRepo({ name: repository, directory: newLocation }));
@@ -183,8 +161,7 @@ export function Clone() {
             <p>
               Repository <b>{repository}</b> cloned successfully!
               <br />
-              Location:{" "}
-              <code className="rounded bg-gray-100 p-1">{newLocation}</code>
+              Location: <code className="rounded bg-gray-100 p-1">{newLocation}</code>
             </p>
           ),
         });
@@ -192,25 +169,19 @@ export function Clone() {
         const newLocation = values.location + "\\" + repository.repo_name;
         localStorage.setItem("currentRepoName", repository.repo_name);
         localStorage.setItem("repoDir", newLocation);
-        dispatch(
-          setRepo({ name: repository.repo_name, directory: newLocation })
-        );
+        dispatch(setRepo({ name: repository.repo_name, directory: newLocation }));
         toast({
           title: "Repository Cloned",
           description: (
             <p>
               Repository <b>{repository.repo_name}</b> cloned successfully!
               <br />
-              Location:{" "}
-              <code className="rounded bg-gray-100 p-1">{newLocation}</code>
+              Location: <code className="rounded bg-gray-100 p-1">{newLocation}</code>
             </p>
           ),
         });
       }
-      func.displayNotificationNotFocus(
-        "Repository Cloned",
-        "Git Clone Completed Successfully!"
-      );
+      func.displayNotificationNotFocus("Repository Cloned", "Git Clone Completed Successfully!");
       if (values.addToDB) {
         let repoName = values.target.split("/").pop() ?? "";
         if (!(await db.checkUrlDup(values.target))) {
@@ -312,9 +283,7 @@ export function Clone() {
                               !field.value && "text-muted-foreground"
                             )}>
                             {field.value ?
-                              links?.find(
-                                (link) => link.repo_url === field.value
-                              )?.repo_name
+                              links?.find((link) => link.repo_url === field.value)?.repo_name
                             : "Select remote repository..."}
 
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -322,21 +291,11 @@ export function Clone() {
                         </FormControl>
                       </PopoverTrigger>
                       <div className="flex w-full flex-row items-center justify-center gap-4 sm:w-fit sm:gap-1">
-                        <Separator
-                          orientation="horizontal"
-                          className="block shrink grow sm:w-2"
-                        />
+                        <Separator orientation="horizontal" className="block shrink grow sm:w-2" />
                         <p>or</p>
-                        <Separator
-                          orientation="horizontal"
-                          className="block shrink grow sm:w-2"
-                        />
+                        <Separator orientation="horizontal" className="block shrink grow sm:w-2" />
                       </div>
-                      <Input
-                        type="text"
-                        {...field}
-                        placeholder="https://example.com/"
-                      />
+                      <Input type="text" {...field} placeholder="https://example.com/" />
                     </div>
                     <PopoverContent className="w-full p-0">
                       <Command>
@@ -356,9 +315,7 @@ export function Clone() {
                                 <Check
                                   className={cn(
                                     "mr-2 h-4 w-4",
-                                    link.repo_url === field.value ?
-                                      "opacity-100"
-                                    : "opacity-0"
+                                    link.repo_url === field.value ? "opacity-100" : "opacity-0"
                                   )}
                                 />
                                 {link.repo_url}
@@ -382,16 +339,12 @@ export function Clone() {
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start gap-2 space-y-0 rounded border p-2 dark:border-neutral-800">
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>Save URL</FormLabel>
                     <FormDescription>
-                      Save the URL from the input field to the remote repository
-                      list.
+                      Save the URL from the input field to the remote repository list.
                     </FormDescription>
                   </div>
                 </FormItem>
@@ -425,9 +378,7 @@ export function Clone() {
                       </Button>
                     </div>
                   </FormControl>
-                  <FormDescription>
-                    Location to store cloned repository.
-                  </FormDescription>
+                  <FormDescription>Location to store cloned repository.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -436,21 +387,8 @@ export function Clone() {
             <DialogFooter>
               {isCloning ?
                 theme == "Dark" ?
-                  <ScaleLoader
-                    height={16}
-                    width={1.5}
-                    margin={1.75}
-                    radius={8}
-                    color="#d4d4d4"
-                  />
-                : <ScaleLoader
-                    height={16}
-                    width={1.5}
-                    margin={1.75}
-                    radius={8}
-                    color="#404040"
-                  />
-
+                  <ScaleLoader height={16} width={1.5} margin={1.75} radius={8} color="#d4d4d4" />
+                : <ScaleLoader height={16} width={1.5} margin={1.75} radius={8} color="#404040" />
               : <Button
                   className="CR_2A"
                   type="button"

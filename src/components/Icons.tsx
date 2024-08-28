@@ -108,15 +108,9 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siPrettier;
     } else if (fileName?.startsWith("eslint") || fileName === "eslintrc") {
       iconsVar = siEslint;
-    } else if (
-      fileName?.startsWith("tailwind") ||
-      fileName === "tailwind.config"
-    ) {
+    } else if (fileName?.startsWith("tailwind") || fileName === "tailwind.config") {
       iconsVar = siTailwindcss;
-    } else if (
-      fileName?.startsWith("postcss") ||
-      fileName === "postcss.config"
-    ) {
+    } else if (fileName?.startsWith("postcss") || fileName === "postcss.config") {
       iconsVar = siPostcss;
     } else if (fileName?.startsWith("astro") || fileName === "astro.config") {
       iconsVar = siAstro;
@@ -134,15 +128,9 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siPrettier;
     } else if (fileName?.startsWith("eslint") || fileName === "eslintrc") {
       iconsVar = siEslint;
-    } else if (
-      fileName?.startsWith("tailwind") ||
-      fileName === "tailwind.config"
-    ) {
+    } else if (fileName?.startsWith("tailwind") || fileName === "tailwind.config") {
       iconsVar = siTailwindcss;
-    } else if (
-      fileName?.startsWith("postcss") ||
-      fileName === "postcss.config"
-    ) {
+    } else if (fileName?.startsWith("postcss") || fileName === "postcss.config") {
       iconsVar = siPostcss;
     } else if (fileName?.startsWith("astro") || fileName === "astro.config") {
       iconsVar = siAstro;
@@ -248,17 +236,10 @@ export function Icons(params: Readonly<Params>) {
     }
   }
   // JSON
-  else if (
-    extension === "json" ||
-    extension === "json5" ||
-    extension === "jsonc"
-  ) {
+  else if (extension === "json" || extension === "json5" || extension === "jsonc") {
     if (fileName === "package" || fileName === "package-lock") {
       iconsVar = siNodedotjs;
-    } else if (
-      fileName?.startsWith("tsconfig") ||
-      fileName === "tsconfig-base"
-    ) {
+    } else if (fileName?.startsWith("tsconfig") || fileName === "tsconfig-base") {
       iconsVar = siTypescript;
     } else if (fileName?.startsWith("tauri")) {
       iconsVar = siTauri;
@@ -316,11 +297,7 @@ export function Icons(params: Readonly<Params>) {
     iconsVar = siGit;
   }
   // NPM
-  else if (
-    extension === "npm" ||
-    extension === "npmrc" ||
-    extension === "npmignore"
-  ) {
+  else if (extension === "npm" || extension === "npmrc" || extension === "npmignore") {
     iconsVar = siNpm;
   }
   // EDITORCONFIG

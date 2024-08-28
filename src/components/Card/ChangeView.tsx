@@ -1,13 +1,7 @@
 import { useAppSelector } from "@/lib/Redux/hooks";
 import { useEffect, useState } from "react";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ChangeView() {
   const [changes, setChanges] = useState("");
@@ -18,12 +12,8 @@ export function ChangeView() {
 
   const incomingChanges = useAppSelector((state) => state.pullMsg.changes);
   const incomingTagBranch = useAppSelector((state) => state.pullMsg.tagBranch);
-  const incomingFilesChanged = useAppSelector(
-    (state) => state.pullMsg.filesChanged
-  );
-  const incomingInsertions = useAppSelector(
-    (state) => state.pullMsg.insertions
-  );
+  const incomingFilesChanged = useAppSelector((state) => state.pullMsg.filesChanged);
+  const incomingInsertions = useAppSelector((state) => state.pullMsg.insertions);
   const incomingDeletions = useAppSelector((state) => state.pullMsg.deletions);
 
   useEffect(() => {
@@ -45,8 +35,7 @@ export function ChangeView() {
         <CardHeader className="bg-white dark:bg-neutral-950">
           <CardDescription>Latest Changes Since Last Pull</CardDescription>
           <CardTitle>
-            {filesChanged} files changed, {insertions} insertions (+),{" "}
-            {deletions} deletions (-)
+            {filesChanged} files changed, {insertions} insertions (+), {deletions} deletions (-)
           </CardTitle>
         </CardHeader>
         <CardContent className="whitespace-pre-wrap leading-7">

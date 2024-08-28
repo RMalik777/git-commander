@@ -6,10 +6,7 @@ import {
 } from "@tauri-apps/api/notification";
 import { appWindow } from "@tauri-apps/api/window";
 
-export async function displayNotificationNotFocus(
-  title: string,
-  message: string
-) {
+export async function displayNotificationNotFocus(title: string, message: string) {
   if ((await isPermissionGranted()) === false) {
     await requestPermission();
   }
@@ -37,9 +34,7 @@ export async function readGitIgnore(dir: string, scan: boolean = true) {
   const formatted = {
     folder: result.filter(
       (line) =>
-        (line.includes("/") || !line.includes(".")) &&
-        !line.startsWith("!") &&
-        !line.includes("/*")
+        (line.includes("/") || !line.includes(".")) && !line.startsWith("!") && !line.includes("/*")
     ),
     file: result.filter((line) => !line.includes("/") && line.includes(".")),
     folderException: result.filter((line) => line.startsWith("!")),
@@ -54,9 +49,7 @@ export async function readGitIgnore(dir: string, scan: boolean = true) {
     formatted.pop();
     return formatted.join("/").replace(/^!/, "");
   });
-  formatted.fileException = formatted.fileException.map((line) =>
-    line.replace(/^!/, "")
-  );
+  formatted.fileException = formatted.fileException.map((line) => line.replace(/^!/, ""));
   return formatted;
 }
 
@@ -78,12 +71,8 @@ export async function sortAndFilter(
   if (parentDir !== "") {
     if (await checkGitIgnore(rootDir + parentDir)) {
       secondIgnore = await readGitIgnore(rootDir + parentDir);
-      ignore.folder.push(
-        ...secondIgnore.folder.filter((f) => !ignore.folder.includes(f))
-      );
-      ignore.file.push(
-        ...secondIgnore.file.filter((f) => !ignore.file.includes(f))
-      );
+      ignore.folder.push(...secondIgnore.folder.filter((f) => !ignore.folder.includes(f)));
+      ignore.file.push(...secondIgnore.file.filter((f) => !ignore.file.includes(f)));
     }
   }
   parent.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);

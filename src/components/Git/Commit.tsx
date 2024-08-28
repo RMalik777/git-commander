@@ -61,8 +61,7 @@ export function Commit() {
     if (RegExp(/no changes/gi).test(response)) {
       toast({
         title: "No Changes",
-        description:
-          "No changes to commit, add changed file to staged before commiting",
+        description: "No changes to commit, add changed file to staged before commiting",
         action: (
           <ToastAction altText="Add" onClick={() => {}} asChild>
             <NavLink to="/folder">Staging Area</NavLink>
@@ -79,8 +78,7 @@ export function Commit() {
         title: "Successfully Commited",
         description: (
           <>
-            Commited to{" "}
-            <code className="rounded bg-gray-50 p-1">{repoName}/Branch</code>
+            Commited to <code className="rounded bg-gray-50 p-1">{repoName}/Branch</code>
             <br />
             Commit Message: <br />
             <p>{values.commitMsg}</p>
@@ -105,9 +103,7 @@ export function Commit() {
         <Card className="w-full">
           <CardHeader>
             <CardTitle>Commit</CardTitle>
-            <CardDescription>
-              Commit changes made to remote repository
-            </CardDescription>
+            <CardDescription>Commit changes made to remote repository</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid w-full items-center gap-4">
@@ -123,9 +119,7 @@ export function Commit() {
                           className="CMT_2"
                           disabled={repoName == ""}
                           placeholder={
-                            repoName == "" ?
-                              "No Repository Opened"
-                            : "RFCXXXXX name div"
+                            repoName == "" ? "No Repository Opened" : "RFCXXXXX name div"
                           }
                           {...field}
                         />
@@ -134,9 +128,7 @@ export function Commit() {
                     </FormItem>
                   )}
                 />
-                <Alert
-                  variant="warning"
-                  className={userName == "" ? "block" : "hidden"}>
+                <Alert variant="warning" className={userName == "" ? "block" : "hidden"}>
                   <TriangleAlert className="h-4 w-4" />
                   <AlertTitle>Warning</AlertTitle>
                   <AlertDescription className="flex flex-col items-start gap-1">
@@ -174,9 +166,7 @@ export function Commit() {
                   <Alert variant="information">
                     <Info className="h-4 w-4" />
                     <AlertTitle>Information</AlertTitle>
-                    <AlertDescription>
-                      You have unstaged changes
-                    </AlertDescription>
+                    <AlertDescription>You have unstaged changes</AlertDescription>
                   </Alert>
                 : null}
               </div>
@@ -186,11 +176,7 @@ export function Commit() {
             <Button type="reset" variant="outline" size="sm">
               Cancel
             </Button>
-            <Button
-              type="submit"
-              size="sm"
-              disabled={repoName == ""}
-              className="CMT_3">
+            <Button type="submit" size="sm" disabled={repoName == ""} className="CMT_3">
               Commit
             </Button>
           </CardFooter>
