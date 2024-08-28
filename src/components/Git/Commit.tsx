@@ -42,7 +42,13 @@ const formSchema = z.object({
     .max(75, { message: "Commit message too long" }),
 });
 
-export function Commit({ getDiff, getStaged }: { getDiff: () => void; getStaged: () => void }) {
+export function Commit({
+  getDiff,
+  getStaged,
+}: {
+  getDiff: () => Promise<void>;
+  getStaged: () => Promise<void>;
+}) {
   const highlighter = driver({});
 
   const lastCommitMessage = useAppSelector((state) => state.git.lastCommitMessage);
@@ -62,6 +68,10 @@ export function Commit({ getDiff, getStaged }: { getDiff: () => void; getStaged:
   useEffect(() => {
     if (!lastCommitMessage || lastCommitMessage == "") return;
     commitForm.reset({ commitMsg: lastCommitMessage });
+    setTimeout(async () => {
+      await getStaged();
+      await getDiff();
+    }, 10);
   }, [lastCommitMessage]);
 
   const { toast } = useToast();
