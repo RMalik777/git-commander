@@ -40,10 +40,11 @@ const formSchema = z.object({
     .max(75, { message: "Commit message too long" }),
 });
 
-export function Commit() {
+export function Commit({ getDiff, getStaged }: { getDiff: () => void; getStaged: () => void }) {
   const highlighter = driver({});
 
   const repoName = useAppSelector((state) => state.repo.name);
+  const currentBranch = useAppSelector((state) => state.repo.branch);
   const workDir = useAppSelector((state) => state.repo.directory);
   const userName = useAppSelector((state) => state.user.value);
   const diffChanges = useAppSelector((state) => state.repo.diff);
@@ -57,45 +58,60 @@ export function Commit() {
   const { toast } = useToast();
   const { handleSubmit, reset } = commitForm;
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await git.commitAll(workDir, values.commitMsg);
-    if (RegExp(/no changes/gi).test(response)) {
+    try {
+      const response = await git.commit(workDir, values.commitMsg);
+      getDiff();
+      getStaged();
+      if (RegExp(/no changes/gi).test(response)) {
+        toast({
+          title: "No Changes",
+          description: "No changes to commit, add changed file to staged before commiting.",
+        });
+      } else if (RegExp(/nothing to commit/gi).test(response)) {
+        toast({
+          title: "Nothing to Commit",
+          description: "No changes to commit",
+        });
+      } else {
+        toast({
+          title: "Successfully Commited",
+          description: (
+            <>
+              Commited to{" "}
+              <code className="rounded bg-gray-50 p-1">
+                {repoName}/{currentBranch}
+              </code>
+              <br />
+              Commit Message: <br />
+              <p>{values.commitMsg}</p>
+            </>
+          ),
+          action: (
+            <ToastAction
+              altText="Push"
+              onClick={() => {
+                git.push(workDir);
+              }}>
+              Push
+            </ToastAction>
+          ),
+        });
+      }
+      reset();
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
       toast({
-        title: "No Changes",
-        description: "No changes to commit, add changed file to staged before commiting",
-        action: (
-          <ToastAction altText="Add" onClick={() => {}} asChild>
-            <NavLink to="/folder">Staging Area</NavLink>
-          </ToastAction>
-        ),
-      });
-    } else if (RegExp(/nothing to commit/gi).test(response)) {
-      toast({
-        title: "Nothing to Commit",
-        description: "No changes to commit",
-      });
-    } else {
-      toast({
-        title: "Successfully Commited",
-        description: (
-          <>
-            Commited to <code className="rounded bg-gray-50 p-1">{repoName}/Branch</code>
-            <br />
-            Commit Message: <br />
-            <p>{values.commitMsg}</p>
-          </>
-        ),
-        action: (
-          <ToastAction
-            altText="Push"
-            onClick={() => {
-              git.push(workDir);
-            }}>
-            Push
-          </ToastAction>
-        ),
+        title: "Error",
+        description: "An unknown error occured while commiting changes",
+        variant: "destructive",
       });
     }
-    reset();
   }
   return (
     <Form {...commitForm}>
