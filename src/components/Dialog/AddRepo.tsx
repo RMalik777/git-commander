@@ -92,14 +92,10 @@ export function AddRepo({ afterAdd }: Readonly<{ afterAdd: () => void }>) {
         <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
           <DialogHeader>
             <DialogTitle>Add Repository</DialogTitle>
-            <DialogDescription>
-              Add a new repository to the list
-            </DialogDescription>
+            <DialogDescription>Add a new repository to the list</DialogDescription>
           </DialogHeader>
           <Form {...addRepoForm}>
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={handleSubmit(onSubmit)}>
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
               <FormField
                 control={addRepoForm.control}
                 name="name"
@@ -107,16 +103,10 @@ export function AddRepo({ afterAdd }: Readonly<{ afterAdd: () => void }>) {
                   <FormItem>
                     <FormLabel>Repository Name</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Repository Name"
-                        type="text"
-                      />
+                      <Input {...field} placeholder="Repository Name" type="text" />
                     </FormControl>
                     <div>
-                      <FormDescription>
-                        Repository name that will be shown
-                      </FormDescription>
+                      <FormDescription>Repository name that will be shown</FormDescription>
                       <FormMessage />
                     </div>
                   </FormItem>
@@ -129,16 +119,10 @@ export function AddRepo({ afterAdd }: Readonly<{ afterAdd: () => void }>) {
                   <FormItem>
                     <FormLabel>Repository Link</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Repository Link"
-                        type="text"
-                      />
+                      <Input {...field} placeholder="Repository Link" type="text" />
                     </FormControl>
                     <div>
-                      <FormDescription>
-                        Link to corresponding remote repository
-                      </FormDescription>
+                      <FormDescription>Link to corresponding remote repository</FormDescription>
                       <FormMessage />
                     </div>
                   </FormItem>
@@ -146,10 +130,7 @@ export function AddRepo({ afterAdd }: Readonly<{ afterAdd: () => void }>) {
               />
               <DialogFooter className="items-center">
                 <DialogClose asChild>
-                  <Button
-                    variant="outline"
-                    type="reset"
-                    onClick={() => reset()}>
+                  <Button variant="outline" type="reset" onClick={() => reset()}>
                     Cancel
                   </Button>
                 </DialogClose>

@@ -9,12 +9,7 @@ import { Terminal as TerminalIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import {
-  fitTerminal,
-  initShell,
-  readFromPty,
-  writeToPty,
-} from "@/lib/terminalFunc";
+import { fitTerminal, initShell, readFromPty, writeToPty } from "@/lib/terminalFunc";
 
 export function TerminalView() {
   const dir = useAppSelector((state) => state.repo.directory);
@@ -49,9 +44,7 @@ export function TerminalView() {
     fitTerminal(term, fitAddon);
   }, [dir]);
 
-  const [openTerminal, setOpenTerminal] = useState(
-    localStorage.getItem("openTerminal") === "true"
-  );
+  const [openTerminal, setOpenTerminal] = useState(localStorage.getItem("openTerminal") === "true");
   return (
     <footer className="flex h-fit max-h-72 flex-col items-end gap-1 border dark:border-neutral-700">
       <Button
@@ -68,10 +61,7 @@ export function TerminalView() {
       <div
         id="terminal"
         ref={terminalElement}
-        className={
-          (openTerminal ? "block" : "hidden") +
-          " h-full max-h-60 min-h-52 w-full"
-        }></div>
+        className={(openTerminal ? "block" : "hidden") + " h-full max-h-60 min-h-52 w-full"}></div>
     </footer>
   );
 }

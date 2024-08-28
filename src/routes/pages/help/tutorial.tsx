@@ -28,8 +28,7 @@ export default function Tutorial() {
     {
       id: "TB",
       title: "Toolbar",
-      description:
-        "Where is the toolbar and what are the functions available in the toolbar.",
+      description: "Where is the toolbar and what are the functions available in the toolbar.",
       tour: () => {
         const tour = driver({
           showProgress: true,
@@ -46,16 +45,14 @@ export default function Tutorial() {
               element: ".TB_2",
               popover: {
                 title: "Current Repository",
-                description:
-                  "This is the current repository and branch you are working on.",
+                description: "This is the current repository and branch you are working on.",
               },
             },
             {
               element: ".TB_3",
               popover: {
                 title: "Change Branch",
-                description:
-                  "Click to choose a different branch from the dropdown.",
+                description: "Click to choose a different branch from the dropdown.",
               },
             },
             {
@@ -76,16 +73,14 @@ export default function Tutorial() {
               element: ".TB_6",
               popover: {
                 title: "Pull",
-                description:
-                  "Click to pull the latest changes from the remote repository.",
+                description: "Click to pull the latest changes from the remote repository.",
               },
             },
             {
               element: ".TB_7",
               popover: {
                 title: "Push",
-                description:
-                  "Click to push the changes to the remote repository.",
+                description: "Click to push the changes to the remote repository.",
               },
             },
             {
@@ -147,15 +142,13 @@ export default function Tutorial() {
                 element: ".FE_3",
                 popover: {
                   title: "Refresh",
-                  description:
-                    "Click the refresh button to refresh the file explorer.",
+                  description: "Click the refresh button to refresh the file explorer.",
                 },
               },
               {
                 popover: {
                   title: "Done",
-                  description:
-                    "You can now navigate through the files and folders.",
+                  description: "You can now navigate through the files and folders.",
                 },
               },
             ],
@@ -170,8 +163,7 @@ export default function Tutorial() {
     {
       id: "OR",
       title: "Opening Repository",
-      description:
-        "Quick guide on how to open a existing git repository from your local machine.",
+      description: "Quick guide on how to open a existing git repository from your local machine.",
       tour: () => {
         navigate("/");
         setTimeout(() => {
@@ -189,15 +181,13 @@ export default function Tutorial() {
               {
                 popover: {
                   title: "Choose Repository",
-                  description:
-                    "A dialog will appear, choose the repository you want to open.",
+                  description: "A dialog will appear, choose the repository you want to open.",
                 },
               },
               {
                 popover: {
                   title: "Confirmation",
-                  description:
-                    "An error will be shown if the folder is not a git repository.",
+                  description: "An error will be shown if the folder is not a git repository.",
                 },
               },
             ],
@@ -209,8 +199,7 @@ export default function Tutorial() {
     {
       id: "CR",
       title: "Cloning Repository",
-      description:
-        "Quick guide on how to clone a git repository from a remote server.",
+      description: "Quick guide on how to clone a git repository from a remote server.",
       tour: () => {
         navigate("/");
         setTimeout(() => {
@@ -224,9 +213,7 @@ export default function Tutorial() {
                   description:
                     "Click on the Clone button to clone a git repository from a remote server.",
                   onNextClick: () => {
-                    (
-                      window.document.querySelector(".CR_1") as HTMLElement
-                    )?.click();
+                    (window.document.querySelector(".CR_1") as HTMLElement)?.click();
                     setTimeout(() => tour.moveNext(), 1);
                   },
                 },
@@ -238,9 +225,7 @@ export default function Tutorial() {
                   description:
                     "Choose the repository URL you want clone from the dropdown. Or you can enter the repository URL you want to clone from the remote server.",
                   onPrevClick: () => {
-                    (
-                      window.document.querySelector("CR_2A") as HTMLElement
-                    )?.click();
+                    (window.document.querySelector("CR_2A") as HTMLElement)?.click();
                     tour.movePrevious();
                   },
                 },
@@ -257,8 +242,7 @@ export default function Tutorial() {
                 element: ".CR_4",
                 popover: {
                   title: "Click Clone Button",
-                  description:
-                    "Click on the Clone button to start cloning the repository.",
+                  description: "Click on the Clone button to start cloning the repository.",
                 },
               },
               {
@@ -314,8 +298,7 @@ export default function Tutorial() {
                 element: ".STG_4",
                 popover: {
                   title: "File Path",
-                  description:
-                    "The path of the file relative to the repository.",
+                  description: "The path of the file relative to the repository.",
                   onNextClick: () => {
                     const el = window.document.querySelector(".STG_5A");
                     el?.classList.add("flex");
@@ -328,8 +311,7 @@ export default function Tutorial() {
                 element: ".STG_5",
                 popover: {
                   title: "Action Button",
-                  description:
-                    "Hover over the file name to see the action available.",
+                  description: "Hover over the file name to see the action available.",
                   onPrevClick: () => {
                     const el = window.document.querySelector(".STG_5A");
                     el?.classList.add("hidden");
@@ -349,8 +331,7 @@ export default function Tutorial() {
                 element: ".STG_7",
                 popover: {
                   title: "Stage File",
-                  description:
-                    "Clicking the plus icon beside the file name to stage (add) file.",
+                  description: "Clicking the plus icon beside the file name to stage (add) file.",
                   onNextClick: () => {
                     const item = window.document.querySelector(".STG_5A");
                     item?.classList.add("hidden");
@@ -418,8 +399,7 @@ export default function Tutorial() {
                 element: ".UST_1",
                 popover: {
                   title: "Staging Changes",
-                  description:
-                    "This is the page where you can unstage your changes.",
+                  description: "This is the page where you can unstage your changes.",
                 },
               },
               {
@@ -440,8 +420,7 @@ export default function Tutorial() {
                 element: ".UST_4",
                 popover: {
                   title: "File Path",
-                  description:
-                    "The path of the file relative to the repository.",
+                  description: "The path of the file relative to the repository.",
                   onNextClick: () => {
                     const el = window.document.querySelector(".UST_5A");
                     el?.classList.add("flex");
@@ -454,8 +433,7 @@ export default function Tutorial() {
                 element: ".UST_5",
                 popover: {
                   title: "Action Button",
-                  description:
-                    "Hover over the file name to see the action available.",
+                  description: "Hover over the file name to see the action available.",
                   onPrevClick: () => {
                     const el = window.document.querySelector(".UST_5A");
                     el?.classList.add("hidden");
@@ -475,8 +453,7 @@ export default function Tutorial() {
                 element: ".UST_7",
                 popover: {
                   title: "Unstage File",
-                  description:
-                    "Clicking the minus icon beside the file name to unstage file.",
+                  description: "Clicking the minus icon beside the file name to unstage file.",
                   onNextClick: () => {
                     const item = window.document.querySelector(".UST_5A");
                     item?.classList.add("hidden");
@@ -627,9 +604,7 @@ export default function Tutorial() {
                     key={item.id}
                     className="flex flex-col items-start gap-1 rounded p-4 duration-200 ease-out hover:bg-neutral-50 hover:dark:bg-neutral-900"
                     onClick={item.tour}>
-                    <h3 className="text-left text-lg font-medium tracking-tight">
-                      {item.title}
-                    </h3>
+                    <h3 className="text-left text-lg font-medium tracking-tight">{item.title}</h3>
                     <p className="text-left">{item.description}</p>
                   </button>
                 );
@@ -637,9 +612,7 @@ export default function Tutorial() {
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            <h2 className="px-4 text-xl font-medium sm:col-span-2">
-              Git Command
-            </h2>
+            <h2 className="px-4 text-xl font-medium sm:col-span-2">Git Command</h2>
             <Separator className="" />
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {tutorialGit.map((item) => {
@@ -648,9 +621,7 @@ export default function Tutorial() {
                     key={item.id}
                     className="flex flex-col items-start gap-1 rounded p-4 duration-200 ease-out hover:bg-neutral-50 hover:dark:bg-neutral-900"
                     onClick={item.tour}>
-                    <h3 className="text-left text-lg font-medium tracking-tight">
-                      {item.title}
-                    </h3>
+                    <h3 className="text-left text-lg font-medium tracking-tight">{item.title}</h3>
                     <p className="text-left">{item.description}</p>
                   </button>
                 );

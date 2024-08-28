@@ -58,16 +58,10 @@ export default function Settings() {
       <Card>
         <CardHeader>
           <CardTitle>Remote Repositories List</CardTitle>
-          <CardDescription>
-            Add or remove your predefined remote repositories
-          </CardDescription>
+          <CardDescription>Add or remove your predefined remote repositories</CardDescription>
         </CardHeader>
         <CardContent>
-          <RepoTable
-            repos={repos}
-            onDeleteRepo={handleDelete}
-            fetchData={fetchData}
-          />
+          <RepoTable repos={repos} onDeleteRepo={handleDelete} fetchData={fetchData} />
         </CardContent>
         <CardFooter>
           <AddRepo afterAdd={fetchData} />

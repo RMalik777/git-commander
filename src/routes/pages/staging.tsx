@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 import { setFiles } from "@/lib/Redux/fileList";
 
+import { Copy } from "@/components/Card/Copy";
 import { Staging } from "@/components/Card/Staging";
 import { Commit } from "@/components/Git/Commit";
 
@@ -19,7 +20,9 @@ export default function Git() {
   const dir = useAppSelector((state) => state.repo.directory);
   const diffList = useAppSelector((state) => state.repo.diff);
 
-  const store = new Store(".fileList.json");
+  const fileStore = new Store(".fileList.json");
+  const diffStore = new Store(".diffList.json");
+  const stagedStore = new Store(".stagedList.json");
 
   async function getDiff() {
     const data = await git.showChanged(dir);
@@ -38,7 +41,8 @@ export default function Git() {
     });
     toEntry.push(...toEntry2);
     dispatch(setRepo({ diff: toEntry }));
-    localStorage.setItem("diffList", JSON.stringify(toEntry));
+    diffStore.set("diffList", toEntry);
+    diffStore.save();
   }
   useEffect(() => {
     if (dir === "") return;
@@ -55,7 +59,8 @@ export default function Git() {
       } as FileEntry;
     });
     dispatch(setRepo({ staged: toEntry }));
-    localStorage.setItem("stagedList", JSON.stringify(toEntry));
+    stagedStore.set("stagedList", toEntry);
+    stagedStore.save();
   }
   useEffect(() => {
     if (dir === "") return;
@@ -66,15 +71,15 @@ export default function Git() {
     async function setDirectory() {
       const allChild = await dirFunc.getAllChildDir(dir);
       dispatch(setFiles(allChild));
-      store.set("fileList", allChild);
-      store.save();
+      fileStore.set("fileList", allChild);
+      fileStore.save();
     }
     if (dir === "") return;
     setDirectory();
   }, [dir]);
   return (
     <div className="flex flex-col items-stretch gap-4">
-      <Commit />
+      <Commit getDiff={getDiff} getStaged={getStaged} />
       <Staging
         diffList={diffList}
         dir={dir}
@@ -83,6 +88,7 @@ export default function Git() {
         getDiff={getDiff}
         getStaged={getStaged}
       />
+      <Copy />
     </div>
   );
 }

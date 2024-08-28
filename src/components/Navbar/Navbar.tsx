@@ -2,12 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import {
   ArrowLeftToLine,
@@ -66,29 +61,17 @@ export function Navbar() {
           (navOpen ? "items-end" : "items-center")
         }>
         <TooltipProvider delayDuration={50}>
-          <ul
-            className={
-              "flex w-full flex-col gap-4 " + (navOpen ? "self-end" : "")
-            }>
+          <ul className={"flex w-full flex-col gap-4 " + (navOpen ? "self-end" : "")}>
             {menuItem.map((item) => {
               return (
                 <li key={item.link} className="w-full">
                   <Tooltip open={navOpen ? false : undefined}>
                     <TooltipTrigger asChild>
-                      <NavLink
-                        to={item.link}
-                        className="group block h-fit w-full">
+                      <NavLink to={item.link} className="group block h-fit w-full">
                         <Button
-                          className={
-                            "" +
-                            (navOpen ? "w-full justify-start gap-2 p-2" : "")
-                          }
+                          className={"" + (navOpen ? "w-full justify-start gap-2 p-2" : "")}
                           size="icon"
-                          variant={
-                            currentPath.pathname == item.link ?
-                              "default"
-                            : "ghost"
-                          }>
+                          variant={currentPath.pathname == item.link ? "default" : "ghost"}>
                           {item.icon}
                           {navOpen ? item.name : ""}
                         </Button>

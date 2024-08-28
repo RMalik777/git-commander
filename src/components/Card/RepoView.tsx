@@ -42,18 +42,13 @@ export function RepoView() {
   const dir = useAppSelector((state) => state.repo.directory);
   const dispatch = useAppDispatch();
 
-  const [isGitRepo, setIsGitRepo] = useState(
-    sessionStorage.getItem("isGitRepo") === "true"
-  );
-  const [errorMsg, setErrorMsg] = useState(
-    sessionStorage.getItem("errorMsg") ?? null
-  );
-  const [showError, setShowError] = useState(
-    sessionStorage.getItem("showError") == "true"
-  );
+  const [isGitRepo, setIsGitRepo] = useState(sessionStorage.getItem("isGitRepo") === "true");
+  const [errorMsg, setErrorMsg] = useState(sessionStorage.getItem("errorMsg") ?? null);
+  const [showError, setShowError] = useState(sessionStorage.getItem("showError") == "true");
   useEffect(() => {
     if (!dir || dir == "") return;
     async function getDiff() {
+      const diffStore = new Store(".diffList.json");
       const data = await git.showChanged(dir);
       const data2 = await git.ShowUntrackedFiles(dir);
       const toEntry = data.map((item: string) => {
@@ -70,7 +65,8 @@ export function RepoView() {
       });
       toEntry.push(...toEntry2);
       dispatch(setRepo({ diff: toEntry }));
-      localStorage.setItem("diffList", JSON.stringify(toEntry));
+      diffStore.set("diffList", toEntry);
+      diffStore.save();
     }
     getDiff();
   }, [dir]);
@@ -78,6 +74,7 @@ export function RepoView() {
   useEffect(() => {
     if (!dir || dir == "") return;
     async function getStaged() {
+      const stagedStore = new Store(".stagedList.json");
       const data = await git.showStaged(dir);
       const toEntry = data.map((item: string) => {
         return {
@@ -86,7 +83,8 @@ export function RepoView() {
         } as FileEntry;
       });
       dispatch(setRepo({ staged: toEntry }));
-      localStorage.setItem("stagedList", JSON.stringify(toEntry));
+      stagedStore.set("stagedList", toEntry);
+      stagedStore.save();
     }
     getStaged();
   }, [dir]);
@@ -99,8 +97,7 @@ export function RepoView() {
     if (typeof toOpen === "string") {
       localStorage.setItem("repoDir", toOpen.toString());
       const repoNameNew = toOpen.split("\\").pop();
-      if (repoNameNew)
-        localStorage.setItem("currentRepoName", repoNameNew.toString());
+      if (repoNameNew) localStorage.setItem("currentRepoName", repoNameNew.toString());
       dispatch(setRepo({ name: repoNameNew, directory: toOpen }));
       const newParent = await getNearestParent(toOpen);
       console.log("NEWPARENT", newParent);
@@ -149,13 +146,22 @@ export function RepoView() {
       sessionStorage.removeItem("errorMsg");
       return;
     }
+    const fileStore = new Store(".fileList.json");
+    const diffStore = new Store(".diffList.json");
+    const stagedStore = new Store(".stagedList.json");
+    dispatch(removePullMsg());
+    dispatch(removeFiles());
+    fileStore.clear();
+    diffStore.clear();
+    stagedStore.clear();
+    fileStore.save();
+    diffStore.save();
+    stagedStore.save();
     checkDir(dir);
   }, [dir]);
 
   const [parentDialog, setParentDialog] = useState(false);
-  const [parent, setParent] = useState(
-    sessionStorage.getItem("parent") ?? null
-  );
+  const [parent, setParent] = useState(sessionStorage.getItem("parent") ?? null);
   async function getNearestParent(dir: string) {
     const data = await git.getParent(dir);
     setParent(data);
@@ -197,23 +203,19 @@ export function RepoView() {
             <Info className="h-4 w-4" />
             <AlertTitle>Error!</AlertTitle>
             <AlertDescription>
-              {errorMsg?.replace("Error!", "") ??
-                "Folder is not a git repository"}
+              {errorMsg?.replace("Error!", "") ?? "Folder is not a git repository"}
             </AlertDescription>
           </Alert>
         : null}
         <AlertDialog open={parentDialog} onOpenChange={setParentDialog}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>
-                Git repository found in the parent directory
-              </AlertDialogTitle>
+              <AlertDialogTitle>Git repository found in the parent directory</AlertDialogTitle>
               <AlertDialogDescription>
                 <code className="rounded border border-gray-200 bg-gray-100 p-1 dark:border-neutral-700 dark:bg-neutral-800">
                   {parent}
                 </code>{" "}
-                is the parent of the selected directory. Do you want to open the
-                parent directory?
+                is the parent of the selected directory. Do you want to open the parent directory?
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -244,17 +246,22 @@ export function RepoView() {
           size="sm"
           variant="destructive"
           onClick={() => {
-            const store = new Store(".fileList.json");
+            const fileStore = new Store(".fileList.json");
+            const diffStore = new Store(".diffList.json");
+            const stagedStore = new Store(".stagedList.json");
             localStorage.removeItem("repoDir");
             localStorage.removeItem("currentRepoName");
             localStorage.removeItem("currentBranch");
             localStorage.removeItem("stagedList");
-            localStorage.removeItem("diffList");
-            localStorage.removeItem("stagedList");
             dispatch(removeRepo());
             dispatch(removePullMsg());
             dispatch(removeFiles());
-            store.clear();
+            fileStore.clear();
+            diffStore.clear();
+            stagedStore.clear();
+            fileStore.save();
+            diffStore.save();
+            stagedStore.save();
           }}>
           Close Repository
         </Button>

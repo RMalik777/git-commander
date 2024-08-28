@@ -12,9 +12,7 @@ export default function ErrorPage() {
       <p className="text-2xl">Sorry, an unexpected error has occurred.</p>
       <p className="text-lg">
         <code className="">
-          <span className="font-bold">
-            {error.status ? error.status + " | " : ""}
-          </span>
+          <span className="font-bold">{error.status ? error.status + " | " : ""}</span>
           {error.statusText || error.message}
         </code>
       </p>

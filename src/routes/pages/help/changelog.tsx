@@ -18,14 +18,10 @@ export default function Changelog() {
         <Markdown
           components={{
             h1(props) {
-              return (
-                <h1 className="mt-4 text-2xl font-bold">{props.children}</h1>
-              );
+              return <h1 className="mt-4 text-2xl font-bold">{props.children}</h1>;
             },
             h2(props) {
-              return (
-                <h2 className="mt-4 text-xl font-bold">{props.children}</h2>
-              );
+              return <h2 className="mt-4 text-xl font-bold">{props.children}</h2>;
             },
             h3(props) {
               return <h3 className="text-lg font-bold">{props.children}</h3>;
@@ -34,14 +30,10 @@ export default function Changelog() {
               return <h4 className="text-lg font-medium">{props.children}</h4>;
             },
             h5(props) {
-              return (
-                <h5 className="text-base font-medium">{props.children}</h5>
-              );
+              return <h5 className="text-base font-medium">{props.children}</h5>;
             },
             h6(props) {
-              return (
-                <h6 className="text-base font-normal">{props.children}</h6>
-              );
+              return <h6 className="text-base font-normal">{props.children}</h6>;
             },
             a(props) {
               return (
@@ -58,11 +50,7 @@ export default function Changelog() {
               return <ul className="">{props.children}</ul>;
             },
             li(props) {
-              return (
-                <li className="list-inside list-disc text-base">
-                  {props.children}
-                </li>
-              );
+              return <li className="list-inside list-disc text-base">{props.children}</li>;
             },
             p(props) {
               return <p className="text-sm">{props.children}</p>;

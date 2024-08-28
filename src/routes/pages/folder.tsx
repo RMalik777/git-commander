@@ -19,6 +19,7 @@ export default function Git() {
   const refFile = useRef("");
 
   async function getDiff() {
+    const diffList = new Store(".diffList.json");
     const data = await git.showChanged(dir);
     const data2 = await git.ShowUntrackedFiles(dir);
     const toEntry = data.map((item: string) => {
@@ -35,7 +36,8 @@ export default function Git() {
     });
     toEntry.push(...toEntry2);
     dispatch(setRepo({ diff: toEntry }));
-    localStorage.setItem("diffList", JSON.stringify(toEntry));
+    diffList.set("diffList", toEntry);
+    diffList.save();
   }
   useEffect(() => {
     if (dir === "") return;
@@ -44,6 +46,7 @@ export default function Git() {
 
   const stagedList = useAppSelector((state) => state.repo.staged);
   async function getStaged() {
+    const stagedStore = new Store(".stagedList.json");
     const data = await git.showStaged(dir);
     const toEntry = data.map((item: string) => {
       return {
@@ -52,7 +55,8 @@ export default function Git() {
       } as FileEntry;
     });
     dispatch(setRepo({ staged: toEntry }));
-    localStorage.setItem("stagedList", JSON.stringify(toEntry));
+    stagedStore.set("stagedList", toEntry);
+    stagedStore.save();
   }
   useEffect(() => {
     if (dir === "") return;

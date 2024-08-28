@@ -9,18 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  FolderContent,
-  FolderItem,
-  FolderRoot,
-  FolderTrigger,
-} from "@/components/ui/folder";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { FolderContent, FolderItem, FolderRoot, FolderTrigger } from "@/components/ui/folder";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { Lightbulb, RefreshCw } from "lucide-react";
 
@@ -69,21 +59,14 @@ export function FileList({
     return (
       <div className="hidden flex-row items-center gap-2 2xs:flex">
         {fileStatus === "Changed" ?
-          <h4 className="text-sm text-neutral-300 duration-200 dark:text-neutral-600">
-            Edited
-          </h4>
+          <h4 className="text-sm text-neutral-300 duration-200 dark:text-neutral-600">Edited</h4>
         : fileStatus === "Staged" ?
-          <h4 className="dark:text-neutal-600 text-sm text-neutral-300 duration-200">
-            Staged
-          </h4>
+          <h4 className="dark:text-neutal-600 text-sm text-neutral-300 duration-200">Staged</h4>
         : null}
       </div>
     );
   }
-  function recursiveDirRenderer(
-    parent: FileEntry[],
-    root: boolean
-  ): React.ReactNode {
+  function recursiveDirRenderer(parent: FileEntry[], root: boolean): React.ReactNode {
     return (
       <>
         {parent?.map((placeholder) => {
@@ -124,9 +107,7 @@ export function FileList({
                   <FolderRoot
                     className={
                       "group duration-200 ease-out " +
-                      (root ? "" : (
-                        "ml-4 border-l border-neutral-200 dark:border-neutral-800"
-                      ))
+                      (root ? "" : "ml-4 border-l border-neutral-200 dark:border-neutral-800")
                     }
                     type="multiple">
                     <FolderItem value="item-1" className="">
@@ -136,17 +117,13 @@ export function FileList({
                           {actionButton(child)}
                         </div>
                       </FolderTrigger>
-                      <FolderContent>
-                        {recursiveDirRenderer(child.children, false)}
-                      </FolderContent>
+                      <FolderContent>{recursiveDirRenderer(child.children, false)}</FolderContent>
                     </FolderItem>
                   </FolderRoot>
                 : <div
                     className={
                       "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
-                      (root ? "" : (
-                        "ml-4 border-l border-neutral-200 dark:border-neutral-800"
-                      ))
+                      (root ? "" : "ml-4 border-l border-neutral-200 dark:border-neutral-800")
                     }>
                     <Icons name={child.name} />
                     <button className="flex w-full items-center justify-between text-left">
@@ -196,15 +173,10 @@ export function FileList({
       </CardContent>
       <CardFooter className="flex justify-center">
         <div className="flex w-fit flex-col items-center justify-center gap-1 rounded border border-blue-500 bg-blue-200/20 p-2 dark:bg-blue-700/20 xs:flex-row">
-          <Lightbulb
-            size={20}
-            className="min-w-fit text-blue-600 dark:text-blue-500"
-          />
+          <Lightbulb size={20} className="min-w-fit text-blue-600 dark:text-blue-500" />
           <p className="text-center text-neutral-600 dark:text-neutral-300">
             File and folder referenced inside{" "}
-            <code className="rounded bg-neutral-100/50 p-1 dark:bg-neutral-900/50">
-              .gitignore
-            </code>{" "}
+            <code className="rounded bg-neutral-100/50 p-1 dark:bg-neutral-900/50">.gitignore</code>{" "}
             will not be shown.
           </p>
         </div>

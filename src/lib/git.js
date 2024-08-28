@@ -62,8 +62,7 @@ export async function checkGit(path) {
     command.stdout.on("data", () => (isGitRepo = true));
     command.stderr.on("data", (data) => {
       isGitRepo = false;
-      if (data.match(/fatal: not a git repository/gi))
-        errorMsg = "Folder is not a git repository";
+      if (data.match(/fatal: not a git repository/gi)) errorMsg = "Folder is not a git repository";
     });
     command.spawn().catch((error) => {
       errorMsg = error;
@@ -96,17 +95,11 @@ export async function clone(localRepo, remoteRepo, username) {
   configUsername(localRepo, username);
   const response = new Promise((resolve, reject) => {
     const result = [];
-    const command = new Command(
-      "git 3 args",
-      ["clone", "--progress", remoteRepo],
-      {
-        cwd: localRepo,
-      }
-    );
+    const command = new Command("git 3 args", ["clone", "--progress", remoteRepo], {
+      cwd: localRepo,
+    });
     command.on("close", (data) => {
-      console.log(
-        `command finished with code ${data.code} and signal ${data.signal}`
-      );
+      console.log(`command finished with code ${data.code} and signal ${data.signal}`);
       resolve(result);
     });
     command.on("error", (error) => {
@@ -137,9 +130,7 @@ export async function commit(path, message) {
       cwd: path,
     });
     commmit.on("close", (data) => {
-      console.log(
-        `command finished with code ${data.code} and signal ${data.signal}`
-      );
+      console.log(`command finished with code ${data.code} and signal ${data.signal}`);
       resolve(result.at(-1));
     });
     commmit.on("error", (error) => console.error(`command error: "${error}"`));
@@ -164,13 +155,9 @@ export async function commitAll(path, message) {
 }
 
 export async function configUsername(path, username) {
-  const command = new Command(
-    "git username",
-    ["config", "user.name", username],
-    {
-      cwd: path,
-    }
-  );
+  const command = new Command("git username", ["config", "user.name", username], {
+    cwd: path,
+  });
   await command.spawn().catch((error) => {
     console.log(error);
     throw new Error(error);
@@ -181,7 +168,9 @@ export async function configUsernameReplace(path) {
   const command = new Command(
     "git username replace",
     ["config", "--replace-all", "user.name", username],
-    { cwd: path }
+    {
+      cwd: path,
+    }
   );
   await command.spawn().catch((error) => {
     console.error(error);
@@ -200,9 +189,7 @@ export async function currentBranch(path) {
       reject(new Error(error));
     });
     command.stdout.on("data", (data) => (result = data.trim()));
-    command.stderr.on("data", (line) =>
-      console.log(`command stderr: "${line}"`)
-    );
+    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
     command.spawn().catch((error) => {
       console.error(error);
       reject(new Error(error));
@@ -211,28 +198,34 @@ export async function currentBranch(path) {
   return await response;
 }
 
+export async function getLastCommitMessage(path) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 3 args", ["log", "-1", "--pretty=%B"], {
+      cwd: path,
+    });
+    const result = [];
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (data) => result.push(data.trim()));
+    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
 export async function getParent(path) {
   const response = new Promise((resolve, reject) => {
-    const command = new Command(
-      "git 2 args",
-      ["rev-parse", "--show-toplevel"],
-      {
-        cwd: path,
-      }
-    );
+    const command = new Command("git 2 args", ["rev-parse", "--show-toplevel"], {
+      cwd: path,
+    });
     let result;
     command.on("close", () => resolve(result));
     command.on("error", (error) => {
       console.error(`command error: "${error}"`);
       reject(new Error(error));
     });
-    command.stdout.on(
-      "data",
-      (data) => (result = data.replace(/\//g, "\\").trim())
-    );
-    command.stderr.on("data", (line) =>
-      console.log(`command stderr: "${line}"`)
-    );
+    command.stdout.on("data", (data) => (result = data.replace(/\//g, "\\").trim()));
+    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
     command.spawn().catch((error) => {
       console.error(error);
       reject(new Error(error));
@@ -320,9 +313,7 @@ export async function showChanged(path) {
     });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) =>
-      result.push(line.trim().replace(/[\n\r]/g, ""))
-    );
+    command.stdout.on("data", (line) => result.push(line.trim().replace(/[\n\r]/g, "")));
     // command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
@@ -332,18 +323,12 @@ export async function showChanged(path) {
 export async function showStaged(path) {
   const response = new Promise((resolve, reject) => {
     const result = [];
-    const command = new Command(
-      "git 3 args",
-      ["diff", "--name-only", "--cached"],
-      {
-        cwd: path,
-      }
-    );
+    const command = new Command("git 3 args", ["diff", "--name-only", "--cached"], {
+      cwd: path,
+    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) =>
-      result.push(line.trim().replace(/[\n\r]/g, ""))
-    );
+    command.stdout.on("data", (line) => result.push(line.trim().replace(/[\n\r]/g, "")));
     // command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
@@ -353,30 +338,20 @@ export async function showStaged(path) {
 export async function ShowUntrackedFiles(path) {
   const response = new Promise((resolve, reject) => {
     const result = [];
-    const command = new Command(
-      "git 3 args",
-      ["ls-files", "--others", "--exclude-standard"],
-      {
-        cwd: path,
-      }
-    );
+    const command = new Command("git 3 args", ["ls-files", "--others", "--exclude-standard"], {
+      cwd: path,
+    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) =>
-      result.push(line.replace(/[\n\r]/g, ""))
-    );
-    command.stderr.on("data", (line) =>
-      result.push(line.replace(/[\n\r]/g, ""))
-    );
+    command.stdout.on("data", (line) => result.push(line.replace(/[\n\r]/g, "")));
+    command.stderr.on("data", (line) => result.push(line.replace(/[\n\r]/g, "")));
     command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
 }
 
 export async function setSSLFalse() {
-  const command = new Command("git ssl", [
-    "config --global http.sslVerify false",
-  ]);
+  const command = new Command("git ssl", ["config --global http.sslVerify false"]);
   await command.spawn().catch((error) => {
     console.error(error);
   });
@@ -386,13 +361,9 @@ export async function switchBranch(path, branch) {
   const response = new Promise((resolve, reject) => {
     const resultNormal = [],
       resultReject = [];
-    const command = new Command(
-      "git 3 args",
-      ["switch", branch, "--progress"],
-      {
-        cwd: path,
-      }
-    );
+    const command = new Command("git 3 args", ["switch", branch, "--progress"], {
+      cwd: path,
+    });
     command.on("close", () => {
       if (resultReject.length > 1) {
         const result = resultReject.join("").trim();

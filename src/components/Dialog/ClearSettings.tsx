@@ -7,6 +7,9 @@ import { z } from "zod";
 import { useAppDispatch } from "@/lib/Redux/hooks";
 import { removeRepo } from "@/lib/Redux/repoSlice";
 import { removeUser } from "@/lib/Redux/userSlice";
+import { removeFiles } from "@/lib/Redux/fileList";
+import { removeLastCommitMessage } from "@/lib/Redux/gitSlice";
+import { removePullMsg } from "@/lib/Redux/pullMsg";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -70,12 +73,7 @@ export function ClearSettings({
       setValue("username", true);
       setValue("theme", true);
       setValue("repoList", true);
-    } else if (
-      !allChecked &&
-      usernameChecked &&
-      themeChecked &&
-      repoListChecked
-    ) {
+    } else if (!allChecked && usernameChecked && themeChecked && repoListChecked) {
       setValue("username", false);
       setValue("theme", false);
       setValue("repoList", false);
@@ -99,8 +97,12 @@ export function ClearSettings({
     const removedItems = [];
     if (data.all) {
       localStorage.clear();
+      sessionStorage.clear();
       dispatch(removeUser());
       dispatch(removeRepo());
+      dispatch(removeFiles());
+      dispatch(removeLastCommitMessage());
+      dispatch(removePullMsg());
       removedItems.push("All settings");
     } else {
       if (data.username) {
@@ -149,19 +151,14 @@ export function ClearSettings({
           <DialogDescription>Choose what you want to clear</DialogDescription>
         </DialogHeader>
         <Form {...clearSettingsForm}>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-1">
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
             <FormField
               control={clearSettingsForm.control}
               name="all"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2 dark:border-neutral-800">
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>All</FormLabel>
@@ -175,16 +172,11 @@ export function ClearSettings({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2 dark:border-neutral-800">
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>Username</FormLabel>
-                    <FormDescription>
-                      Clear your username from the settings.
-                    </FormDescription>
+                    <FormDescription>Clear your username from the settings.</FormDescription>
                   </div>
                 </FormItem>
               )}
@@ -195,16 +187,11 @@ export function ClearSettings({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2 dark:border-neutral-800">
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>Theme</FormLabel>
-                    <FormDescription>
-                      Reset your theme to default.
-                    </FormDescription>
+                    <FormDescription>Reset your theme to default.</FormDescription>
                   </div>
                 </FormItem>
               )}
@@ -215,16 +202,11 @@ export function ClearSettings({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2 dark:border-neutral-800">
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>Repository List</FormLabel>
-                    <FormDescription>
-                      Clear all repositories from the list.
-                    </FormDescription>
+                    <FormDescription>Clear all repositories from the list.</FormDescription>
                   </div>
                 </FormItem>
               )}
@@ -239,16 +221,10 @@ export function ClearSettings({
                 variant="destructive"
                 type="button"
                 onClick={() => {
-                  if (
-                    !allChecked &&
-                    !usernameChecked &&
-                    !themeChecked &&
-                    !repoListChecked
-                  ) {
+                  if (!allChecked && !usernameChecked && !themeChecked && !repoListChecked) {
                     toast({
                       title: "No Category Selected",
-                      description:
-                        "Please select the settings you want to clear",
+                      description: "Please select the settings you want to clear",
                       duration: 300,
                     });
                     return;

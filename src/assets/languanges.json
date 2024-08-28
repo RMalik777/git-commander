@@ -600,16 +600,7 @@
   },
   "Common Lisp": {
     "color": "#3fb68b",
-    "extensions": [
-      ".lisp",
-      ".asd",
-      ".cl",
-      ".l",
-      ".lsp",
-      ".ny",
-      ".podsl",
-      ".sexp"
-    ],
+    "extensions": [".lisp", ".asd", ".cl", ".l", ".lsp", ".ny", ".podsl", ".sexp"],
     "language_id": 66
   },
   "Common Workflow Language": {
@@ -632,13 +623,7 @@
     "language_id": 69
   },
   "Cpp-ObjDump": {
-    "extensions": [
-      ".cppobjdump",
-      ".c++-objdump",
-      ".c++objdump",
-      ".cpp-objdump",
-      ".cxx-objdump"
-    ],
+    "extensions": [".cppobjdump", ".c++-objdump", ".c++objdump", ".cpp-objdump", ".cxx-objdump"],
     "language_id": 70
   },
   "Creole": {
@@ -931,22 +916,8 @@
   },
   "Erlang": {
     "color": "#B83998",
-    "extensions": [
-      ".erl",
-      ".app",
-      ".app.src",
-      ".es",
-      ".escript",
-      ".hrl",
-      ".xrl",
-      ".yrl"
-    ],
-    "filenames": [
-      "Emakefile",
-      "rebar.config",
-      "rebar.config.lock",
-      "rebar.lock"
-    ],
+    "extensions": [".erl", ".app", ".app.src", ".es", ".escript", ".hrl", ".xrl", ".yrl"],
+    "filenames": ["Emakefile", "rebar.config", "rebar.config.lock", "rebar.lock"],
     "language_id": 104
   },
   "Euphoria": {
@@ -1027,16 +998,7 @@
   },
   "Forth": {
     "color": "#341708",
-    "extensions": [
-      ".fth",
-      ".4th",
-      ".f",
-      ".for",
-      ".forth",
-      ".fr",
-      ".frt",
-      ".fs"
-    ],
+    "extensions": [".fth", ".4th", ".f", ".for", ".forth", ".fr", ".frt", ".fs"],
     "language_id": 114
   },
   "Fortran": {
@@ -1375,15 +1337,7 @@
   },
   "HTML": {
     "color": "#e34c26",
-    "extensions": [
-      ".html",
-      ".hta",
-      ".htm",
-      ".html.hl",
-      ".inc",
-      ".xht",
-      ".xhtml"
-    ],
+    "extensions": [".html", ".hta", ".htm", ".html.hl", ".inc", ".xht", ".xhtml"],
     "language_id": 146
   },
   "HTML+ECR": {
@@ -1819,14 +1773,7 @@
   },
   "Just": {
     "color": "#384d54",
-    "filenames": [
-      ".JUSTFILE",
-      ".Justfile",
-      ".justfile",
-      "JUSTFILE",
-      "Justfile",
-      "justfile"
-    ],
+    "filenames": [".JUSTFILE", ".Justfile", ".justfile", "JUSTFILE", "Justfile", "justfile"],
     "extensions": [".just"],
     "language_id": 128447695
   },
@@ -2017,16 +1964,7 @@
   },
   "Lua": {
     "color": "#000080",
-    "extensions": [
-      ".lua",
-      ".fcgi",
-      ".nse",
-      ".p8",
-      ".pd_lua",
-      ".rbxs",
-      ".rockspec",
-      ".wlua"
-    ],
+    "extensions": [".lua", ".fcgi", ".nse", ".p8", ".pd_lua", ".rbxs", ".rockspec", ".wlua"],
     "filenames": [".luacheckrc"],
     "language_id": 213
   },
@@ -2149,17 +2087,7 @@
   },
   "Mathematica": {
     "color": "#dd1100",
-    "extensions": [
-      ".mathematica",
-      ".cdf",
-      ".m",
-      ".ma",
-      ".mt",
-      ".nb",
-      ".nbp",
-      ".wl",
-      ".wlt"
-    ],
+    "extensions": [".mathematica", ".cdf", ".m", ".ma", ".mt", ".nb", ".nbp", ".wl", ".wlt"],
     "language_id": 224
   },
   "Maven POM": {
@@ -2668,26 +2596,8 @@
   },
   "Perl": {
     "color": "#0298c3",
-    "extensions": [
-      ".pl",
-      ".al",
-      ".cgi",
-      ".fcgi",
-      ".perl",
-      ".ph",
-      ".plx",
-      ".pm",
-      ".psgi",
-      ".t"
-    ],
-    "filenames": [
-      ".latexmkrc",
-      "Makefile.PL",
-      "Rexfile",
-      "ack",
-      "cpanfile",
-      "latexmkrc"
-    ],
+    "extensions": [".pl", ".al", ".cgi", ".fcgi", ".perl", ".ph", ".plx", ".pm", ".psgi", ".t"],
+    "filenames": [".latexmkrc", "Makefile.PL", "Rexfile", "ack", "cpanfile", "latexmkrc"],
     "language_id": 282
   },
   "Pic": {
@@ -2939,14 +2849,7 @@
     "language_id": 309
   },
   "REALbasic": {
-    "extensions": [
-      ".rbbas",
-      ".rbfrm",
-      ".rbmnu",
-      ".rbres",
-      ".rbtbar",
-      ".rbuistate"
-    ],
+    "extensions": [".rbbas", ".rbfrm", ".rbmnu", ".rbres", ".rbtbar", ".rbuistate"],
     "language_id": 310
   },
   "REXX": {
@@ -3275,17 +3178,7 @@
   },
   "SQL": {
     "color": "#e38c00",
-    "extensions": [
-      ".sql",
-      ".cql",
-      ".ddl",
-      ".inc",
-      ".mysql",
-      ".prc",
-      ".tab",
-      ".udf",
-      ".viw"
-    ],
+    "extensions": [".sql", ".cql", ".ddl", ".inc", ".mysql", ".prc", ".tab", ".udf", ".viw"],
     "language_id": 333
   },
   "SQLPL": {
@@ -3813,15 +3706,7 @@
   },
   "Unity3D Asset": {
     "color": "#222c37",
-    "extensions": [
-      ".anim",
-      ".asset",
-      ".mask",
-      ".mat",
-      ".meta",
-      ".prefab",
-      ".unity"
-    ],
+    "extensions": [".anim", ".asset", ".mask", ".mat", ".meta", ".prefab", ".unity"],
     "language_id": 380
   },
   "Unix Assembly": {
@@ -3865,16 +3750,7 @@
   },
   "VHDL": {
     "color": "#adb2cb",
-    "extensions": [
-      ".vhdl",
-      ".vhd",
-      ".vhf",
-      ".vhi",
-      ".vho",
-      ".vhs",
-      ".vht",
-      ".vhw"
-    ],
+    "extensions": [".vhdl", ".vhd", ".vhf", ".vhi", ".vho", ".vhs", ".vht", ".vhw"],
     "language_id": 385
   },
   "Vala": {
@@ -3905,16 +3781,7 @@
   "Vim Script": {
     "color": "#199f4b",
     "extensions": [".vim", ".vba", ".vimrc", ".vmb"],
-    "filenames": [
-      ".exrc",
-      ".gvimrc",
-      ".nvimrc",
-      ".vimrc",
-      "_vimrc",
-      "gvimrc",
-      "nvimrc",
-      "vimrc"
-    ],
+    "filenames": [".exrc", ".gvimrc", ".nvimrc", ".vimrc", "_vimrc", "gvimrc", "nvimrc", "vimrc"],
     "language_id": 388
   },
   "Vim Snippet": {
