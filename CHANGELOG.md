@@ -1,3 +1,16 @@
+# [1.13.0](https://github.com/RMalik777/git-commander/compare/v1.12.2...v1.13.0) (2024-08-29)
+
+
+### Bug Fixes
+
+* file list refresh every page changes ([dc570c1](https://github.com/RMalik777/git-commander/commit/dc570c1d2105ad2e791292fc0789b72f851b3b9f))
+* refresh commit list when new commit is pushed ([b7ffc86](https://github.com/RMalik777/git-commander/commit/b7ffc868659475ef267d34d93bb6c3a9b7c0cbe7))
+
+
+### Features
+
+* show list of commit that hasn't been pushed ([051f587](https://github.com/RMalik777/git-commander/commit/051f5871e2624d9c6f6a7401004d43164b8180bc))
+
 ## [1.12.2](https://github.com/RMalik777/git-commander/compare/v1.12.1...v1.12.2) (2024-08-29)
 
 
