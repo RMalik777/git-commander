@@ -30,7 +30,13 @@ export function ChangeView() {
     incomingDeletions,
   ]);
 
-  return incomingChanges || incomingTagBranch ?
+  return (
+      incomingChanges ||
+        incomingTagBranch ||
+        incomingFilesChanged ||
+        incomingInsertions ||
+        incomingDeletions
+    ) ?
       <Card>
         <CardHeader className="bg-white dark:bg-neutral-950">
           <CardDescription>Latest Changes Since Last Pull</CardDescription>
