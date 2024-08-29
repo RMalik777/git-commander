@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
 
@@ -34,6 +36,7 @@ export function FileList({
   getDiff: () => Promise<void>;
   getStaged: () => Promise<void>;
 }>) {
+  const [refreshClick, setRefreshClick] = useState(false);
   function currentStatus(file: FileEntry) {
     let fileStatus = "Unchanged";
     if (
@@ -159,10 +162,14 @@ export function FileList({
                   size="icon"
                   className="FE_3 h-fit w-fit"
                   onClick={async () => {
+                    setRefreshClick(true);
                     await getDiff();
                     await getStaged();
+                    setTimeout(() => {
+                      setRefreshClick(false);
+                    }, 1000);
                   }}>
-                  <RefreshCw size={20} />
+                  <RefreshCw size={20} className={refreshClick ? "animate-spin" : ""} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
