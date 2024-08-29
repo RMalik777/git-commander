@@ -50,9 +50,14 @@ export function TerminalView() {
       <Button
         variant="outline"
         className="flex w-fit gap-1 rounded-none font-mono"
-        onClick={() => {
+        onClick={async () => {
           setOpenTerminal(!openTerminal);
           localStorage.setItem("openTerminal", (!openTerminal).toString());
+          const fitAddon = new FitAddon();
+          term.loadAddon(fitAddon);
+          // Set timeout is needed so the FitAddon can be loaded first before fitting the terminal. The amount of time is (probably) not important, 1ms should be enough but i choose 10 just to be safe.
+          // The alternative will be to await the term.loadAddon(fitAddon) and then fit the terminal. But that shows warning because it's not a promise.
+          setTimeout(() => fitTerminal(term, fitAddon), 10);
         }}>
         <TerminalIcon size={20} />
         Terminal

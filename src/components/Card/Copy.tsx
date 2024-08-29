@@ -61,6 +61,7 @@ export function Copy() {
     const list = values.fileList.trim().split("\n");
     const listLength = list.length;
     const duplicateList = [];
+    const notExistList = [];
     for (let i = listLength - 1; i >= 0; i--) {
       const file = list[i].trim();
       if (file.length === 0) {
@@ -68,31 +69,42 @@ export function Copy() {
       } else {
         list[i] = file;
         if (!(await exists(`${values.source}/${file}`))) {
-          toast({
-            title: "Copying Cancelled",
-            description: (
-              <>
-                File <code className="rounded bg-red-700 p-1">{file}</code> does not exist in the
-                source folder. Please check the file name and location
-              </>
-            ),
-            variant: "destructive",
-            action: (
-              <ToastAction
-                altText="Open Folder"
-                onClick={async () => {
-                  await openFolder(values.source);
-                }}>
-                Open Folder
-              </ToastAction>
-            ),
-          });
-          return;
+          notExistList.push(file);
         }
         if ((await exists(`${values.destination}/${file}`)) && !values.overwrite) {
           duplicateList.push(file);
         }
       }
+    }
+    if (notExistList.length > 0) {
+      toast({
+        title: "Copying Cancelled",
+        description: (
+          <>
+            File{" "}
+            {notExistList.reverse().map((item) => (
+              <>
+                <code key={item} className="rounded bg-black/10 p-1 font-medium text-white">
+                  {item}
+                </code>
+                <span> </span>
+              </>
+            ))}{" "}
+            does not exist in the source folder. Please check the file name and location
+          </>
+        ),
+        variant: "destructive",
+        action: (
+          <ToastAction
+            altText="Open Folder"
+            onClick={async () => {
+              await openFolder(values.source);
+            }}>
+            Open Folder
+          </ToastAction>
+        ),
+      });
+      return;
     }
     if (list.length === 0) {
       toast({
@@ -108,9 +120,12 @@ export function Copy() {
         description: (
           <>
             File{" "}
-            <code className="rounded bg-black/10 p-1 font-medium text-white">
-              {duplicateList.join(", ")}
-            </code>{" "}
+            {duplicateList.reverse().map((item) => (
+              <>
+                <code className="rounded bg-black/10 p-1 font-medium text-white">{item}</code>
+                <span> </span>
+              </>
+            ))}
             already exists in the destination folder.
           </>
         ),
@@ -326,12 +341,15 @@ export function Copy() {
                   : "scale-0 opacity-0 max-md:translate-y-6 md:translate-x-40") +
                   " flex w-fit items-center gap-1 rounded border border-yellow-500/50 bg-yellow-200/20 p-2 text-yellow-700 duration-200 ease-out dark:border-yellow-500 dark:border-yellow-900/50 dark:dark:border-yellow-900 dark:bg-yellow-800/20 dark:text-yellow-500 [&>svg]:text-yellow-700 dark:[&>svg]:text-yellow-500"
                 }>
-                <TriangleAlert size={16} />
-                <p className="text-center font-medium">
-                  Warning! <span className="font-normal">Overwrite option is turned on</span>
+                <TriangleAlert size={16} className="max-xs:hidden" />
+                <p className="text-center font-normal tracking-normal">
+                  <span className="font-medium tracking-tight">Warning! </span>Overwrite option is
+                  turned on
                 </p>
               </div>
-              <Button type="submit">Copy</Button>
+              <Button className="max-md:w-full" type="submit">
+                Copy
+              </Button>
             </div>
           </form>
         </Form>
