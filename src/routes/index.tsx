@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 import { RepoView } from "@/components/Card/RepoView";
+import { WaitingPush } from "@/components/Card/WaitingPush";
 import { ChangeView } from "@/components/Card/ChangeView";
 
 import * as git from "@/lib/git";
@@ -15,6 +16,7 @@ export default function Index() {
   return (
     <div className="flex flex-col gap-4">
       <RepoView />
+      <WaitingPush />
       <ChangeView />
     </div>
   );

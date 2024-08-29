@@ -198,6 +198,96 @@ export async function currentBranch(path) {
   return await response;
 }
 
+export async function getAllRemoteCommit(path, branch) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command(
+      "git 4 args",
+      [
+        "log",
+        `origin/${branch}`,
+        '--pretty=format:"%h $|$ %ad $|$ %an $|$ %s"',
+        "--date=format-local:%Y-%m-%d %H:%M:%S",
+      ],
+      {
+        cwd: path,
+      }
+    );
+    const result = [];
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line.trim()));
+    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
+export async function getLatestRemoteCommit(path) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 2 args", ["log", "origin/main", "-1", "--oneline"], {
+      cwd: path,
+    });
+    let result;
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => {
+      console.error(`command error: "${error}"`);
+      reject(new Error(error));
+    });
+    command.stdout.on("data", (line) => (result = line.trim()));
+    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
+    command.spawn().catch((error) => {
+      console.error(error);
+      reject(new Error(error));
+    });
+  });
+  return await response;
+}
+
+export async function getCommitNotPushedFull(path) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command(
+      "git 4 args",
+      [
+        "log",
+        "@{push}..",
+        '--pretty=format:"%h $|$ %ad $|$ %an $|$ %s"',
+        "--date=format-local:%Y-%m-%d %H:%M:%S",
+      ],
+      {
+        cwd: path,
+      }
+    );
+    const result = [];
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => {
+      console.error(`command error: "${error}"`);
+      reject(new Error(error));
+    });
+    command.stdout.on("data", (line) => result.push(line.trim()));
+    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
+    command.spawn().catch((error) => {
+      console.error(error);
+      reject(new Error(error));
+    });
+  });
+  return await response;
+}
+
+export async function getCommitNotPushed(path) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command("git 3 args", ["log", "@{push}..", "--oneline"], {
+      cwd: path,
+    });
+    const result = [];
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line.trim()));
+    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
 export async function getLastCommitMessage(path) {
   const response = new Promise((resolve, reject) => {
     const command = new Command("git 3 args", ["log", "-1", "--pretty=%B"], {
@@ -206,7 +296,7 @@ export async function getLastCommitMessage(path) {
     const result = [];
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (data) => result.push(data.trim()));
+    command.stdout.on("data", (line) => result.push(line.trim()));
     command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
@@ -224,7 +314,7 @@ export async function getParent(path) {
       console.error(`command error: "${error}"`);
       reject(new Error(error));
     });
-    command.stdout.on("data", (data) => (result = data.replace(/\//g, "\\").trim()));
+    command.stdout.on("data", (line) => (result = data.replace(/\//g, "\\").trim()));
     command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
     command.spawn().catch((error) => {
       console.error(error);
