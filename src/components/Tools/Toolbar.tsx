@@ -441,7 +441,7 @@ export function Toolbar() {
                                 currentBranch
                               );
                               dispatch(setRepo({ hash: currentHash }));
-                              localStorage.setItem("currentRepoHash", currentHash);
+                              localStorage.setItem("currentRepoHash", currentHash.toString());
                             } catch (error) {
                               throw Error(error as string);
                             }

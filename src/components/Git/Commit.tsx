@@ -100,7 +100,7 @@ export function Commit({
           description: (
             <>
               Commited to{" "}
-              <code className="rounded bg-gray-50 p-1">
+              <code className="rounded bg-gray-50 p-1 dark:bg-neutral-900">
                 {repoName}/{currentBranch}
               </code>
               <br />
@@ -132,7 +132,7 @@ export function Commit({
                       currentBranch
                     );
                     dispatch(setRepo({ hash: currentHash }));
-                    localStorage.setItem("currentRepoHash", currentHash);
+                    localStorage.setItem("currentRepoHash", currentHash.toString());
                   } catch (error) {
                     throw Error(error as string);
                   }
