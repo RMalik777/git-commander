@@ -57,7 +57,7 @@ export function TerminalView() {
           term.loadAddon(fitAddon);
           // Set timeout is needed so the FitAddon can be loaded first before fitting the terminal.
           // The alternative will be to await the term.loadAddon(fitAddon) and then fit the terminal. But that shows warning because it's not a promise.
-          setTimeout(() => fitTerminal(term, fitAddon), 1);
+          setTimeout(() => fitTerminal(term, fitAddon), 10);
         }}>
         <TerminalIcon size={20} />
         Terminal
