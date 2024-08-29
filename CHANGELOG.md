@@ -1,3 +1,11 @@
+## [1.12.2](https://github.com/RMalik777/git-commander/compare/v1.12.1...v1.12.2) (2024-08-29)
+
+
+### Bug Fixes
+
+* system color theme not detecting current theme ([42e6c1e](https://github.com/RMalik777/git-commander/commit/42e6c1ed24584267844c5070803f224ba2c97fc8))
+* terminal show with wrong size after hidden ([d21af34](https://github.com/RMalik777/git-commander/commit/d21af34497eb9b126736b333ea65b7f5261f79f6))
+
 ## [1.12.1](https://github.com/RMalik777/git-commander/compare/v1.12.0...v1.12.1) (2024-08-28)
 
 
