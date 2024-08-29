@@ -1,4 +1,5 @@
 import { FileEntry } from "@tauri-apps/api/fs";
+import { open } from "@tauri-apps/api/shell";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -33,7 +34,7 @@ export function FileList({
   getDiff: () => Promise<void>;
   getStaged: () => Promise<void>;
 }>) {
-  function actionButton(file: FileEntry) {
+  function currentStatus(file: FileEntry) {
     let fileStatus = "Unchanged";
     if (
       diffList.some((target) => {
@@ -114,7 +115,7 @@ export function FileList({
                       <FolderTrigger className="group p-1 pl-2 hover:bg-neutral-100 dark:hover:bg-neutral-900">
                         <div className="flex w-full justify-between text-left">
                           {child.name}
-                          {actionButton(child)}
+                          {currentStatus(child)}
                         </div>
                       </FolderTrigger>
                       <FolderContent>{recursiveDirRenderer(child.children, false)}</FolderContent>
@@ -125,10 +126,16 @@ export function FileList({
                       "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
                       (root ? "" : "ml-4 border-l border-neutral-200 dark:border-neutral-800")
                     }>
-                    <Icons name={child.name} />
-                    <button className="flex w-full items-center justify-between text-left">
-                      {child.name}
-                      {actionButton(child)}
+                    <button
+                      className="flex w-full items-center gap-1"
+                      onClick={async () => {
+                        await open(dir + "\\" + child.path);
+                      }}>
+                      <Icons name={child.name} />
+                      <div className="flex w-full items-center justify-between text-left">
+                        {child.name}
+                        {currentStatus(child)}
+                      </div>
                     </button>
                   </div>
                 }
