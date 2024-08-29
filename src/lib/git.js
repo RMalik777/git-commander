@@ -222,23 +222,21 @@ export async function getAllRemoteCommit(path, branch) {
   return await response;
 }
 
-export async function getLatestRemoteCommit(path) {
+export async function getLatestRemoteCommitHash(path, branch) {
   const response = new Promise((resolve, reject) => {
-    const command = new Command("git 2 args", ["log", "origin/main", "-1", "--oneline"], {
-      cwd: path,
-    });
+    const command = new Command(
+      "git 4 args",
+      ["log", `origin/${branch}`, '--pretty=format:"%h"', "-1"],
+      {
+        cwd: path,
+      }
+    );
     let result;
     command.on("close", () => resolve(result));
-    command.on("error", (error) => {
-      console.error(`command error: "${error}"`);
-      reject(new Error(error));
-    });
+    command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => (result = line.trim()));
     command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
-    command.spawn().catch((error) => {
-      console.error(error);
-      reject(new Error(error));
-    });
+    command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
 }

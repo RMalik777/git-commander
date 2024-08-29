@@ -21,6 +21,7 @@ export function WaitingPush() {
   const currentBranch = useAppSelector((state) => state.repo.branch);
   const currentRepoDir = useAppSelector((state) => state.repo.directory);
   const currentRepoName = useAppSelector((state) => state.repo.name);
+  const currentRepoHash = useAppSelector((state) => state.repo.hash);
 
   const [formattedWaitingPush, setFormattedWaitingPush] =
     useState<CommitFormat[]>(commitWaitingPush);
@@ -40,7 +41,7 @@ export function WaitingPush() {
       setFormattedWaitingPush(result);
     }
     getWaitingPush();
-  }, [currentBranch, currentRepoDir, currentRepoName]);
+  }, [currentBranch, currentRepoDir, currentRepoName, currentRepoHash]);
 
   return (
     <Card>
