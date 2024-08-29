@@ -435,6 +435,16 @@ export function Toolbar() {
                                 description: response.toString().trim(),
                               });
                             }
+                            try {
+                              const currentHash = await git.getLatestRemoteCommitHash(
+                                dirLocation,
+                                currentBranch
+                              );
+                              dispatch(setRepo({ hash: currentHash }));
+                              localStorage.setItem("currentRepoHash", currentHash.toString());
+                            } catch (error) {
+                              throw Error(error as string);
+                            }
                           } catch (error) {
                             if (error instanceof Error) {
                               console.error(error);

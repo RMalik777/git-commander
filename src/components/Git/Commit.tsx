@@ -1,5 +1,6 @@
 import { useAppSelector, useAppDispatch } from "@/lib/Redux/hooks";
 import { removeLastCommitMessage } from "@/lib/Redux/gitSlice";
+import { setRepo } from "@/lib/Redux/repoSlice";
 import { NavLink } from "react-router-dom";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,7 +56,7 @@ export function Commit({
 
   const repoName = useAppSelector((state) => state.repo.name);
   const currentBranch = useAppSelector((state) => state.repo.branch);
-  const workDir = useAppSelector((state) => state.repo.directory);
+  const currentRepoDir = useAppSelector((state) => state.repo.directory);
   const userName = useAppSelector((state) => state.user.value);
   const diffChanges = useAppSelector((state) => state.repo.diff);
 
@@ -79,7 +80,7 @@ export function Commit({
   const { handleSubmit, reset } = commitForm;
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const response = await git.commit(workDir, values.commitMsg);
+      const response = await git.commit(currentRepoDir, values.commitMsg);
       dispatch(removeLastCommitMessage());
       getDiff();
       getStaged();
@@ -99,7 +100,7 @@ export function Commit({
           description: (
             <>
               Commited to{" "}
-              <code className="rounded bg-gray-50 p-1">
+              <code className="rounded bg-gray-50 p-1 dark:bg-neutral-900">
                 {repoName}/{currentBranch}
               </code>
               <br />
@@ -110,8 +111,43 @@ export function Commit({
           action: (
             <ToastAction
               altText="Push"
-              onClick={() => {
-                git.push(workDir);
+              onClick={async () => {
+                try {
+                  const response = await git.push(currentRepoDir);
+                  if (response.toString().includes("fatal")) {
+                    toast({
+                      title: "Failed to push",
+                      description: response.toString().trim(),
+                      variant: "destructive",
+                    });
+                  } else {
+                    toast({
+                      title: "Pushed Succesfully",
+                      description: response.toString().trim(),
+                    });
+                  }
+                  try {
+                    const currentHash = await git.getLatestRemoteCommitHash(
+                      currentRepoDir,
+                      currentBranch
+                    );
+                    dispatch(setRepo({ hash: currentHash }));
+                    localStorage.setItem("currentRepoHash", currentHash.toString());
+                  } catch (error) {
+                    throw Error(error as string);
+                  }
+                } catch (error) {
+                  if (error instanceof Error) {
+                    console.error(error);
+                    toast({
+                      title: "Failed to push",
+                      description: (
+                        <p className="whitespace-pre-wrap break-words">{error.message}</p>
+                      ),
+                      variant: "destructive",
+                    });
+                  }
+                }
               }}>
               Push
             </ToastAction>

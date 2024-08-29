@@ -105,9 +105,19 @@ export function RepoView() {
         dispatch(setRepo({ name: newParent.split("\\").pop() }));
         setParentDialog(true);
       }
-      await dirFunc.getAllChildDir(toOpen);
       dispatch(removeFiles());
       dispatch(removePullMsg());
+      const fileStore = new Store(".fileList.json");
+      const diffStore = new Store(".diffList.json");
+      const stagedStore = new Store(".stagedList.json");
+      fileStore.clear();
+      diffStore.clear();
+      stagedStore.clear();
+      fileStore.save();
+      diffStore.save();
+      stagedStore.save();
+
+      await dirFunc.getAllChildDir(toOpen);
     }
   }
 
@@ -146,17 +156,6 @@ export function RepoView() {
       sessionStorage.removeItem("errorMsg");
       return;
     }
-    const fileStore = new Store(".fileList.json");
-    const diffStore = new Store(".diffList.json");
-    const stagedStore = new Store(".stagedList.json");
-    dispatch(removePullMsg());
-    dispatch(removeFiles());
-    fileStore.clear();
-    diffStore.clear();
-    stagedStore.clear();
-    fileStore.save();
-    diffStore.save();
-    stagedStore.save();
     checkDir(dir);
   }, [dir]);
 
