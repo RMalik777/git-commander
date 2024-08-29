@@ -234,7 +234,9 @@ export async function getLatestRemoteCommitHash(path, branch) {
     let result;
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => (result = line.trim()));
+    command.stdout.on("data", (line) => {
+      result = line.trim().replaceAll('"', "");
+    });
     command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
