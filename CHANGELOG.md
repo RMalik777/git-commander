@@ -1,3 +1,16 @@
+## [1.12.1](https://github.com/RMalik777/git-commander/compare/v1.12.0...v1.12.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* change input to multiple files ([208c56a](https://github.com/RMalik777/git-commander/commit/208c56adaa7b71d2fd881a10ba68a5cd2b9a0067))
+* check if source exists before copying ([b6e9c2a](https://github.com/RMalik777/git-commander/commit/b6e9c2aa9855be590f0ac32a7a9c70527bff4615))
+* detect tag changes when pulling ([1abf0bd](https://github.com/RMalik777/git-commander/commit/1abf0bd04a454db87fe5e919f79998b251b26326))
+* remember last commit message ([c2c5ef2](https://github.com/RMalik777/git-commander/commit/c2c5ef298720653d73de05972139dc774f0520c9))
+* update staging list after commit ([a2234f0](https://github.com/RMalik777/git-commander/commit/a2234f038237323bfe390542fe14cec8ef18d62e))
+* update staging list after commit undo ([0962141](https://github.com/RMalik777/git-commander/commit/0962141b4298000ca948bf73e5a86b7a14fc682d))
+* wrong repo name when inserting into db ([93e310a](https://github.com/RMalik777/git-commander/commit/93e310a54db59cc0e856d625e712d5785e882953))
+
 # [1.12.0](https://github.com/RMalik777/git-commander/compare/v1.11.0...v1.12.0) (2024-08-27)
 
 
