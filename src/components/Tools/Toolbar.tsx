@@ -640,8 +640,13 @@ export function Toolbar() {
                       !document.documentElement.classList.contains("dark") &&
                       window.localStorage.getItem("theme") === "Light"
                     ) {
-                      document.documentElement.classList.remove("dark");
-                      document.documentElement.style.removeProperty("color-scheme");
+                      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                        document.documentElement.classList.add("dark");
+                        document.documentElement.style.colorScheme = "dark";
+                      } else {
+                        document.documentElement.classList.remove("dark");
+                        document.documentElement.style.removeProperty("color-scheme");
+                      }
                       window.localStorage.removeItem("theme");
                       setThemeMode("System");
                     }
