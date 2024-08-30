@@ -32,7 +32,7 @@ export function WaitingPush() {
 
   useEffect(() => {
     async function getWaitingPush() {
-      const waitingPush = await git.getAllRemoteCommit(currentRepoDir, "main");
+      const waitingPush = await git.getCommitNotPushed(currentRepoDir);
       const result = waitingPush.map((commit: string) => {
         const split = commit.replaceAll(/(^"|"$)/g, "").split(" $|$ ");
         const hash = split[0];
