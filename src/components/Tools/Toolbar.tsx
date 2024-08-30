@@ -191,11 +191,11 @@ export function Toolbar() {
               toast({
                 title: "Switching Branch",
                 description: (
-                  <>
-                    {themeMode === "Dark" ?
-                      <PulseLoader size={6} speedMultiplier={0.8} color="#ffffff" />
-                    : <PulseLoader size={6} speedMultiplier={0.8} color="#000000" />}
-                  </>
+                  <PulseLoader
+                    size={6}
+                    speedMultiplier={0.8}
+                    color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                  />
                 ),
                 duration: 6000,
               });
@@ -314,11 +314,11 @@ export function Toolbar() {
                           toast({
                             title: "Pulling Repository",
                             description: (
-                              <>
-                                {themeMode === "Dark" ?
-                                  <PulseLoader size={6} speedMultiplier={0.8} color="#ffffff" />
-                                : <PulseLoader size={6} speedMultiplier={0.8} color="#000000" />}
-                              </>
+                              <PulseLoader
+                                size={6}
+                                speedMultiplier={0.8}
+                                color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                              />
                             ),
                           });
                           try {
@@ -385,6 +385,7 @@ export function Toolbar() {
                         <HashLoader
                           size={24}
                           speedMultiplier={1.2}
+                          color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
                           className={
                             (isPulling ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0") +
                             " relative duration-300 ease-out"
@@ -414,11 +415,11 @@ export function Toolbar() {
                           toast({
                             title: "Pushing Repository",
                             description: (
-                              <>
-                                {themeMode === "Dark" ?
-                                  <PulseLoader size={6} speedMultiplier={0.8} color="#ffffff" />
-                                : <PulseLoader size={6} speedMultiplier={0.8} color="#000000" />}
-                              </>
+                              <PulseLoader
+                                size={6}
+                                speedMultiplier={0.8}
+                                color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                              />
                             ),
                           });
                           try {
@@ -463,11 +464,13 @@ export function Toolbar() {
                         <HashLoader
                           size={24}
                           speedMultiplier={1.2}
+                          color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
                           className={
                             (isPushing ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0") +
                             " relative duration-300 ease-out"
                           }
                         />
+
                         <ArrowUpToLine
                           className={
                             (isPushing ?
