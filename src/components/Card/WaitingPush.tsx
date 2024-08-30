@@ -52,7 +52,7 @@ export function WaitingPush() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Table className="border-collapse border">
+        <Table className="border-collapse border dark:border-neutral-700">
           <TableHeader className="">
             <TableRow>
               <TableHead>Date and Time</TableHead>
