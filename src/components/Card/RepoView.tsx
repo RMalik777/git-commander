@@ -36,7 +36,7 @@ import { Clone } from "@/components/Dialog/Clone";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { removeRepo, setRepo } from "@/lib/Redux/repoSlice";
 import { removePullMsg } from "@/lib/Redux/pullMsg";
-import { removeFiles } from "@/lib/Redux/fileList";
+import { removeFiles, setFiles } from "@/lib/Redux/fileList";
 
 export function RepoView() {
   const dir = useAppSelector((state) => state.repo.directory);
@@ -100,7 +100,6 @@ export function RepoView() {
       if (repoNameNew) localStorage.setItem("currentRepoName", repoNameNew.toString());
       dispatch(setRepo({ name: repoNameNew, directory: toOpen }));
       const newParent = await getNearestParent(toOpen);
-      console.log("NEWPARENT", newParent);
       if (newParent && toOpen != newParent) {
         dispatch(setRepo({ name: newParent.split("\\").pop() }));
         setParentDialog(true);
@@ -110,14 +109,17 @@ export function RepoView() {
       const fileStore = new Store(".fileList.json");
       const diffStore = new Store(".diffList.json");
       const stagedStore = new Store(".stagedList.json");
-      fileStore.clear();
-      diffStore.clear();
-      stagedStore.clear();
-      fileStore.save();
-      diffStore.save();
-      stagedStore.save();
+      await fileStore.clear();
+      await diffStore.clear();
+      await stagedStore.clear();
+      await fileStore.save();
+      await diffStore.save();
+      await stagedStore.save();
 
-      await dirFunc.getAllChildDir(toOpen);
+      const fileList = await dirFunc.getAllChildDir(toOpen);
+      dispatch(setFiles(fileList));
+      await fileStore.set("fileList", fileList);
+      await fileStore.save();
     }
   }
 

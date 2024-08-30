@@ -178,7 +178,6 @@ export function Copy() {
         }
       }
     });
-    console.log(list);
   }
   return (
     <Card>
