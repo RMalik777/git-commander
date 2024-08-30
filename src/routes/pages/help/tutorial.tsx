@@ -570,7 +570,7 @@ export default function Tutorial() {
               return (
                 <div
                   key={item.id}
-                  className="flex w-full flex-col items-start gap-2 rounded border p-2">
+                  className="flex w-full flex-col items-start gap-2 rounded border dark:border-neutral-700 p-2">
                   <div className="flex items-center gap-1">
                     <FileText className="" size={18} />
                     <p className="text-lg font-medium">{item.title}</p>
