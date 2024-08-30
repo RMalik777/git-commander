@@ -101,7 +101,6 @@ export function Clone() {
         cwd: localRepo,
       });
       command.on("close", (data) => {
-        console.log(`command finished with code ${data.code} and signal ${data.signal}`);
         setProgress("");
         setIsCloning(false);
         resolve(result);
