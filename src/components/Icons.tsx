@@ -106,13 +106,13 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siVitest;
     } else if (fileName?.startsWith(".prettier")) {
       iconsVar = siPrettier;
-    } else if (fileName?.startsWith("eslint") || fileName === "eslintrc") {
+    } else if (fileName === "eslintrc" || fileName === "eslint.config") {
       iconsVar = siEslint;
-    } else if (fileName?.startsWith("tailwind") || fileName === "tailwind.config") {
+    } else if (fileName === "tailwind.config") {
       iconsVar = siTailwindcss;
-    } else if (fileName?.startsWith("postcss") || fileName === "postcss.config") {
+    } else if (fileName === "postcss.config") {
       iconsVar = siPostcss;
-    } else if (fileName?.startsWith("astro") || fileName === "astro.config") {
+    } else if (fileName === "astro.config") {
       iconsVar = siAstro;
     } else {
       iconsVar = siJavascript;
@@ -126,13 +126,13 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siVitest;
     } else if (fileName?.startsWith(".prettier")) {
       iconsVar = siPrettier;
-    } else if (fileName?.startsWith("eslint") || fileName === "eslintrc") {
+    } else if (fileName === "eslintrc" || fileName === "eslint.config") {
       iconsVar = siEslint;
-    } else if (fileName?.startsWith("tailwind") || fileName === "tailwind.config") {
+    } else if (fileName === "tailwind.config") {
       iconsVar = siTailwindcss;
-    } else if (fileName?.startsWith("postcss") || fileName === "postcss.config") {
+    } else if (fileName === "postcss.config") {
       iconsVar = siPostcss;
-    } else if (fileName?.startsWith("astro") || fileName === "astro.config") {
+    } else if (fileName === "astro.config") {
       iconsVar = siAstro;
     } else {
       iconsVar = siTypescript;
@@ -357,7 +357,9 @@ export function Icons(params: Readonly<Params>) {
     extension === "jpeg" ||
     extension === "gif" ||
     extension === "webp" ||
-    extension === "avif"
+    extension === "avif" ||
+    extension === "icns" ||
+    extension === "ico"
   ) {
     return <Image className={iconsClass} />;
   }
