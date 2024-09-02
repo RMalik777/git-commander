@@ -1,3 +1,18 @@
+# [1.14.0](https://github.com/RMalik777/git-commander/compare/v1.13.0...v1.14.0) (2024-09-02)
+
+
+### Bug Fixes
+
+* fix wrong function name when reading commit ([635366e](https://github.com/RMalik777/git-commander/commit/635366e1913497f4ccbdb10d776e7733940d507f))
+* upstream tag and branch changes does not showed when pulled ([1e44b89](https://github.com/RMalik777/git-commander/commit/1e44b8974bc0187747e56f9e717fd224678c9dfb))
+* view changes can't be closed ([336badc](https://github.com/RMalik777/git-commander/commit/336badcf325ad8222b94f4d0f9c76c52b086041e))
+* wrong parameter in git function ([8fa7680](https://github.com/RMalik777/git-commander/commit/8fa76807d8d1c0f6793376722c6ea79628643a43))
+
+
+### Features
+
+* add search in waiting commit list ([2c0d5f8](https://github.com/RMalik777/git-commander/commit/2c0d5f8189b85cf43026d345ca42d6e6f39815ac))
+
 # [1.13.0](https://github.com/RMalik777/git-commander/compare/v1.12.2...v1.13.0) (2024-08-29)
 
 
