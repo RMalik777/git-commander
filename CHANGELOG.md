@@ -1,3 +1,24 @@
+# [1.13.0](https://github.com/RMalik777/git-commander/compare/v1.12.2...v1.13.0) (2024-08-29)
+
+
+### Bug Fixes
+
+* file list refresh every page changes ([dc570c1](https://github.com/RMalik777/git-commander/commit/dc570c1d2105ad2e791292fc0789b72f851b3b9f))
+* refresh commit list when new commit is pushed ([b7ffc86](https://github.com/RMalik777/git-commander/commit/b7ffc868659475ef267d34d93bb6c3a9b7c0cbe7))
+
+
+### Features
+
+* show list of commit that hasn't been pushed ([051f587](https://github.com/RMalik777/git-commander/commit/051f5871e2624d9c6f6a7401004d43164b8180bc))
+
+## [1.12.2](https://github.com/RMalik777/git-commander/compare/v1.12.1...v1.12.2) (2024-08-29)
+
+
+### Bug Fixes
+
+* system color theme not detecting current theme ([42e6c1e](https://github.com/RMalik777/git-commander/commit/42e6c1ed24584267844c5070803f224ba2c97fc8))
+* terminal show with wrong size after hidden ([d21af34](https://github.com/RMalik777/git-commander/commit/d21af34497eb9b126736b333ea65b7f5261f79f6))
+
 ## [1.12.1](https://github.com/RMalik777/git-commander/compare/v1.12.0...v1.12.1) (2024-08-28)
 
 
