@@ -335,8 +335,9 @@ export function Toolbar() {
                               });
                             } else {
                               const toCompare = response.toString().trim();
+                              console.log(toCompare);
                               const regexTag = new RegExp(
-                                String.raw`From[\s\S]+${repoName}}\s, ([\s\S]+),(?:already up to date|updating \w+)`,
+                                String.raw`From[\s\S]+${repoName}}\s*, ([\s\S]+),(?:already up to date|updating \w+)`,
                                 "i"
                               );
                               const regexChanges =
