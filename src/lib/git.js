@@ -304,7 +304,7 @@ export async function getParent(path) {
       console.error(`command error: "${error}"`);
       reject(new Error(error));
     });
-    command.stdout.on("data", (line) => (result = data.replace(/\//g, "\\").trim()));
+    command.stdout.on("data", (line) => (result = line.replace(/\//g, "\\").trim()));
     command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
     command.spawn().catch((error) => {
       console.error(error);
