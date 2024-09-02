@@ -243,7 +243,7 @@ export async function getLatestRemoteCommitHash(path, branch) {
   return await response;
 }
 
-export async function getCommitNotPushedFull(path) {
+export async function getCommitNotPushed(path) {
   const response = new Promise((resolve, reject) => {
     const command = new Command(
       "git 4 args",
@@ -273,19 +273,9 @@ export async function getCommitNotPushedFull(path) {
   return await response;
 }
 
-export async function getCommitNotPushed(path) {
-  const response = new Promise((resolve, reject) => {
-    const command = new Command("git 3 args", ["log", "@{push}..", "--oneline"], {
-      cwd: path,
-    });
-    const result = [];
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => result.push(line.trim()));
-    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
-    command.spawn().catch((error) => reject(new Error(error)));
-  });
-  return await response;
+export async function getNumberOfCommitsNotPushed(path) {
+  const response = await getCommitNotPushed(path);
+  return await response.length;
 }
 
 export async function getLastCommitMessage(path) {
@@ -314,7 +304,7 @@ export async function getParent(path) {
       console.error(`command error: "${error}"`);
       reject(new Error(error));
     });
-    command.stdout.on("data", (line) => (result = data.replace(/\//g, "\\").trim()));
+    command.stdout.on("data", (line) => (result = line.replace(/\//g, "\\").trim()));
     command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
     command.spawn().catch((error) => {
       console.error(error);

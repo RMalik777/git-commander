@@ -55,7 +55,7 @@ export function Toolbar() {
     setThemeMode(window.localStorage.getItem("theme") ?? "System");
   }, []);
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    if (e.matches && !localStorage.theme) {
+    if (e.matches && !localStorage.getItem("theme")) {
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
         document.documentElement.className = "dark";
         document.documentElement.style.colorScheme = "dark";
@@ -67,7 +67,7 @@ export function Toolbar() {
   });
 
   window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e) => {
-    if (e.matches && !localStorage.theme) {
+    if (e.matches && !localStorage.getItem("theme")) {
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
         document.documentElement.className = "dark";
         document.documentElement.style.colorScheme = "dark";
@@ -156,7 +156,7 @@ export function Toolbar() {
   const highlighter = driver({});
 
   return (
-    <div className="TB_1 flex flex-col">
+    <header className="TB_1 flex flex-col">
       <div className="flex w-full grow flex-row">
         <TooltipProvider delayDuration={350}>
           <div className="relative flex h-full w-full items-center justify-center border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
@@ -335,8 +335,9 @@ export function Toolbar() {
                               });
                             } else {
                               const toCompare = response.toString().trim();
+                              console.log(toCompare);
                               const regexTag = new RegExp(
-                                String.raw`From[\s\S]+${repoName}}\s, ([\s\S]+),(?:already up to date|updating \w+)`,
+                                String.raw`From[\s\S]+${repoName}}\s*, ([\s\S]+),(?:already up to date|updating \w+)`,
                                 "i"
                               );
                               const regexChanges =
@@ -699,6 +700,6 @@ export function Toolbar() {
           </TooltipProvider>
         </div>
       </div>
-    </div>
+    </header>
   );
 }

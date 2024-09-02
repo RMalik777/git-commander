@@ -4,6 +4,8 @@ import { setWaitingPush, type CommitFormat } from "@/lib/Redux/gitSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -25,10 +27,12 @@ export function WaitingPush() {
 
   const [formattedWaitingPush, setFormattedWaitingPush] =
     useState<CommitFormat[]>(commitWaitingPush);
+  const [filteredWaitingPush, setFilteredWaitingPush] =
+    useState<CommitFormat[]>(formattedWaitingPush);
 
   useEffect(() => {
     async function getWaitingPush() {
-      const waitingPush = await git.getCommitNotPushedFull(currentRepoDir);
+      const waitingPush = await git.getCommitNotPushed(currentRepoDir);
       const result = waitingPush.map((commit: string) => {
         const split = commit.replaceAll(/(^"|"$)/g, "").split(" $|$ ");
         const hash = split[0];
@@ -39,10 +43,22 @@ export function WaitingPush() {
       });
       dispatch(setWaitingPush(result));
       setFormattedWaitingPush(result);
+      setFilteredWaitingPush(result);
     }
     getWaitingPush();
   }, [currentBranch, currentRepoDir, currentRepoName, currentRepoHash]);
 
+  const [search, setSearch] = useState("");
+  useEffect(() => {
+    setFilteredWaitingPush(
+      formattedWaitingPush?.filter(
+        (commit) =>
+          commit.message.toLowerCase().includes(search.toLowerCase()) ||
+          commit.author.toLowerCase().includes(search.toLowerCase()) ||
+          commit.hash.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search]);
   return (
     <Card>
       <CardHeader>
@@ -52,6 +68,16 @@ export function WaitingPush() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <form className="mb-4 flex flex-col items-stretch justify-center gap-2 xs:flex-row xs:items-center xs:justify-end">
+          <Label>Search</Label>
+          <Input
+            disabled={commitWaitingPush.length === 0}
+            className="w-full xs:w-1/3"
+            type="search"
+            placeholder="Search by Hash, Author or Message"
+            onChange={(e) => setTimeout(() => setSearch(e.target.value), 150)}
+          />
+        </form>
         <Table className="border-collapse border dark:border-neutral-700">
           <TableHeader className="">
             <TableRow>
@@ -62,25 +88,32 @@ export function WaitingPush() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {formattedWaitingPush.map((commit, index) => (
-              <TableRow key={index + commit.hash}>
-                <TableCell>
-                  {new Date(commit.date).toLocaleDateString(undefined, {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}{" "}
-                  {new Date(commit.date).toLocaleTimeString(undefined, {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
+            {filteredWaitingPush.length > 0 ?
+              filteredWaitingPush.map((commit) => (
+                <TableRow key={commit.hash}>
+                  <TableCell>
+                    {new Date(commit.date).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}{" "}
+                    {new Date(commit.date).toLocaleTimeString(undefined, {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </TableCell>
+                  <TableCell className="break-all font-mono">{commit.hash}</TableCell>
+                  <TableCell>{commit.author}</TableCell>
+                  <TableCell className="">{commit.message}</TableCell>
+                </TableRow>
+              ))
+            : <TableRow>
+                <TableCell colSpan={4} className="text-center">
+                  No commit waiting to be pushed
                 </TableCell>
-                <TableCell className="break-all font-mono">{commit.hash}</TableCell>
-                <TableCell>{commit.author}</TableCell>
-                <TableCell className="">{commit.message}</TableCell>
               </TableRow>
-            ))}
+            }
           </TableBody>
         </Table>
       </CardContent>
