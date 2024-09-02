@@ -2,13 +2,21 @@ import { useAppSelector } from "@/lib/Redux/hooks";
 import { useEffect, useState } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ToastAction } from "@/components/ui/toast";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
+
+import { X } from "lucide-react";
 
 export function ChangeView() {
+  const { toast } = useToast();
+
   const [changes, setChanges] = useState("");
   const [tagBranch, setTagBranch] = useState("");
   const [filesChanged, setFilesChanged] = useState(0);
   const [insertions, setInsertions] = useState(0);
   const [deletions, setDeletions] = useState(0);
+  const [show, setShow] = useState(true);
 
   const incomingChanges = useAppSelector((state) => state.pullMsg.changes);
   const incomingTagBranch = useAppSelector((state) => state.pullMsg.tagBranch);
@@ -22,6 +30,7 @@ export function ChangeView() {
     setFilesChanged(incomingFilesChanged);
     setInsertions(incomingInsertions);
     setDeletions(incomingDeletions);
+    setShow(true);
   }, [
     incomingChanges,
     incomingTagBranch,
@@ -29,17 +38,46 @@ export function ChangeView() {
     incomingInsertions,
     incomingDeletions,
   ]);
-
+  // ADD BUTTON TO CLOSE CARD
   return (
-      incomingChanges ||
-        incomingTagBranch ||
-        incomingFilesChanged ||
-        incomingInsertions ||
-        incomingDeletions
+      show &&
+        (incomingChanges ||
+          incomingTagBranch ||
+          incomingFilesChanged ||
+          incomingInsertions ||
+          incomingDeletions)
     ) ?
-      <Card>
+      <Card className="relative">
+        <button
+          className="group absolute right-4 top-4"
+          onClick={() => {
+            setShow(false);
+            toast({
+              title: "Dismissed",
+              action: (
+                <ToastAction
+                  altText="Undoing Closed changes view"
+                  onClick={() => {
+                    setShow(true);
+                  }}>
+                  Undo
+                </ToastAction>
+              ),
+            });
+          }}>
+          <TooltipProvider>
+            <Tooltip disableHoverableContent delayDuration={250}>
+              <TooltipTrigger>
+                <X className="text-neutral-400 duration-75 group-hover:text-neutral-950" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Dismiss</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </button>
         <CardHeader className="bg-white dark:bg-neutral-950">
-          <CardDescription>Latest Changes Since Last Pull</CardDescription>
+          <CardDescription>Latest Changes Since Last Pull </CardDescription>
           <CardTitle>
             {filesChanged} files changed, {insertions} insertions (+), {deletions} deletions (-)
           </CardTitle>
