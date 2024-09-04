@@ -14,31 +14,32 @@ import {
   GitBranchPlus,
 } from "lucide-react";
 
+const iconClass = "min-w-fit";
 const menuItem = [
   {
     name: "Home",
     link: "/",
-    icon: <Home />,
+    icon: <Home className={iconClass} />,
   },
   {
     name: "Source Control",
     link: "/staging",
-    icon: <GitBranchPlus />,
+    icon: <GitBranchPlus className={iconClass} />,
   },
   {
     name: "Content",
     link: "/folder",
-    icon: <FolderOpen />,
+    icon: <FolderOpen className={iconClass} />,
   },
   {
     name: "Settings",
     link: "/settings",
-    icon: <Settings />,
+    icon: <Settings className={iconClass} />,
   },
   {
     name: "Help",
     link: "/help",
-    icon: <CircleHelp />,
+    icon: <CircleHelp className={iconClass} />,
   },
 ];
 
@@ -52,8 +53,8 @@ export function Navbar() {
   return (
     <aside
       className={
-        "border-r border-neutral-200 bg-white px-3 py-3 transition-all duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950 " +
-        (navOpen ? "w-1/6 min-w-fit" : "w-fit")
+        "border-r border-neutral-200 bg-white px-3 py-3 transition-all duration-150 ease-out dark:border-neutral-700 dark:bg-neutral-950 " +
+        (navOpen ? "w-1/6 min-w-fit" : "w-16 min-w-fit")
       }>
       <nav
         className={
@@ -69,7 +70,10 @@ export function Navbar() {
                     <TooltipTrigger asChild>
                       <NavLink to={item.link} className="group block h-fit w-full">
                         <Button
-                          className={"" + (navOpen ? "w-full justify-start gap-2 p-2" : "")}
+                          className={
+                            "justify-start gap-2 p-2 transition-all duration-150 ease-out " +
+                            (navOpen ? "w-full" : "")
+                          }
                           size="icon"
                           variant={currentPath.pathname == item.link ? "default" : "ghost"}>
                           {item.icon}
