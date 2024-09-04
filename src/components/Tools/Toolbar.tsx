@@ -104,6 +104,7 @@ export function Toolbar() {
         );
         dispatch(setRepo({ branch: showedBranch }));
         localStorage.setItem("currentBranch", showedBranch?.toString() ?? "");
+        setSwitchMessage(`${repoName}/${showedBranch}`);
       } catch (error) {
         console.error(error);
       }
