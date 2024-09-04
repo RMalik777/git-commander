@@ -14,7 +14,7 @@ import {
   GitBranchPlus,
 } from "lucide-react";
 
-const iconClass = "min-w-fit";
+const iconClass = "min-w-fit z-10";
 const menuItem = [
   {
     name: "Home",
@@ -71,7 +71,7 @@ export function Navbar() {
                       <NavLink to={item.link} className="group block h-fit w-full">
                         <Button
                           className={
-                            "justify-start gap-2 p-2 transition-all duration-150 ease-out " +
+                            "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out " +
                             (navOpen ? "w-full" : "")
                           }
                           size="icon"
