@@ -79,7 +79,9 @@ export function ChangeView() {
         <CardHeader className="bg-white dark:bg-neutral-950">
           <CardDescription>Latest Changes Since Last Pull </CardDescription>
           <CardTitle>
-            {filesChanged} files changed, {insertions} insertions (+), {deletions} deletions (-)
+            <span className="text-blue-500">{filesChanged}</span> files changed,{" "}
+            <span className="text-green-500">{insertions} </span>insertions (+),{" "}
+            <span className="text-red-500">{deletions} </span>deletions (-)
           </CardTitle>
         </CardHeader>
         <CardContent className="whitespace-pre-wrap leading-7">
