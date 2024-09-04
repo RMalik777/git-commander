@@ -257,7 +257,7 @@ List of all command:
 |`undoLastCommit`|`path`|`git reset --soft HEAD^`|Undo last commit to a last commit known. Option `--soft` to keep all the files untouched. Option `HEAD^` refer to a last commit.|
 |`unstageAll`|`path`|`git reset HEAD`|Undo all staged file. No option so the method is default (`--mixed`). HEAD is refering to the current HEAD.|
 |`unstageFile`|`path`, `file`|`git restore --staged <file>`|Undo staged but only one specific file.|
-|`version`||`git -version`|Check whether git is installed in the target devices. If not the promise will be rejected|
+|`version`||`git --version`|Check whether git is installed in the target devices. If not the promise will be rejected|
 <!-- prettier-ignore-end -->
 
 ### Database TS Call
