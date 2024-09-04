@@ -1,3 +1,11 @@
+## [1.14.1](https://github.com/RMalik777/git-commander/compare/v1.14.0...v1.14.1) (2024-09-04)
+
+
+### Bug Fixes
+
+* detect if there is no git installed ([bb4487a](https://github.com/RMalik777/git-commander/commit/bb4487af17a1e85fdd1ee8a6a23295f48f710e43))
+* tag and branch update not showing ([4845280](https://github.com/RMalik777/git-commander/commit/4845280728d615493279286cb34c88ae4b596fb8))
+
 # [1.14.0](https://github.com/RMalik777/git-commander/compare/v1.13.0...v1.14.0) (2024-09-02)
 
 
