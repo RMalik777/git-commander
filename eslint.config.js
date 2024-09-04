@@ -7,7 +7,7 @@ import tseslint from "typescript-eslint";
 export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  { ignores: ["src-tauri/**", "dist/**", "CHANGELOG.md"] },
+  { ignores: ["src-tauri/**", "dist/**", "CHANGELOG.md", "src/components/ui"] },
   {
     files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     plugins: {

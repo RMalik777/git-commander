@@ -100,7 +100,7 @@ export function Clone() {
       const command = new ShellCommand("git 3 args", ["clone", "--progress", remoteRepo], {
         cwd: localRepo,
       });
-      command.on("close", (data) => {
+      command.on("close", () => {
         setProgress("");
         setIsCloning(false);
         resolve(result);
