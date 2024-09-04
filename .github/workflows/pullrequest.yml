@@ -23,7 +23,14 @@ jobs:
             args: ""
 
     runs-on: ${{ matrix.platform }}
+
     steps:
+      - name: Git Config for LF line endings
+        if: matrix.platform == 'windows-latest'
+        run: |
+          git config --system core.autocrlf false
+          git config --system core.eol lf
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
