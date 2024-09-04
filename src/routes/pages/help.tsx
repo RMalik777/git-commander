@@ -1,13 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-import {
-  CircleArrowRight,
-  Files,
-  GraduationCap,
-  History,
-  Info,
-  MessageCircleQuestion,
-} from "lucide-react";
+import { CircleArrowRight, GraduationCap, History, Info } from "lucide-react";
 
 const items = [
   {
@@ -15,16 +8,7 @@ const items = [
     link: "tutorial",
     icon: <GraduationCap size={20} />,
   },
-  // {
-  //   name: "FAQ",
-  //   link: "faq",
-  //   icon: <MessageCircleQuestion size={20} />,
-  // },
-  // {
-  //   name: "Resource",
-  //   link: "resource",
-  //   icon: <Files size={20} />,
-  // },
+
   {
     name: "Changelog",
     link: "changelog",
