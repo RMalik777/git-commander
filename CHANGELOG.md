@@ -1,3 +1,16 @@
+## [1.14.2](https://github.com/RMalik777/git-commander/compare/v1.14.1...v1.14.2) (2024-09-05)
+
+
+### Bug Fixes
+
+* remember copy location not reflecting latest value ([9432bcd](https://github.com/RMalik777/git-commander/commit/9432bcd0ed4cfb6303df1150541a4d299311fd8e))
+* wrong repo and branch name when switching branch ([4c0b571](https://github.com/RMalik777/git-commander/commit/4c0b571b5c2a1c3d9bd2a264e97edc12dec19a7c))
+
+
+### Reverts
+
+* revert commit "abc" ([06aa13a](https://github.com/RMalik777/git-commander/commit/06aa13a2937aced0c59aae8e0dfdaf15c83eb604))
+
 ## [1.14.1](https://github.com/RMalik777/git-commander/compare/v1.14.0...v1.14.1) (2024-09-04)
 
 
