@@ -160,7 +160,10 @@ export function Copy() {
             </ToastAction>
           ),
         });
-        reset();
+        reset({
+          source: values.rememberSource ? values.destination : "",
+          destination: values.rememberDestination ? values.destination : "",
+        });
       } catch (error) {
         console.error(error);
         if (error instanceof Error) {
