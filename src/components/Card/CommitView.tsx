@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { setWaitingPush, type CommitFormat } from "@/lib/Redux/gitSlice";
+import { setLocalCommit, setRemoteCommit, type CommitFormat } from "@/lib/Redux/gitSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,41 +17,68 @@ import {
 
 import * as git from "@/lib/git";
 
-export function WaitingPush() {
+export function CommitView({
+  title,
+  desc,
+  type,
+}: Readonly<{ title: string; desc: string; type: "Local" | "Remote" | "All" }>) {
   const dispatch = useAppDispatch();
-  const commitWaitingPush = useAppSelector((state) => state.git.waitingPush);
+  const localCommit = useAppSelector((state) => state.git.localCommit);
+  const remoteCommit = useAppSelector((state) => state.git.remoteCommit);
+  const allCommit = localCommit.concat(remoteCommit);
   const currentBranch = useAppSelector((state) => state.repo.branch);
   const currentRepoDir = useAppSelector((state) => state.repo.directory);
   const currentRepoName = useAppSelector((state) => state.repo.name);
   const currentRepoHash = useAppSelector((state) => state.repo.hash);
 
-  const [formattedWaitingPush, setFormattedWaitingPush] =
-    useState<CommitFormat[]>(commitWaitingPush);
-  const [filteredWaitingPush, setFilteredWaitingPush] =
-    useState<CommitFormat[]>(formattedWaitingPush);
+  const [formattedCommit, setFormattedCommit] = useState<CommitFormat[]>(
+    type === "Local" ? localCommit
+    : type === "Remote" ? remoteCommit
+    : allCommit
+  );
+  const [filteredCommit, setFilteredCommit] = useState<CommitFormat[]>(formattedCommit);
 
-  useEffect(() => {
-    async function getWaitingPush() {
-      const waitingPush = await git.getCommitNotPushed(currentRepoDir);
-      const result = waitingPush.map((commit: string) => {
-        const split = commit.replaceAll(/(^"|"$)/g, "").split(" $|$ ");
-        const hash = split[0];
-        const date = new Date(split[1]).toISOString();
-        const author = split[2];
-        const message = split.slice(3).join(" ");
-        return { hash, date, author, message };
-      });
-      dispatch(setWaitingPush(result));
-      setFormattedWaitingPush(result);
-      setFilteredWaitingPush(result);
+  function formatCommit(commit) {
+    const result = commit.map((commit: string) => {
+      const split = commit.replaceAll(/(^"|"$)/g, "").split(" $|$ ");
+      const hash = split[0];
+      const date = new Date(split[1]).toISOString();
+      const author = split[2];
+      const message = split.slice(3).join(" ");
+      return { hash, date, author, message };
+    });
+    return result as CommitFormat[];
+  }
+  async function getCommit() {
+    let result;
+    if (type === "Local") {
+      const commit = await git.getAllCommit(currentRepoDir, currentBranch, type);
+      result = formatCommit(commit);
+      dispatch(setLocalCommit(result));
+    } else if (type === "Remote") {
+      const commit = await git.getAllCommit(currentRepoDir, currentBranch, type);
+      result = formatCommit(commit);
+      dispatch(setRemoteCommit(result));
+    } else {
+      const local = await git.getAllCommit(currentRepoDir, currentBranch, "Local");
+      const localCommit = formatCommit(local);
+      dispatch(setLocalCommit(localCommit));
+      const remote = await git.getAllCommit(currentRepoDir, currentBranch, "Remote");
+      const remoteCommit = formatCommit(remote);
+      dispatch(setRemoteCommit(remoteCommit));
+      result = localCommit.concat(remoteCommit);
     }
-    getWaitingPush();
+    setFormattedCommit(result);
+    setFilteredCommit(result);
+  }
+  useEffect(() => {
+    getCommit();
   }, [currentBranch, currentRepoDir, currentRepoName, currentRepoHash]);
 
   const [search, setSearch] = useState("");
   useEffect(() => {
-    setFilteredWaitingPush(
-      formattedWaitingPush?.filter(
+    setFilteredCommit(
+      formattedCommit?.filter(
         (commit) =>
           commit.message.toLowerCase().includes(search.toLowerCase()) ||
           commit.author.toLowerCase().includes(search.toLowerCase()) ||
@@ -62,16 +89,14 @@ export function WaitingPush() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Latest Commit</CardTitle>
-        <CardDescription>
-          List of local commit that hasn&apos;t been pushed to remote repository
-        </CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{desc}</CardDescription>
       </CardHeader>
       <CardContent>
         <form className="mb-4 flex flex-col items-stretch justify-center gap-2 xs:flex-row xs:items-center xs:justify-end">
           <Label>Search</Label>
           <Input
-            disabled={commitWaitingPush.length === 0}
+            disabled={formattedCommit.length === 0}
             className="w-full xs:w-1/3"
             type="search"
             placeholder="Search by Hash, Author or Message"
@@ -88,8 +113,8 @@ export function WaitingPush() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredWaitingPush.length > 0 ?
-              filteredWaitingPush.map((commit) => (
+            {filteredCommit.length > 0 ?
+              filteredCommit.map((commit) => (
                 <TableRow key={commit.hash}>
                   <TableCell>
                     {new Date(commit.date).toLocaleDateString(undefined, {
@@ -110,7 +135,7 @@ export function WaitingPush() {
               ))
             : <TableRow>
                 <TableCell colSpan={4} className="text-center">
-                  No commit waiting to be pushed
+                  {type === "Local" ? "No Commit waiting to be pushed" : "No Commit"}
                 </TableCell>
               </TableRow>
             }

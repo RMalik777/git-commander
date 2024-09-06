@@ -5,7 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { OctagonAlert } from "lucide-react";
 
 import { RepoView } from "@/components/Card/RepoView";
-import { WaitingPush } from "@/components/Card/WaitingPush";
+import { CommitView } from "@/components/Card/CommitView";
 import { ChangeView } from "@/components/Card/ChangeView";
 
 import * as git from "@/lib/git";
@@ -41,7 +41,6 @@ export default function Index() {
       </Alert>
 
       <RepoView />
-      <WaitingPush />
       <ChangeView />
     </div>
   );

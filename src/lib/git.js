@@ -198,20 +198,38 @@ export async function currentBranch(path) {
   return await response;
 }
 
-export async function getAllRemoteCommit(path, branch) {
+export async function getAllCommit(path, branch, type) {
   const response = new Promise((resolve, reject) => {
-    const command = new Command(
-      "git 4 args",
-      [
-        "log",
-        `origin/${branch}`,
-        '--pretty=format:"%h $|$ %ad $|$ %an $|$ %s"',
-        "--date=format-local:%Y-%m-%d %H:%M:%S",
-      ],
-      {
-        cwd: path,
-      }
-    );
+    let command;
+    if (type.toLowerCase() === "local") {
+      command = new Command(
+        "git 4 args",
+        [
+          "log",
+          "@{push}..",
+          '--pretty=format:"%h $|$ %ad $|$ %an $|$ %s"',
+          "--date=format-local:%Y-%m-%d %H:%M:%S",
+        ],
+        {
+          cwd: path,
+        }
+      );
+    } else if (type.toLowerCase() === "remote") {
+      command = new Command(
+        "git 4 args",
+        [
+          "log",
+          `origin/${branch}`,
+          '--pretty=format:"%h $|$ %ad $|$ %an $|$ %s"',
+          "--date=format-local:%Y-%m-%d %H:%M:%S",
+        ],
+        {
+          cwd: path,
+        }
+      );
+    } else {
+      throw new Error("Choose between 'all' or 'remote'");
+    }
     const result = [];
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
@@ -239,36 +257,6 @@ export async function getLatestRemoteCommitHash(path, branch) {
     });
     command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
-  });
-  return await response;
-}
-
-export async function getCommitNotPushed(path) {
-  const response = new Promise((resolve, reject) => {
-    const command = new Command(
-      "git 4 args",
-      [
-        "log",
-        "@{push}..",
-        '--pretty=format:"%h $|$ %ad $|$ %an $|$ %s"',
-        "--date=format-local:%Y-%m-%d %H:%M:%S",
-      ],
-      {
-        cwd: path,
-      }
-    );
-    const result = [];
-    command.on("close", () => resolve(result));
-    command.on("error", (error) => {
-      console.error(`command error: "${error}"`);
-      reject(new Error(error));
-    });
-    command.stdout.on("data", (line) => result.push(line.trim()));
-    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
-    command.spawn().catch((error) => {
-      console.error(error);
-      reject(new Error(error));
-    });
   });
   return await response;
 }
