@@ -51,14 +51,10 @@ export function CommitView({
   }
   async function getCommit() {
     let result;
-    if (type === "Local") {
+    if (type === "Local" || type === "Remote") {
       const commit = await git.getAllCommit(currentRepoDir, currentBranch, type);
       result = formatCommit(commit);
       dispatch(setLocalCommit(result));
-    } else if (type === "Remote") {
-      const commit = await git.getAllCommit(currentRepoDir, currentBranch, type);
-      result = formatCommit(commit);
-      dispatch(setRemoteCommit(result));
     } else {
       const local = await git.getAllCommit(currentRepoDir, currentBranch, "Local");
       const localCommit = formatCommit(local);

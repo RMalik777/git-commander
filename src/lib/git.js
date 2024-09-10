@@ -262,7 +262,7 @@ export async function getLatestRemoteCommitHash(path, branch) {
 }
 
 export async function getNumberOfCommitsNotPushed(path) {
-  const response = await getCommitNotPushed(path);
+  const response = await getAllCommit(path, "", "local");
   return await response.length;
 }
 
