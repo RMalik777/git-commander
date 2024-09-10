@@ -17,6 +17,7 @@ import Tutorial from "./routes/pages/help/tutorial";
 import Resource from "./routes/pages/help/resource";
 import Faq from "./routes/pages/help/faq";
 import Info from "./routes/pages/help/info";
+import Zip from "./routes/pages/Zip";
 
 import ErrorPage from "./error-page";
 
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/staging",
         element: <Staging />,
+      },
+      {
+        path: "/zip",
+        element: <Zip />,
       },
       {
         path: "/folder",

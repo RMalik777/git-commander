@@ -12,6 +12,7 @@ import {
   Home,
   Settings,
   GitBranchPlus,
+  Package,
 } from "lucide-react";
 
 const iconClass = "min-w-fit z-10";
@@ -25,6 +26,11 @@ const menuItem = [
     name: "Source Control",
     link: "/staging",
     icon: <GitBranchPlus className={iconClass} />,
+  },
+  {
+    name: "Copy and Zip",
+    link: "/zip",
+    icon: <Package className={iconClass} />,
   },
   {
     name: "Content",
