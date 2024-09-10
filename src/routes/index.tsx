@@ -5,7 +5,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { OctagonAlert } from "lucide-react";
 
 import { RepoView } from "@/components/Card/RepoView";
-import { CommitView } from "@/components/Card/CommitView";
 import { ChangeView } from "@/components/Card/ChangeView";
 
 import * as git from "@/lib/git";
