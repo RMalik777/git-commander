@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 import { setFiles } from "@/lib/Redux/fileList";
 
-import { Copy } from "@/components/Card/Copy";
 import { Staging } from "@/components/Card/Staging";
 import { Commit } from "@/components/Git/Commit";
 import { CommitView } from "@/components/Card/CommitView";
@@ -94,7 +93,6 @@ export default function Git() {
         getDiff={getDiff}
         getStaged={getStaged}
       />
-      <Copy />
     </div>
   );
 }
