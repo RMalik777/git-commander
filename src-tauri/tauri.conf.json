@@ -140,11 +140,6 @@
             ]
           },
           {
-            "name": "echo",
-            "cmd": "echo",
-            "args": ["%cd%"]
-          },
-          {
             "name": "src/bin/7za",
             "sidecar": true,
             "args": [
