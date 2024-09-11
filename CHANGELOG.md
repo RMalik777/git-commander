@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/RMalik777/git-commander/compare/v1.14.2...v1.15.0) (2024-09-11)
+
+
+### Features
+
+* add compressing function ([c748842](https://github.com/RMalik777/git-commander/commit/c7488420b97a4bbdcb34f23f696a4a99c8331ad1))
+
 ## [1.14.2](https://github.com/RMalik777/git-commander/compare/v1.14.1...v1.14.2) (2024-09-05)
 
 
