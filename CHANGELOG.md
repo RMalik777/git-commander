@@ -1,3 +1,15 @@
+# [1.16.0](https://github.com/RMalik777/git-commander/compare/v1.15.0...v1.16.0) (2024-09-11)
+
+
+### Bug Fixes
+
+* compress folder and its child correctly ([715549c](https://github.com/RMalik777/git-commander/commit/715549cc7e63733dabc7c8e11c725aa5941a209d))
+
+
+### Features
+
+* add search ([de89d5a](https://github.com/RMalik777/git-commander/commit/de89d5a21fea6562558bec48f559c8e4356a0791))
+
 # [1.15.0](https://github.com/RMalik777/git-commander/compare/v1.14.2...v1.15.0) (2024-09-11)
 
 
