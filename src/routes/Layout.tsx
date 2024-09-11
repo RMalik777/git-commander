@@ -15,7 +15,7 @@ export default function Layout({ children }: Readonly<{ children?: React.ReactNo
         <Toolbar />
         <div className="min-w-dvw flex h-fit flex-grow flex-row overflow-hidden">
           <Navbar />
-          <main className="flex-grow overflow-y-auto bg-white p-3 duration-200 ease-out dark:bg-neutral-950">
+          <main className="flex-grow overflow-y-auto bg-white p-4 duration-200 ease-out dark:bg-neutral-950">
             {children ?? <Outlet />}
           </main>
         </div>

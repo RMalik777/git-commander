@@ -36,8 +36,17 @@
       "path": {
         "all": true
       },
+      "dialog": {
+        "all": false,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true,
+        "save": false
+      },
       "shell": {
         "all": true,
+        "sidecar": true,
         "scope": [
           {
             "name": "go to folder",
@@ -129,16 +138,24 @@
                 "validator": "\\S+"
               }
             ]
+          },
+          {
+            "name": "../src-tauri/bin/sza",
+            "sidecar": true,
+            "args": [
+              "a",
+              {
+                "validator": "[\\S\\s]+"
+              },
+              {
+                "validator": "[\\S\\s]+"
+              },
+              {
+                "validator": "[\\S\\s]+"
+              }
+            ]
           }
         ]
-      },
-      "dialog": {
-        "all": false,
-        "ask": false,
-        "confirm": false,
-        "message": false,
-        "open": true,
-        "save": false
       }
     },
     "windows": [
@@ -162,7 +179,8 @@
         "icons/128x128@2x.png",
         "icons/icon.icns",
         "icons/icon.ico"
-      ]
+      ],
+      "externalBin": ["../src-tauri/bin/sza"]
     }
   }
 }

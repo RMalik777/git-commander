@@ -8,12 +8,14 @@ export interface CommitFormat {
 }
 export interface GitState {
   lastCommitMessage: string;
-  waitingPush: CommitFormat[];
+  localCommit: CommitFormat[];
+  remoteCommit: CommitFormat[];
 }
 
 const initialState: GitState = {
   lastCommitMessage: "",
-  waitingPush: [],
+  localCommit: [],
+  remoteCommit: [],
 };
 
 export const gitSlice = createSlice({
@@ -23,18 +25,36 @@ export const gitSlice = createSlice({
     setLastCommitMessage: (state, action: PayloadAction<string>) => {
       state.lastCommitMessage = action.payload;
     },
-    setWaitingPush: (state, action: PayloadAction<CommitFormat[]>) => {
-      state.waitingPush = action.payload;
+    setLocalCommit: (state, action: PayloadAction<CommitFormat[]>) => {
+      state.localCommit = action.payload;
+    },
+    setRemoteCommit: (state, action: PayloadAction<CommitFormat[]>) => {
+      state.remoteCommit = action.payload;
     },
     removeLastCommitMessage: (state) => {
       state.lastCommitMessage = "";
     },
-    removeWaitingPush: (state) => {
-      state.waitingPush = [];
+    removeLocalCommit: (state) => {
+      state.localCommit = [];
+    },
+    removeCommitMessage: (state) => {
+      state.remoteCommit = [];
+    },
+    removeAllGitAttr(state) {
+      state.lastCommitMessage = "";
+      state.localCommit = [];
+      state.remoteCommit = [];
     },
   },
 });
 
-export const { setLastCommitMessage, removeLastCommitMessage, setWaitingPush, removeWaitingPush } =
-  gitSlice.actions;
+export const {
+  setLastCommitMessage,
+  removeLastCommitMessage,
+  setLocalCommit,
+  removeLocalCommit,
+  setRemoteCommit,
+  removeCommitMessage,
+  removeAllGitAttr,
+} = gitSlice.actions;
 export default gitSlice.reducer;

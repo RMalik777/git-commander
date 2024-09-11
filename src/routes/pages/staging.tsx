@@ -7,9 +7,9 @@ import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 import { setFiles } from "@/lib/Redux/fileList";
 
-import { Copy } from "@/components/Card/Copy";
 import { Staging } from "@/components/Card/Staging";
 import { Commit } from "@/components/Git/Commit";
+import { CommitView } from "@/components/Card/CommitView";
 
 import * as git from "@/lib/git";
 import * as dirFunc from "@/lib/directory";
@@ -79,6 +79,11 @@ export default function Git() {
   }, [dir]);
   return (
     <div className="flex flex-col items-stretch gap-4">
+      <CommitView
+        title="Latest Commit"
+        desc="List of local commit that hasn't been pushed to remote repository"
+        type="Local"
+      />
       <Commit getDiff={getDiff} getStaged={getStaged} />
       <Staging
         diffList={diffList}
@@ -88,7 +93,6 @@ export default function Git() {
         getDiff={getDiff}
         getStaged={getStaged}
       />
-      <Copy />
     </div>
   );
 }
