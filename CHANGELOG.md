@@ -1,3 +1,46 @@
+# [1.15.0](https://github.com/RMalik777/git-commander/compare/v1.14.2...v1.15.0) (2024-09-11)
+
+
+### Features
+
+* add compressing function ([c748842](https://github.com/RMalik777/git-commander/commit/c7488420b97a4bbdcb34f23f696a4a99c8331ad1))
+
+## [1.14.2](https://github.com/RMalik777/git-commander/compare/v1.14.1...v1.14.2) (2024-09-05)
+
+
+### Bug Fixes
+
+* remember copy location not reflecting latest value ([9432bcd](https://github.com/RMalik777/git-commander/commit/9432bcd0ed4cfb6303df1150541a4d299311fd8e))
+* wrong repo and branch name when switching branch ([4c0b571](https://github.com/RMalik777/git-commander/commit/4c0b571b5c2a1c3d9bd2a264e97edc12dec19a7c))
+
+
+### Reverts
+
+* revert commit "abc" ([06aa13a](https://github.com/RMalik777/git-commander/commit/06aa13a2937aced0c59aae8e0dfdaf15c83eb604))
+
+## [1.14.1](https://github.com/RMalik777/git-commander/compare/v1.14.0...v1.14.1) (2024-09-04)
+
+
+### Bug Fixes
+
+* detect if there is no git installed ([bb4487a](https://github.com/RMalik777/git-commander/commit/bb4487af17a1e85fdd1ee8a6a23295f48f710e43))
+* tag and branch update not showing ([4845280](https://github.com/RMalik777/git-commander/commit/4845280728d615493279286cb34c88ae4b596fb8))
+
+# [1.14.0](https://github.com/RMalik777/git-commander/compare/v1.13.0...v1.14.0) (2024-09-02)
+
+
+### Bug Fixes
+
+* fix wrong function name when reading commit ([635366e](https://github.com/RMalik777/git-commander/commit/635366e1913497f4ccbdb10d776e7733940d507f))
+* upstream tag and branch changes does not showed when pulled ([1e44b89](https://github.com/RMalik777/git-commander/commit/1e44b8974bc0187747e56f9e717fd224678c9dfb))
+* view changes can't be closed ([336badc](https://github.com/RMalik777/git-commander/commit/336badcf325ad8222b94f4d0f9c76c52b086041e))
+* wrong parameter in git function ([8fa7680](https://github.com/RMalik777/git-commander/commit/8fa76807d8d1c0f6793376722c6ea79628643a43))
+
+
+### Features
+
+* add search in waiting commit list ([2c0d5f8](https://github.com/RMalik777/git-commander/commit/2c0d5f8189b85cf43026d345ca42d6e6f39815ac))
+
 # [1.13.0](https://github.com/RMalik777/git-commander/compare/v1.12.2...v1.13.0) (2024-08-29)
 
 
