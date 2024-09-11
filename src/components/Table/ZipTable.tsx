@@ -1,20 +1,21 @@
-import type { FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
-
-import { ChevronDown, ChevronUp, Minus } from "lucide-react";
-
-import { Icons } from "../Icons";
 
 import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  TableCaption,
 } from "@/components/ui/table";
+
+import { ChevronDown, ChevronUp, Folder, Minus } from "lucide-react";
+
+import { FileList } from "@/lib/Types/fileList";
+
+import { Icons } from "@/components/Icons";
 
 // import { useAutoAnimate } from "@formkit/auto-animate/react";
 
@@ -23,8 +24,8 @@ export function ZipTable({
   fileList,
   setFileList,
 }: Readonly<{
-  fileList: FileEntry[];
-  setFileList: (fileList: FileEntry[]) => void;
+  fileList: FileList[];
+  setFileList: (fileList: FileList[]) => void;
 }>) {
   /**
    * useAutoAnimate is disabled because it's still have some issue
@@ -39,13 +40,13 @@ export function ZipTable({
       <TableHeader>
         <TableRow>
           <TableHead>No</TableHead>
-          <TableHead>File Name</TableHead>
-          <TableHead>File Location</TableHead>
+          <TableHead>File/Folder Name</TableHead>
+          <TableHead>Location</TableHead>
           <TableHead className="text-center">Sort</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {fileList.length > 0 ?
+        {fileList?.length > 0 ?
           fileList?.map((item, index) => (
             <TableRow key={item.path}>
               <TableCell className="">{index + 1}</TableCell>
@@ -55,7 +56,12 @@ export function ZipTable({
                   onClick={() => {
                     open(item.path);
                   }}>
-                  {Icons({ name: item.name })}
+                  {item.type == "Folder" ?
+                    <Folder
+                      size={16}
+                      className="fill-yellow-400 text-yellow-400 dark:fill-yellow-500 dark:text-yellow-500"
+                    />
+                  : Icons({ name: item.name })}
                   {item.name}
                 </button>
               </TableCell>
