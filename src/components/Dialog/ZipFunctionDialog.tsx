@@ -83,7 +83,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
     }
     sessionStorage.setItem("format", values.archiveFormat);
     toast({
-      title: "Zipping File",
+      title: "Compressing File",
       description: "Please wait...",
     });
     const tempDir = `${currentDir}\\$$temp`;
@@ -132,7 +132,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
        * > If the path contains double quotes (because you tried to solve PROBLEM 1), the command will fail too. Because how JavaScript handle double quotes and try to escape the double quotes (" is written as \" in JavaScript) and the command doesn't know that it is an escape character and will try to read it anyway.
        * SOLUTION: currently unknown
        *
-       * So the solution is to write the path to a text file and then read the text file to get the path.
+       * So the workaround is to write the path to a text file and then read the text file to get the path.
        *
        * Reference:
        * https://7-zip.opensource.jp/chm/cmdline/syntax.htm
@@ -147,25 +147,38 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       const output = await command.execute();
       if (output.code == 0) {
         toast({
-          title: "File Zipped Succesfully",
+          title: "File Compressed Succesfully",
           action: (
             <ToastAction onClick={async () => openFolder(currentDir)} altText="Open Folder">
               Open Folder
             </ToastAction>
           ),
         });
+      } else {
+        toast({
+          title: "Problem Occured While Compressing File",
+          description: (
+            <>
+              Error Code: {output.code}
+              <br />
+              Error Message: {output.stderr}
+            </>
+          ),
+          variant: "destructive",
+        });
       }
     } catch (error) {
       if (error instanceof Error) {
         console.error(error);
         toast({
-          title: "Error While Zipping File",
+          title: "Error While Compressing File",
           description: error.message,
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Unknown Error While Zipping File",
+          title: "Unknown Error While Compressing File",
+          variant: "destructive",
         });
       }
     } finally {
