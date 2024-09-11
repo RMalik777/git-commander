@@ -36,6 +36,7 @@ fn main() {
         })
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .plugin(tauri_plugin_store::Builder::default().build())
+        .plugin(tauri_plugin_fs_extra::init())
         .setup(|_app| {
             db::init();
             Ok(())
