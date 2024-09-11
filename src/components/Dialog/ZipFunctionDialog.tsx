@@ -109,7 +109,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       title: "Compressing File",
       description: "Please wait...",
     });
-    const tempDir = `${currentDir}\\$$temp`;
+    const tempDir = `${currentDir}\\.$temp`;
     // FLOW: CREATE TEMP FOLDER -> DUPLICATE FILE TO TEMP FOLDER -> RENAME FILE -> CREATE TXT FILE -> ZIP FILE -> DELETE TEMP FOLDER
     try {
       await createDir(tempDir);

@@ -22,10 +22,14 @@ import { Icons } from "@/components/Icons";
 // ADD SIZE
 export function ZipTable({
   fileList,
+  filteredFileList,
   setFileList,
+  setFilteredFileList,
 }: Readonly<{
   fileList: FileList[];
+  filteredFileList: FileList[];
   setFileList: (fileList: FileList[]) => void;
+  setFilteredFileList: (fileList: FileList[]) => void;
 }>) {
   /**
    * useAutoAnimate is disabled because it's still have some issue
@@ -42,12 +46,12 @@ export function ZipTable({
           <TableHead>No</TableHead>
           <TableHead>File/Folder Name</TableHead>
           <TableHead>Location</TableHead>
-          <TableHead className="text-center">Sort</TableHead>
+          <TableHead className="text-center">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {fileList?.length > 0 ?
-          fileList?.map((item, index) => (
+          filteredFileList?.map((item, index) => (
             <TableRow key={item.path}>
               <TableCell className="">{index + 1}</TableCell>
               <TableCell className="">
@@ -74,10 +78,21 @@ export function ZipTable({
                     variant="outline"
                     disabled={index === 0}
                     onClick={() => {
+                      const newFiltered = [...filteredFileList];
+                      const tempFiltered = newFiltered[index];
+                      newFiltered[index] = newFiltered[index - 1];
+                      newFiltered[index - 1] = tempFiltered;
+                      setFilteredFileList(newFiltered);
                       const newList = [...fileList];
-                      const temp = newList[index];
-                      newList[index] = newList[index - 1];
-                      newList[index - 1] = temp;
+                      const toSwap1 = newList.findIndex(
+                        (find) => find.path === newFiltered[index].path
+                      );
+                      const toSwap2 = newList.findIndex(
+                        (find) => find.path === newFiltered[index - 1].path
+                      );
+                      const temp = newList[toSwap1];
+                      newList[toSwap1] = newList[toSwap2];
+                      newList[toSwap2] = temp;
                       setFileList(newList);
                     }}>
                     <ChevronUp />
@@ -86,12 +101,23 @@ export function ZipTable({
                     size="icon"
                     className="h-8 w-8"
                     variant="outline"
-                    disabled={index === fileList.length - 1}
+                    disabled={index === filteredFileList.length - 1}
                     onClick={() => {
+                      const newFiltered = [...filteredFileList];
+                      const tempFiltered = newFiltered[index];
+                      newFiltered[index] = newFiltered[index + 1];
+                      newFiltered[index + 1] = tempFiltered;
+                      setFilteredFileList(newFiltered);
                       const newList = [...fileList];
-                      const temp = newList[index];
-                      newList[index] = newList[index + 1];
-                      newList[index + 1] = temp;
+                      const toSwap1 = newList.findIndex(
+                        (find) => find.path === newFiltered[index].path
+                      );
+                      const toSwap2 = newList.findIndex(
+                        (find) => find.path === newFiltered[index + 1].path
+                      );
+                      const temp = newList[toSwap1];
+                      newList[toSwap1] = newList[toSwap2];
+                      newList[toSwap2] = temp;
                       setFileList(newList);
                     }}>
                     <ChevronDown />
@@ -101,8 +127,12 @@ export function ZipTable({
                     className="h-8 w-8"
                     variant="destructive"
                     onClick={() => {
+                      const newFiltered = [...filteredFileList];
+                      newFiltered.splice(index, 1);
+                      setFilteredFileList(newFiltered);
                       const newList = [...fileList];
-                      newList.splice(index, 1);
+                      const toDelete = newList.findIndex((find) => find.path === item.path);
+                      newList.splice(toDelete, 1);
                       setFileList(newList);
                     }}>
                     <Minus />
