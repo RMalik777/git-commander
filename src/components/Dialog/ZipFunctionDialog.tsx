@@ -98,7 +98,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
           });
           await renameFile(
             `${tempDir}\\${file.name}`,
-            `${tempDir}\\${index.toLocaleString(undefined, { minimumIntegerDigits: 2, useGrouping: false })}_${file.name}`
+            `${tempDir}\\${(index + 1).toLocaleString(undefined, { minimumIntegerDigits: 2, useGrouping: false })}_${file.name}`
           );
         } catch (error) {
           if (error instanceof Error) {
@@ -138,7 +138,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
        * https://7-zip.opensource.jp/chm/cmdline/syntax.htm
        */
 
-      const command = Command.sidecar("src/bin/7za", [
+      const command = Command.sidecar("../src-tauri/bin/sza", [
         "a",
         `-t${values.archiveFormat}`,
         `${currentDir}\\${values.archiveName}.${values.archiveFormat}`,
@@ -157,6 +157,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       }
     } catch (error) {
       if (error instanceof Error) {
+        console.error(error);
         toast({
           title: "Error While Zipping File",
           description: error.message,

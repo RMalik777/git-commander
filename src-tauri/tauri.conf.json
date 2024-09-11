@@ -140,11 +140,13 @@
             ]
           },
           {
-            "name": "src/bin/7za",
+            "name": "../src-tauri/bin/sza",
             "sidecar": true,
             "args": [
               "a",
-              "-tzip",
+              {
+                "validator": "[\\S\\s]+"
+              },
               {
                 "validator": "[\\S\\s]+"
               },
@@ -178,7 +180,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "externalBin": ["src/bin/7za"]
+      "externalBin": ["../src-tauri/bin/sza"]
     }
   }
 }
