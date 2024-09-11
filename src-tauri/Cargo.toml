@@ -11,7 +11,7 @@ edition = "2021"
 tauri-build = { version = "1", features = [] }
 
 [dependencies]
-tauri = { version = "1", features = [ "app-all", "os-all", "clipboard-all", "window-set-focus", "dialog-open", "notification-all", "path-all", "fs-all", "shell-all"] }
+tauri = { version = "1", features = [ "app-all", "os-all", "clipboard-all", "window-set-focus", "dialog-open", "notification-all", "path-all", "fs-all", "shell-all", "devtools"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 dirs = "5.0.1"
@@ -24,6 +24,7 @@ uuid = "1.8.0"
 portable-pty = "0.8.1"
 tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+tauri-plugin-fs-extra = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

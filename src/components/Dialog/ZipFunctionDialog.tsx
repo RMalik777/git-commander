@@ -1,17 +1,20 @@
+import { useState } from "react";
+
 import { useAppSelector } from "@/lib/Redux/hooks";
 
 import { open } from "@tauri-apps/api/dialog";
 import {
   createDir,
+  exists,
   type FileEntry,
   readBinaryFile,
   readDir,
   removeDir,
-  removeFile,
   renameFile,
   writeBinaryFile,
   writeTextFile,
 } from "@tauri-apps/api/fs";
+import { metadata } from "tauri-plugin-fs-extra-api";
 import { Command, open as openFolder } from "@tauri-apps/api/shell";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,6 +52,8 @@ import {
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
+import { BarLoader } from "react-spinners";
+
 const formSchema = z.object({
   archiveName: z.string().min(1, { message: "Please enter a name for the file" }),
   archiveFormat: z.string().min(1, { message: "Please choose a file type" }),
@@ -62,17 +67,35 @@ const compressionFormat = [
 
 export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[] }>) {
   const { toast } = useToast();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const currentDir = useAppSelector((state) => state.repo.directory);
   const zipFunctionForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       archiveName: "",
-      archiveFormat: sessionStorage.getItem("format") ?? "",
+      archiveFormat: localStorage.getItem("format") ?? "",
       location: currentDir,
     },
   });
   const { handleSubmit, reset } = zipFunctionForm;
+  async function recursiveCopy(parent: FileEntry, source: string, destination: string) {
+    if ((await metadata(parent.path)).isDir) {
+      await createDir(`${destination}\\${parent.name}`);
+      const childDir = await readDir(parent.path, { recursive: true });
+      for (const child of childDir) {
+        await recursiveCopy(child, source, `${destination}\\${parent.name}`);
+      }
+    } else {
+      if (!(await exists(parent.path))) throw new Error(`File ${parent.name} not found`);
+      await writeBinaryFile({
+        path: `${destination}\\${parent.name}`,
+        contents: await readBinaryFile(parent.path),
+      });
+    }
+  }
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     if (fileList.length === 0) {
       toast({
         title: "No File Selected",
@@ -81,39 +104,30 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       });
       return;
     }
-    sessionStorage.setItem("format", values.archiveFormat);
+    localStorage.setItem("format", values.archiveFormat);
     toast({
-      title: "Zipping File",
+      title: "Compressing File",
       description: "Please wait...",
     });
-    const tempDir = `${currentDir}\\$$temp`;
+    const tempDir = `${currentDir}\\.$temp`;
     // FLOW: CREATE TEMP FOLDER -> DUPLICATE FILE TO TEMP FOLDER -> RENAME FILE -> CREATE TXT FILE -> ZIP FILE -> DELETE TEMP FOLDER
     try {
       await createDir(tempDir);
       for (const [index, file] of fileList.entries()) {
-        try {
+        const prepend = `${(index + 1).toLocaleString(undefined, { minimumIntegerDigits: 2, useGrouping: false })}_`;
+        if ((await metadata(file.path)).isDir) {
+          await createDir(`${tempDir}\\${prepend}${file.name}`);
+          const childDir = await readDir(file.path, { recursive: true });
+          for (const child of childDir) {
+            await recursiveCopy(child, child.path, `${tempDir}\\${prepend}${file.name}\\`);
+          }
+        } else {
+          if (!(await exists(file.path))) throw new Error(`File ${file.name} not found`);
           await writeBinaryFile({
-            path: `${tempDir}\\${file.name}`,
+            path: `${tempDir}\\${prepend}${file.name}`,
             contents: await readBinaryFile(file.path),
           });
-          await renameFile(
-            `${tempDir}\\${file.name}`,
-            `${tempDir}\\${(index + 1).toLocaleString(undefined, { minimumIntegerDigits: 2, useGrouping: false })}_${file.name}`
-          );
-        } catch (error) {
-          if (error instanceof Error) {
-            toast({
-              title: "Error",
-              description: error.message,
-              variant: "destructive",
-            });
-          } else {
-            toast({
-              title: "Unknown Error",
-              variant: "destructive",
-            });
-          }
-          return;
+          await renameFile(`${tempDir}\\${prepend}${file.name}`, `${tempDir}\\${file.name}`);
         }
       }
       const newFileList = await readDir(tempDir, { recursive: true });
@@ -132,7 +146,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
        * > If the path contains double quotes (because you tried to solve PROBLEM 1), the command will fail too. Because how JavaScript handle double quotes and try to escape the double quotes (" is written as \" in JavaScript) and the command doesn't know that it is an escape character and will try to read it anyway.
        * SOLUTION: currently unknown
        *
-       * So the solution is to write the path to a text file and then read the text file to get the path.
+       * So the workaround is to write the path to a text file and then read the text file to get the path.
        *
        * Reference:
        * https://7-zip.opensource.jp/chm/cmdline/syntax.htm
@@ -147,36 +161,51 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       const output = await command.execute();
       if (output.code == 0) {
         toast({
-          title: "File Zipped Succesfully",
+          title: "File Compressed Succesfully",
           action: (
             <ToastAction onClick={async () => openFolder(currentDir)} altText="Open Folder">
               Open Folder
             </ToastAction>
           ),
         });
+      } else {
+        toast({
+          title: "Problem Occured While Compressing File",
+          description: (
+            <>
+              Error Code: {output.code}
+              <br />
+              Error Message: {output.stderr}
+            </>
+          ),
+          variant: "destructive",
+        });
       }
+      setDialogOpen(false);
+      reset({ archiveFormat: values.archiveFormat, archiveName: "", location: currentDir });
     } catch (error) {
       if (error instanceof Error) {
         console.error(error);
         toast({
-          title: "Error While Zipping File",
+          title: "Error While Compressing File",
           description: error.message,
           variant: "destructive",
         });
       } else {
         toast({
-          title: "Unknown Error While Zipping File",
+          title: "Unknown Error While Compressing File",
+          description: error?.toString(),
+          variant: "destructive",
         });
       }
     } finally {
-      await removeFile(`${tempDir}\\zip.txt`);
+      setIsLoading(false);
       await removeDir(tempDir, { recursive: true });
     }
-    reset();
   }
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="default" size="sm">
           Open Zip Dialog
@@ -190,6 +219,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
         <Form {...zipFunctionForm}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
             <FormField
+              disabled={isLoading}
               control={zipFunctionForm.control}
               name="archiveName"
               render={({ field }) => (
@@ -205,12 +235,16 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                 </FormItem>
               )}></FormField>
             <FormField
+              disabled={isLoading}
               control={zipFunctionForm.control}
               name="archiveFormat"
               render={({ field }) => (
                 <FormItem className="space-y-1">
                   <FormLabel>Archive Format</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={isLoading}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select format" />
@@ -229,6 +263,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                 </FormItem>
               )}></FormField>
             <FormField
+              disabled={isLoading}
               control={zipFunctionForm.control}
               name="location"
               render={({ field }) => (
@@ -267,14 +302,19 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                 </FormItem>
               )}></FormField>
             <DialogFooter>
+              <BarLoader
+                width="100%"
+                speedMultiplier={0.8}
+                className={(isLoading ? "" : "!w-0") + " transition-all duration-200 ease-out"}
+              />
               <DialogClose asChild>
                 <Button variant="outline" type="reset" onClick={() => reset()}>
-                  Cancel
+                  Close
                 </Button>
               </DialogClose>
-              <DialogClose asChild>
-                <Button type="submit">Zip</Button>
-              </DialogClose>
+              <Button type="submit" disabled={isLoading}>
+                Zip
+              </Button>
             </DialogFooter>
           </form>
         </Form>

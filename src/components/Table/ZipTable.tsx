@@ -1,30 +1,35 @@
-import type { FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
-
-import { ChevronDown, ChevronUp, Minus } from "lucide-react";
-
-import { Icons } from "../Icons";
 
 import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  TableCaption,
 } from "@/components/ui/table";
+
+import { ChevronDown, ChevronUp, Folder, Minus } from "lucide-react";
+
+import { FileList } from "@/lib/Types/fileList";
+
+import { Icons } from "@/components/Icons";
 
 // import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 // ADD SIZE
 export function ZipTable({
   fileList,
+  filteredFileList,
   setFileList,
+  setFilteredFileList,
 }: Readonly<{
-  fileList: FileEntry[];
-  setFileList: (fileList: FileEntry[]) => void;
+  fileList: FileList[];
+  filteredFileList: FileList[];
+  setFileList: (fileList: FileList[]) => void;
+  setFilteredFileList: (fileList: FileList[]) => void;
 }>) {
   /**
    * useAutoAnimate is disabled because it's still have some issue
@@ -39,14 +44,14 @@ export function ZipTable({
       <TableHeader>
         <TableRow>
           <TableHead>No</TableHead>
-          <TableHead>File Name</TableHead>
-          <TableHead>File Location</TableHead>
-          <TableHead className="text-center">Sort</TableHead>
+          <TableHead>File/Folder Name</TableHead>
+          <TableHead>Location</TableHead>
+          <TableHead className="text-center">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {fileList.length > 0 ?
-          fileList?.map((item, index) => (
+        {fileList?.length > 0 ?
+          filteredFileList?.map((item, index) => (
             <TableRow key={item.path}>
               <TableCell className="">{index + 1}</TableCell>
               <TableCell className="">
@@ -55,7 +60,12 @@ export function ZipTable({
                   onClick={() => {
                     open(item.path);
                   }}>
-                  {Icons({ name: item.name })}
+                  {item.type == "Folder" ?
+                    <Folder
+                      size={16}
+                      className="fill-yellow-400 text-yellow-400 dark:fill-yellow-500 dark:text-yellow-500"
+                    />
+                  : Icons({ name: item.name })}
                   {item.name}
                 </button>
               </TableCell>
@@ -68,10 +78,21 @@ export function ZipTable({
                     variant="outline"
                     disabled={index === 0}
                     onClick={() => {
+                      const newFiltered = [...filteredFileList];
+                      const tempFiltered = newFiltered[index];
+                      newFiltered[index] = newFiltered[index - 1];
+                      newFiltered[index - 1] = tempFiltered;
+                      setFilteredFileList(newFiltered);
                       const newList = [...fileList];
-                      const temp = newList[index];
-                      newList[index] = newList[index - 1];
-                      newList[index - 1] = temp;
+                      const toSwap1 = newList.findIndex(
+                        (find) => find.path === newFiltered[index].path
+                      );
+                      const toSwap2 = newList.findIndex(
+                        (find) => find.path === newFiltered[index - 1].path
+                      );
+                      const temp = newList[toSwap1];
+                      newList[toSwap1] = newList[toSwap2];
+                      newList[toSwap2] = temp;
                       setFileList(newList);
                     }}>
                     <ChevronUp />
@@ -80,12 +101,23 @@ export function ZipTable({
                     size="icon"
                     className="h-8 w-8"
                     variant="outline"
-                    disabled={index === fileList.length - 1}
+                    disabled={index === filteredFileList.length - 1}
                     onClick={() => {
+                      const newFiltered = [...filteredFileList];
+                      const tempFiltered = newFiltered[index];
+                      newFiltered[index] = newFiltered[index + 1];
+                      newFiltered[index + 1] = tempFiltered;
+                      setFilteredFileList(newFiltered);
                       const newList = [...fileList];
-                      const temp = newList[index];
-                      newList[index] = newList[index + 1];
-                      newList[index + 1] = temp;
+                      const toSwap1 = newList.findIndex(
+                        (find) => find.path === newFiltered[index].path
+                      );
+                      const toSwap2 = newList.findIndex(
+                        (find) => find.path === newFiltered[index + 1].path
+                      );
+                      const temp = newList[toSwap1];
+                      newList[toSwap1] = newList[toSwap2];
+                      newList[toSwap2] = temp;
                       setFileList(newList);
                     }}>
                     <ChevronDown />
@@ -95,8 +127,12 @@ export function ZipTable({
                     className="h-8 w-8"
                     variant="destructive"
                     onClick={() => {
+                      const newFiltered = [...filteredFileList];
+                      newFiltered.splice(index, 1);
+                      setFilteredFileList(newFiltered);
                       const newList = [...fileList];
-                      newList.splice(index, 1);
+                      const toDelete = newList.findIndex((find) => find.path === item.path);
+                      newList.splice(toDelete, 1);
                       setFileList(newList);
                     }}>
                     <Minus />

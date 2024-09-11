@@ -53,6 +53,7 @@
     "simple-icons": "^13.9.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
+    "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra#v1",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1",
     "zod": "^3.23.8"
   },
