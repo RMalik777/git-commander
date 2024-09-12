@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,16 +11,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
-
 import { ZipFunctionDialog } from "@/components/Dialog/ZipFunctionDialog";
 import { ZipTableDialog } from "@/components/Dialog/ZipTableDialog";
 import { ZipTable } from "@/components/Table/ZipTable";
-import { useToast } from "@/components/ui/use-toast";
 
-import { FileList } from "@/lib/Types/fileList";
+import type { FileList } from "@/lib/Types/fileList";
 
 export function ZipView() {
   const { toast } = useToast();
