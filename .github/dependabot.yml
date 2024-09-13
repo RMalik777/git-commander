@@ -10,9 +10,11 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "monthly"
+    open-pull-requests-limit: 20
 
   - package-ecosystem: "cargo" # See documentation for possible values
     target-branch: "dev"
     directory: "/src-tauri" # Location of package manifests
     schedule:
       interval: "monthly"
+    open-pull-requests-limit: 20
