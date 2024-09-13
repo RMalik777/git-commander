@@ -1,3 +1,11 @@
+## [1.16.1](https://github.com/RMalik777/git-commander/compare/v1.16.0...v1.16.1) (2024-09-13)
+
+
+### Bug Fixes
+
+* compress table not updating after insertion ([a09dd79](https://github.com/RMalik777/git-commander/commit/a09dd7922fe773ab498e0f3e94e1dc0486298405))
+* show loading state when reading directory ([a0aa86c](https://github.com/RMalik777/git-commander/commit/a0aa86c641fafc218e8505ae0702e93eb4feca92))
+
 # [1.16.0](https://github.com/RMalik777/git-commander/compare/v1.15.0...v1.16.0) (2024-09-11)
 
 
