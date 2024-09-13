@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
@@ -14,8 +14,11 @@ import {
 } from "@/components/ui/card";
 import { FolderContent, FolderItem, FolderRoot, FolderTrigger } from "@/components/ui/folder";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
 
-import { Lightbulb, RefreshCw } from "lucide-react";
+import { Lightbulb, RefreshCw, SearchX } from "lucide-react";
+
+import { BarLoader } from "react-spinners";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
 
@@ -28,14 +31,24 @@ export function FileList({
   stagedList,
   getDiff,
   getStaged,
+  getDirList,
 }: Readonly<{
   dir: string;
-  dirList: FileEntry[];
+  dirList: FileEntry[] | undefined;
   diffList: FileEntry[];
   stagedList: FileEntry[];
   getDiff: () => Promise<void>;
   getStaged: () => Promise<void>;
+  getDirList: () => Promise<void>;
 }>) {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (dirList) setLoading(false);
+    else if (!dirList) setLoading(true);
+    console.log(loading, dirList);
+  }, [dirList]);
+
   const [refreshClick, setRefreshClick] = useState(false);
   function currentStatus(file: FileEntry) {
     let fileStatus = "Unchanged";
@@ -71,6 +84,7 @@ export function FileList({
     );
   }
   function recursiveDirRenderer(parent: FileEntry[], root: boolean): React.ReactNode {
+    if (!parent || parent instanceof Error) return null;
     return (
       <>
         {parent?.map((placeholder) => {
@@ -149,6 +163,58 @@ export function FileList({
       </>
     );
   }
+  function checkIfLoading() {
+    const theme = window.localStorage.getItem("theme") ?? "";
+    if (loading) {
+      return (
+        <div className="px-2">
+          <BarLoader width="100%" color={theme == "Dark" ? "#d4d4d4" : "#404040"} />
+          <p className="text-center text-lg font-medium">Reading Directory</p>
+        </div>
+      );
+    }
+    if (!loading && dirList?.length) {
+      return recursiveDirRenderer(dirList, true);
+    } else {
+      return (
+        <div className="flex flex-col items-center justify-center gap-4 px-2 py-20 text-neutral-600 duration-200 ease-out dark:text-neutral-400">
+          <SearchX className="h-12 w-auto sm:h-14 md:h-16 lg:h-20" />
+          <div className="w-full text-center">
+            <h4 className="font-mono text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
+              Empty
+            </h4>
+            <p className="text-center text-base font-medium text-neutral-400 dark:text-neutral-600 md:text-lg">
+              Directory may be empty or the system couldn&apos;t access it.
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              try {
+                await open(dir);
+              } catch (error) {
+                if (error instanceof Error) {
+                  toast({
+                    title: "Error",
+                    description: error.message,
+                    variant: "destructive",
+                  });
+                } else {
+                  toast({
+                    title: "Error",
+                    description: error?.toString(),
+                    variant: "destructive",
+                  });
+                }
+              }
+            }}>
+            Open Folder
+          </Button>
+        </div>
+      );
+    }
+  }
   return (
     <Card className="FE_1 w-full">
       <CardHeader className="">
@@ -163,11 +229,19 @@ export function FileList({
                   className="FE_3 h-fit w-fit"
                   onClick={async () => {
                     setRefreshClick(true);
-                    await getDiff();
-                    await getStaged();
-                    setTimeout(() => {
-                      setRefreshClick(false);
-                    }, 1000);
+                    setLoading(true);
+                    try {
+                      await getDirList();
+                      await getDiff();
+                      await getStaged();
+                    } catch (error) {
+                      console.error(error);
+                    } finally {
+                      setTimeout(() => {
+                        setRefreshClick(false);
+                        setLoading(false);
+                      }, 100);
+                    }
                   }}>
                   <RefreshCw size={20} className={refreshClick ? "animate-spin" : ""} />
                 </Button>
@@ -182,9 +256,7 @@ export function FileList({
           Stage your file before committing to the repository.
         </CardDescription>
       </CardHeader>
-      <CardContent className="overflow-auto pl-4 pt-3">
-        {dirList ? recursiveDirRenderer(dirList, true) : null}
-      </CardContent>
+      <CardContent className="overflow-auto pl-4 pt-3">{checkIfLoading()}</CardContent>
       <CardFooter className="flex justify-center">
         <div className="flex w-fit flex-col items-center justify-center gap-1 rounded border border-blue-500 bg-blue-200/20 p-2 dark:bg-blue-700/20 xs:flex-row">
           <Lightbulb size={20} className="min-w-fit text-blue-600 dark:text-blue-500" />

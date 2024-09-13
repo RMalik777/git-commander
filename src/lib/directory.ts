@@ -8,6 +8,6 @@ export async function getAllChildDir(repo: string) {
     return sorted;
   } catch (error) {
     console.error(error);
-    return [];
+    throw error;
   }
 }
