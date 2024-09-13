@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,17 +11,17 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
-
 import { ZipFunctionDialog } from "@/components/Dialog/ZipFunctionDialog";
 import { ZipTableDialog } from "@/components/Dialog/ZipTableDialog";
 import { ZipTable } from "@/components/Table/ZipTable";
 
-import { FileList } from "@/lib/Types/fileList";
+import type { FileList } from "@/lib/Types/fileList";
 
 export function ZipView() {
+  const { toast } = useToast();
   const [openDialog, setOpenDialog] = useState(false);
   const [fileList, setFileList] = useState<FileList[]>(
     sessionStorage.getItem("fileZipList") ?
@@ -41,6 +42,15 @@ export function ZipView() {
   }, [search]);
   useEffect(() => {
     sessionStorage.setItem("fileZipList", JSON.stringify(fileList));
+    setFilteredFileList(fileList);
+    setFilteredFileList(
+      fileList.filter((item) => {
+        return (
+          item?.path.toLowerCase().includes(search.toLowerCase()) ||
+          item?.name?.toLowerCase().includes(search.toLowerCase())
+        );
+      })
+    );
   }, [fileList]);
   return (
     <Card>
@@ -54,12 +64,17 @@ export function ZipView() {
         <div className="mb-4 flex flex-col items-stretch justify-start gap-2 sm:flex-row sm:items-center md:justify-end">
           <Label>Search</Label>
           <Input
+            disabled={fileList.length == 0}
             className="w-full md:w-1/2"
             type="text"
             placeholder="Search file or folder"
             onChange={(e) => setSearch(e.target.value)}
           />
-          <Button variant="destructive" size="sm" onClick={() => setOpenDialog(true)}>
+          <Button
+            disabled={fileList.length == 0}
+            variant="destructive"
+            size="sm"
+            onClick={() => setOpenDialog(true)}>
             Clear Table
           </Button>
         </div>
@@ -71,6 +86,9 @@ export function ZipView() {
           onConfirm={() => {
             setFileList([]);
             sessionStorage.removeItem("fileZipList");
+            toast({
+              title: "Table Cleared",
+            });
           }}
         />
         <ZipTable

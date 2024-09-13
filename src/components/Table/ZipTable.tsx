@@ -50,7 +50,7 @@ export function ZipTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {fileList?.length > 0 ?
+        {filteredFileList?.length > 0 ?
           filteredFileList?.map((item, index) => (
             <TableRow key={item.path}>
               <TableCell className="">{index + 1}</TableCell>
@@ -143,7 +143,7 @@ export function ZipTable({
           ))
         : <TableRow>
             <TableCell colSpan={4} className="text-center">
-              No file added
+              {fileList.length > 0 ? "No File or Folder Matched" : "No File or Folder Added"}
             </TableCell>
           </TableRow>
         }
@@ -153,7 +153,7 @@ export function ZipTable({
         <code className="rounded bg-neutral-100 text-neutral-700 duration-150 ease-out dark:bg-neutral-800 dark:text-neutral-200">
           xx_original-filename
         </code>
-        . xx is a 2 digit number
+        {/* */}. xx is a 2 digit number
       </TableCaption>
     </Table>
   );

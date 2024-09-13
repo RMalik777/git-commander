@@ -8,10 +8,13 @@ import { setFiles } from "@/lib/Redux/fileList";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
+import { useToast } from "@/components/ui/use-toast";
+
 import * as dirFunc from "@/lib/directory";
 import * as git from "@/lib/git";
 
 export default function Git() {
+  const { toast } = useToast();
   const dispatch = useAppDispatch();
   const dir = useAppSelector((state) => state.repo.directory);
   const diffList = useAppSelector((state) => state.repo.diff);
@@ -63,18 +66,37 @@ export default function Git() {
     getStaged();
   }, [dir]);
 
-  useEffect(() => {
+  async function getDirList() {
     const store = new Store(".fileList.json");
-    async function setDirectory() {
-      refFile.current = dir;
-      const allChild = await dirFunc.getAllChildDir(dir);
+    refFile.current = dir;
+    let allChild: FileEntry[];
+    try {
+      allChild = await dirFunc.getAllChildDir(dir);
       dispatch(setFiles(allChild));
       store.set("fileList", allChild);
       store.save();
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: error?.toString(),
+          variant: "destructive",
+        });
+      }
+      allChild = [];
+      dispatch(setFiles(allChild));
     }
+  }
+  useEffect(() => {
     if (dir === "") return;
     // if (dir == refFile.current) return;
-    setDirectory();
+    getDirList();
   }, [dir]);
 
   return (
@@ -86,6 +108,7 @@ export default function Git() {
         stagedList={stagedList}
         getDiff={getDiff}
         getStaged={getStaged}
+        getDirList={getDirList}
       />
     </div>
   );
