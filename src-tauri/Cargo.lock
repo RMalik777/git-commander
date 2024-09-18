@@ -454,9 +454,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.1.19"
+version = "1.1.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2d74707dde2ba56f86ae90effb3b43ddd369504387e718014de010cec7959800"
+checksum = "45bcde016d64c21da4be18b655631e5ab6d3107607e71a73a9f53eb48aae23fb"
 dependencies = [
  "shlex",
 ]
@@ -3830,7 +3830,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs-extra"
 version = "0.0.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#cf058d5d4a6639b0684339944d9c137a9cddde14"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#fadee9d8bad783b6b1125f6008e2aaf5c55bd663"
 dependencies = [
  "log",
  "serde",
@@ -3842,7 +3842,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "0.0.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#cf058d5d4a6639b0684339944d9c137a9cddde14"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#fadee9d8bad783b6b1125f6008e2aaf5c55bd663"
 dependencies = [
  "log",
  "serde",
@@ -3854,7 +3854,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-window-state"
 version = "0.1.1"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#cf058d5d4a6639b0684339944d9c137a9cddde14"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#fadee9d8bad783b6b1125f6008e2aaf5c55bd663"
 dependencies = [
  "bincode",
  "bitflags 2.6.0",
@@ -4269,9 +4269,9 @@ checksum = "e91b56cd4cadaeb79bbf1a5645f6b4f8dc5bde8834ad5894a8db35fda9efa1fe"
 
 [[package]]
 name = "unicode-normalization"
-version = "0.1.23"
+version = "0.1.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a56d1686db2308d901306f92a263857ef59ea39678a5458e7cb17f01415101f5"
+checksum = "5033c97c4262335cded6d6fc3e5c18ab755e1a3dc96376350f3d8e9f009ad956"
 dependencies = [
  "tinyvec",
 ]
