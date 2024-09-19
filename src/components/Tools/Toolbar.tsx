@@ -3,10 +3,10 @@ import { Command } from "@tauri-apps/api/shell";
 import { useLayoutEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
+import { setLastCommitMessage } from "@/lib/Redux/gitSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setPullMsg } from "@/lib/Redux/pullMsg";
 import { setRepo } from "@/lib/Redux/repoSlice";
-import { setLastCommitMessage } from "@/lib/Redux/gitSlice";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,6 +37,8 @@ import {
   GitBranch,
   Menu,
   Moon,
+  MoveDown,
+  RefreshCcw,
   Sun,
   SunMoon,
   Undo2,
@@ -153,6 +155,9 @@ export function Toolbar() {
 
   const [isPulling, setIsPulling] = useState(false);
   const [isPushing, setIsPushing] = useState(false);
+
+  const [isFetching, setIsFetching] = useState(false);
+  const [fetchAmount, setFetchAmount] = useState(0);
 
   const highlighter = driver({});
 
@@ -302,6 +307,70 @@ export function Toolbar() {
           <Separator orientation="vertical" className="h-full" />
           <TooltipProvider delayDuration={100}>
             <ul className="flex flex-row items-center gap-6 sm:gap-12">
+              <li
+                className={(fetchAmount > 0 ? "pr-2" : "") + " flex items-center rounded-md border"}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className="TB_6"
+                      size="icon"
+                      variant="outline"
+                      onClick={async () => {
+                        try {
+                          setIsFetching(true);
+                          const result = await git.fetch(dirLocation);
+                          const response = await git.getDiffCommit(dirLocation, currentBranch);
+                          setFetchAmount(response.length);
+                          toast({
+                            title: "Fetched Repository",
+                            description: result,
+                          });
+                        } catch (error) {
+                          if (error instanceof Error) {
+                            console.error(error);
+                            toast({
+                              title: "Failed to fetch",
+                              description: (
+                                <p className="whitespace-pre-wrap break-words">{error.message}</p>
+                              ),
+                              variant: "destructive",
+                            });
+                          } else {
+                            toast({
+                              title: "Failed to fetch",
+                              description: error?.toString(),
+                              variant: "destructive",
+                            });
+                          }
+                        } finally {
+                          setIsFetching(false);
+                        }
+                      }}>
+                      <RefreshCcw className={(isFetching ? "animate-spin" : "") + " absolute"} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>Sync</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger
+                    className={
+                      (fetchAmount > 0 ? "flex" : "hidden") + " items-center text-lg font-medium"
+                    }>
+                    <MoveDown />
+                    {fetchAmount}
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>
+                      {fetchAmount > 0 ?
+                        `${fetchAmount} incoming commit, press pull to integrate incoming commit`
+                      : "Amount of incoming commit from origin"}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </li>
               <li>
                 <div className="flex gap-2 sm:gap-4">
                   <Tooltip>
@@ -367,6 +436,7 @@ export function Toolbar() {
                                 title: "Pulled Succesfully",
                                 description: desc(),
                               });
+                              setFetchAmount(0);
                             }
                           } catch (error) {
                             if (error instanceof Error) {

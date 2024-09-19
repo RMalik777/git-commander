@@ -198,6 +198,43 @@ export async function currentBranch(path) {
   return await response;
 }
 
+export async function fetch(path) {
+  const response = new Promise((resolve, reject) => {
+    const result = [];
+    const command = new Command("git 1 args", ["fetch"], { cwd: path });
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line));
+    command.stderr.on("data", (line) => result.push(line));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
+export async function getDiffCommit(path, branch) {
+  const response = new Promise((resolve, reject) => {
+    const command = new Command(
+      "git 4 args",
+      [
+        "log",
+        `origin/${branch}...${branch}`,
+        '--pretty=format:"%h $|$ %ad $|$ %an $|$ %s"',
+        "--date=format-local:%Y-%m-%d %H:%M:%S",
+      ],
+      {
+        cwd: path,
+      }
+    );
+    const result = [];
+    command.on("close", () => resolve(result));
+    command.on("error", (error) => reject(new Error(error)));
+    command.stdout.on("data", (line) => result.push(line.trim()));
+    command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
+    command.spawn().catch((error) => reject(new Error(error)));
+  });
+  return await response;
+}
+
 export async function getAllCommit(path, branch, type) {
   const response = new Promise((resolve, reject) => {
     let command;
