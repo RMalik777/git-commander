@@ -35,10 +35,16 @@ export default function Index() {
         <AlertTitle>This program may not worked as intended</AlertTitle>
         <AlertDescription>
           No <span className="font-semibold">git</span> detected on your system. Please install git
-          to use this program.
+          to use this program.{" "}
+          <a
+            href="https://git-scm.com/downloads"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium underline after:content-['_↗'] hover:opacity-80">
+            Download git
+          </a>
         </AlertDescription>
       </Alert>
-
       <RepoView />
       <ChangeView />
     </div>

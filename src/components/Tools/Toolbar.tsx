@@ -308,7 +308,9 @@ export function Toolbar() {
           <TooltipProvider delayDuration={100}>
             <ul className="flex flex-row items-center gap-6 sm:gap-12">
               <li
-                className={(fetchAmount > 0 ? "pr-2" : "") + " flex items-center rounded-md border"}>
+                className={
+                  (fetchAmount > 0 ? "pr-2" : "") + " flex items-center rounded-md border"
+                }>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
