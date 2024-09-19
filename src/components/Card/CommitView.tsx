@@ -38,7 +38,7 @@ export function CommitView({
   );
   const [filteredCommit, setFilteredCommit] = useState<CommitFormat[]>(formattedCommit);
 
-  function formatCommit(commit) {
+  function formatCommit(commit: string[]) {
     const result = commit.map((commit: string) => {
       const split = commit.replaceAll(/(^"|"$)/g, "").split(" $|$ ");
       const hash = split[0];
