@@ -48,34 +48,34 @@ export function ChangeView() {
           incomingDeletions)
     ) ?
       <Card className="relative">
-        <button
-          className="group absolute right-4 top-4"
-          onClick={() => {
-            setShow(false);
-            toast({
-              title: "Dismissed",
-              action: (
-                <ToastAction
-                  altText="Undoing Closed changes view"
-                  onClick={() => {
-                    setShow(true);
-                  }}>
-                  Undo
-                </ToastAction>
-              ),
-            });
-          }}>
-          <TooltipProvider>
-            <Tooltip disableHoverableContent delayDuration={250}>
-              <TooltipTrigger>
+        <TooltipProvider>
+          <Tooltip disableHoverableContent delayDuration={250}>
+            <TooltipTrigger asChild>
+              <button
+                className="group absolute right-4 top-4"
+                onClick={() => {
+                  setShow(false);
+                  toast({
+                    title: "Dismissed",
+                    action: (
+                      <ToastAction
+                        altText="Undoing Closed changes view"
+                        onClick={() => {
+                          setShow(true);
+                        }}>
+                        Undo
+                      </ToastAction>
+                    ),
+                  });
+                }}>
                 <X className="text-neutral-400 duration-75 group-hover:text-neutral-950" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Dismiss</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </button>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Dismiss</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <CardHeader className="bg-white dark:bg-neutral-950">
           <CardDescription>Latest Changes Since Last Pull </CardDescription>
           <CardTitle>
