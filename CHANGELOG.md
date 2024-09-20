@@ -1,3 +1,10 @@
+## [1.16.2](https://github.com/RMalik777/git-commander/compare/v1.16.1...v1.16.2) (2024-09-20)
+
+
+### Bug Fixes
+
+* show fetch button in toolbar ([9efeede](https://github.com/RMalik777/git-commander/commit/9efeede2db505bdc857d5fb47f999c76a27712bd))
+
 ## [1.16.1](https://github.com/RMalik777/git-commander/compare/v1.16.0...v1.16.1) (2024-09-13)
 
 
