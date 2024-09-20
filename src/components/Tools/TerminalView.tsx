@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 
 import { FitAddon } from "@xterm/addon-fit";
 import { Terminal } from "@xterm/xterm";
+import { WebLinksAddon } from "@xterm/addon-web-links";
+import { ClipboardAddon } from "@xterm/addon-clipboard";
 import "@xterm/xterm/css/xterm.css";
 
 import { Terminal as TerminalIcon } from "lucide-react";
@@ -24,8 +26,11 @@ export function TerminalView() {
 
   useEffect(() => {
     const fitAddon = new FitAddon();
+    const clipboardAddon = new ClipboardAddon();
     if (terminalElement.current) {
       term.loadAddon(fitAddon);
+      term.loadAddon(new WebLinksAddon());
+      term.loadAddon(clipboardAddon);
       term.open(terminalElement.current as HTMLElement);
       initShell(dir);
       term.onData(writeToPty);
@@ -38,7 +43,10 @@ export function TerminalView() {
     if (!term) return;
     term.reset();
     const fitAddon = new FitAddon();
+    const clipboardAddon = new ClipboardAddon();
     term.loadAddon(fitAddon);
+    term.loadAddon(new WebLinksAddon());
+    term.loadAddon(clipboardAddon);
     initShell(dir);
     addEventListener("resize", () => fitTerminal(term, fitAddon));
     fitTerminal(term, fitAddon);
@@ -54,7 +62,11 @@ export function TerminalView() {
           setOpenTerminal(!openTerminal);
           localStorage.setItem("openTerminal", (!openTerminal).toString());
           const fitAddon = new FitAddon();
+          const clipboardAddon = new ClipboardAddon();
           term.loadAddon(fitAddon);
+          term.loadAddon(new WebLinksAddon());
+          term.loadAddon(clipboardAddon);
+
           // Set timeout is needed so the FitAddon can be loaded first before fitting the terminal. The amount of time is (probably) not important, 1ms should be enough but i choose 10 just to be safe.
           // The alternative will be to await the term.loadAddon(fitAddon) and then fit the terminal. But that shows warning because it's not a promise.
           setTimeout(() => fitTerminal(term, fitAddon), 10);
