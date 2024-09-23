@@ -202,10 +202,10 @@ export async function fetch(path) {
   const response = new Promise((resolve, reject) => {
     const result = [];
     const command = new Command("git 1 args", ["fetch"], { cwd: path });
-    command.on("close", () => resolve(result));
+    command.on("close", () => resolve(result.toString()));
     command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => result.push(line));
-    command.stderr.on("data", (line) => result.push(line));
+    command.stdout.on("data", (line) => result.push(line + "\n"));
+    command.stderr.on("data", (line) => result.push(line + "\n"));
     command.spawn().catch((error) => reject(new Error(error)));
   });
   return await response;
