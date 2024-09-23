@@ -225,7 +225,7 @@ export function ClearSettings({
                     toast({
                       title: "No Category Selected",
                       description: "Please select the settings you want to clear",
-                      duration: 300,
+                      duration: 3000,
                     });
                     return;
                   }

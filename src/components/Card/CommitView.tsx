@@ -36,7 +36,6 @@ export function CommitView({
     : type === "Remote" ? remoteCommit
     : allCommit
   );
-  const [filteredCommit, setFilteredCommit] = useState<CommitFormat[]>(formattedCommit);
 
   function formatCommit(commit: string[]) {
     const result = commit.map((commit: string) => {
@@ -65,23 +64,18 @@ export function CommitView({
       result = localCommit.concat(remoteCommit);
     }
     setFormattedCommit(result);
-    setFilteredCommit(result);
   }
   useEffect(() => {
     getCommit();
   }, [currentBranch, currentRepoDir, currentRepoName, currentRepoHash]);
 
   const [search, setSearch] = useState("");
-  useEffect(() => {
-    setFilteredCommit(
-      formattedCommit?.filter(
-        (commit) =>
-          commit.message.toLowerCase().includes(search.toLowerCase()) ||
-          commit.author.toLowerCase().includes(search.toLowerCase()) ||
-          commit.hash.toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  }, [search]);
+  const filteredCommit = formattedCommit?.filter(
+    (commit) =>
+      commit.message.toLowerCase().includes(search.toLowerCase()) ||
+      commit.author.toLowerCase().includes(search.toLowerCase()) ||
+      commit.hash.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <Card>
       <CardHeader>

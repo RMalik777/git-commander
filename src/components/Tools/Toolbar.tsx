@@ -26,6 +26,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { ToastAction } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -309,7 +310,8 @@ export function Toolbar() {
             <ul className="flex flex-row items-center gap-6 sm:gap-12">
               <li
                 className={
-                  (fetchAmount > 0 ? "pr-2" : "") + " flex items-center rounded-md border"
+                  (fetchAmount > 0 ? "border-b border-r border-t pr-px" : "") +
+                  " box-border flex h-10 items-center rounded-md duration-200 ease-out dark:border-neutral-800"
                 }>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -323,10 +325,28 @@ export function Toolbar() {
                           const result = await git.fetch(dirLocation);
                           const response = await git.getDiffCommit(dirLocation, currentBranch);
                           setFetchAmount(response.length);
-                          toast({
-                            title: "Fetched Repository",
-                            description: result,
-                          });
+                          if (result.startsWith("fatal") || result.startsWith("error")) {
+                            toast({
+                              title: "Error",
+                              description: result,
+                              variant: "destructive",
+                            });
+                          } else if (result == "") {
+                            toast({
+                              title: "Repository Up To Date",
+                            });
+                          } else {
+                            toast({
+                              title: "Repository Synced",
+                              description: (
+                                <p>
+                                  {result} <br /> Press pull to integrate changes to local
+                                  repository
+                                </p>
+                              ),
+                              action: <ToastAction altText="Pull Repo">Pull</ToastAction>,
+                            });
+                          }
                         } catch (error) {
                           if (error instanceof Error) {
                             console.error(error);
@@ -348,7 +368,9 @@ export function Toolbar() {
                           setIsFetching(false);
                         }
                       }}>
-                      <RefreshCcw className={(isFetching ? "animate-spin" : "") + " absolute"} />
+                      <RefreshCcw
+                        className={(isFetching ? "animate-spin" : "") + " absolute min-h-fit"}
+                      />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
@@ -359,10 +381,24 @@ export function Toolbar() {
                 <Tooltip>
                   <TooltipTrigger
                     className={
-                      (fetchAmount > 0 ? "flex" : "hidden") + " items-center text-lg font-medium"
+                      (fetchAmount > 0 ? "w-10 opacity-100" : "w-0 opacity-100") +
+                      " flex items-center text-lg font-medium duration-200 ease-out"
                     }>
-                    <MoveDown />
-                    {fetchAmount}
+                    <MoveDown
+                      className={
+                        (fetchAmount > 0 ?
+                          "translate-x-0 scale-100 opacity-100"
+                        : "-translate-x-8 scale-0 opacity-0") + " min-w-fit duration-200 ease-out"
+                      }
+                    />
+                    <span
+                      className={
+                        (fetchAmount > 0 ?
+                          "translate-x-0 scale-100 opacity-100"
+                        : "-translate-x-10 scale-0 opacity-0") + " duration-200 ease-out"
+                      }>
+                      {fetchAmount}
+                    </span>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p>
