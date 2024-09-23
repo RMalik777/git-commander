@@ -324,8 +324,15 @@ export function Toolbar() {
                           const result = await git.fetch(dirLocation);
                           const response = await git.getDiffCommit(dirLocation, currentBranch);
                           setFetchAmount(response.length);
+                          if (response?.startsWith("fatal")) {
+                            toast({
+                              title: "Error",
+                              description: response.toString(),
+                              variant: "destructive",
+                            });
+                          }
                           toast({
-                            title: "Fetched Repository",
+                            title: "Repository Synced",
                             description: result,
                           });
                         } catch (error) {
