@@ -1,3 +1,12 @@
+## [1.16.3](https://github.com/RMalik777/git-commander/compare/v1.16.2...v1.16.3) (2024-09-23)
+
+
+### Bug Fixes
+
+* git fetch called the wrong function after finished ([c26533e](https://github.com/RMalik777/git-commander/commit/c26533e4c4ef5a032e3d152d279ba70646f69975))
+* support interaction with url in terminal ([ffed1b2](https://github.com/RMalik777/git-commander/commit/ffed1b2e0bf6ef5cb149d2736876f86634136359))
+* toast duration too short ([9bd434d](https://github.com/RMalik777/git-commander/commit/9bd434df5ffcfc52d6cfc4042538a9e47a611ebc))
+
 ## [1.16.2](https://github.com/RMalik777/git-commander/compare/v1.16.1...v1.16.2) (2024-09-20)
 
 
