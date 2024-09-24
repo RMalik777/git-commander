@@ -10,12 +10,11 @@ import {
   readBinaryFile,
   readDir,
   removeDir,
-  renameFile,
   writeBinaryFile,
   writeTextFile,
 } from "@tauri-apps/api/fs";
-import { metadata } from "tauri-plugin-fs-extra-api";
 import { Command, open as openFolder } from "@tauri-apps/api/shell";
+import { metadata } from "tauri-plugin-fs-extra-api";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -127,7 +126,6 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
             path: `${tempDir}\\${prepend}${file.name}`,
             contents: await readBinaryFile(file.path),
           });
-          await renameFile(`${tempDir}\\${prepend}${file.name}`, `${tempDir}\\${file.name}`);
         }
       }
       const newFileList = await readDir(tempDir, { recursive: true });
@@ -155,7 +153,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       const command = Command.sidecar("../src-tauri/bin/sza", [
         "a",
         `-t${values.archiveFormat}`,
-        `${currentDir}\\${values.archiveName}.${values.archiveFormat}`,
+        `${values.location}\\${values.archiveName}.${values.archiveFormat}`,
         `@${tempDir}\\zip.txt`,
       ]);
       const output = await command.execute();
@@ -280,6 +278,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                           placeholder="path/to/your/folder"
                         />
                         <Button
+                          disabled={isLoading}
                           type="button"
                           variant="outline"
                           onClick={async () => {

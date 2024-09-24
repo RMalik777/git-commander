@@ -2795,9 +2795,9 @@ dependencies = [
 
 [[package]]
 name = "pkg-config"
-version = "0.3.30"
+version = "0.3.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d231b230927b5e4ad203db57bbcbee2802f6bce620b1e4a9024a07d94e2907ec"
+checksum = "953ec861398dccce10c670dfeaf3ec4911ca479e9c02154b3a215178c5f566f2"
 
 [[package]]
 name = "plist"
@@ -3830,7 +3830,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs-extra"
 version = "0.0.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#4af2ab9fd841db90be730554e6bc175af8ce7380"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#3b465674f4a46aad0a2b396df6cbe16bdffb75d8"
 dependencies = [
  "log",
  "serde",
@@ -3842,7 +3842,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "0.0.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#4af2ab9fd841db90be730554e6bc175af8ce7380"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#3b465674f4a46aad0a2b396df6cbe16bdffb75d8"
 dependencies = [
  "log",
  "serde",
@@ -3854,7 +3854,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-window-state"
 version = "0.1.1"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#4af2ab9fd841db90be730554e6bc175af8ce7380"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#3b465674f4a46aad0a2b396df6cbe16bdffb75d8"
 dependencies = [
  "bincode",
  "bitflags 2.6.0",
