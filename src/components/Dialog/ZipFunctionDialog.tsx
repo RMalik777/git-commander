@@ -127,7 +127,6 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
             path: `${tempDir}\\${prepend}${file.name}`,
             contents: await readBinaryFile(file.path),
           });
-          await renameFile(`${tempDir}\\${prepend}${file.name}`, `${tempDir}\\${file.name}`);
         }
       }
       const newFileList = await readDir(tempDir, { recursive: true });
