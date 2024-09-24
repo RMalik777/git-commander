@@ -155,7 +155,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       const command = Command.sidecar("../src-tauri/bin/sza", [
         "a",
         `-t${values.archiveFormat}`,
-        `${currentDir}\\${values.archiveName}.${values.archiveFormat}`,
+        `${values.location}\\${values.archiveName}.${values.archiveFormat}`,
         `@${tempDir}\\zip.txt`,
       ]);
       const output = await command.execute();
@@ -280,6 +280,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                           placeholder="path/to/your/folder"
                         />
                         <Button
+                          disabled={isLoading}
                           type="button"
                           variant="outline"
                           onClick={async () => {
