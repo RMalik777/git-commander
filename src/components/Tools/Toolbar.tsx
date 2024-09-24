@@ -340,11 +340,9 @@ export function Toolbar() {
                               title: "Repository Synced",
                               description: (
                                 <p>
-                                  {result} <br /> Press pull to integrate changes to local
-                                  repository
+                                  {result} <br /> Pull to integrate changes to local repository
                                 </p>
                               ),
-                              action: <ToastAction altText="Pull Repo">Pull</ToastAction>,
                             });
                           }
                         } catch (error) {
