@@ -1,3 +1,12 @@
+## [1.16.4](https://github.com/RMalik777/git-commander/compare/v1.16.3...v1.16.4) (2024-09-24)
+
+
+### Bug Fixes
+
+* compressed file have wrong names ([d5412e4](https://github.com/RMalik777/git-commander/commit/d5412e44405a7dd0574309057b1272120cc2e6f6))
+* compressed file have wrong names ([dcf03ef](https://github.com/RMalik777/git-commander/commit/dcf03ef343e620089877cb891632174d5867c476))
+* compressed file is stored in wrong location ([16c2656](https://github.com/RMalik777/git-commander/commit/16c26563e7453334300f9a0e5b58eefe454de33d))
+
 ## [1.16.3](https://github.com/RMalik777/git-commander/compare/v1.16.2...v1.16.3) (2024-09-23)
 
 
