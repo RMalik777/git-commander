@@ -53,6 +53,8 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { BarLoader } from "react-spinners";
 
+import { displayNotificationNotFocus } from "@/lib/functions";
+
 const formSchema = z.object({
   archiveName: z.string().min(1, { message: "Please enter a name for the file" }),
   archiveFormat: z.string().min(1, { message: "Please choose a file type" }),
@@ -166,6 +168,10 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
             </ToastAction>
           ),
         });
+        await displayNotificationNotFocus(
+          "Compression Finished",
+          "File has been compressed successfully"
+        );
       } else {
         toast({
           title: "Problem Occured While Compressing File",
@@ -178,6 +184,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
           ),
           variant: "destructive",
         });
+        await displayNotificationNotFocus("Compression Failed", output.stderr.toString());
       }
       setDialogOpen(false);
       reset({ archiveFormat: values.archiveFormat, archiveName: "", location: currentDir });
@@ -189,12 +196,17 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
           description: error.message,
           variant: "destructive",
         });
+        displayNotificationNotFocus("Compression Failed", error.message);
       } else {
         toast({
           title: "Unknown Error While Compressing File",
           description: error?.toString(),
           variant: "destructive",
         });
+        displayNotificationNotFocus(
+          "Compression Failed",
+          error?.toString() ?? "Unknown Error Occured"
+        );
       }
     } finally {
       setIsLoading(false);

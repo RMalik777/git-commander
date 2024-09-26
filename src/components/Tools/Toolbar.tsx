@@ -26,7 +26,6 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { ToastAction } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -340,11 +339,9 @@ export function Toolbar() {
                               title: "Repository Synced",
                               description: (
                                 <p>
-                                  {result} <br /> Press pull to integrate changes to local
-                                  repository
+                                  {result} <br /> Pull to integrate changes to local repository
                                 </p>
                               ),
-                              action: <ToastAction altText="Pull Repo">Pull</ToastAction>,
                             });
                           }
                         } catch (error) {
@@ -378,11 +375,11 @@ export function Toolbar() {
                   </TooltipContent>
                 </Tooltip>
 
-                <Tooltip>
+                <Tooltip disableHoverableContent>
                   <TooltipTrigger
                     className={
                       (fetchAmount > 0 ? "w-10 opacity-100" : "w-0 opacity-100") +
-                      " flex items-center text-lg font-medium duration-200 ease-out"
+                      " flex h-full items-center text-lg font-medium duration-200 ease-out"
                     }>
                     <MoveDown
                       className={

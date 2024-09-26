@@ -205,11 +205,12 @@ export function Copy() {
                         placeholder={`example.txt\nexample2.txt\nexample3.txt`}
                       />
                       <FormDescription>
-                        Enter the file name you want to copy, separated by line/
+                        Enter the file name you want to copy, separated by line(
                         {/* */}
                         <span className="rounded bg-neutral-200 px-2 py-1 font-mono text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50">
                           Enter
                         </span>
+                        )
                       </FormDescription>
                       <FormMessage />
                     </div>
