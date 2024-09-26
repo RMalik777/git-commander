@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/RMalik777/git-commander/compare/v1.16.4...v1.17.0) (2024-09-26)
+
+
+### Features
+
+* display desktop notification upon successful compression ([a8c051f](https://github.com/RMalik777/git-commander/commit/a8c051f681e27429ea1c3b41151ea80b8927fd8c))
+
 ## [1.16.4](https://github.com/RMalik777/git-commander/compare/v1.16.3...v1.16.4) (2024-09-24)
 
 
