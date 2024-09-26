@@ -1,6 +1,6 @@
 import { Command } from "@tauri-apps/api/shell";
 
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { setLastCommitMessage } from "@/lib/Redux/gitSlice";
@@ -157,7 +157,17 @@ export function Toolbar() {
   const [isPushing, setIsPushing] = useState(false);
 
   const [isFetching, setIsFetching] = useState(false);
-  const [fetchAmount, setFetchAmount] = useState(0);
+  const [fetchAmount, setFetchAmount] = useState<number>(() => {
+    const amountFromStorage = parseInt(localStorage.getItem("fetchAmount") ?? "0");
+    if (Number.isNaN(amountFromStorage)) return 0;
+    return amountFromStorage;
+  });
+  useEffect(() => {
+    localStorage.setItem("fetchAmount", fetchAmount.toString());
+  }, [fetchAmount]);
+  useEffect(() => {
+    setFetchAmount(0);
+  }, [dirLocation]);
 
   const highlighter = driver({});
 
