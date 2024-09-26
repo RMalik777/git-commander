@@ -123,7 +123,6 @@ export async function clone(localRepo, remoteRepo, username) {
 }
 
 export async function commit(path, message) {
-  await configUsername(path);
   const response = new Promise((resolve, reject) => {
     const result = [];
     const commmit = new Command("git 3 args", ["commit", "-m", message], {
