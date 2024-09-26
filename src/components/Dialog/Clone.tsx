@@ -94,7 +94,7 @@ export function Clone() {
   const [progress, setProgress] = useState("");
   const [isCloning, setIsCloning] = useState(false);
   async function clone(localRepo: string, remoteRepo: string, username: string) {
-    git.configUsername(localRepo, username);
+    if (username) await git.configUsername(localRepo, username);
     const response: Promise<string[]> = new Promise((resolve, reject) => {
       const result: string[] = [];
       const command = new ShellCommand("git 3 args", ["clone", "--progress", remoteRepo], {

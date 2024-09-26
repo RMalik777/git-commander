@@ -92,7 +92,7 @@ export async function checkGitStatus(path) {
 }
 
 export async function clone(localRepo, remoteRepo, username) {
-  configUsername(localRepo, username);
+  await configUsername(localRepo, username);
   const response = new Promise((resolve, reject) => {
     const result = [];
     const command = new Command("git 3 args", ["clone", "--progress", remoteRepo], {
@@ -123,7 +123,7 @@ export async function clone(localRepo, remoteRepo, username) {
 }
 
 export async function commit(path, message) {
-  configUsername(path);
+  await configUsername(path);
   const response = new Promise((resolve, reject) => {
     const result = [];
     const commmit = new Command("git 3 args", ["commit", "-m", message], {
