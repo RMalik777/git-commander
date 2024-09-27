@@ -80,6 +80,7 @@ export function Commit({
   const { handleSubmit, reset } = commitForm;
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      if (userName) await git.configUsername(currentRepoDir, userName);
       const response = await git.commit(currentRepoDir, values.commitMsg);
       dispatch(removeLastCommitMessage());
       getDiff();
