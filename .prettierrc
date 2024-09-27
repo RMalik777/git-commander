@@ -4,5 +4,6 @@
   "bracketSameLine": true,
   "experimentalTernaries": true,
   "printWidth": 100,
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindFunctions": ["cva"]
 }
