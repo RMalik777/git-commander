@@ -1,3 +1,11 @@
+## [1.17.1](https://github.com/RMalik777/git-commander/compare/v1.17.0...v1.17.1) (2024-09-27)
+
+
+### Bug Fixes
+
+* don't clear commit message if commit is denied ([e443136](https://github.com/RMalik777/git-commander/commit/e443136822ef11aede11f3b752b66f95d4e2af4e))
+* fetch amount storing last repo value instead of resetting ([4e4059e](https://github.com/RMalik777/git-commander/commit/4e4059e7b55da1048bb39bd715ddbd9566a63e85))
+
 # [1.17.0](https://github.com/RMalik777/git-commander/compare/v1.16.4...v1.17.0) (2024-09-26)
 
 
