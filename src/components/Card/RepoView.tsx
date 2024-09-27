@@ -120,6 +120,8 @@ export function RepoView() {
       dispatch(setFiles(fileList));
       await fileStore.set("fileList", fileList);
       await fileStore.save();
+
+      localStorage.removeItem("fetchAmount");
     }
   }
 
@@ -154,8 +156,21 @@ export function RepoView() {
       setShowError(false);
       sessionStorage.setItem("showError", "false");
       sessionStorage.removeItem("isGitRepo");
-      setErrorMsg(null);
       sessionStorage.removeItem("errorMsg");
+      setErrorMsg(null);
+      localStorage.removeItem("fetchAmount");
+      const fileStore = new Store(".fileList.json");
+      const diffStore = new Store(".diffList.json");
+      const stagedStore = new Store(".stagedList.json");
+      fileStore.clear();
+      diffStore.clear();
+      stagedStore.clear();
+      fileStore.save();
+      diffStore.save();
+      stagedStore.save();
+      fileStore.save();
+
+      localStorage.removeItem("fetchAmount");
       return;
     }
     checkDir(dir);
@@ -254,6 +269,7 @@ export function RepoView() {
             localStorage.removeItem("currentRepoName");
             localStorage.removeItem("currentBranch");
             localStorage.removeItem("stagedList");
+            localStorage.removeItem("fetchAmount");
             dispatch(removeRepo());
             dispatch(removePullMsg());
             dispatch(removeFiles());
