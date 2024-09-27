@@ -154,8 +154,8 @@ export function Commit({
             </ToastAction>
           ),
         });
+        reset({ commitMsg: "" });
       }
-      reset({ commitMsg: "" });
     } catch (error) {
       if (error instanceof Error) {
         toast({
@@ -163,12 +163,13 @@ export function Commit({
           description: error.message,
           variant: "destructive",
         });
+      } else {
+        toast({
+          title: "Error",
+          description: error ? error?.toString() : "An unknown error occured",
+          variant: "destructive",
+        });
       }
-      toast({
-        title: "Error",
-        description: "An unknown error occured while commiting changes",
-        variant: "destructive",
-      });
     }
   }
   return (
