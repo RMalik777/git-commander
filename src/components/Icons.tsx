@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 import {
+  type SimpleIcon,
   si7zip,
   siAstro,
   siBun,
@@ -85,7 +86,7 @@ export function Icons(params: Readonly<Params>) {
   const lucideClass = " text-current";
   const si_Class = " fill-current";
 
-  let iconsVar;
+  let iconsVar: SimpleIcon | undefined;
   // DATABASE
   if (
     extension === "db" ||
