@@ -1,3 +1,43 @@
+## [1.17.1](https://github.com/RMalik777/git-commander/compare/v1.17.0...v1.17.1) (2024-09-27)
+
+
+### Bug Fixes
+
+* don't clear commit message if commit is denied ([e443136](https://github.com/RMalik777/git-commander/commit/e443136822ef11aede11f3b752b66f95d4e2af4e))
+* fetch amount storing last repo value instead of resetting ([4e4059e](https://github.com/RMalik777/git-commander/commit/4e4059e7b55da1048bb39bd715ddbd9566a63e85))
+
+# [1.17.0](https://github.com/RMalik777/git-commander/compare/v1.16.4...v1.17.0) (2024-09-26)
+
+
+### Features
+
+* display desktop notification upon successful compression ([a8c051f](https://github.com/RMalik777/git-commander/commit/a8c051f681e27429ea1c3b41151ea80b8927fd8c))
+
+## [1.16.4](https://github.com/RMalik777/git-commander/compare/v1.16.3...v1.16.4) (2024-09-24)
+
+
+### Bug Fixes
+
+* compressed file have wrong names ([d5412e4](https://github.com/RMalik777/git-commander/commit/d5412e44405a7dd0574309057b1272120cc2e6f6))
+* compressed file have wrong names ([dcf03ef](https://github.com/RMalik777/git-commander/commit/dcf03ef343e620089877cb891632174d5867c476))
+* compressed file is stored in wrong location ([16c2656](https://github.com/RMalik777/git-commander/commit/16c26563e7453334300f9a0e5b58eefe454de33d))
+
+## [1.16.3](https://github.com/RMalik777/git-commander/compare/v1.16.2...v1.16.3) (2024-09-23)
+
+
+### Bug Fixes
+
+* git fetch called the wrong function after finished ([c26533e](https://github.com/RMalik777/git-commander/commit/c26533e4c4ef5a032e3d152d279ba70646f69975))
+* support interaction with url in terminal ([ffed1b2](https://github.com/RMalik777/git-commander/commit/ffed1b2e0bf6ef5cb149d2736876f86634136359))
+* toast duration too short ([9bd434d](https://github.com/RMalik777/git-commander/commit/9bd434df5ffcfc52d6cfc4042538a9e47a611ebc))
+
+## [1.16.2](https://github.com/RMalik777/git-commander/compare/v1.16.1...v1.16.2) (2024-09-20)
+
+
+### Bug Fixes
+
+* show fetch button in toolbar ([9efeede](https://github.com/RMalik777/git-commander/commit/9efeede2db505bdc857d5fb47f999c76a27712bd))
+
 ## [1.16.1](https://github.com/RMalik777/git-commander/compare/v1.16.0...v1.16.1) (2024-09-13)
 
 
