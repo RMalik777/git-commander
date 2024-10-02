@@ -26,12 +26,10 @@ export function ZipTable({
   fileList,
   filteredFileList,
   setFileList,
-  setFilteredFileList,
 }: Readonly<{
   fileList: FileList[];
   filteredFileList: FileList[];
   setFileList: (fileList: FileList[]) => void;
-  setFilteredFileList: (fileList: FileList[]) => void;
 }>) {
   /**
    * useAutoAnimate is disabled because it's still have some issue
@@ -81,7 +79,6 @@ export function ZipTable({
                             newFiltered = filteredFileList.toSpliced(editValue, 0, item);
                             newFiltered.splice(index, 1);
                           }
-                          setFilteredFileList(newFiltered);
                         }
                         setIsEdit(false);
                       }}>
@@ -137,7 +134,6 @@ export function ZipTable({
                       const tempFiltered = newFiltered[index];
                       newFiltered[index] = newFiltered[index - 1];
                       newFiltered[index - 1] = tempFiltered;
-                      setFilteredFileList(newFiltered);
                       const newList = [...fileList];
                       const toSwap1 = newList.findIndex(
                         (find) => find.path === newFiltered[index].path
@@ -162,7 +158,6 @@ export function ZipTable({
                       const tempFiltered = newFiltered[index];
                       newFiltered[index] = newFiltered[index + 1];
                       newFiltered[index + 1] = tempFiltered;
-                      setFilteredFileList(newFiltered);
                       const newList = [...fileList];
                       const toSwap1 = newList.findIndex(
                         (find) => find.path === newFiltered[index].path
@@ -184,7 +179,6 @@ export function ZipTable({
                     onClick={() => {
                       const newFiltered = [...filteredFileList];
                       newFiltered.splice(index, 1);
-                      setFilteredFileList(newFiltered);
                       const newList = [...fileList];
                       const toDelete = newList.findIndex((find) => find.path === item.path);
                       newList.splice(toDelete, 1);
