@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import { setLocalCommit, setRemoteCommit, type CommitFormat } from "@/lib/Redux/gitSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
@@ -70,12 +70,15 @@ export function CommitView({
   }, [currentBranch, currentRepoDir, currentRepoName, currentRepoHash]);
 
   const [search, setSearch] = useState("");
-  const filteredCommit = formattedCommit?.filter(
-    (commit) =>
-      commit.message.toLowerCase().includes(search.toLowerCase()) ||
-      commit.author.toLowerCase().includes(search.toLowerCase()) ||
-      commit.hash.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredCommit = useMemo(() => {
+    const find = search.trim().toLowerCase();
+    return formattedCommit?.filter(
+      (commit) =>
+        commit.message.toLowerCase().includes(find) ||
+        commit.author.toLowerCase().includes(find) ||
+        commit.hash.toLowerCase().includes(find)
+    );
+  }, [formattedCommit, search]);
   return (
     <Card>
       <CardHeader>
