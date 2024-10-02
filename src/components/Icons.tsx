@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 import {
+  type SimpleIcon,
   si7zip,
   siAstro,
   siBun,
@@ -69,6 +70,7 @@ import {
   siVitest,
   siVuedotjs,
   siYaml,
+  siTurborepo,
 } from "simple-icons";
 
 interface Params {
@@ -85,7 +87,7 @@ export function Icons(params: Readonly<Params>) {
   const lucideClass = " text-current";
   const si_Class = " fill-current";
 
-  let iconsVar;
+  let iconsVar: SimpleIcon | undefined;
   // DATABASE
   if (
     extension === "db" ||
@@ -247,6 +249,8 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siComposer;
     } else if (fileName === "vercel") {
       iconsVar = siVercel;
+    } else if (fileName === "turbo") {
+      iconsVar = siTurborepo;
     } else {
       return <Braces className={iconsClass} />;
     }
