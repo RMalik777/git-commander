@@ -70,6 +70,7 @@ import {
   siVitest,
   siVuedotjs,
   siYaml,
+  siTurborepo,
 } from "simple-icons";
 
 interface Params {
@@ -248,6 +249,8 @@ export function Icons(params: Readonly<Params>) {
       iconsVar = siComposer;
     } else if (fileName === "vercel") {
       iconsVar = siVercel;
+    } else if (fileName === "turbo") {
+      iconsVar = siTurborepo;
     } else {
       return <Braces className={iconsClass} />;
     }
