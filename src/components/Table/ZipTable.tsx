@@ -130,21 +130,21 @@ export function ZipTable({
                     variant="outline"
                     disabled={index === 0}
                     onClick={() => {
-                      const newFiltered = [...filteredFileList];
-                      const tempFiltered = newFiltered[index];
-                      newFiltered[index] = newFiltered[index - 1];
-                      newFiltered[index - 1] = tempFiltered;
-                      const newList = [...fileList];
-                      const toSwap1 = newList.findIndex(
-                        (find) => find.path === newFiltered[index].path
+                      [filteredFileList[index], filteredFileList[index - 1]] = [
+                        filteredFileList[index - 1],
+                        filteredFileList[index],
+                      ];
+                      const toSwap1 = fileList.findIndex(
+                        (find) => find.path === filteredFileList[index].path
                       );
-                      const toSwap2 = newList.findIndex(
-                        (find) => find.path === newFiltered[index - 1].path
+                      const toSwap2 = fileList.findIndex(
+                        (find) => find.path === filteredFileList[index - 1].path
                       );
-                      const temp = newList[toSwap1];
-                      newList[toSwap1] = newList[toSwap2];
-                      newList[toSwap2] = temp;
-                      setFileList(newList);
+                      [fileList[toSwap1], fileList[toSwap2]] = [
+                        fileList[toSwap2],
+                        fileList[toSwap1],
+                      ];
+                      setFileList([...fileList]);
                     }}>
                     <ChevronUp />
                   </Button>
@@ -154,21 +154,21 @@ export function ZipTable({
                     variant="outline"
                     disabled={index === filteredFileList.length - 1}
                     onClick={() => {
-                      const newFiltered = [...filteredFileList];
-                      const tempFiltered = newFiltered[index];
-                      newFiltered[index] = newFiltered[index + 1];
-                      newFiltered[index + 1] = tempFiltered;
-                      const newList = [...fileList];
-                      const toSwap1 = newList.findIndex(
-                        (find) => find.path === newFiltered[index].path
+                      [filteredFileList[index], filteredFileList[index + 1]] = [
+                        filteredFileList[index + 1],
+                        filteredFileList[index],
+                      ];
+                      const toSwap1 = fileList.findIndex(
+                        (find) => find.path === filteredFileList[index].path
                       );
-                      const toSwap2 = newList.findIndex(
-                        (find) => find.path === newFiltered[index + 1].path
+                      const toSwap2 = fileList.findIndex(
+                        (find) => find.path === filteredFileList[index + 1].path
                       );
-                      const temp = newList[toSwap1];
-                      newList[toSwap1] = newList[toSwap2];
-                      newList[toSwap2] = temp;
-                      setFileList(newList);
+                      [fileList[toSwap1], fileList[toSwap2]] = [
+                        fileList[toSwap2],
+                        fileList[toSwap1],
+                      ];
+                      setFileList([...fileList]);
                     }}>
                     <ChevronDown />
                   </Button>
@@ -177,12 +177,10 @@ export function ZipTable({
                     className="h-8 w-8"
                     variant="destructive"
                     onClick={() => {
-                      const newFiltered = [...filteredFileList];
-                      newFiltered.splice(index, 1);
-                      const newList = [...fileList];
-                      const toDelete = newList.findIndex((find) => find.path === item.path);
-                      newList.splice(toDelete, 1);
-                      setFileList(newList);
+                      filteredFileList.splice(index, 1);
+                      const toDelete = fileList.findIndex((find) => find.path === item.path);
+                      fileList.splice(toDelete, 1);
+                      setFileList([...fileList]);
                     }}>
                     <Minus />
                   </Button>
