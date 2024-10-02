@@ -32,10 +32,10 @@ export function TerminalView() {
       term.loadAddon(new WebLinksAddon());
       term.loadAddon(clipboardAddon);
       term.open(terminalElement.current as HTMLElement);
-      initShell(dir);
-      term.onData(writeToPty);
-      addEventListener("resize", () => fitTerminal(term, fitAddon));
       fitTerminal(term, fitAddon);
+      term.onData(writeToPty);
+      initShell(dir);
+      addEventListener("resize", () => fitTerminal(term, fitAddon));
       window.requestAnimationFrame(() => readFromPty(term));
     }
   }, []);
