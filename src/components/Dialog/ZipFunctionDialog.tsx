@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { useAppSelector } from "@/lib/Redux/hooks";
 
-import { open } from "@tauri-apps/api/dialog";
+import { open } from "@tauri-apps/plugin-dialog";
 import {
   createDir,
   exists,
@@ -12,9 +12,9 @@ import {
   removeDir,
   writeBinaryFile,
   writeTextFile,
-} from "@tauri-apps/api/fs";
-import { Command, open as openFolder } from "@tauri-apps/api/shell";
-import { metadata } from "tauri-plugin-fs-extra-api";
+} from "@tauri-apps/plugin-fs";
+import { Command, open as openFolder } from "@tauri-apps/plugin-shell";
+import { metadata } from "@tauri-apps/plugin-fs";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

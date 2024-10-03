@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { writeText } from "@tauri-apps/api/clipboard";
-import { removeFile, type FileEntry } from "@tauri-apps/api/fs";
-import { open } from "@tauri-apps/api/shell";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+import { removeFile, type FileEntry } from "@tauri-apps/plugin-fs";
+import { open } from "@tauri-apps/plugin-shell";
 
 import {
   ContextMenu,

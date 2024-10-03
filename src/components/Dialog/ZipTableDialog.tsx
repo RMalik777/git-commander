@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { open } from "@tauri-apps/api/dialog";
-import { exists } from "@tauri-apps/api/fs";
+import { open } from "@tauri-apps/plugin-dialog";
+import { exists } from "@tauri-apps/plugin-fs";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

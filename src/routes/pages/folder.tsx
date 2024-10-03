@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
-import { FileEntry } from "@tauri-apps/api/fs";
-import { Store } from "tauri-plugin-store-api";
+import { FileEntry } from "@tauri-apps/plugin-fs";
+import { Store } from "@tauri-apps/plugin-store";
 
 import { FileList } from "@/components/Card/FileList";
 import { setFiles } from "@/lib/Redux/fileList";

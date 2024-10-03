@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-import { Store } from "tauri-plugin-store-api";
-import { FileEntry } from "@tauri-apps/api/fs";
+import { Store } from "@tauri-apps/plugin-store";
+import { FileEntry } from "@tauri-apps/plugin-fs";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";

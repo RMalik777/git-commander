@@ -2,161 +2,29 @@
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist"
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
   },
-  "package": {
-    "productName": "Git Commander",
-    "version": "../package.json"
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "externalBin": ["../src-tauri/bin/sza"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
   },
-  "tauri": {
-    "allowlist": {
-      "app": {
-        "all": true,
-        "hide": false,
-        "show": false
-      },
-      "os": {
-        "all": true
-      },
-      "clipboard": {
-        "all": true
-      },
-      "notification": {
-        "all": true
-      },
-      "window": {
-        "all": false,
-        "setFocus": true
-      },
-      "fs": {
-        "all": true,
-        "scope": ["**/*"]
-      },
-      "path": {
-        "all": true
-      },
-      "dialog": {
-        "all": false,
-        "ask": false,
-        "confirm": false,
-        "message": false,
-        "open": true,
-        "save": false
-      },
-      "shell": {
-        "all": true,
-        "sidecar": true,
-        "scope": [
-          {
-            "name": "go to folder",
-            "cmd": "cd",
-            "args": [
-              {
-                "validator": "[\\s\\S]+"
-              }
-            ]
-          },
-          {
-            "name": "git ssl",
-            "cmd": "git",
-            "args": ["config", "http.sslVerify", "false"]
-          },
-          {
-            "name": "git username",
-            "cmd": "git",
-            "args": [
-              "config",
-              "user.name",
-              {
-                "validator": "[\\S\\s]+"
-              }
-            ]
-          },
-          {
-            "name": "git username replace",
-            "cmd": "git",
-            "args": [
-              "config",
-              "--replace-all",
-              "user.name",
-              {
-                "validator": "[\\S\\s]+"
-              }
-            ]
-          },
-          {
-            "name": "git 1 args",
-            "cmd": "git",
-            "args": [
-              {
-                "validator": "\\S+"
-              }
-            ]
-          },
-          {
-            "name": "git 2 args",
-            "cmd": "git",
-            "args": [
-              {
-                "validator": "\\S+"
-              },
-              {
-                "validator": "\\S+"
-              }
-            ]
-          },
-          {
-            "name": "git 3 args",
-            "cmd": "git",
-            "args": [
-              {
-                "validator": "\\S+"
-              },
-              {
-                "validator": "\\S+"
-              },
-              {
-                "validator": "\\S+"
-              }
-            ]
-          },
-          {
-            "name": "git 4 args",
-            "cmd": "git",
-            "args": [
-              {
-                "validator": "\\S+"
-              },
-              {
-                "validator": "\\S+"
-              },
-              {
-                "validator": "\\S+"
-              },
-              {
-                "validator": "\\S+"
-              }
-            ]
-          },
-          {
-            "name": "../src-tauri/bin/sza",
-            "sidecar": true,
-            "args": [
-              "a",
-              {
-                "validator": "[\\S\\s]+"
-              },
-              {
-                "validator": "[\\S\\s]+"
-              },
-              {
-                "validator": "[\\S\\s]+"
-              }
-            ]
-          }
-        ]
-      }
+  "productName": "Git Commander",
+  "mainBinaryName": "Git Commander",
+  "version": "../package.json",
+  "identifier": "com.git-commander.dev",
+  "plugins": {},
+  "app": {
+    "security": {
+      "csp": null
     },
     "windows": [
       {
@@ -165,22 +33,6 @@
         "height": 720,
         "center": true
       }
-    ],
-    "security": {
-      "csp": null
-    },
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "com.git-commander.dev",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "externalBin": ["../src-tauri/bin/sza"]
-    }
+    ]
   }
 }

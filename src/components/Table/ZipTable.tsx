@@ -1,4 +1,4 @@
-import { open } from "@tauri-apps/api/shell";
+import { open } from "@tauri-apps/plugin-shell";
 import { useState, useRef } from "react";
 
 import { Button } from "@/components/ui/button";

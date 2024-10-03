@@ -1,4 +1,4 @@
-import { readDir } from "@tauri-apps/api/fs";
+import { readDir } from "@tauri-apps/plugin-fs";
 import { sortAndFilter } from "./functions";
 
 export async function getAllChildDir(repo: string) {

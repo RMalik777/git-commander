@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FileEntry } from "@tauri-apps/api/fs";
-import { Store } from "tauri-plugin-store-api";
+import { FileEntry } from "@tauri-apps/plugin-fs";
+import { Store } from "@tauri-apps/plugin-store";
 
 export interface RepoState {
   hash: string;

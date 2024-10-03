@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { getTauriVersion } from "@tauri-apps/api/app";
-import { writeText } from "@tauri-apps/api/clipboard";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import {
   arch,
   Arch,
@@ -12,7 +12,7 @@ import {
   tempdir,
   type,
   version,
-} from "@tauri-apps/api/os";
+} from "@tauri-apps/plugin-os";
 
 import { Button } from "@/components/ui/button";
 

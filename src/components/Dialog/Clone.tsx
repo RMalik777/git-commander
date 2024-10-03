@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { open } from "@tauri-apps/api/dialog";
-import { Command as ShellCommand } from "@tauri-apps/api/shell";
+import { open } from "@tauri-apps/plugin-dialog";
+import { Command as ShellCommand } from "@tauri-apps/plugin-shell";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

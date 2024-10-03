@@ -1,6 +1,6 @@
-import { open } from "@tauri-apps/api/dialog";
-import { copyFile, exists } from "@tauri-apps/api/fs";
-import { open as openFolder } from "@tauri-apps/api/shell";
+import { open } from "@tauri-apps/plugin-dialog";
+import { copyFile, exists } from "@tauri-apps/plugin-fs";
+import { open as openFolder } from "@tauri-apps/plugin-shell";
 
 import { useState } from "react";
 

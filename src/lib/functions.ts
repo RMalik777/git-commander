@@ -1,10 +1,11 @@
-import { FileEntry, exists, readTextFile } from "@tauri-apps/api/fs";
+import { type FileEntry, exists, readTextFile } from "@tauri-apps/plugin-fs";
 import {
   isPermissionGranted,
   requestPermission,
   sendNotification,
-} from "@tauri-apps/api/notification";
-import { appWindow } from "@tauri-apps/api/window";
+} from "@tauri-apps/plugin-notification";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+const appWindow = getCurrentWebviewWindow();
 
 export async function displayNotificationNotFocus(title: string, message: string) {
   if ((await isPermissionGranted()) === false) {

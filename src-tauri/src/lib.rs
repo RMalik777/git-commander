@@ -30,14 +30,19 @@ pub fn run() {
     let reader = pty_pair.master.try_clone_reader().unwrap();
     let writer = pty_pair.master.take_writer().unwrap();
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
         .manage(AppState {
             pty_pair: Arc::new(AsyncMutex::new(pty_pair)),
             writer: Arc::new(AsyncMutex::new(writer)),
             reader: Arc::new(AsyncMutex::new(BufReader::new(reader))),
         })
+        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(tauri_plugin_fs_extra::init())
+        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_os::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
+
         .setup(|_app| {
             db::init();
             Ok(())

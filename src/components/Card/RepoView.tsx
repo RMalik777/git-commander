@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { open } from "@tauri-apps/api/dialog";
-import { exists, FileEntry } from "@tauri-apps/api/fs";
-import { open as openFolder } from "@tauri-apps/api/shell";
-import { Store } from "tauri-plugin-store-api";
+import { open } from "@tauri-apps/plugin-dialog";
+import { exists, FileEntry } from "@tauri-apps/plugin-fs";
+import { open as openFolder } from "@tauri-apps/plugin-shell";
+import { Store } from "@tauri-apps/plugin-store";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {

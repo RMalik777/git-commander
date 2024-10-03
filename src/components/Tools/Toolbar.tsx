@@ -1,4 +1,4 @@
-import { Command } from "@tauri-apps/api/shell";
+import { Command } from "@tauri-apps/plugin-shell";
 
 import { useEffect, useLayoutEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
