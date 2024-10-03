@@ -39,5 +39,14 @@ module.exports = {
       },
     },
   },
-  plugins: [tailwind_animate],
+  plugins: [
+    tailwind_animate,
+
+    // workaround for @starting-style, should be remove when tailwind v4 (stable) is released. (tailwind v4-alpha already provided this functionality)
+    // source: https://github.com/tailwindlabs/tailwindcss/discussions/12039#discussioncomment-10063510
+    /** @type {import('tailwindcss/types/config').PluginCreator} */
+    ({ addVariant }) => {
+      addVariant("starting", "@starting-style");
+    },
+  ],
 };

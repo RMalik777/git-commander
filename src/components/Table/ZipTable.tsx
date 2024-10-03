@@ -1,6 +1,8 @@
 import { open } from "@tauri-apps/api/shell";
+import { useState, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -24,12 +26,10 @@ export function ZipTable({
   fileList,
   filteredFileList,
   setFileList,
-  setFilteredFileList,
 }: Readonly<{
   fileList: FileList[];
   filteredFileList: FileList[];
   setFileList: (fileList: FileList[]) => void;
-  setFilteredFileList: (fileList: FileList[]) => void;
 }>) {
   /**
    * useAutoAnimate is disabled because it's still have some issue
@@ -39,21 +39,73 @@ export function ZipTable({
    *
    * related issue: https://github.com/formkit/auto-animate/issues/7
    */
+  const [isEdit, setIsEdit] = useState(false);
+  const [editId, setEditId] = useState(0);
+  const [editValue, setEditValue] = useState(0);
+
+  const form = useRef<HTMLFormElement>(null);
+
   return (
     <Table className="mb-4">
       <TableHeader>
         <TableRow>
-          <TableHead>No</TableHead>
+          <TableHead className="text-center">No</TableHead>
           <TableHead>File/Folder Name</TableHead>
           <TableHead>Location</TableHead>
           <TableHead className="text-center">Action</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
+      <TableBody
+      // ref={parent}
+      >
         {filteredFileList?.length > 0 ?
           filteredFileList?.map((item, index) => (
             <TableRow key={item.path}>
-              <TableCell className="">{index + 1}</TableCell>
+              <TableCell className="w-fit min-w-16 py-0 text-center">
+                <>
+                  {isEdit && editId == index ?
+                    <form
+                      ref={form}
+                      className="h-full w-min min-w-full"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (editValue != index + 1) {
+                          let newFiltered;
+                          // If the new place is higher in the table
+                          if (editValue < index + 1) {
+                            newFiltered = filteredFileList.toSpliced(editValue - 1, 0, item);
+                            newFiltered.splice(index + 1, 1);
+                          } else {
+                            newFiltered = filteredFileList.toSpliced(editValue, 0, item);
+                            newFiltered.splice(index, 1);
+                          }
+                        }
+                        setIsEdit(false);
+                      }}>
+                      <Input
+                        className="h-full w-full p-0 px-0 py-1 text-center font-medium"
+                        type="number"
+                        min={1}
+                        max={filteredFileList.length}
+                        value={editValue}
+                        onChange={(e) => setEditValue(parseInt(e.target.value))}
+                        onBlur={() => form.current?.requestSubmit()}
+                        autoFocus
+                      />
+                    </form>
+                  : <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditValue(index + 1);
+                        setEditId(index);
+                        setIsEdit(true);
+                      }}>
+                      {index + 1}
+                    </Button>
+                  }
+                </>
+              </TableCell>
               <TableCell className="">
                 <button
                   className="flex items-center gap-1 text-left font-semibold"
@@ -78,22 +130,21 @@ export function ZipTable({
                     variant="outline"
                     disabled={index === 0}
                     onClick={() => {
-                      const newFiltered = [...filteredFileList];
-                      const tempFiltered = newFiltered[index];
-                      newFiltered[index] = newFiltered[index - 1];
-                      newFiltered[index - 1] = tempFiltered;
-                      setFilteredFileList(newFiltered);
-                      const newList = [...fileList];
-                      const toSwap1 = newList.findIndex(
-                        (find) => find.path === newFiltered[index].path
+                      [filteredFileList[index], filteredFileList[index - 1]] = [
+                        filteredFileList[index - 1],
+                        filteredFileList[index],
+                      ];
+                      const toSwap1 = fileList.findIndex(
+                        (find) => find.path === filteredFileList[index].path
                       );
-                      const toSwap2 = newList.findIndex(
-                        (find) => find.path === newFiltered[index - 1].path
+                      const toSwap2 = fileList.findIndex(
+                        (find) => find.path === filteredFileList[index - 1].path
                       );
-                      const temp = newList[toSwap1];
-                      newList[toSwap1] = newList[toSwap2];
-                      newList[toSwap2] = temp;
-                      setFileList(newList);
+                      [fileList[toSwap1], fileList[toSwap2]] = [
+                        fileList[toSwap2],
+                        fileList[toSwap1],
+                      ];
+                      setFileList([...fileList]);
                     }}>
                     <ChevronUp />
                   </Button>
@@ -103,22 +154,21 @@ export function ZipTable({
                     variant="outline"
                     disabled={index === filteredFileList.length - 1}
                     onClick={() => {
-                      const newFiltered = [...filteredFileList];
-                      const tempFiltered = newFiltered[index];
-                      newFiltered[index] = newFiltered[index + 1];
-                      newFiltered[index + 1] = tempFiltered;
-                      setFilteredFileList(newFiltered);
-                      const newList = [...fileList];
-                      const toSwap1 = newList.findIndex(
-                        (find) => find.path === newFiltered[index].path
+                      [filteredFileList[index], filteredFileList[index + 1]] = [
+                        filteredFileList[index + 1],
+                        filteredFileList[index],
+                      ];
+                      const toSwap1 = fileList.findIndex(
+                        (find) => find.path === filteredFileList[index].path
                       );
-                      const toSwap2 = newList.findIndex(
-                        (find) => find.path === newFiltered[index + 1].path
+                      const toSwap2 = fileList.findIndex(
+                        (find) => find.path === filteredFileList[index + 1].path
                       );
-                      const temp = newList[toSwap1];
-                      newList[toSwap1] = newList[toSwap2];
-                      newList[toSwap2] = temp;
-                      setFileList(newList);
+                      [fileList[toSwap1], fileList[toSwap2]] = [
+                        fileList[toSwap2],
+                        fileList[toSwap1],
+                      ];
+                      setFileList([...fileList]);
                     }}>
                     <ChevronDown />
                   </Button>
@@ -127,13 +177,10 @@ export function ZipTable({
                     className="h-8 w-8"
                     variant="destructive"
                     onClick={() => {
-                      const newFiltered = [...filteredFileList];
-                      newFiltered.splice(index, 1);
-                      setFilteredFileList(newFiltered);
-                      const newList = [...fileList];
-                      const toDelete = newList.findIndex((find) => find.path === item.path);
-                      newList.splice(toDelete, 1);
-                      setFileList(newList);
+                      filteredFileList.splice(index, 1);
+                      const toDelete = fileList.findIndex((find) => find.path === item.path);
+                      fileList.splice(toDelete, 1);
+                      setFileList([...fileList]);
                     }}>
                     <Minus />
                   </Button>

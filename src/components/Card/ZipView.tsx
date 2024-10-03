@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,30 +28,19 @@ export function ZipView() {
       JSON.parse(sessionStorage.getItem("fileZipList") as string)
     : []
   );
-  const [filteredFileList, setFilteredFileList] = useState<FileList[]>(fileList);
+
   const [search, setSearch] = useState("");
-  useEffect(() => {
-    setFilteredFileList(
-      fileList.filter((item) => {
-        return (
-          item?.path.toLowerCase().includes(search.toLowerCase()) ||
-          item?.name?.toLowerCase().includes(search.toLowerCase())
-        );
-      })
+  const filtered = useMemo(() => {
+    const find = search.trim().toLowerCase();
+    return fileList.filter(
+      (item) => item?.path.toLowerCase().includes(find) || item?.name?.toLowerCase().includes(find)
     );
-  }, [search]);
+  }, [fileList, search]);
+
   useEffect(() => {
     sessionStorage.setItem("fileZipList", JSON.stringify(fileList));
-    setFilteredFileList(fileList);
-    setFilteredFileList(
-      fileList.filter((item) => {
-        return (
-          item?.path.toLowerCase().includes(search.toLowerCase()) ||
-          item?.name?.toLowerCase().includes(search.toLowerCase())
-        );
-      })
-    );
   }, [fileList]);
+
   return (
     <Card>
       <CardHeader>
@@ -68,7 +57,7 @@ export function ZipView() {
             className="w-full md:w-1/2"
             type="text"
             placeholder="Search file or folder"
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setTimeout(() => setSearch(e.target.value), 100)}
           />
           <Button
             disabled={fileList.length == 0}
@@ -91,12 +80,7 @@ export function ZipView() {
             });
           }}
         />
-        <ZipTable
-          fileList={fileList}
-          filteredFileList={filteredFileList}
-          setFileList={setFileList}
-          setFilteredFileList={setFilteredFileList}
-        />
+        <ZipTable fileList={fileList} filteredFileList={filtered} setFileList={setFileList} />
         <div className="flex flex-col gap-2 sm:flex-row">
           <ZipTableDialog add="File" fileList={fileList} setFileList={setFileList} />
           <ZipTableDialog add="Folder" fileList={fileList} setFileList={setFileList} />
