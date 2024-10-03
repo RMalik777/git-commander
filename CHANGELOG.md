@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/RMalik777/git-commander/compare/v1.17.1...v1.18.0) (2024-10-03)
+
+
+### Features
+
+* sort table with number ([fb8d166](https://github.com/RMalik777/git-commander/commit/fb8d166defaf44da39a809e90098f1b5bc20ed7e))
+
 ## [1.17.1](https://github.com/RMalik777/git-commander/compare/v1.17.0...v1.17.1) (2024-09-27)
 
 
