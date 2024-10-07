@@ -1,5 +1,5 @@
 import { open } from "@tauri-apps/api/shell";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,13 +14,13 @@ import {
 } from "@/components/ui/table";
 
 import {
+  ArrowDownAZ,
+  ArrowUpAZ,
+  ArrowUpDown,
   ChevronDown,
   ChevronUp,
   Folder,
   Minus,
-  ArrowUpAZ,
-  ArrowDownAZ,
-  ArrowUpDown,
 } from "lucide-react";
 
 import { FileList } from "@/lib/Types/fileList";
@@ -67,11 +67,17 @@ export function ZipTable({
               onClick={() => {
                 setSortCat("name");
                 if (sort === "asc") {
-                  fileList.sort((a, b) => a.name.localeCompare(b.name ?? ""));
+                  fileList.sort((a, b) => {
+                    if (a.name) return a.name.localeCompare(b.name ?? "");
+                    return "".localeCompare(b.name ?? "");
+                  });
                   setFileList([...fileList]);
                   setSort("desc");
                 } else {
-                  fileList.sort((a, b) => b.name.localeCompare(a.name ?? ""));
+                  fileList.sort((a, b) => {
+                    if (b.name) return b.name.localeCompare(a.name ?? "");
+                    return "".localeCompare(a.name ?? "");
+                  });
                   setFileList([...fileList]);
                   setSort("asc");
                 }
