@@ -237,7 +237,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                   <FormLabel>Archive Name</FormLabel>
                   <FormControl>
                     <>
-                      <Input {...field} placeholder="example.zip" />
+                      <Input {...field} placeholder="Example Name" />
                       <FormDescription>File name for the output</FormDescription>
                       <FormMessage />
                     </>
