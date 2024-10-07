@@ -182,9 +182,7 @@ export function Toolbar() {
                   {repoName === "" ?
                     ""
                   : isSwitching ?
-                    <>
-                      <span>{switchMessage}</span>
-                    </>
+                    <span>{switchMessage}</span>
                   : <>
                       <span>{repoName}</span>/{currentBranch}
                     </>
