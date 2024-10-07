@@ -1,3 +1,16 @@
+# [1.19.0](https://github.com/RMalik777/git-commander/compare/v1.18.0...v1.19.0) (2024-10-07)
+
+
+### Bug Fixes
+
+* item in zip table is refusing to swap position ([0498923](https://github.com/RMalik777/git-commander/commit/0498923cb076764c739fe05c21f30ab599470cb8))
+
+
+### Features
+
+* add option to hide alert ([a400a8a](https://github.com/RMalik777/git-commander/commit/a400a8aa6dbf07aa0ff5b022829a209fd7b059d2))
+* sort based on name and path ([bb14585](https://github.com/RMalik777/git-commander/commit/bb14585fa7b80c78129e4bae875826d58832e6e6))
+
 # [1.18.0](https://github.com/RMalik777/git-commander/compare/v1.17.1...v1.18.0) (2024-10-03)
 
 
