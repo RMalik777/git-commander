@@ -1,5 +1,7 @@
-import { useAppSelector, useAppDispatch } from "@/lib/Redux/hooks";
+import { useEffect, useState } from "react";
+
 import { removeLastCommitMessage } from "@/lib/Redux/gitSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 import { NavLink } from "react-router-dom";
 
@@ -34,7 +36,6 @@ import { Info, TriangleAlert } from "lucide-react";
 import { driver } from "driver.js";
 
 import * as git from "@/lib/git";
-import { useEffect } from "react";
 
 const formSchema = z.object({
   commitMsg: z
@@ -59,6 +60,8 @@ export function Commit({
   const currentRepoDir = useAppSelector((state) => state.repo.directory);
   const userName = useAppSelector((state) => state.user.value);
   const diffChanges = useAppSelector((state) => state.repo.diff);
+
+  const [showAlert, setShowAlert] = useState(localStorage.getItem("usernameAlert") !== "hide");
 
   const commitForm = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -207,38 +210,56 @@ export function Commit({
                     </FormItem>
                   )}
                 />
-                <Alert variant="warning" className={userName == "" ? "block" : "hidden"}>
+                <Alert
+                  variant="warning"
+                  className={
+                    (userName == "" && showAlert ? "block" : "") + " duration-200 ease-out"
+                  }>
                   <TriangleAlert className="h-4 w-4" />
                   <AlertTitle>Warning</AlertTitle>
                   <AlertDescription className="flex flex-col items-start gap-1">
-                    You haven&apos;t set your username.
-                    <NavLink to="/settings">
+                    You haven&apos;t set your username. The commit will be made with the default
+                    username.
+                    <code>git config --get --global user.name</code>
+                    <div className="flex gap-4">
+                      <NavLink to="/settings">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className=""
+                          onClick={() => {
+                            setTimeout(() => {
+                              highlighter.highlight({
+                                element: "#usernameInput",
+                                popover: {
+                                  title: "Username Configuration",
+                                  description: "Add your username here",
+                                  showButtons: ["close"],
+                                  onCloseClick: () => {
+                                    highlighter.destroy();
+                                  },
+                                },
+                              });
+                              setTimeout(() => {
+                                highlighter.destroy();
+                              }, 5000);
+                            }, 1);
+                          }}>
+                          Add Username
+                        </Button>
+                      </NavLink>
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
-                        className=""
                         onClick={() => {
-                          setTimeout(() => {
-                            highlighter.highlight({
-                              element: "#usernameInput",
-                              popover: {
-                                title: "Username Configuration",
-                                description: "Add your username here",
-                                showButtons: ["close"],
-                                onCloseClick: () => {
-                                  highlighter.destroy();
-                                },
-                              },
-                            });
-                            setTimeout(() => {
-                              highlighter.destroy();
-                            }, 5000);
-                          }, 1);
+                          localStorage.setItem("usernameAlert", "hide");
+                          setShowAlert(!showAlert);
                         }}>
-                        Add Username
+                        Dismiss
                       </Button>
-                    </NavLink>
+                    </div>
                   </AlertDescription>
                 </Alert>
                 {diffChanges?.length != 0 ?
