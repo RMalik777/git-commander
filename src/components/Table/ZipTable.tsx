@@ -1,5 +1,5 @@
 import { open } from "@tauri-apps/api/shell";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { ChevronDown, ChevronUp, Folder, Minus } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Folder,
+  Minus,
+  ArrowUpAZ,
+  ArrowDownAZ,
+  ArrowUpDown,
+} from "lucide-react";
 
 import { FileList } from "@/lib/Types/fileList";
 
@@ -42,6 +50,8 @@ export function ZipTable({
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState(0);
   const [editValue, setEditValue] = useState(0);
+  const [sort, setSort] = useState<"asc" | "desc" | undefined>(undefined);
+  const [sortCat, setSortCat] = useState("");
 
   const form = useRef<HTMLFormElement>(null);
 
@@ -50,8 +60,54 @@ export function ZipTable({
       <TableHeader>
         <TableRow>
           <TableHead className="text-center">No</TableHead>
-          <TableHead>File/Folder Name</TableHead>
-          <TableHead>Location</TableHead>
+          <TableHead>
+            <button
+              type="button"
+              className="flex gap-2"
+              onClick={() => {
+                setSortCat("name");
+                if (sort === "asc") {
+                  fileList.sort((a, b) => a.name.localeCompare(b.name ?? ""));
+                  setFileList([...fileList]);
+                  setSort("desc");
+                } else {
+                  fileList.sort((a, b) => b.name.localeCompare(a.name ?? ""));
+                  setFileList([...fileList]);
+                  setSort("asc");
+                }
+              }}>
+              File/Folder Name
+              {sort === "asc" && sortCat === "name" ?
+                <ArrowUpAZ size={20} />
+              : sort === "desc" && sortCat === "name" ?
+                <ArrowDownAZ size={20} />
+              : <ArrowUpDown size={20} />}
+            </button>
+          </TableHead>
+          <TableHead>
+            <button
+              type="button"
+              className="flex gap-2"
+              onClick={() => {
+                setSortCat("path");
+                if (sort === "asc") {
+                  fileList.sort((a, b) => a.path.localeCompare(b.path));
+                  setFileList([...fileList]);
+                  setSort("desc");
+                } else {
+                  fileList.sort((a, b) => b.path.localeCompare(a.path));
+                  setFileList([...fileList]);
+                  setSort("asc");
+                }
+              }}>
+              Location
+              {sort === "asc" && sortCat === "path" ?
+                <ArrowUpAZ size={20} />
+              : sort === "desc" && sortCat === "path" ?
+                <ArrowDownAZ size={20} />
+              : <ArrowUpDown size={20} />}
+            </button>
+          </TableHead>
           <TableHead className="text-center">Action</TableHead>
         </TableRow>
       </TableHeader>
@@ -85,6 +141,7 @@ export function ZipTable({
                               fileList.splice(realIndex, 1);
                             }
                             setFileList([...fileList]);
+                            setSortCat("");
                           }
                           setIsEdit(false);
                         }}>
@@ -152,6 +209,7 @@ export function ZipTable({
                           fileList[toSwap1],
                         ];
                         setFileList([...fileList]);
+                        setSortCat("");
                       }}>
                       <ChevronUp />
                     </Button>
@@ -176,6 +234,7 @@ export function ZipTable({
                           fileList[toSwap1],
                         ];
                         setFileList([...fileList]);
+                        setSortCat("");
                       }}>
                       <ChevronDown />
                     </Button>
@@ -188,6 +247,7 @@ export function ZipTable({
                         const toDelete = fileList.findIndex((find) => find.path === item.path);
                         fileList.splice(toDelete, 1);
                         setFileList([...fileList]);
+                        setSortCat("");
                       }}>
                       <Minus />
                     </Button>
