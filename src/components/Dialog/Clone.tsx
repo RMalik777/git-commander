@@ -182,10 +182,10 @@ export function Clone() {
       func.displayNotificationNotFocus("Repository Cloned", "Git Clone Completed Successfully!");
       if (values.addToDB) {
         const repoName = values.target.split("/").pop() ?? "";
+        if (!values.target?.endsWith(".git")) {
+          values.target += ".git";
+        }
         if (!(await db.checkUrlDup(values.target))) {
-          if (!values.target?.endsWith(".git")) {
-            values.target += ".git";
-          }
           try {
             await db.insertIntoRepo(repoName, values.target);
             setTimeout(() => {
@@ -195,14 +195,24 @@ export function Clone() {
               });
             }, 3000);
           } catch (error) {
-            console.error(error);
-            setTimeout(() => {
-              toast({
-                title: "Error",
-                description: "Failed to save repository URL",
-                variant: "destructive",
-              });
-            }, 3000);
+            if (error instanceof Error) {
+              console.error(error);
+              setTimeout(() => {
+                toast({
+                  title: "Error",
+                  description: error?.message,
+                  variant: "destructive",
+                });
+              }, 3000);
+            } else {
+              setTimeout(() => {
+                toast({
+                  title: "Error",
+                  description: error?.toString(),
+                  variant: "destructive",
+                });
+              }, 3000);
+            }
           }
         } else {
           setTimeout(() => {
