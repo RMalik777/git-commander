@@ -91,8 +91,7 @@ export async function checkGitStatus(path) {
   return await response;
 }
 
-export async function clone(localRepo, remoteRepo, username) {
-  await configUsername(localRepo, username);
+export async function clone(localRepo, remoteRepo) {
   const response = new Promise((resolve, reject) => {
     const result = [];
     const command = new Command("git 3 args", ["clone", "--progress", remoteRepo], {

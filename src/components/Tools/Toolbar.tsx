@@ -319,7 +319,7 @@ export function Toolbar() {
             <ul className="flex flex-row items-center gap-6 sm:gap-12">
               <li
                 className={
-                  (fetchAmount > 0 ? "border-b border-r border-t pr-px" : "") +
+                  (fetchAmount > 0 ? "border-b border-r border-t pr-2" : "") +
                   " box-border flex h-10 items-center rounded-md duration-200 ease-out dark:border-neutral-800"
                 }>
                 <Tooltip>
