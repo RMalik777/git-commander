@@ -219,8 +219,7 @@ export function Commit({
                   <AlertTitle>Warning</AlertTitle>
                   <AlertDescription className="flex flex-col items-start gap-1">
                     You haven&apos;t set your username. The commit will be made with the default
-                    username.
-                    <code>git config --get --global user.name</code>
+                    username. <code>git config --get --global user.name</code>
                     <div className="flex gap-4">
                       <NavLink to="/settings">
                         <Button
