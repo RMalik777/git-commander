@@ -46,7 +46,6 @@ export function FileList({
   useEffect(() => {
     if (dirList) setLoading(false);
     else if (!dirList) setLoading(true);
-    console.log(loading, dirList);
   }, [dirList]);
 
   const [refreshClick, setRefreshClick] = useState(false);

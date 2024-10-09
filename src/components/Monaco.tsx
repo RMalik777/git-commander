@@ -1,24 +1,33 @@
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { readTextFile } from "@tauri-apps/api/fs";
+import { readTextFile, writeTextFile } from "@tauri-apps/api/fs";
 
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import "@/lib/Monaco/userWorker";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
-import { createHighlighter, bundledLanguages } from "shiki";
 import { shikiToMonaco } from "@shikijs/monaco";
+import { bundledLanguages, createHighlighter } from "shiki";
+
+import { Button } from "@/components//ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
+
+import { Save } from "lucide-react";
+
+const allLang = Object.keys(bundledLanguages);
 
 export function Monaco({ path }: Readonly<{ path: string }>) {
-  const extension = path.split(".").pop() || "";
+  const { toast } = useToast();
+  const extension = path.split(".").pop() ?? "";
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const [currentData, setCurrentData] = useState("");
   const monacoEl = useRef(null);
 
   async function loadShiki() {
     // Create the highlighter, it can be reused
     const highlighter = await createHighlighter({
       themes: ["monokai"],
-      langs: ["html"],
-
+      langs: allLang, // or ['javascript', 'ruby', 'python', 'html', 'css']
       warnings: false,
     });
     // Register the languageIds first. Only registered languages will be highlighted.
@@ -30,17 +39,23 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
   }
 
   async function loadEditor() {
-    await loadShiki();
+    /**
+     * SHIKI currently disabled due to a performance issue
+     */
+    // await loadShiki();
     let data = "";
     if (path) {
       data = await readTextFile(path);
     }
+    const langId = monaco.languages
+      .getLanguages()
+      .find((lang) => lang.extensions?.find((ext) => ext === `.${extension}`));
     setEditor((editor) => {
       if (editor) return editor;
       return monaco.editor.create(monacoEl.current!, {
         value: data,
-        language: "html",
-        theme: "monokai",
+        language: langId?.id ?? "plaintext",
+        theme: "vs-dark",
         automaticLayout: true,
         wordWrap: "on",
       });
@@ -57,6 +72,7 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
     let data = "";
     if (path) {
       data = await readTextFile(path);
+      setCurrentData(data);
     }
     editor?.setValue(data);
 
@@ -64,11 +80,64 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
       .getLanguages()
       .findIndex((lang) => lang.extensions?.find((ext) => ext === `.${extension}`));
     editor?.setModel(monaco.editor.createModel(data, monaco.languages.getLanguages()[langId].id));
-    // monaco.editor.setModelLanguage(editor?.getModel(), monaco.languages.getLanguages()[langId].id);
   }
   useEffect(() => {
     loadContent();
   }, [path]);
 
-  return <div className="h-full w-full border" ref={monacoEl}></div>;
+  return (
+    <>
+      <TooltipProvider delayDuration={100}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={async () => {
+                const content = editor?.getValue();
+                if (content && path) {
+                  try {
+                    await writeTextFile(path, content);
+                    toast({
+                      title: "Saved",
+                      description: (
+                        <p>
+                          <code className="rounded bg-neutral-50/80 p-1">{path}</code> saved.
+                        </p>
+                      ),
+                    });
+                  } catch (error) {
+                    if (error instanceof Error) {
+                      toast({
+                        title: "Error",
+                        description: error.message,
+                        variant: "destructive",
+                      });
+                    } else {
+                      toast({
+                        title: "Error",
+                        description: error?.toString(),
+                        variant: "destructive",
+                      });
+                    }
+                  }
+                } else {
+                  toast({
+                    title: "Error",
+                    description: content ? "No file path" : "No content to saved",
+                    variant: "destructive",
+                  });
+                }
+              }}>
+              <Save />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Save</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <div className="h-full w-full" ref={monacoEl}></div>
+    </>
+  );
 }

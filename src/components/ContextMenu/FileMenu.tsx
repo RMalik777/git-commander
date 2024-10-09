@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { writeText } from "@tauri-apps/api/clipboard";
 import { removeFile, type FileEntry } from "@tauri-apps/api/fs";
@@ -9,11 +10,14 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
+  ContextMenuShortcut,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { useToast } from "@/components/ui/use-toast";
 
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
+
+import { Code2 } from "lucide-react";
 
 import * as git from "@/lib/git";
 import { PulseLoader } from "react-spinners";
@@ -33,6 +37,7 @@ export function FileMenu({
   getStaged: () => Promise<void>;
   getDiff: () => Promise<void>;
 }>) {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [openDialogRevert, setOpenDialogRevert] = useState(false);
   const [openDialogDelete, setOpenDialogDelete] = useState(false);
@@ -42,6 +47,18 @@ export function FileMenu({
         <ContextMenuTrigger className="w-full">{children}</ContextMenuTrigger>
         <ContextMenuContent className="w-64">
           <ContextMenuItem>{target.name}</ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem
+            inset
+            disabled={target.children ? true : false}
+            onClick={() => {
+              navigate("/editor", { state: { path: `${dir}\\${target.path}` } });
+            }}>
+            Open In Editor
+            <ContextMenuShortcut>
+              <Code2 size={16} />
+            </ContextMenuShortcut>
+          </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem
             inset
