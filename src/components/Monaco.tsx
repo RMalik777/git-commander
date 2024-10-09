@@ -93,6 +93,7 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
             <Button
               variant="outline"
               size="icon"
+              className="group min-h-10 min-w-10"
               onClick={async () => {
                 const content = editor?.getValue();
                 if (content && path) {
