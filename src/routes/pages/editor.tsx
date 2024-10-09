@@ -17,16 +17,17 @@ export default function Editor() {
   const relativeDir = currentDir.split("\\").pop();
   const location = useLocation();
 
-  const path: string = location.state?.path ?? "";
+  const path: string = location.state?.path;
   // window.history.replaceState({}, "");
 
-  const splitPath = path.replace(`${currentDir}\\`, `${relativeDir}\\`).split("\\");
+  const splitPath = path?.replace(`${currentDir}\\`, `${relativeDir}\\`)?.trim()?.split("\\");
+  console.log(splitPath);
 
   return (
     <div className="flex h-full flex-col items-start gap-2">
       <Breadcrumb>
         <BreadcrumbList>
-          {splitPath.map((path, index) => {
+          {splitPath?.map((path, index) => {
             return (
               <Fragment key={path}>
                 <BreadcrumbItem>
@@ -34,7 +35,7 @@ export default function Editor() {
                     {path}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator />
+                {index < splitPath.length - 1 && <BreadcrumbSeparator />}
               </Fragment>
             );
           })}
