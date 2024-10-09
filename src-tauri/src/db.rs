@@ -1,10 +1,8 @@
-use std::env;
 use std::fs;
 use std::path::Path;
 
 use diesel::prelude::*;
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
-use dotenvy::dotenv;
 
 const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
