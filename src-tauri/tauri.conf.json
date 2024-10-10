@@ -27,7 +27,8 @@
       },
       "window": {
         "all": false,
-        "setFocus": true
+        "setFocus": true,
+        "requestUserAttention": true
       },
       "fs": {
         "all": true,
