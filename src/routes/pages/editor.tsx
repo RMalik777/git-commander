@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/lib/Redux/hooks";
-import { Fragment } from "react";
+import { Fragment, useLayoutEffect, useState } from "react";
 import { useLocation, NavLink } from "react-router-dom";
+import { exists } from "@tauri-apps/api/fs";
 
 import {
   Breadcrumb,
@@ -20,13 +21,26 @@ export default function Editor() {
   const location = useLocation();
 
   const path: string = location.state?.path ?? sessionStorage.getItem("editorActive") ?? "";
+  const pathLength = path.length;
   sessionStorage.setItem("editorActive", path);
   // window.history.replaceState({}, "");
 
   const splitPath = path?.replace(`${currentDir}\\`, `${relativeDir}\\`)?.trim()?.split("\\");
   console.log(splitPath);
 
-  return path ?
+  const [isExist, setIsExist] = useState(true);
+  async function checkExist() {
+    const isExist = await exists(path);
+    if (!isExist) {
+      sessionStorage.removeItem("editorActive");
+      setIsExist(false);
+    }
+  }
+  useLayoutEffect(() => {
+    checkExist();
+  }, []);
+
+  return path && isExist ?
       <div className="flex h-full flex-col items-start gap-2">
         <Breadcrumb>
           <BreadcrumbList>
@@ -51,10 +65,12 @@ export default function Editor() {
           <FileX className="h-14 w-auto dark:text-neutral-50 sm:h-16 md:h-20 lg:h-24" />
           <div className="text-center sm:text-left">
             <h2 className="text-xl font-semibold tracking-tight dark:text-neutral-50 md:text-2xl lg:text-3xl xl:text-4xl">
-              No file selected
+              {pathLength > 0 ? "File not found" : "No file selected"}
             </h2>
             <p className="text-base font-medium tracking-normal text-neutral-400 dark:text-neutral-600 md:text-lg">
-              Please select a file from content page to view
+              {pathLength > 0 ?
+                "Selected file is not available or has been deleted"
+              : "Please select a file from content page to open editor"}
             </p>
           </div>
         </section>
