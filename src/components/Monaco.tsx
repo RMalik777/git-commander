@@ -23,6 +23,13 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
   const [currentData, setCurrentData] = useState("");
   const monacoEl = useRef(null);
 
+  /**
+   * SHIKI currently disabled because of a performance issue when you load all languages. If you use a specific language, you can enable it, but when you open a file with a different language, it won't highlight the syntax.
+   *
+   * How to load SHIKI:
+   * https://shiki.matsu.io/packages/monaco
+   */
+  //eslint-disable-next-line
   async function loadShiki() {
     // Create the highlighter, it can be reused
     const highlighter = await createHighlighter({
@@ -40,7 +47,7 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
 
   async function loadEditor() {
     /**
-     * SHIKI currently disabled due to a performance issue
+     * SHIKI currently disabled due to a reason listed above
      */
     // await loadShiki();
     let data = "";
