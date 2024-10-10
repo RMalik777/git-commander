@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { open } from "@tauri-apps/api/dialog";
 import { Command as ShellCommand } from "@tauri-apps/api/shell";
+import { appWindow } from "@tauri-apps/api/window";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -180,6 +181,7 @@ export function Clone() {
         });
       }
       func.displayNotificationNotFocus("Repository Cloned", "Git Clone Completed Successfully!");
+      await appWindow.requestUserAttention(2);
       if (values.addToDB) {
         const repoName = values.target.split("/").pop() ?? "";
         if (!values.target?.endsWith(".git")) {
@@ -233,6 +235,7 @@ export function Clone() {
           "Error Cloning Repository",
           "An error occurred while cloning the repository. Please try again"
         );
+        await appWindow.requestUserAttention(2);
         console.error(error);
         toast({
           title: "Error Cloning Repository",
