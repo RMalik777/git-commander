@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  Prepare:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,17 +23,9 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
-        
-  Lint:
-    needs: Prepare
-    runs-on: ubuntu-latest
-    steps:
+
       - name: Lint
         run: npm run lint
 
-  Build:
-    needs: Lint
-    runs-on: ubuntu-latest
-    steps:
       - name: Build
         run: npm run build
