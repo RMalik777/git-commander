@@ -26,7 +26,6 @@ export default function Editor() {
   // window.history.replaceState({}, "");
 
   const splitPath = path?.replace(`${currentDir}\\`, `${relativeDir}\\`)?.trim()?.split("\\");
-  console.log(splitPath);
 
   const [isExist, setIsExist] = useState(true);
   async function checkExist() {
