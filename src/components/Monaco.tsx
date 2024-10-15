@@ -131,6 +131,7 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
                         ),
                       });
                       setUnsaved(false);
+                      setCurrentData(content);
                     } catch (error) {
                       if (error instanceof Error) {
                         toast({
