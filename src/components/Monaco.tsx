@@ -50,10 +50,14 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
      * SHIKI currently disabled due to a reason listed above
      */
     // await loadShiki();
+    
+
     let data = "";
     if (path) {
       data = await readTextFile(path);
+      setCurrentData(data);
     }
+
     const langId = monaco.languages
       .getLanguages()
       .find((lang) => lang.extensions?.find((ext) => ext === `.${extension}`));
@@ -79,72 +83,92 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
     let data = "";
     if (path) {
       data = await readTextFile(path);
-      setCurrentData(data);
     }
-    editor?.setValue(data);
-
-    const langId = monaco.languages
-      .getLanguages()
-      .findIndex((lang) => lang.extensions?.find((ext) => ext === `.${extension}`));
-    editor?.setModel(monaco.editor.createModel(data, monaco.languages.getLanguages()[langId].id));
+    setCurrentData(data);
   }
   useEffect(() => {
     loadContent();
-  }, [path]);
+  }, []);
+
+  const [unsaved, setUnsaved] = useState(false);
+ 
+  useEffect(() => {
+    if (editor) {
+      const listener = editor.onDidChangeModelContent(() => {
+        const editorValue = editor.getValue();
+        if (editorValue !== currentData) {
+          console.log("true");
+          setUnsaved(true);
+        } else {
+          console.log("false");
+          setUnsaved(false);
+        }
+      });
+      return () => listener.dispose();
+    }
+  }, [editor?.getValue()]);
 
   return (
     <>
-      <TooltipProvider delayDuration={100}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="group min-h-10 min-w-10"
-              onClick={async () => {
-                const content = editor?.getValue();
-                if (content && path) {
-                  try {
-                    await writeTextFile(path, content);
-                    toast({
-                      title: "Saved",
-                      description: (
-                        <p>
-                          <code className="rounded bg-neutral-50/80 p-1">{path}</code> saved.
-                        </p>
-                      ),
-                    });
-                  } catch (error) {
-                    if (error instanceof Error) {
+      <div className="flex items-center gap-2">
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="group min-h-10 min-w-10"
+                onClick={async () => {
+                  const content = editor?.getValue();
+                  if (content && path) {
+                    try {
+                      await writeTextFile(path, content);
                       toast({
-                        title: "Error",
-                        description: error.message,
-                        variant: "destructive",
+                        title: "Saved",
+                        description: (
+                          <p>
+                            <code className="rounded bg-neutral-50/80 p-1">{path}</code> saved.
+                          </p>
+                        ),
                       });
-                    } else {
-                      toast({
-                        title: "Error",
-                        description: error?.toString(),
-                        variant: "destructive",
-                      });
+                      setUnsaved(false);
+                    } catch (error) {
+                      if (error instanceof Error) {
+                        toast({
+                          title: "Error",
+                          description: error.message,
+                          variant: "destructive",
+                        });
+                      } else {
+                        toast({
+                          title: "Error",
+                          description: error?.toString(),
+                          variant: "destructive",
+                        });
+                      }
                     }
+                  } else {
+                    toast({
+                      title: "Error",
+                      description: content ? "No file path" : "No content to saved",
+                      variant: "destructive",
+                    });
                   }
-                } else {
-                  toast({
-                    title: "Error",
-                    description: content ? "No file path" : "No content to saved",
-                    variant: "destructive",
-                  });
-                }
-              }}>
-              <Save />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Save</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+                }}>
+                <Save />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Save</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        {unsaved ?
+          <p className="font-medium opacity-100 duration-200 ease-out starting:opacity-0">
+            Warning! you have unsaved changes
+          </p>
+        : null}
+      </div>
       <div className="h-full w-full" ref={monacoEl}></div>
     </>
   );
