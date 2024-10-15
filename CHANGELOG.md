@@ -1,3 +1,20 @@
+# [1.20.0](https://github.com/RMalik777/git-commander/compare/v1.19.0...v1.20.0) (2024-10-15)
+
+
+### Bug Fixes
+
+* address in tutorial pointing to wrong page ([8dee474](https://github.com/RMalik777/git-commander/commit/8dee474b48b2ff635dfd6c9865f3d231ab73ca01))
+* folder list keep loading when empty ([e59514b](https://github.com/RMalik777/git-commander/commit/e59514b9eed32207539d654b5f02efcd09b11f77))
+* persist editor path ([1fd83f7](https://github.com/RMalik777/git-commander/commit/1fd83f76c5384b0fb1042a408184b4f0bcd0dd99))
+* show warning when there is unsaved changes in editor ([4074f19](https://github.com/RMalik777/git-commander/commit/4074f194c78f73d912098afcc48d5ed0d8d016c4))
+
+
+### Features
+
+* add editor ([f3d5633](https://github.com/RMalik777/git-commander/commit/f3d563334b4dbcddc034115a30160cd5cc57b778))
+* add integrated editor ([589d0ee](https://github.com/RMalik777/git-commander/commit/589d0ee05949d643c42a48cadcb28cb779241a20))
+* request user attention after notification shows ([8bc978f](https://github.com/RMalik777/git-commander/commit/8bc978ffbd8acdfcd4e24f9156dac2ed851c7f4d))
+
 # [1.19.0](https://github.com/RMalik777/git-commander/compare/v1.18.0...v1.19.0) (2024-10-07)
 
 
