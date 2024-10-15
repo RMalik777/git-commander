@@ -5,8 +5,9 @@ import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
 
-// @ts-ignore
+// "@ts-expect-error
 self.MonacoEnvironment = {
+  // eslint-disable-next-line
   getWorker(_: any, label: string) {
     if (label === "json") {
       return new jsonWorker();

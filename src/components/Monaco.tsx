@@ -50,7 +50,6 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
      * SHIKI currently disabled due to a reason listed above
      */
     // await loadShiki();
-    
 
     let data = "";
     if (path) {
@@ -91,7 +90,7 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
   }, []);
 
   const [unsaved, setUnsaved] = useState(false);
- 
+
   useEffect(() => {
     if (editor) {
       const listener = editor.onDidChangeModelContent(() => {
