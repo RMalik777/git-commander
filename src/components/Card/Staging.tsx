@@ -46,7 +46,7 @@ export function Staging({
   getStaged,
 }: Readonly<{
   dir: string;
-  dirList: FileEntry[];
+  dirList: FileEntry[] | undefined;
   diffList: FileEntry[];
   stagedList: FileEntry[];
   getDiff: () => Promise<void>;
@@ -557,7 +557,12 @@ export function Staging({
         {stagedList?.length > 0 || diffList?.length > 0 ?
           viewMode === "list" ?
             listView()
-          : treeView(dirList, true)
+          : dirList ?
+            treeView(dirList, true)
+          : <h1 className="w-full text-center text-lg font-medium text-neutral-500 dark:text-neutral-400">
+              Empty...
+            </h1>
+
         : <h1 className="w-full text-center text-lg font-medium text-neutral-500 dark:text-neutral-400">
             Empty...
           </h1>

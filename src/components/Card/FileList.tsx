@@ -46,7 +46,6 @@ export function FileList({
   useEffect(() => {
     if (dirList) setLoading(false);
     else if (!dirList) setLoading(true);
-    console.log(loading, dirList);
   }, [dirList]);
 
   const [refreshClick, setRefreshClick] = useState(false);
@@ -165,7 +164,7 @@ export function FileList({
   }
   function checkIfLoading() {
     const theme = window.localStorage.getItem("theme") ?? "";
-    if (loading) {
+    if (loading && dir) {
       return (
         <div className="px-2">
           <BarLoader width="100%" color={theme == "Dark" ? "#d4d4d4" : "#404040"} />

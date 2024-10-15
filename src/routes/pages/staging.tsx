@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 
 import { Store } from "tauri-plugin-store-api";
 import { FileEntry } from "@tauri-apps/api/fs";
@@ -44,10 +44,6 @@ export default function Git() {
     diffStore.set("diffList", toEntry);
     diffStore.save();
   }
-  useEffect(() => {
-    if (dir === "") return;
-    getDiff();
-  }, [dir]);
 
   const stagedList = useAppSelector((state) => state.repo.staged);
   async function getStaged() {
@@ -62,12 +58,8 @@ export default function Git() {
     stagedStore.set("stagedList", toEntry);
     stagedStore.save();
   }
-  useEffect(() => {
-    if (dir === "") return;
-    getStaged();
-  }, [dir]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function setDirectory() {
       const allChild = await dirFunc.getAllChildDir(dir);
       dispatch(setFiles(allChild));
@@ -76,6 +68,8 @@ export default function Git() {
     }
     if (dir === "") return;
     setDirectory();
+    getDiff();
+    getStaged();
   }, [dir]);
   return (
     <div className="flex flex-col items-stretch gap-4">

@@ -8,11 +8,12 @@ import {
   ArrowLeftToLine,
   ArrowRightToLine,
   CircleHelp,
+  Code2,
   FolderOpen,
-  Home,
-  Settings,
   GitBranchPlus,
+  Home,
   Package,
+  Settings,
 } from "lucide-react";
 
 const iconClass = "min-w-fit z-10";
@@ -36,6 +37,11 @@ const menuItem = [
     name: "Content",
     link: "/folder",
     icon: <FolderOpen className={iconClass} />,
+  },
+  {
+    name: "Editor",
+    link: "/editor",
+    icon: <Code2 className={iconClass} />,
   },
   {
     name: "Settings",

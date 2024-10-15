@@ -512,7 +512,7 @@ export default function Tutorial() {
       title: "Committing Changes",
       description: "Guide on how to commit changes to a git repository.",
       tour: () => {
-        navigate("/");
+        navigate("/staging");
         setTimeout(() => {
           const tour = driver({
             showProgress: true,
@@ -555,7 +555,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        });
+        }, 1);
       },
     },
   ];

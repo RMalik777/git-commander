@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { open } from "@tauri-apps/api/dialog";
 import { Command as ShellCommand } from "@tauri-apps/api/shell";
+import { appWindow } from "@tauri-apps/api/window";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -180,12 +181,13 @@ export function Clone() {
         });
       }
       func.displayNotificationNotFocus("Repository Cloned", "Git Clone Completed Successfully!");
+      await appWindow.requestUserAttention(2);
       if (values.addToDB) {
         const repoName = values.target.split("/").pop() ?? "";
+        if (!values.target?.endsWith(".git")) {
+          values.target += ".git";
+        }
         if (!(await db.checkUrlDup(values.target))) {
-          if (!values.target?.endsWith(".git")) {
-            values.target += ".git";
-          }
           try {
             await db.insertIntoRepo(repoName, values.target);
             setTimeout(() => {
@@ -195,14 +197,24 @@ export function Clone() {
               });
             }, 3000);
           } catch (error) {
-            console.error(error);
-            setTimeout(() => {
-              toast({
-                title: "Error",
-                description: "Failed to save repository URL",
-                variant: "destructive",
-              });
-            }, 3000);
+            if (error instanceof Error) {
+              console.error(error);
+              setTimeout(() => {
+                toast({
+                  title: "Error",
+                  description: error?.message,
+                  variant: "destructive",
+                });
+              }, 3000);
+            } else {
+              setTimeout(() => {
+                toast({
+                  title: "Error",
+                  description: error?.toString(),
+                  variant: "destructive",
+                });
+              }, 3000);
+            }
           }
         } else {
           setTimeout(() => {
@@ -223,6 +235,7 @@ export function Clone() {
           "Error Cloning Repository",
           "An error occurred while cloning the repository. Please try again"
         );
+        await appWindow.requestUserAttention(2);
         console.error(error);
         toast({
           title: "Error Cloning Repository",
