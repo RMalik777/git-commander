@@ -1,3 +1,40 @@
+# [1.20.0](https://github.com/RMalik777/git-commander/compare/v1.19.0...v1.20.0) (2024-10-15)
+
+
+### Bug Fixes
+
+* address in tutorial pointing to wrong page ([8dee474](https://github.com/RMalik777/git-commander/commit/8dee474b48b2ff635dfd6c9865f3d231ab73ca01))
+* folder list keep loading when empty ([e59514b](https://github.com/RMalik777/git-commander/commit/e59514b9eed32207539d654b5f02efcd09b11f77))
+* persist editor path ([1fd83f7](https://github.com/RMalik777/git-commander/commit/1fd83f76c5384b0fb1042a408184b4f0bcd0dd99))
+* show warning when there is unsaved changes in editor ([4074f19](https://github.com/RMalik777/git-commander/commit/4074f194c78f73d912098afcc48d5ed0d8d016c4))
+
+
+### Features
+
+* add editor ([f3d5633](https://github.com/RMalik777/git-commander/commit/f3d563334b4dbcddc034115a30160cd5cc57b778))
+* add integrated editor ([589d0ee](https://github.com/RMalik777/git-commander/commit/589d0ee05949d643c42a48cadcb28cb779241a20))
+* request user attention after notification shows ([8bc978f](https://github.com/RMalik777/git-commander/commit/8bc978ffbd8acdfcd4e24f9156dac2ed851c7f4d))
+
+# [1.19.0](https://github.com/RMalik777/git-commander/compare/v1.18.0...v1.19.0) (2024-10-07)
+
+
+### Bug Fixes
+
+* item in zip table is refusing to swap position ([0498923](https://github.com/RMalik777/git-commander/commit/0498923cb076764c739fe05c21f30ab599470cb8))
+
+
+### Features
+
+* add option to hide alert ([a400a8a](https://github.com/RMalik777/git-commander/commit/a400a8aa6dbf07aa0ff5b022829a209fd7b059d2))
+* sort based on name and path ([bb14585](https://github.com/RMalik777/git-commander/commit/bb14585fa7b80c78129e4bae875826d58832e6e6))
+
+# [1.18.0](https://github.com/RMalik777/git-commander/compare/v1.17.1...v1.18.0) (2024-10-03)
+
+
+### Features
+
+* sort table with number ([fb8d166](https://github.com/RMalik777/git-commander/commit/fb8d166defaf44da39a809e90098f1b5bc20ed7e))
+
 ## [1.17.1](https://github.com/RMalik777/git-commander/compare/v1.17.0...v1.17.1) (2024-09-27)
 
 
