@@ -1,3 +1,15 @@
+# [1.21.0](https://github.com/RMalik777/git-commander/compare/v1.20.0...v1.21.0) (2024-10-16)
+
+
+### Bug Fixes
+
+* editor not showing latest status ([0c8aedc](https://github.com/RMalik777/git-commander/commit/0c8aedc8be425767165674fbf7364779cc1beaf0))
+
+
+### Features
+
+* ctrl+s to save ([3cd76f7](https://github.com/RMalik777/git-commander/commit/3cd76f75dae92e0e06f6c237c65935b264a1649c))
+
 # [1.20.0](https://github.com/RMalik777/git-commander/compare/v1.19.0...v1.20.0) (2024-10-15)
 
 
