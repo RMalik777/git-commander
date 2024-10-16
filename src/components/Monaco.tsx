@@ -114,7 +114,7 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
           title: "Saved",
           description: (
             <p>
-              <code className="rounded bg-neutral-50/80 p-1">{path}</code> saved.
+              <code className="rounded bg-neutral-50/80 dark:bg-neutral-800/80 p-1">{path}</code> saved.
             </p>
           ),
         });
