@@ -96,10 +96,8 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
       const listener = editor.onDidChangeModelContent(() => {
         const editorValue = editor.getValue();
         if (editorValue !== currentData) {
-          console.log("true");
           setUnsaved(true);
         } else {
-          console.log("false");
           setUnsaved(false);
         }
       });
@@ -107,6 +105,44 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
     }
   }, [editor?.getValue()]);
 
+  async function saveContent() {
+    const content = editor?.getValue();
+    if (content && path) {
+      try {
+        await writeTextFile(path, content);
+        toast({
+          title: "Saved",
+          description: (
+            <p>
+              <code className="rounded bg-neutral-50/80 p-1">{path}</code> saved.
+            </p>
+          ),
+        });
+        setUnsaved(false);
+        setCurrentData(content);
+      } catch (error) {
+        if (error instanceof Error) {
+          toast({
+            title: "Error",
+            description: error.message,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: error?.toString(),
+            variant: "destructive",
+          });
+        }
+      }
+    } else {
+      toast({
+        title: "Error",
+        description: content ? "No file path" : "No content to saved",
+        variant: "destructive",
+      });
+    }
+  }
   return (
     <>
       <div className="flex items-center gap-2">
@@ -117,44 +153,7 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
                 variant="outline"
                 size="icon"
                 className="group min-h-10 min-w-10"
-                onClick={async () => {
-                  const content = editor?.getValue();
-                  if (content && path) {
-                    try {
-                      await writeTextFile(path, content);
-                      toast({
-                        title: "Saved",
-                        description: (
-                          <p>
-                            <code className="rounded bg-neutral-50/80 p-1">{path}</code> saved.
-                          </p>
-                        ),
-                      });
-                      setUnsaved(false);
-                      setCurrentData(content);
-                    } catch (error) {
-                      if (error instanceof Error) {
-                        toast({
-                          title: "Error",
-                          description: error.message,
-                          variant: "destructive",
-                        });
-                      } else {
-                        toast({
-                          title: "Error",
-                          description: error?.toString(),
-                          variant: "destructive",
-                        });
-                      }
-                    }
-                  } else {
-                    toast({
-                      title: "Error",
-                      description: content ? "No file path" : "No content to saved",
-                      variant: "destructive",
-                    });
-                  }
-                }}>
+                onClick={async () => await saveContent()}>
                 <Save />
               </Button>
             </TooltipTrigger>
@@ -169,7 +168,14 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
           </p>
         : null}
       </div>
-      <div className="h-full w-full" ref={monacoEl}></div>
+      <div
+        className="h-full w-full"
+        ref={monacoEl}
+        onKeyDown={async (e) => {
+          if (e.ctrlKey && e.key == "s") {
+            await saveContent();
+          }
+        }}></div>
     </>
   );
 }
