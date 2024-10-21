@@ -213,7 +213,7 @@ export function Commit({
                 <Alert
                   variant="warning"
                   className={
-                    (userName == "" && showAlert ? "block" : "") + " duration-200 ease-out"
+                    (userName == "" && showAlert ? "block" : "hidden") + " duration-200 ease-out"
                   }>
                   <TriangleAlert className="h-4 w-4" />
                   <AlertTitle>Warning</AlertTitle>

@@ -16,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -73,7 +74,25 @@ export function UsernameConfig() {
                     <Input id="usernameInput" placeholder={username} {...field} />
                   </FormControl>
                   <FormDescription>
-                    This will be the <b>user.name</b> used when committing
+                    This will be the <b>user.name</b> used when committing. If empty, git{" "}
+                    <TooltipProvider delayDuration={250}>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <b>global user.name</b>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" align="end">
+                          How to check your global git user.name:
+                          <br />
+                          <ol className="list-inside list-decimal">
+                            <li>Open terminal</li>
+                            <li>
+                              Enter <code>git config --get --global user.name</code>
+                            </li>
+                          </ol>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>{" "}
+                    will be used.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
