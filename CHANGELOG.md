@@ -1,3 +1,11 @@
+## [1.21.1](https://github.com/RMalik777/git-commander/compare/v1.21.0...v1.21.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* alert not getting dismissed ([edab14c](https://github.com/RMalik777/git-commander/commit/edab14c8b67a7e33f397afc89a3b0ccc0eb04607))
+* check global user.name ([5792b35](https://github.com/RMalik777/git-commander/commit/5792b35182e2e2f99076802441ca09bb768c8885))
+
 # [1.21.0](https://github.com/RMalik777/git-commander/compare/v1.20.0...v1.21.0) (2024-10-16)
 
 
