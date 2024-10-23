@@ -1,4 +1,5 @@
 import DOMPurify from "dompurify";
+import { cn } from "@/lib/utils";
 
 import {
   AppWindow,
@@ -75,6 +76,7 @@ import {
 
 interface Params {
   name: string | undefined;
+  className?: string;
 }
 
 export function Icons(params: Readonly<Params>) {
@@ -83,8 +85,7 @@ export function Icons(params: Readonly<Params>) {
   fileNameWithoutExt?.pop();
   const fileName = fileNameWithoutExt?.join(".").toLowerCase();
 
-  const iconsClass = "h-4 w-4 min-w-4 min-h-4";
-  const lucideClass = " text-current";
+  const iconsClass = cn("h-4 w-4 min-w-4 min-h-4 text-current", params.className);
   const si_Class = " fill-current";
 
   let iconsVar: SimpleIcon | undefined;
@@ -96,7 +97,7 @@ export function Icons(params: Readonly<Params>) {
     extension === "mysql" ||
     extension === "sqlite"
   ) {
-    return <Database className={iconsClass + lucideClass} />;
+    return <Database className={iconsClass} />;
   }
 
   //? -------- PROGRAMMING LANGUAGES ---------
@@ -457,7 +458,7 @@ export function Icons(params: Readonly<Params>) {
   return iconsVar ?
       <div
         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(iconsVar.svg) }}
-        className={iconsClass + si_Class}
+        className={cn(iconsClass, si_Class)}
       />
-    : <File className={iconsClass + lucideClass} />;
+    : <File className={iconsClass} />;
 }

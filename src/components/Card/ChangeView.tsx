@@ -47,7 +47,7 @@ export function ChangeView() {
           incomingInsertions ||
           incomingDeletions)
     ) ?
-      <Card className="relative">
+      <Card className="relative duration-200 ease-out starting:translate-y-5">
         <TooltipProvider>
           <Tooltip disableHoverableContent delayDuration={250}>
             <TooltipTrigger asChild>

@@ -52,7 +52,10 @@ export function FileMenu({
             inset
             disabled={target.children ? true : false}
             onClick={() => {
-              navigate("/editor", { state: { path: `${dir}\\${target.path}` } });
+              navigate("/editor", {
+                state: { path: `${dir}\\${target.path}` },
+                viewTransition: true,
+              });
             }}>
             Open In Editor
             <ContextMenuShortcut>

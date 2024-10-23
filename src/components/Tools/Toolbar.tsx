@@ -386,7 +386,7 @@ export function Toolbar() {
                 <Tooltip disableHoverableContent>
                   <TooltipTrigger
                     className={
-                      (fetchAmount > 0 ? "w-10 opacity-100" : "w-0 opacity-100") +
+                      (fetchAmount > 0 ? "w-fit min-w-5 opacity-100" : "w-0 opacity-100") +
                       " flex h-full items-center text-lg font-medium duration-200 ease-out"
                     }>
                     <MoveDown
@@ -656,7 +656,7 @@ export function Toolbar() {
             </MenubarTrigger>
             <MenubarContent>
               <MenubarItem asChild>
-                <NavLink to="/settings" className="">
+                <NavLink to="/settings" className="" viewTransition>
                   <p className="text-base">{username}</p>
                 </NavLink>
               </MenubarItem>
@@ -714,6 +714,7 @@ export function Toolbar() {
                 <NavLink
                   to="/settings"
                   className="TB_9 hidden sm:block"
+                  viewTransition
                   onClick={() => {
                     if (localStorage.getItem("username") !== null) return;
                     setTimeout(() => {
