@@ -7,7 +7,8 @@ export default function ErrorPage() {
   return (
     <div
       id="error-page"
-      className="min-w-dvw mx-12 flex min-h-full flex-col items-center justify-center gap-2">
+      className="min-w-dvw mx-12 flex min-h-full flex-col items-center justify-center gap-2"
+    >
       <h1 className="text-4xl">oops! :(</h1>
       <p className="text-2xl">Sorry, an unexpected error has occurred.</p>
       <p className="text-lg">

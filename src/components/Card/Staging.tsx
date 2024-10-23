@@ -80,7 +80,8 @@ export function Staging({
                     newPath.pop();
                     await open(dir + "\\" + newPath.join("\\"));
                   }
-                }}>
+                }}
+              >
                 <FolderOpen className="h-full w-full" />
               </button>
             </TooltipTrigger>
@@ -116,7 +117,8 @@ export function Staging({
                       }
                       await getDiff();
                       await getStaged();
-                    }}>
+                    }}
+                  >
                     <Plus className="h-full w-full" />
                   </button>
                 </TooltipTrigger>
@@ -128,7 +130,8 @@ export function Staging({
                 <TooltipTrigger asChild>
                   <button
                     className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
-                    onClick={() => setOpenDialogId(file.path)}>
+                    onClick={() => setOpenDialogId(file.path)}
+                  >
                     <Undo className="h-full w-full" />
                   </button>
                 </TooltipTrigger>
@@ -162,7 +165,8 @@ export function Staging({
                     }
                     await getStaged();
                     await getDiff();
-                  }}>
+                  }}
+                >
                   <Minus className="h-full w-full" />
                 </button>
               </TooltipTrigger>
@@ -278,7 +282,8 @@ export function Staging({
                       await getDiff();
                       await getStaged();
                     }
-                  }}>
+                  }}
+                >
                   <Minus className="h-full w-full" />
                 </button>
               </div>
@@ -292,7 +297,8 @@ export function Staging({
                     status="Staged"
                     target={target}
                     getDiff={getDiff}
-                    getStaged={getStaged}>
+                    getStaged={getStaged}
+                  >
                     <div className="group flex items-center gap-2 p-1 pl-3 hover:bg-neutral-100 hover:dark:bg-neutral-900">
                       <Icons name={target.name} />
                       <div className="flex w-full items-center justify-between">
@@ -343,12 +349,14 @@ export function Staging({
                       await getStaged();
                       await getDiff();
                     }
-                  }}>
+                  }}
+                >
                   <Plus className="h-full w-full" />
                 </button>
                 <button
                   className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
-                  onClick={() => setRevertDialog(true)}>
+                  onClick={() => setRevertDialog(true)}
+                >
                   <Undo className="h-full w-full" />
                 </button>
                 <ConfirmationDialog
@@ -402,7 +410,8 @@ export function Staging({
                     dir={dir}
                     status="Changed"
                     getDiff={getDiff}
-                    getStaged={getStaged}>
+                    getStaged={getStaged}
+                  >
                     <div className="group flex cursor-default items-center gap-2 p-1 pl-3 hover:bg-neutral-100 hover:dark:bg-neutral-900">
                       <Icons name={target.name} />
                       <div className="flex w-full items-center justify-between">
@@ -461,7 +470,8 @@ export function Staging({
                 status={fileStatus}
                 target={child}
                 getDiff={getDiff}
-                getStaged={getStaged}>
+                getStaged={getStaged}
+              >
                 <div className="w-full">
                   <div className="STG_2 UST_2 STG_4 UST_4">
                     {child.children ?
@@ -473,7 +483,8 @@ export function Staging({
                           ))
                         }
                         type="multiple"
-                        defaultValue={["item"]}>
+                        defaultValue={["item"]}
+                      >
                         <FolderItem value="item" className="">
                           <div className="group flex w-full justify-between hover:bg-neutral-100 dark:hover:bg-neutral-900">
                             <FolderTrigger className="p-1 pl-2">{child.name}</FolderTrigger>
@@ -488,7 +499,8 @@ export function Staging({
                           (root ? "pl-6" : (
                             "ml-4 border-l border-neutral-200 pl-7 dark:border-neutral-800"
                           ))
-                        }>
+                        }
+                      >
                         <Icons name={child.name} />
                         <div className="STG_3 UST_3 flex w-full items-center justify-between">
                           {child.name}
@@ -520,7 +532,8 @@ export function Staging({
                   onClick={async () => {
                     await getDiff();
                     await getStaged();
-                  }}>
+                  }}
+                >
                   <RefreshCw size={20} />
                 </Button>
               </TooltipTrigger>
@@ -547,7 +560,8 @@ export function Staging({
                 onValueChange={(e) => {
                   localStorage.setItem("viewMode", e);
                   setViewMode(e);
-                }}>
+                }}
+              >
                 <MenubarRadioItem value="list">List</MenubarRadioItem>
                 <MenubarRadioItem value="tree">Tree</MenubarRadioItem>
               </MenubarRadioGroup>

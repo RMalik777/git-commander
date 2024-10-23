@@ -133,7 +133,7 @@ export function Commit({
                   try {
                     const currentHash = await git.getLatestRemoteCommitHash(
                       currentRepoDir,
-                      currentBranch
+                      currentBranch,
                     );
                     dispatch(setRepo({ hash: currentHash }));
                     localStorage.setItem("currentRepoHash", currentHash.toString());
@@ -152,7 +152,8 @@ export function Commit({
                     });
                   }
                 }
-              }}>
+              }}
+            >
               Push
             </ToastAction>
           ),
@@ -214,7 +215,8 @@ export function Commit({
                   variant="warning"
                   className={
                     (userName == "" && showAlert ? "block" : "hidden") + " duration-200 ease-out"
-                  }>
+                  }
+                >
                   <TriangleAlert className="h-4 w-4" />
                   <AlertTitle>Warning</AlertTitle>
                   <AlertDescription className="flex flex-col items-start gap-1">
@@ -244,7 +246,8 @@ export function Commit({
                                 highlighter.destroy();
                               }, 5000);
                             }, 1);
-                          }}>
+                          }}
+                        >
                           Add Username
                         </Button>
                       </NavLink>
@@ -255,7 +258,8 @@ export function Commit({
                         onClick={() => {
                           localStorage.setItem("usernameAlert", "hide");
                           setShowAlert(!showAlert);
-                        }}>
+                        }}
+                      >
                         Dismiss
                       </Button>
                     </div>

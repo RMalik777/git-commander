@@ -34,7 +34,9 @@ export async function readGitIgnore(dir: string, scan: boolean = true) {
   const formatted = {
     folder: result.filter(
       (line) =>
-        (line.includes("/") || !line.includes(".")) && !line.startsWith("!") && !line.includes("/*")
+        (line.includes("/") || !line.includes(".")) &&
+        !line.startsWith("!") &&
+        !line.includes("/*"),
     ),
     file: result.filter((line) => !line.includes("/") && line.includes(".")),
     folderException: result.filter((line) => line.startsWith("!")),
@@ -42,7 +44,7 @@ export async function readGitIgnore(dir: string, scan: boolean = true) {
   };
   formatted.file = formatted.file.map((line) => line.replace(/^\W\**./, ""));
   formatted.folder = formatted.folder.map((line) =>
-    line.replace(/^\//, "").replace(/\/$/, "").replace(/\/\*/g, "")
+    line.replace(/^\//, "").replace(/\/$/, "").replace(/\/\*/g, ""),
   );
   formatted.folderException = formatted.folderException.map((line) => {
     const formatted = line.split("/");
@@ -62,7 +64,7 @@ export async function sortAndFilter(
     file: string[];
     folderException: string[];
     fileException: string[];
-  }
+  },
 ) {
   if (!ignore) {
     ignore = await readGitIgnore(rootDir);

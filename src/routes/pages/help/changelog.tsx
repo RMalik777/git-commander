@@ -41,7 +41,8 @@ export default function Changelog() {
                   className="text-blue-500 visited:text-purple-500 hover:underline"
                   href={props.href}
                   target="_blank"
-                  rel="noopener noreferrer">
+                  rel="noopener noreferrer"
+                >
                   {props.children}
                 </a>
               );
@@ -55,7 +56,8 @@ export default function Changelog() {
             p(props) {
               return <p className="text-sm">{props.children}</p>;
             },
-          }}>
+          }}
+        >
           {md}
         </Markdown>
       </div>

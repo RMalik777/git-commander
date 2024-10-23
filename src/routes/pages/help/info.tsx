@@ -61,9 +61,10 @@ export default function Info() {
               osType,
               tempDir,
               react,
-            })
+            }),
           );
-        }}>
+        }}
+      >
         <Clipboard size={20} />
       </Button>
       <div className="flex flex-col items-center justify-center">

@@ -102,7 +102,7 @@ export function Toolbar() {
           await git.branchList(dirLocation);
         setBranchList(newBranchList);
         const showedBranch = newBranchList?.local?.find(
-          (branch) => branch?.toLowerCase() === target?.toLowerCase()
+          (branch) => branch?.toLowerCase() === target?.toLowerCase(),
         );
         dispatch(setRepo({ branch: showedBranch }));
         localStorage.setItem("currentBranch", showedBranch?.toString() ?? "");
@@ -195,7 +195,8 @@ export function Toolbar() {
             </Tooltip>
             <span
               className="absolute bottom-0 left-0 h-[2px] animate-pulse bg-black dark:bg-white"
-              style={{ width: `${switchPercentage}%` }}></span>
+              style={{ width: `${switchPercentage}%` }}
+            ></span>
           </div>
           <Select
             value={currentBranch}
@@ -235,7 +236,8 @@ export function Toolbar() {
                 setIsSwitching(false);
                 setSwitchMessage(`${repoName}/${toSwitch}`);
               }
-            }}>
+            }}
+          >
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" asChild className="TB_3">
@@ -285,7 +287,8 @@ export function Toolbar() {
                     disabled={window.history.state.idx == 0}
                     size="icon"
                     variant="ghost"
-                    onClick={() => navigate(-1)}>
+                    onClick={() => navigate(-1)}
+                  >
                     <ChevronLeft />
                   </Button>
                 </TooltipTrigger>
@@ -302,7 +305,8 @@ export function Toolbar() {
                     className="TB_5 max-xs:hidden"
                     size="icon"
                     variant="ghost"
-                    onClick={() => navigate(1)}>
+                    onClick={() => navigate(1)}
+                  >
                     <ChevronRight />
                   </Button>
                 </TooltipTrigger>
@@ -319,7 +323,8 @@ export function Toolbar() {
                 className={
                   (fetchAmount > 0 ? "border-b border-r border-t pr-2" : "") +
                   " box-border flex h-10 items-center rounded-md duration-200 ease-out dark:border-neutral-800"
-                }>
+                }
+              >
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -372,7 +377,8 @@ export function Toolbar() {
                         } finally {
                           setIsFetching(false);
                         }
-                      }}>
+                      }}
+                    >
                       <RefreshCcw
                         className={(isFetching ? "animate-spin" : "") + " absolute min-h-fit"}
                       />
@@ -388,7 +394,8 @@ export function Toolbar() {
                     className={
                       (fetchAmount > 0 ? "w-fit min-w-5 opacity-100" : "w-0 opacity-100") +
                       " flex h-full items-center text-lg font-medium duration-200 ease-out"
-                    }>
+                    }
+                  >
                     <MoveDown
                       className={
                         (fetchAmount > 0 ?
@@ -401,7 +408,8 @@ export function Toolbar() {
                         (fetchAmount > 0 ?
                           "translate-x-0 scale-100 opacity-100"
                         : "-translate-x-10 scale-0 opacity-0") + " duration-200 ease-out"
-                      }>
+                      }
+                    >
                       {fetchAmount}
                     </span>
                   </TooltipTrigger>
@@ -450,7 +458,7 @@ export function Toolbar() {
                               const toCompare = response.toString().trim();
                               const regexTag = new RegExp(
                                 String.raw`From[\s\S]+${repoName}\s*, ([\s\S]+),(?:already up to date|updating \w+)`,
-                                "i"
+                                "i",
                               );
                               const regexChanges =
                                 /Fast-forward\s([\s\S]+)\s\d+ files changed, \d+ insertions\(\+\), \d+ deletions\(-\)/i;
@@ -466,7 +474,7 @@ export function Toolbar() {
                                   filesChanged: parseInt(matchSummary?.[1] ?? 0),
                                   insertions: parseInt(matchSummary?.[2] ?? 0),
                                   deletions: parseInt(matchSummary?.[3] ?? 0),
-                                })
+                                }),
                               );
                               const desc = (): string => {
                                 if (matchSummary) {
@@ -495,7 +503,8 @@ export function Toolbar() {
                           } finally {
                             setIsPulling(false);
                           }
-                        }}>
+                        }}
+                      >
                         <HashLoader
                           size={24}
                           speedMultiplier={1.2}
@@ -553,7 +562,7 @@ export function Toolbar() {
                             try {
                               const currentHash = await git.getLatestRemoteCommitHash(
                                 dirLocation,
-                                currentBranch
+                                currentBranch,
                               );
                               dispatch(setRepo({ hash: currentHash }));
                               localStorage.setItem("currentRepoHash", currentHash.toString());
@@ -574,7 +583,8 @@ export function Toolbar() {
                           } finally {
                             setIsPushing(false);
                           }
-                        }}>
+                        }}
+                      >
                         <HashLoader
                           size={24}
                           speedMultiplier={1.2}
@@ -612,8 +622,8 @@ export function Toolbar() {
                           const lastCommitMessage = await git.getLastCommitMessage(dirLocation);
                           dispatch(
                             setLastCommitMessage(
-                              lastCommitMessage.toString().trim().replace(/,$/g, "")
-                            )
+                              lastCommitMessage.toString().trim().replace(/,$/g, ""),
+                            ),
                           );
                           try {
                             const response = await git.undoLastCommit(dirLocation);
@@ -636,7 +646,8 @@ export function Toolbar() {
                               variant: "destructive",
                             });
                           }
-                        }}>
+                        }}
+                      >
                         <Undo2 />
                       </Button>
                     </TooltipTrigger>
@@ -696,7 +707,8 @@ export function Toolbar() {
                     window.localStorage.setItem("theme", "Dark");
                     setThemeMode("Dark");
                   }
-                }}>
+                }}
+              >
                 {themeMode == "Light" ?
                   <Sun className="duration-200" />
                 : themeMode == "Dark" ?
@@ -733,7 +745,8 @@ export function Toolbar() {
                         highlighter.destroy();
                       }, 5000);
                     }, 1);
-                  }}>
+                  }}
+                >
                   <Button variant="outline" size="sm" className="CMT_1">
                     <p className="text-base">{username}</p>
                   </Button>
@@ -785,7 +798,8 @@ export function Toolbar() {
                       window.localStorage.setItem("theme", "Dark");
                       setThemeMode("Dark");
                     }
-                  }}>
+                  }}
+                >
                   <Sun
                     className={
                       (themeMode == "Light" ? "rotate-0 scale-100" : "rotate-90 scale-0") +

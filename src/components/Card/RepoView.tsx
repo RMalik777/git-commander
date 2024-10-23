@@ -209,7 +209,8 @@ export function RepoView() {
           }
           onClick={() => {
             if (dir) openFolder(dir);
-          }}>
+          }}
+        >
           <p className="">
             <code>{dir}</code>
           </p>
@@ -240,7 +241,8 @@ export function RepoView() {
                 onClick={() => {
                   dispatch(setRepo({ directory: parent?.toString() }));
                   localStorage.setItem("repoDir", parent?.toString() ?? "");
-                }}>
+                }}
+              >
                 Open
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -254,7 +256,8 @@ export function RepoView() {
           variant="default"
           onClick={async () => {
             await openFile();
-          }}>
+          }}
+        >
           Open Repository
         </Button>
         <Clone />
@@ -279,7 +282,8 @@ export function RepoView() {
             fileStore.save();
             diffStore.save();
             stagedStore.save();
-          }}>
+          }}
+        >
           Close Repository
         </Button>
       </CardFooter>

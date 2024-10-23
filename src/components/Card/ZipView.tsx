@@ -26,14 +26,14 @@ export function ZipView() {
   const [fileList, setFileList] = useState<FileList[]>(
     sessionStorage.getItem("fileZipList") ?
       JSON.parse(sessionStorage.getItem("fileZipList") as string)
-    : []
+    : [],
   );
 
   const [search, setSearch] = useState("");
   const filtered = useMemo(() => {
     const find = search.trim().toLowerCase();
     return fileList.filter(
-      (item) => item?.path.toLowerCase().includes(find) || item?.name?.toLowerCase().includes(find)
+      (item) => item?.path.toLowerCase().includes(find) || item?.name?.toLowerCase().includes(find),
     );
   }, [fileList, search]);
 
@@ -63,7 +63,8 @@ export function ZipView() {
             disabled={fileList.length == 0}
             variant="destructive"
             size="sm"
-            onClick={() => setOpenDialog(true)}>
+            onClick={() => setOpenDialog(true)}
+          >
             Clear Table
           </Button>
         </div>

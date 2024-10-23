@@ -168,7 +168,8 @@ export function ZipTableDialog({
                               setLocation(toOpen);
                               field.onChange(toOpen);
                             }
-                          }}>
+                          }}
+                        >
                           Open
                         </Button>
                       </div>
@@ -181,7 +182,8 @@ export function ZipTableDialog({
                     </>
                   </FormControl>
                 </FormItem>
-              )}></FormField>
+              )}
+            ></FormField>
             <DialogFooter className="mt-4">
               <DialogClose asChild>
                 <Button type="reset" variant="outline">

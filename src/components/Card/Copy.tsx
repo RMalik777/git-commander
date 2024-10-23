@@ -99,7 +99,8 @@ export function Copy() {
             altText="Open Folder"
             onClick={async () => {
               await openFolder(values.source);
-            }}>
+            }}
+          >
             Open Folder
           </ToastAction>
         ),
@@ -135,7 +136,8 @@ export function Copy() {
             altText="Open Folder"
             onClick={async () => {
               await openFolder(values.destination);
-            }}>
+            }}
+          >
             Open Folder
           </ToastAction>
         ),
@@ -155,7 +157,8 @@ export function Copy() {
               altText="Open Folder"
               onClick={async () => {
                 await openFolder(values.destination);
-              }}>
+              }}
+            >
               Open Folder
             </ToastAction>
           ),
@@ -216,7 +219,8 @@ export function Copy() {
                     </div>
                   </FormControl>
                 </FormItem>
-              )}></FormField>
+              )}
+            ></FormField>
             <FormField
               control={copyForm.control}
               name="overwrite"
@@ -227,7 +231,8 @@ export function Copy() {
                   </FormControl>
                   <FormLabel>Overwrite Files with Same Name in Destination</FormLabel>
                 </FormItem>
-              )}></FormField>
+              )}
+            ></FormField>
             <div className="flex w-full flex-col items-start justify-between gap-4 md:flex-row">
               <FormField
                 control={copyForm.control}
@@ -259,13 +264,15 @@ export function Copy() {
                               localStorage.setItem("source", toOpen.toString());
                               field.onChange(toOpen.toString());
                             }
-                          }}>
+                          }}
+                        >
                           Open
                         </Button>
                       </div>
                     </FormControl>
                   </FormItem>
-                )}></FormField>
+                )}
+              ></FormField>
               <MoveRight className="mt-4 hidden min-w-8 self-center md:block" />
               <FormField
                 control={copyForm.control}
@@ -295,13 +302,15 @@ export function Copy() {
                               localStorage.setItem("destination", toOpen.toString());
                               field.onChange(toOpen.toString());
                             }
-                          }}>
+                          }}
+                        >
                           Open
                         </Button>
                       </div>
                     </FormControl>
                   </FormItem>
-                )}></FormField>
+                )}
+              ></FormField>
             </div>
             <div className="flex w-full flex-col gap-2 md:flex-row md:gap-16">
               <FormField
@@ -317,7 +326,8 @@ export function Copy() {
                       <FormDescription>Remember the source file for next time</FormDescription>
                     </div>
                   </FormItem>
-                )}></FormField>
+                )}
+              ></FormField>
               <FormField
                 control={copyForm.control}
                 name="rememberDestination"
@@ -333,7 +343,8 @@ export function Copy() {
                       </FormDescription>
                     </div>
                   </FormItem>
-                )}></FormField>
+                )}
+              ></FormField>
             </div>
 
             <div className="flex w-full flex-col items-center justify-end gap-2 md:flex-row md:gap-4">
@@ -343,7 +354,8 @@ export function Copy() {
                     "scale-100 opacity-100 max-md:translate-y-0 md:translate-x-0"
                   : "scale-0 opacity-0 max-md:translate-y-6 md:translate-x-40") +
                   " flex w-fit items-center gap-1 rounded border border-yellow-500/50 bg-yellow-200/20 p-2 text-yellow-700 duration-200 ease-out dark:border-yellow-500 dark:border-yellow-900/50 dark:dark:border-yellow-900 dark:bg-yellow-800/20 dark:text-yellow-500 [&>svg]:text-yellow-700 dark:[&>svg]:text-yellow-500"
-                }>
+                }
+              >
                 <TriangleAlert size={16} className="max-xs:hidden" />
                 <p className="text-center font-normal tracking-normal">
                   <span className="font-medium tracking-tight">Warning! </span>Overwrite option is

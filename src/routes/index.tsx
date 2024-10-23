@@ -40,7 +40,8 @@ export default function Index() {
             href="https://git-scm.com/downloads"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-medium underline after:content-['_↗'] hover:opacity-80">
+            className="font-medium underline after:content-['_↗'] hover:opacity-80"
+          >
             Download git
           </a>
         </AlertDescription>

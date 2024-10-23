@@ -75,7 +75,8 @@ export function EditRepo({
               toast({
                 title: "Undo successful",
               });
-            }}>
+            }}
+          >
             Undo
           </ToastAction>
         ),
@@ -103,7 +104,8 @@ export function EditRepo({
         <Button
           className="flex flex-grow items-center justify-center gap-1"
           variant="outline"
-          size="sm">
+          size="sm"
+        >
           <Pencil size={16} className="md:hidden lg:block" />
           <span className="hidden md:block">Edit</span>
         </Button>
