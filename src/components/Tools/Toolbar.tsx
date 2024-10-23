@@ -656,7 +656,7 @@ export function Toolbar() {
             </MenubarTrigger>
             <MenubarContent>
               <MenubarItem asChild>
-                <NavLink to="/settings" className="">
+                <NavLink to="/settings" className="" viewTransition>
                   <p className="text-base">{username}</p>
                 </NavLink>
               </MenubarItem>
@@ -714,6 +714,7 @@ export function Toolbar() {
                 <NavLink
                   to="/settings"
                   className="TB_9 hidden sm:block"
+                  viewTransition
                   onClick={() => {
                     if (localStorage.getItem("username") !== null) return;
                     setTimeout(() => {

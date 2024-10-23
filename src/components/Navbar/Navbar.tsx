@@ -80,7 +80,7 @@ export function Navbar() {
                 <li key={item.link} className="w-full">
                   <Tooltip open={navOpen ? false : undefined}>
                     <TooltipTrigger asChild>
-                      <NavLink to={item.link} className="group block h-fit w-full">
+                      <NavLink to={item.link} className="group block h-fit w-full" viewTransition>
                         <Button
                           className={
                             "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out " +

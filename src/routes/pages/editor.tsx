@@ -83,7 +83,10 @@ export default function Editor() {
             <li>
               Go to{" "}
               <span>
-                <NavLink to="/folder" className="font-medium duration-200 hover:underline">
+                <NavLink
+                  to="/folder"
+                  className="font-medium duration-200 hover:underline"
+                  viewTransition>
                   Content
                 </NavLink>
               </span>{" "}
