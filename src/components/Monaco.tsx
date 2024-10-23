@@ -13,13 +13,16 @@ import { Button } from "@/components//ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 
-import { Save, FileWarning } from "lucide-react";
+import { Save, FileWarning, X } from "lucide-react";
 
 import { Icons } from "@/components/Icons";
 
 const allLang = Object.keys(bundledLanguages);
 
-export function Monaco({ path }: Readonly<{ path: string }>) {
+export function Monaco({
+  path,
+  setPath,
+}: Readonly<{ path: string; setPath: React.Dispatch<React.SetStateAction<string>> }>) {
   const { toast } = useToast();
   const extension = path.split(".").pop() ?? "";
   const fileName = path.split("\\").pop() ?? "";
@@ -171,29 +174,53 @@ export function Monaco({ path }: Readonly<{ path: string }>) {
   }
   return isValid ?
       <>
-        <div className="flex items-center gap-2">
-          <TooltipProvider delayDuration={100}>
+        <TooltipProvider delayDuration={100}>
+          <div className="flex w-full items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="group min-h-10 min-w-10"
+                    onClick={async () => await saveContent()}>
+                    <Save />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Save</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <p
+                className={
+                  (unsaved ? "visible opacity-100" : "invisible opacity-0") +
+                  " font-medium duration-200 ease-out starting:opacity-0"
+                }>
+                Warning! you have unsaved changes
+              </p>
+            </div>
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="outline"
                   size="icon"
                   className="group min-h-10 min-w-10"
-                  onClick={async () => await saveContent()}>
-                  <Save />
+                  onClick={async () => {
+                    window.history.replaceState({}, "");
+                    sessionStorage.removeItem("editorActive");
+                    setPath("");
+                  }}>
+                  <X />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Save</p>
+                <p>Close</p>
               </TooltipContent>
             </Tooltip>
-          </TooltipProvider>
-          {unsaved ?
-            <p className="font-medium opacity-100 duration-200 ease-out starting:opacity-0">
-              Warning! you have unsaved changes
-            </p>
-          : null}
-        </div>
+          </div>
+        </TooltipProvider>
         <div
           className="h-full w-full"
           ref={monacoEl}

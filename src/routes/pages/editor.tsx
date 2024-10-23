@@ -20,7 +20,9 @@ export default function Editor() {
   const relativeDir = currentDir.split("\\").pop();
   const location = useLocation();
 
-  const path: string = location.state?.path ?? sessionStorage.getItem("editorActive") ?? "";
+  const [path, setPath] = useState<string>(
+    location.state?.path ?? sessionStorage.getItem("editorActive") ?? ""
+  );
   const pathLength = path.length;
   sessionStorage.setItem("editorActive", path);
   // window.history.replaceState({}, "");
@@ -57,7 +59,7 @@ export default function Editor() {
             })}
           </BreadcrumbList>
         </Breadcrumb>
-        <Monaco path={path ?? ""} />
+        <Monaco path={path ?? ""} setPath={setPath} />
       </div>
     : <div className="flex h-full w-full flex-col items-center justify-center gap-4 sm:gap-8 lg:gap-16">
         <section className="flex w-full max-w-prose flex-col items-center justify-center gap-2 sm:flex-row">
