@@ -386,7 +386,7 @@ export function Toolbar() {
                 <Tooltip disableHoverableContent>
                   <TooltipTrigger
                     className={
-                      (fetchAmount > 0 ? "w-10 opacity-100" : "w-0 opacity-100") +
+                      (fetchAmount > 0 ? "w-fit min-w-5 opacity-100" : "w-0 opacity-100") +
                       " flex h-full items-center text-lg font-medium duration-200 ease-out"
                     }>
                     <MoveDown
