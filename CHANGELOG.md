@@ -1,3 +1,13 @@
+## [1.21.2](https://github.com/RMalik777/git-commander/compare/v1.21.1...v1.21.2) (2024-10-23)
+
+
+### Bug Fixes
+
+* add class props in icons ([f80ae46](https://github.com/RMalik777/git-commander/commit/f80ae46fd1f8f5004c0ed584d0b6933df61474e1))
+* show close button on editor ([6f71931](https://github.com/RMalik777/git-commander/commit/6f719313290ef5f1d5198f3b110491bcab9885d1))
+* toolbar width ([29584f8](https://github.com/RMalik777/git-commander/commit/29584f823b3abef87a62fab5a83ca4a5921f7d27))
+* validate file when opened in editor ([32c642f](https://github.com/RMalik777/git-commander/commit/32c642f36d981f9f4ea03d4e75353e09ee86aaae))
+
 ## [1.21.1](https://github.com/RMalik777/git-commander/compare/v1.21.0...v1.21.1) (2024-10-21)
 
 
