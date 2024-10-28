@@ -392,7 +392,9 @@ export function Toolbar() {
                 <Tooltip disableHoverableContent>
                   <TooltipTrigger
                     className={
-                      (fetchAmount > 0 ? "w-fit min-w-5 opacity-100" : "w-0 opacity-100") +
+                      (fetchAmount > 0 ?
+                        "visible w-fit min-w-5 opacity-100"
+                      : "invisible w-0 opacity-100") +
                       " flex h-full items-center text-lg font-medium duration-200 ease-out"
                     }
                   >
@@ -723,34 +725,34 @@ export function Toolbar() {
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <NavLink
-                  to="/settings"
-                  className="TB_9 hidden sm:block"
-                  viewTransition
-                  onClick={() => {
-                    if (localStorage.getItem("username") !== null) return;
-                    setTimeout(() => {
-                      highlighter.highlight({
-                        element: "#usernameInput",
-                        popover: {
-                          title: "Username Configuration",
-                          description: "Change your username here",
-                          showButtons: ["close"],
-                          onCloseClick: () => {
-                            highlighter.destroy();
-                          },
-                        },
-                      });
+                <Button variant="outline" size="sm" className="CMT_1" asChild>
+                  <NavLink
+                    to="/settings"
+                    className="TB_9 hidden sm:block"
+                    viewTransition
+                    onClick={() => {
+                      if (localStorage.getItem("username") !== null) return;
                       setTimeout(() => {
-                        highlighter.destroy();
-                      }, 5000);
-                    }, 1);
-                  }}
-                >
-                  <Button variant="outline" size="sm" className="CMT_1">
+                        highlighter.highlight({
+                          element: "#usernameInput",
+                          popover: {
+                            title: "Username Configuration",
+                            description: "Change your username here",
+                            showButtons: ["close"],
+                            onCloseClick: () => {
+                              highlighter.destroy();
+                            },
+                          },
+                        });
+                        setTimeout(() => {
+                          highlighter.destroy();
+                        }, 5000);
+                      }, 1);
+                    }}
+                  >
                     <p className="text-base">{username}</p>
-                  </Button>
-                </NavLink>
+                  </NavLink>
+                </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>
