@@ -1,3 +1,10 @@
+## [1.21.3](https://github.com/RMalik777/git-commander/compare/v1.21.2...v1.21.3) (2024-10-28)
+
+
+### Bug Fixes
+
+* fix crash when no .gitignore detected ([a81f858](https://github.com/RMalik777/git-commander/commit/a81f858067607746f0356da400d3c92b0daf6885))
+
 ## [1.21.2](https://github.com/RMalik777/git-commander/compare/v1.21.1...v1.21.2) (2024-10-23)
 
 
