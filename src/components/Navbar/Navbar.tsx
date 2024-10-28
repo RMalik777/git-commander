@@ -82,19 +82,20 @@ export function Navbar() {
                 <li key={item.link} className="w-full">
                   <Tooltip open={navOpen ? false : undefined}>
                     <TooltipTrigger asChild>
-                      <NavLink to={item.link} className="group block h-fit w-full" viewTransition>
-                        <Button
-                          className={
-                            "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out " +
-                            (navOpen ? "w-full" : "")
-                          }
-                          size="icon"
-                          variant={currentPath.pathname == item.link ? "default" : "ghost"}
-                        >
+                      <Button
+                        asChild
+                        className={
+                          "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out " +
+                          (navOpen ? "w-full" : "")
+                        }
+                        size="icon"
+                        variant={currentPath.pathname == item.link ? "default" : "ghost"}
+                      >
+                        <NavLink to={item.link} className="group block h-fit w-full" viewTransition>
                           {item.icon}
                           {navOpen ? item.name : ""}
-                        </Button>
-                      </NavLink>
+                        </NavLink>
+                      </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right">
                       <p>{item.name}</p>
