@@ -119,14 +119,16 @@ export function FileList({
                 target={child}
                 status={fileStatus}
                 getDiff={getDiff}
-                getStaged={getStaged}>
+                getStaged={getStaged}
+              >
                 {child.children ?
                   <FolderRoot
                     className={
                       "group duration-200 ease-out " +
                       (root ? "" : "ml-4 border-l border-neutral-200 dark:border-neutral-800")
                     }
-                    type="multiple">
+                    type="multiple"
+                  >
                     <FolderItem value="item-1" className="">
                       <FolderTrigger className="group p-1 pl-2 hover:bg-neutral-100 dark:hover:bg-neutral-900">
                         <div className="flex w-full justify-between text-left">
@@ -141,12 +143,14 @@ export function FileList({
                     className={
                       "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
                       (root ? "" : "ml-4 border-l border-neutral-200 dark:border-neutral-800")
-                    }>
+                    }
+                  >
                     <button
                       className="flex w-full items-center gap-1"
                       onClick={async () => {
                         await open(dir + "\\" + child.path);
-                      }}>
+                      }}
+                    >
                       <Icons name={child.name} />
                       <div className="flex w-full items-center justify-between text-left">
                         {child.name}
@@ -207,7 +211,8 @@ export function FileList({
                   });
                 }
               }
-            }}>
+            }}
+          >
             Open Folder
           </Button>
         </div>
@@ -241,7 +246,8 @@ export function FileList({
                         setLoading(false);
                       }, 100);
                     }
-                  }}>
+                  }}
+                >
                   <RefreshCw size={20} className={refreshClick ? "animate-spin" : ""} />
                 </Button>
               </TooltipTrigger>

@@ -62,12 +62,14 @@ export function ChangeView() {
                         altText="Undoing Closed changes view"
                         onClick={() => {
                           setShow(true);
-                        }}>
+                        }}
+                      >
                         Undo
                       </ToastAction>
                     ),
                   });
-                }}>
+                }}
+              >
                 <X className="text-neutral-400 duration-75 group-hover:text-neutral-950" />
               </button>
             </TooltipTrigger>

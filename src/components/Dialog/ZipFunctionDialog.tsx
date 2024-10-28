@@ -170,7 +170,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
         });
         await displayNotificationNotFocus(
           "Compression Finished",
-          "File has been compressed successfully"
+          "File has been compressed successfully",
         );
       } else {
         toast({
@@ -205,7 +205,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
         });
         displayNotificationNotFocus(
           "Compression Failed",
-          error?.toString() ?? "Unknown Error Occured"
+          error?.toString() ?? "Unknown Error Occured",
         );
       }
     } finally {
@@ -243,7 +243,8 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                     </>
                   </FormControl>
                 </FormItem>
-              )}></FormField>
+              )}
+            ></FormField>
             <FormField
               disabled={isLoading}
               control={zipFunctionForm.control}
@@ -254,7 +255,8 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    disabled={isLoading}>
+                    disabled={isLoading}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select format" />
@@ -271,7 +273,8 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                   <FormDescription>Choose the type of the compressed file</FormDescription>
                   <FormMessage />
                 </FormItem>
-              )}></FormField>
+              )}
+            ></FormField>
             <FormField
               disabled={isLoading}
               control={zipFunctionForm.control}
@@ -302,7 +305,8 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                             if (toOpen) {
                               field.onChange(toOpen);
                             }
-                          }}>
+                          }}
+                        >
                           Open
                         </Button>
                       </div>
@@ -311,7 +315,8 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                     </>
                   </FormControl>
                 </FormItem>
-              )}></FormField>
+              )}
+            ></FormField>
             <DialogFooter>
               <BarLoader
                 width="100%"

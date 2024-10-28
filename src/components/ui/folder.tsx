@@ -23,9 +23,10 @@ const FolderTrigger = React.forwardRef<
       ref={ref}
       className={cn(
         "flex w-full flex-1 items-center justify-between pl-2 font-medium transition-all ease-out [&[data-state=open]>div>svg]:rotate-0",
-        className
+        className,
       )}
-      {...props}>
+      {...props}
+    >
       <div className="flex w-full items-center gap-1">
         <ChevronDown className="h-4 w-4 shrink-0 -rotate-90 transition-transform" />
         <Folder className="h-4 w-4 shrink-0 fill-yellow-400 text-yellow-400 duration-150 ease-out dark:fill-yellow-500 dark:text-yellow-500" />
@@ -43,7 +44,8 @@ const FolderContent = React.forwardRef<
   <AccordionPrimitive.Content
     ref={ref}
     className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
-    {...props}>
+    {...props}
+  >
     <div className={cn("pt-0", className)}>{children}</div>
   </AccordionPrimitive.Content>
 ));

@@ -570,7 +570,8 @@ export default function Tutorial() {
               return (
                 <div
                   key={item.id}
-                  className="flex w-full flex-col items-start gap-2 rounded border p-2 dark:border-neutral-700">
+                  className="flex w-full flex-col items-start gap-2 rounded border p-2 dark:border-neutral-700"
+                >
                   <div className="flex items-center gap-1">
                     <FileText className="" size={18} />
                     <p className="text-lg font-medium">{item.title}</p>
@@ -584,7 +585,8 @@ export default function Tutorial() {
                       }) + " ml-6"
                     }
                     href={item.download}
-                    download>
+                    download
+                  >
                     Download
                   </a>
                 </div>
@@ -603,7 +605,8 @@ export default function Tutorial() {
                   <button
                     key={item.id}
                     className="flex flex-col items-start gap-1 rounded p-4 duration-200 ease-out hover:bg-neutral-50 hover:dark:bg-neutral-900"
-                    onClick={item.tour}>
+                    onClick={item.tour}
+                  >
                     <h3 className="text-left text-lg font-medium tracking-tight">{item.title}</h3>
                     <p className="text-left">{item.description}</p>
                   </button>
@@ -620,7 +623,8 @@ export default function Tutorial() {
                   <button
                     key={item.id}
                     className="flex flex-col items-start gap-1 rounded p-4 duration-200 ease-out hover:bg-neutral-50 hover:dark:bg-neutral-900"
-                    onClick={item.tour}>
+                    onClick={item.tour}
+                  >
                     <h3 className="text-left text-lg font-medium tracking-tight">{item.title}</h3>
                     <p className="text-left">{item.description}</p>
                   </button>

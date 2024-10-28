@@ -74,7 +74,8 @@ export default function Settings() {
         variant="destructive"
         onClick={() => {
           setOpenClearSettings(true);
-        }}>
+        }}
+      >
         Clear Settings
       </Button>
     </div>

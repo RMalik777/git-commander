@@ -46,7 +46,8 @@ export function RepoTable({
               className="font-medium"
               onClick={async () => {
                 await open(repo.repo_url);
-              }}>
+              }}
+            >
               {repo.repo_name}
             </TableCell>
             <TableCell>
@@ -69,7 +70,8 @@ export function RepoTable({
                   size="sm"
                   onClick={() => {
                     setOpenDialogId(repo.id);
-                  }}>
+                  }}
+                >
                   <Trash2 size={16} className="md:hidden lg:block" />
                   <span className="hidden md:block">Delete</span>
                 </Button>

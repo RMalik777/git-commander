@@ -56,7 +56,8 @@ export function FileMenu({
                 state: { path: `${dir}\\${target.path}` },
                 viewTransition: true,
               });
-            }}>
+            }}
+          >
             Open In Editor
             <ContextMenuShortcut>
               <Code2 size={16} />
@@ -88,7 +89,8 @@ export function FileMenu({
               }
               await getDiff();
               await getStaged();
-            }}>
+            }}
+          >
             Stage
           </ContextMenuItem>
           <ContextMenuItem
@@ -115,7 +117,8 @@ export function FileMenu({
               }
               await getStaged();
               await getDiff();
-            }}>
+            }}
+          >
             Unstage
           </ContextMenuItem>
           <ContextMenuItem
@@ -123,7 +126,8 @@ export function FileMenu({
             inset
             onClick={() => {
               setOpenDialogRevert(true);
-            }}>
+            }}
+          >
             Revert
           </ContextMenuItem>
           <ContextMenuSeparator />
@@ -143,20 +147,23 @@ export function FileMenu({
                 newPath.pop();
                 await open(dir + "\\" + newPath.join("\\"));
               }
-            }}>
+            }}
+          >
             Open Folder
           </ContextMenuItem>
           <ContextMenuItem
             inset
             disabled={target.children ? true : false}
-            onClick={async () => await open(dir + target.path)}>
+            onClick={async () => await open(dir + target.path)}
+          >
             Open File
           </ContextMenuItem>
           <ContextMenuItem
             inset
             onClick={async () => {
               await writeText(dir + target.path);
-            }}>
+            }}
+          >
             Copy Path
           </ContextMenuItem>
           <ContextMenuSeparator />
@@ -165,7 +172,8 @@ export function FileMenu({
             className="font-medium text-red-500 focus:bg-red-500/10"
             onClick={() => {
               setOpenDialogDelete(true);
-            }}>
+            }}
+          >
             Delete
           </ContextMenuItem>
         </ContextMenuContent>

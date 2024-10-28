@@ -67,12 +67,14 @@ export function Navbar() {
       className={
         "border-r border-neutral-200 bg-white px-3 py-3 transition-all duration-150 ease-out dark:border-neutral-700 dark:bg-neutral-950 " +
         (navOpen ? "w-1/6 min-w-fit" : "w-16 min-w-fit")
-      }>
+      }
+    >
       <nav
         className={
           "flex h-full flex-col justify-between duration-200 ease-out" +
           (navOpen ? "items-end" : "items-center")
-        }>
+        }
+      >
         <TooltipProvider delayDuration={50}>
           <ul className={"flex w-full flex-col gap-4 " + (navOpen ? "self-end" : "")}>
             {menuItem.map((item) => {
@@ -80,18 +82,20 @@ export function Navbar() {
                 <li key={item.link} className="w-full">
                   <Tooltip open={navOpen ? false : undefined}>
                     <TooltipTrigger asChild>
-                      <NavLink to={item.link} className="group block h-fit w-full" viewTransition>
-                        <Button
-                          className={
-                            "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out " +
-                            (navOpen ? "w-full" : "")
-                          }
-                          size="icon"
-                          variant={currentPath.pathname == item.link ? "default" : "ghost"}>
+                      <Button
+                        asChild
+                        className={
+                          "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out " +
+                          (navOpen ? "w-full" : "")
+                        }
+                        size="icon"
+                        variant={currentPath.pathname == item.link ? "default" : "ghost"}
+                      >
+                        <NavLink to={item.link} className="group block h-fit w-full" viewTransition>
                           {item.icon}
                           {navOpen ? item.name : ""}
-                        </Button>
-                      </NavLink>
+                        </NavLink>
+                      </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right">
                       <p>{item.name}</p>
@@ -110,7 +114,8 @@ export function Navbar() {
                 onClick={() => {
                   setNavOpen(!navOpen);
                   localStorage.setItem("navOpen", (!navOpen).toString());
-                }}>
+                }}
+              >
                 {navOpen ?
                   <ArrowLeftToLine size={18} className="" />
                 : <ArrowRightToLine size={18} className="" />}

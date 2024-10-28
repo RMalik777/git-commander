@@ -21,7 +21,7 @@ export default function Editor() {
   const location = useLocation();
 
   const [path, setPath] = useState<string>(
-    location.state?.path ?? sessionStorage.getItem("editorActive") ?? ""
+    location.state?.path ?? sessionStorage.getItem("editorActive") ?? "",
   );
   const pathLength = path.length;
   sessionStorage.setItem("editorActive", path);
@@ -88,7 +88,8 @@ export default function Editor() {
                 <NavLink
                   to="/folder"
                   className="font-medium duration-200 hover:underline"
-                  viewTransition>
+                  viewTransition
+                >
                   Content
                 </NavLink>
               </span>{" "}

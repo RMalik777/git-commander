@@ -183,7 +183,8 @@ export function Monaco({
                     variant="outline"
                     size="icon"
                     className="group min-h-10 min-w-10"
-                    onClick={async () => await saveContent()}>
+                    onClick={async () => await saveContent()}
+                  >
                     <Save />
                   </Button>
                 </TooltipTrigger>
@@ -196,7 +197,8 @@ export function Monaco({
                 className={
                   (unsaved ? "visible opacity-100" : "invisible opacity-0") +
                   " font-medium duration-200 ease-out starting:opacity-0"
-                }>
+                }
+              >
                 Warning! you have unsaved changes
               </p>
             </div>
@@ -211,7 +213,8 @@ export function Monaco({
                     window.history.replaceState({}, "");
                     sessionStorage.removeItem("editorActive");
                     setPath("");
-                  }}>
+                  }}
+                >
                   <X />
                 </Button>
               </TooltipTrigger>
@@ -228,7 +231,8 @@ export function Monaco({
             if (e.ctrlKey && e.key == "s") {
               await saveContent();
             }
-          }}></div>
+          }}
+        ></div>
       </>
     : <div className="flex h-fit min-h-full w-full flex-col items-center justify-center gap-1 md:gap-2">
         <FileWarning className="h-12 w-auto dark:text-white sm:h-14 md:h-16 lg:h-20" />
@@ -261,7 +265,8 @@ export function Monaco({
               }
               console.error(error);
             }
-          }}>
+          }}
+        >
           {Icons({ name: extension, className: "h-full w-auto py-1 hidden sm:block" })}
           <div className="flex flex-col">
             <span className="text-base font-medium">{fileName}</span>

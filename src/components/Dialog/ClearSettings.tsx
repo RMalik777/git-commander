@@ -230,7 +230,8 @@ export function ClearSettings({
                     return;
                   }
                   setOpenConfirmation(true);
-                }}>
+                }}
+              >
                 Clear Settings
               </Button>
             </DialogFooter>

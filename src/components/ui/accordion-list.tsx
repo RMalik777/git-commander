@@ -14,7 +14,7 @@ const ListItem = React.forwardRef<
     ref={ref}
     className={cn(
       "mb-2 border-b border-neutral-200 duration-200 ease-out dark:border-neutral-800",
-      className
+      className,
     )}
     {...props}
   />
@@ -29,9 +29,10 @@ const ListHeader = React.forwardRef<
     ref={ref}
     className={cn(
       "flex w-full duration-200 ease-out hover:bg-neutral-100 hover:dark:bg-neutral-900",
-      className
+      className,
     )}
-    {...props}>
+    {...props}
+  >
     {children}
   </AccordionPrimitive.Header>
 ));
@@ -45,9 +46,10 @@ const ListTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       "flex w-full flex-1 items-center justify-between p-1 font-medium transition-all ease-out [&[data-state=open]>div>svg]:rotate-0",
-      className
+      className,
     )}
-    {...props}>
+    {...props}
+  >
     <div className="flex w-full items-center gap-1">
       <ChevronDown className="h-4 w-4 shrink-0 -rotate-90 transition-transform" />
       {children}
@@ -63,7 +65,8 @@ const ListContent = React.forwardRef<
   <AccordionPrimitive.Content
     ref={ref}
     className="ml-3 overflow-hidden border-l border-neutral-200 text-sm transition-all duration-200 ease-out data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down dark:border-neutral-800"
-    {...props}>
+    {...props}
+  >
     <div className={cn("pb-2 pt-0", className)}>{children}</div>
   </AccordionPrimitive.Content>
 ));

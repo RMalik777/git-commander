@@ -34,7 +34,7 @@ export function CommitView({
   const [formattedCommit, setFormattedCommit] = useState<CommitFormat[]>(
     type === "Local" ? localCommit
     : type === "Remote" ? remoteCommit
-    : allCommit
+    : allCommit,
   );
 
   function formatCommit(commit: string[]) {
@@ -76,7 +76,7 @@ export function CommitView({
       (commit) =>
         commit.message.toLowerCase().includes(find) ||
         commit.author.toLowerCase().includes(find) ||
-        commit.hash.toLowerCase().includes(find)
+        commit.hash.toLowerCase().includes(find),
     );
   }, [formattedCommit, search]);
   return (

@@ -233,7 +233,7 @@ export function Clone() {
       if (error instanceof Error) {
         func.displayNotificationNotFocus(
           "Error Cloning Repository",
-          "An error occurred while cloning the repository. Please try again"
+          "An error occurred while cloning the repository. Please try again",
         );
         await appWindow.requestUserAttention(2);
         console.error(error);
@@ -291,8 +291,9 @@ export function Clone() {
                             aria-expanded={comboOpen}
                             className={cn(
                               "peer h-fit w-full justify-between whitespace-normal break-all text-left",
-                              !field.value && "text-muted-foreground"
-                            )}>
+                              !field.value && "text-muted-foreground",
+                            )}
+                          >
                             {field.value ?
                               links?.find((link) => link.repo_url === field.value)?.repo_name
                             : "Select remote repository..."}
@@ -322,11 +323,12 @@ export function Clone() {
                                   cloneForm.setValue("target", link.repo_url);
                                   setComboOpen(false);
                                 }}
-                                className="whitespace-normal break-all">
+                                className="whitespace-normal break-all"
+                              >
                                 <Check
                                   className={cn(
                                     "mr-2 h-4 w-4",
-                                    link.repo_url === field.value ? "opacity-100" : "opacity-0"
+                                    link.repo_url === field.value ? "opacity-100" : "opacity-0",
                                   )}
                                 />
                                 {link.repo_url}
@@ -384,7 +386,8 @@ export function Clone() {
                         onClick={async () => {
                           const newLocation = await openFile();
                           field.onChange({ target: { value: newLocation } });
-                        }}>
+                        }}
+                      >
                         Open
                       </Button>
                     </div>
@@ -404,7 +407,8 @@ export function Clone() {
                   className="CR_2A"
                   type="button"
                   variant="outline"
-                  onClick={() => setDialogOpen(false)}>
+                  onClick={() => setDialogOpen(false)}
+                >
                   Close
                 </Button>
               }
@@ -418,7 +422,8 @@ export function Clone() {
                 type="submit"
                 variant="default"
                 disabled={isCloning}
-                className="CR_4 flex flex-row items-center gap-1">
+                className="CR_4 flex flex-row items-center gap-1"
+              >
                 <CloudDownload size={20} />
                 Clone
               </Button>

@@ -25,6 +25,7 @@ export async function checkGitIgnore(dir: string) {
 }
 
 export async function readGitIgnore(dir: string, scan: boolean = true) {
+  if ((await checkGitIgnore(dir)) === false) return;
   let data;
   if (scan) data = await readTextFile(dir + "\\.gitignore");
   else data = await readTextFile(dir);
@@ -34,7 +35,9 @@ export async function readGitIgnore(dir: string, scan: boolean = true) {
   const formatted = {
     folder: result.filter(
       (line) =>
-        (line.includes("/") || !line.includes(".")) && !line.startsWith("!") && !line.includes("/*")
+        (line.includes("/") || !line.includes(".")) &&
+        !line.startsWith("!") &&
+        !line.includes("/*"),
     ),
     file: result.filter((line) => !line.includes("/") && line.includes(".")),
     folderException: result.filter((line) => line.startsWith("!")),
@@ -42,7 +45,7 @@ export async function readGitIgnore(dir: string, scan: boolean = true) {
   };
   formatted.file = formatted.file.map((line) => line.replace(/^\W\**./, ""));
   formatted.folder = formatted.folder.map((line) =>
-    line.replace(/^\//, "").replace(/\/$/, "").replace(/\/\*/g, "")
+    line.replace(/^\//, "").replace(/\/$/, "").replace(/\/\*/g, ""),
   );
   formatted.folderException = formatted.folderException.map((line) => {
     const formatted = line.split("/");
@@ -62,7 +65,7 @@ export async function sortAndFilter(
     file: string[];
     folderException: string[];
     fileException: string[];
-  }
+  },
 ) {
   if (!ignore) {
     ignore = await readGitIgnore(rootDir);
@@ -71,10 +74,13 @@ export async function sortAndFilter(
   if (parentDir !== "") {
     if (await checkGitIgnore(rootDir + parentDir)) {
       secondIgnore = await readGitIgnore(rootDir + parentDir);
-      ignore.folder.push(...secondIgnore.folder.filter((f) => !ignore.folder.includes(f)));
-      ignore.file.push(...secondIgnore.file.filter((f) => !ignore.file.includes(f)));
+      if (secondIgnore) {
+        ignore?.folder.push(...secondIgnore.folder.filter((f) => !ignore.folder.includes(f)));
+        ignore?.file.push(...secondIgnore.file.filter((f) => !ignore.file.includes(f)));
+      }
     }
   }
+
   parent.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
   parent.sort((a, b) => {
     if (a.children && !b.children) return -1;
@@ -86,19 +92,19 @@ export async function sortAndFilter(
     const child = parent[i];
     const childExt = child.name?.split("/").pop();
     if (
-      ignore.folder.includes(child.name ?? "") ||
-      ignore.file.includes(child.name ?? "") ||
-      ignore.file.includes(childExt ?? "") ||
+      ignore?.folder.includes(child.name ?? "") ||
+      ignore?.file.includes(child.name ?? "") ||
+      ignore?.file.includes(childExt ?? "") ||
       child.name === ".git"
     ) {
       parent.splice(i, 1);
     }
-    if (ignore.folderException.includes(child.name ?? "")) {
+    if (ignore?.folderException.includes(child.name ?? "")) {
       const childLen = child.children?.length ?? 0;
       for (let j = childLen - 1; j >= 0; j--) {
         const subChild = child.children?.[j];
         const newPath = subChild?.path.replaceAll("\\", "/");
-        if (ignore.fileException.some((file) => !newPath?.includes(file))) {
+        if (ignore?.fileException.some((file) => !newPath?.includes(file))) {
           child.children?.splice(j, 1);
         }
       }

@@ -35,7 +35,7 @@ export const repoSlice = createSlice({
         branch?: string;
         diff?: FileEntry[];
         staged?: FileEntry[];
-      }>
+      }>,
     ) => {
       state.hash = action.payload.hash ?? state.hash;
       state.name = action.payload.name ?? state.name;

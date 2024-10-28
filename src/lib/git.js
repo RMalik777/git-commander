@@ -168,7 +168,7 @@ export async function configUsernameReplace(path) {
     ["config", "--replace-all", "user.name", username],
     {
       cwd: path,
-    }
+    },
   );
   await command.spawn().catch((error) => {
     console.error(error);
@@ -221,7 +221,7 @@ export async function getDiffCommit(path, branch) {
       ],
       {
         cwd: path,
-      }
+      },
     );
     const result = [];
     command.on("close", () => resolve(result));
@@ -247,7 +247,7 @@ export async function getAllCommit(path, branch, type) {
         ],
         {
           cwd: path,
-        }
+        },
       );
     } else if (type.toLowerCase() === "remote") {
       command = new Command(
@@ -260,7 +260,7 @@ export async function getAllCommit(path, branch, type) {
         ],
         {
           cwd: path,
-        }
+        },
       );
     } else {
       throw new Error("Choose between 'all' or 'remote'");
@@ -282,7 +282,7 @@ export async function getLatestRemoteCommitHash(path, branch) {
       ["log", `origin/${branch}`, '--pretty=format:"%h"', "-1"],
       {
         cwd: path,
-      }
+      },
     );
     let result;
     command.on("close", () => resolve(result));

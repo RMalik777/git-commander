@@ -28,7 +28,7 @@ export const pullMsgSlice = createSlice({
         filesChanged?: number;
         insertions?: number;
         deletions?: number;
-      }>
+      }>,
     ) => {
       state.tagBranch = action.payload.tagBranch ?? state.tagBranch;
       state.changes = action.payload.changes ?? state.changes;

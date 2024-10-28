@@ -81,7 +81,8 @@ export function ZipTable({
                   setFileList([...fileList]);
                   setSort("asc");
                 }
-              }}>
+              }}
+            >
               File/Folder Name
               {sort === "asc" && sortCat === "name" ?
                 <ArrowUpAZ size={20} />
@@ -105,7 +106,8 @@ export function ZipTable({
                   setFileList([...fileList]);
                   setSort("asc");
                 }
-              }}>
+              }}
+            >
               Location
               {sort === "asc" && sortCat === "path" ?
                 <ArrowUpAZ size={20} />
@@ -150,7 +152,8 @@ export function ZipTable({
                             setSortCat("");
                           }
                           setIsEdit(false);
-                        }}>
+                        }}
+                      >
                         <Input
                           className="h-full w-full p-0 px-0 py-1 text-center font-medium"
                           type="number"
@@ -170,7 +173,8 @@ export function ZipTable({
                           setEditValue(realIndex + 1);
                           setEditId(realIndex);
                           setIsEdit(true);
-                        }}>
+                        }}
+                      >
                         {realIndex + 1}
                       </Button>
                     }
@@ -181,7 +185,8 @@ export function ZipTable({
                     className="flex items-center gap-1 text-left font-semibold"
                     onClick={() => {
                       open(item.path);
-                    }}>
+                    }}
+                  >
                     {item.type == "Folder" ?
                       <Folder
                         size={16}
@@ -205,10 +210,10 @@ export function ZipTable({
                           filteredFileList[index],
                         ];
                         const toSwap1 = fileList.findIndex(
-                          (find) => find.path === filteredFileList[index].path
+                          (find) => find.path === filteredFileList[index].path,
                         );
                         const toSwap2 = fileList.findIndex(
-                          (find) => find.path === filteredFileList[index - 1].path
+                          (find) => find.path === filteredFileList[index - 1].path,
                         );
                         [fileList[toSwap1], fileList[toSwap2]] = [
                           fileList[toSwap2],
@@ -216,7 +221,8 @@ export function ZipTable({
                         ];
                         setFileList([...fileList]);
                         setSortCat("");
-                      }}>
+                      }}
+                    >
                       <ChevronUp />
                     </Button>
                     <Button
@@ -230,10 +236,10 @@ export function ZipTable({
                           filteredFileList[index],
                         ];
                         const toSwap1 = fileList.findIndex(
-                          (find) => find.path === filteredFileList[index].path
+                          (find) => find.path === filteredFileList[index].path,
                         );
                         const toSwap2 = fileList.findIndex(
-                          (find) => find.path === filteredFileList[index + 1].path
+                          (find) => find.path === filteredFileList[index + 1].path,
                         );
                         [fileList[toSwap1], fileList[toSwap2]] = [
                           fileList[toSwap2],
@@ -241,7 +247,8 @@ export function ZipTable({
                         ];
                         setFileList([...fileList]);
                         setSortCat("");
-                      }}>
+                      }}
+                    >
                       <ChevronDown />
                     </Button>
                     <Button
@@ -254,7 +261,8 @@ export function ZipTable({
                         fileList.splice(toDelete, 1);
                         setFileList([...fileList]);
                         setSortCat("");
-                      }}>
+                      }}
+                    >
                       <Minus />
                     </Button>
                   </div>

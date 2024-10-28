@@ -21,7 +21,7 @@ export function TerminalView() {
       theme: {
         background: "rgb(5, 5, 5)",
       },
-    })
+    }),
   ).current;
 
   useEffect(() => {
@@ -70,7 +70,8 @@ export function TerminalView() {
           // Set timeout is needed so the FitAddon can be loaded first before fitting the terminal. The amount of time is (probably) not important, 1ms should be enough but i choose 10 just to be safe.
           // The alternative will be to await the term.loadAddon(fitAddon) and then fit the terminal. But that shows warning because it's not a promise.
           setTimeout(() => fitTerminal(term, fitAddon), 10);
-        }}>
+        }}
+      >
         <TerminalIcon size={20} />
         Terminal
       </Button>
@@ -81,7 +82,8 @@ export function TerminalView() {
         className={
           (openTerminal ? "block" : "hidden") +
           " h-full max-h-60 min-h-52 w-full animate-in slide-in-from-bottom"
-        }></div>
+        }
+      ></div>
     </footer>
   );
 }
