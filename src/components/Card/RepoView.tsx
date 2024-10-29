@@ -120,7 +120,8 @@ export function RepoView() {
       dispatch(setFiles(fileList));
       await fileStore.set("fileList", fileList);
       await fileStore.save();
-
+      
+      localStorage.removeItem("zipLocation");
       localStorage.removeItem("fetchAmount");
     }
   }
@@ -273,6 +274,7 @@ export function RepoView() {
             localStorage.removeItem("currentBranch");
             localStorage.removeItem("stagedList");
             localStorage.removeItem("fetchAmount");
+            localStorage.removeItem("zipLocation");
             dispatch(removeRepo());
             dispatch(removePullMsg());
             dispatch(removeFiles());
