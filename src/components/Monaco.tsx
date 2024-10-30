@@ -273,5 +273,16 @@ export function Monaco({
             {path}
           </div>
         </Button>
+        <Button
+          variant="outline"
+          onClick={async () => {
+            window.history.replaceState({}, "");
+            sessionStorage.removeItem("editorActive");
+            setPath("");
+          }}
+        >
+          <X />
+          Close File
+        </Button>
       </div>;
 }
