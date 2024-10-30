@@ -60,7 +60,7 @@ export function Staging({
 
   function actionButton(file: FileEntry, mode: string) {
     return (
-      <div className="STG_5A STG_5 UST_5 UST_5A hidden flex-row items-center gap-2 group-hover:flex group-focus:flex">
+      <div className="STG_5A STG_5 UST_5 UST_5A flex flex-row items-center gap-2">
         <TooltipProvider delayDuration={250} disableHoverableContent>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -82,7 +82,7 @@ export function Staging({
                   }
                 }}
               >
-                <FolderOpen className="h-full w-full" />
+                <FolderOpen className="h-full w-full duration-200 ease-out" />
               </button>
             </TooltipTrigger>
             <TooltipContent>
@@ -119,7 +119,7 @@ export function Staging({
                       await getStaged();
                     }}
                   >
-                    <Plus className="h-full w-full" />
+                    <Plus className="h-full w-full duration-200 ease-out" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -132,7 +132,7 @@ export function Staging({
                     className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                     onClick={() => setOpenDialogId(file.path)}
                   >
-                    <Undo className="h-full w-full" />
+                    <Undo className="h-full w-full duration-200 ease-out" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -167,7 +167,7 @@ export function Staging({
                     await getDiff();
                   }}
                 >
-                  <Minus className="h-full w-full" />
+                  <Minus className="h-full w-full duration-200 ease-out" />
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -257,7 +257,7 @@ export function Staging({
           <ListItem value="staged">
             <ListHeader className="group">
               <ListTrigger>Staged</ListTrigger>
-              <div className="UST_8A hidden flex-row items-center gap-2 px-1 group-hover:flex">
+              <div className="UST_8A flex flex-row items-center gap-2 px-1">
                 <button
                   className="UST_8 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
@@ -321,7 +321,7 @@ export function Staging({
           <ListItem value="diff">
             <ListHeader className="group">
               <ListTrigger>Changed</ListTrigger>
-              <div className="STG_8A hidden flex-row items-center gap-2 px-1 group-hover:flex">
+              <div className="STG_8A flex flex-row items-center gap-2 px-1">
                 <button
                   className="STG_8 STG_9A h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
@@ -351,13 +351,13 @@ export function Staging({
                     }
                   }}
                 >
-                  <Plus className="h-full w-full" />
+                  <Plus className="h-full w-full duration-200 ease-out" />
                 </button>
                 <button
                   className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={() => setRevertDialog(true)}
                 >
-                  <Undo className="h-full w-full" />
+                  <Undo className="h-full w-full duration-200 ease-out" />
                 </button>
                 <ConfirmationDialog
                   title="Warning!"
