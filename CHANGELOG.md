@@ -1,3 +1,11 @@
+## [1.21.4](https://github.com/RMalik777/git-commander/compare/v1.21.3...v1.21.4) (2024-10-30)
+
+
+### Bug Fixes
+
+* save zip location ([ab8a18d](https://github.com/RMalik777/git-commander/commit/ab8a18dd78ab5f498728f0ff641541aaf9401115))
+* show close button if editor failed to open file ([261741c](https://github.com/RMalik777/git-commander/commit/261741cfac3bd74ed928b6a06d29e0fd2ba76974))
+
 ## [1.21.3](https://github.com/RMalik777/git-commander/compare/v1.21.2...v1.21.3) (2024-10-28)
 
 
