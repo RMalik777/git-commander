@@ -188,6 +188,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       }
       setDialogOpen(false);
       reset({ archiveFormat: values.archiveFormat, archiveName: "", location: currentDir });
+      localStorage.setItem("zipLocation", values.location);
     } catch (error) {
       if (error instanceof Error) {
         console.error(error);
@@ -300,7 +301,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                             const toOpen = await open({
                               multiple: false,
                               directory: true,
-                              defaultPath: currentDir,
+                              defaultPath: localStorage.getItem("zipLocation") ?? currentDir,
                             });
                             if (toOpen) {
                               field.onChange(toOpen);
