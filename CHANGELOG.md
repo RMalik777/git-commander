@@ -1,3 +1,48 @@
+## [1.21.4](https://github.com/RMalik777/git-commander/compare/v1.21.3...v1.21.4) (2024-10-30)
+
+
+### Bug Fixes
+
+* save zip location ([ab8a18d](https://github.com/RMalik777/git-commander/commit/ab8a18dd78ab5f498728f0ff641541aaf9401115))
+* show close button if editor failed to open file ([261741c](https://github.com/RMalik777/git-commander/commit/261741cfac3bd74ed928b6a06d29e0fd2ba76974))
+
+## [1.21.3](https://github.com/RMalik777/git-commander/compare/v1.21.2...v1.21.3) (2024-10-28)
+
+
+### Bug Fixes
+
+* fix crash when no .gitignore detected ([a81f858](https://github.com/RMalik777/git-commander/commit/a81f858067607746f0356da400d3c92b0daf6885))
+
+## [1.21.2](https://github.com/RMalik777/git-commander/compare/v1.21.1...v1.21.2) (2024-10-23)
+
+
+### Bug Fixes
+
+* add class props in icons ([f80ae46](https://github.com/RMalik777/git-commander/commit/f80ae46fd1f8f5004c0ed584d0b6933df61474e1))
+* show close button on editor ([6f71931](https://github.com/RMalik777/git-commander/commit/6f719313290ef5f1d5198f3b110491bcab9885d1))
+* toolbar width ([29584f8](https://github.com/RMalik777/git-commander/commit/29584f823b3abef87a62fab5a83ca4a5921f7d27))
+* validate file when opened in editor ([32c642f](https://github.com/RMalik777/git-commander/commit/32c642f36d981f9f4ea03d4e75353e09ee86aaae))
+
+## [1.21.1](https://github.com/RMalik777/git-commander/compare/v1.21.0...v1.21.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* alert not getting dismissed ([edab14c](https://github.com/RMalik777/git-commander/commit/edab14c8b67a7e33f397afc89a3b0ccc0eb04607))
+* check global user.name ([5792b35](https://github.com/RMalik777/git-commander/commit/5792b35182e2e2f99076802441ca09bb768c8885))
+
+# [1.21.0](https://github.com/RMalik777/git-commander/compare/v1.20.0...v1.21.0) (2024-10-16)
+
+
+### Bug Fixes
+
+* editor not showing latest status ([0c8aedc](https://github.com/RMalik777/git-commander/commit/0c8aedc8be425767165674fbf7364779cc1beaf0))
+
+
+### Features
+
+* ctrl+s to save ([3cd76f7](https://github.com/RMalik777/git-commander/commit/3cd76f75dae92e0e06f6c237c65935b264a1649c))
+
 # [1.20.0](https://github.com/RMalik777/git-commander/compare/v1.19.0...v1.20.0) (2024-10-15)
 
 
