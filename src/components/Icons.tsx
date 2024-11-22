@@ -85,7 +85,7 @@ export function Icons(params: Readonly<Params>) {
   fileNameWithoutExt?.pop();
   const fileName = fileNameWithoutExt?.join(".").toLowerCase();
 
-  const iconsClass = cn("h-4 w-4 min-w-4 min-h-4 text-current", params.className);
+  const iconsClass = cn("h-4 min-h-4 w-4 min-w-4 text-current", params.className);
   const si_Class = " fill-current";
 
   let iconsVar: SimpleIcon | undefined;

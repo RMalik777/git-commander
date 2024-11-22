@@ -120,7 +120,7 @@ export function RepoView() {
       dispatch(setFiles(fileList));
       await fileStore.set("fileList", fileList);
       await fileStore.save();
-      
+
       localStorage.removeItem("zipLocation");
       localStorage.removeItem("fetchAmount");
     }
