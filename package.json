@@ -70,7 +70,7 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@shikijs/monaco": "^1.23.1",
-    "@tauri-apps/cli": "^1.6.3",
+    "@tauri-apps/cli": "^2.1.0",
     "@types/dompurify": "^3.0.5",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.9.1",
