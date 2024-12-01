@@ -38,7 +38,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "@reduxjs/toolkit": "^2.3.0",
     "@tauri-apps/api": "^1.6.0",
-    "@typescript-eslint/parser": "^8.0.0",
+    "@typescript-eslint/parser": "^8.16.0",
     "@xterm/addon-clipboard": "^0.1.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/addon-web-links": "^0.11.0",
