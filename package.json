@@ -59,7 +59,7 @@
     "react-router-dom": "^6.28.0",
     "react-spinners": "^0.14.1",
     "simple-icons": "^13.17.0",
-    "tailwind-merge": "^2.5.4",
+    "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra#v1",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1",
