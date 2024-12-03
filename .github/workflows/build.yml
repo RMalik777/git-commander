@@ -20,16 +20,22 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: "pnpm"
 
       - name: Install Dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Semantic Release
-        run: npx semantic-release
+        run: pnpm dlx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -55,10 +61,16 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
+          cache: "pnpm"
 
       - name: Install Rust Stable
         uses: dtolnay/rust-toolchain@stable
@@ -74,7 +86,7 @@ jobs:
         # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
 
       - name: Install Frontend Dependencies
-        run: npm ci # change this to npm, pnpm or bun depending on which one you use.
+        run: pnpm install # change this to npm, pnpm or bun depending on which one you use.
 
       - name: Generate Built Apps
         uses: tauri-apps/tauri-action@v0
