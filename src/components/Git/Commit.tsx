@@ -223,7 +223,7 @@ export function Commit({
                     You haven&apos;t set your username. The commit will be made with the default
                     username. <code>git config --get --global user.name</code>
                     <div className="flex gap-4">
-                      <NavLink to="/settings" viewTransition>
+                      <NavLink to="/settings">
                         <Button
                           type="button"
                           variant="outline"

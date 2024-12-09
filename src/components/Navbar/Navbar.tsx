@@ -91,7 +91,7 @@ export function Navbar() {
                         size="icon"
                         variant={currentPath.pathname == item.link ? "default" : "ghost"}
                       >
-                        <NavLink to={item.link} className="group block h-fit w-full" viewTransition>
+                        <NavLink to={item.link} className="group block h-fit w-full">
                           {item.icon}
                           {navOpen ? item.name : ""}
                         </NavLink>

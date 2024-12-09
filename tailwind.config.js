@@ -1,7 +1,7 @@
 import tailwind_animate from "tailwindcss-animate";
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const config = {
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx,jsx,js}",
@@ -50,3 +50,5 @@ module.exports = {
     },
   ],
 };
+
+export default config;

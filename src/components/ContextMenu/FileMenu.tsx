@@ -54,7 +54,6 @@ export function FileMenu({
             onClick={() => {
               navigate("/editor", {
                 state: { path: `${dir}\\${target.path}` },
-                viewTransition: true,
               });
             }}
           >
