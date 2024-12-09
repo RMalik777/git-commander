@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 
 import { CircleArrowRight, GraduationCap, History, Info } from "lucide-react";
 

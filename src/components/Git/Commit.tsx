@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { removeLastCommitMessage } from "@/lib/Redux/gitSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

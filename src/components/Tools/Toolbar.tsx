@@ -1,7 +1,7 @@
 import { Command } from "@tauri-apps/api/shell";
 
 import { useEffect, useLayoutEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router";
 
 import { setLastCommitMessage } from "@/lib/Redux/gitSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
@@ -746,7 +746,7 @@ export function Toolbar() {
                         setTimeout(() => {
                           highlighter.destroy();
                         }, 5000);
-                      }, 1);
+                      }, 10);
                     }}
                   >
                     <p className="text-base">{username}</p>

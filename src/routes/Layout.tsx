@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 
 import { store } from "@/lib/Redux/store";
 import { Provider } from "react-redux";

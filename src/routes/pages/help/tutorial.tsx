@@ -4,7 +4,7 @@ import { HelpNavbar } from "@/components/Navbar/HelpNavbar";
 import { Separator } from "@/components/ui/separator";
 import { buttonVariants } from "@/components/ui/button";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";

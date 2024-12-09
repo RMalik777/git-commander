@@ -53,7 +53,7 @@
     "react-markdown": "^9.0.1",
     "react-redux": "^9.1.2",
     "react-resizable-panels": "^2.1.7",
-    "react-router-dom": "^7.0.2",
+    "react-router": "^7.0.2",
     "react-spinners": "^0.15.0",
     "simple-icons": "^13.20.0",
     "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra#v1",
