@@ -85,7 +85,10 @@ export default function Editor() {
             <li>
               Go to{" "}
               <span>
-                <NavLink to="/folder" className="font-medium duration-200 hover:underline">
+                <NavLink
+                  to="/folder"
+                  className="rounded-sm px-1 py-px font-medium underline duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-800"
+                >
                   Content
                 </NavLink>
               </span>{" "}

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FileEntry } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
 
-import { useAppDispatch } from "@/lib/Redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
 
 import {
@@ -57,6 +57,7 @@ export function Staging({
   const dispatch = useAppDispatch();
   const [openDialogId, setOpenDialogId] = useState("");
   const [revertDialog, setRevertDialog] = useState(false);
+  const repoName = useAppSelector((state) => state.repo.name);
 
   function actionButton(file: FileEntry, mode: string) {
     return (
@@ -517,6 +518,7 @@ export function Staging({
       </>
     );
   }
+
   return (
     <Card className="STG_1 UST_1 w-full">
       <CardHeader className="">
@@ -528,6 +530,7 @@ export function Staging({
                 <Button
                   variant="ghost"
                   size="icon"
+                  disabled={repoName === ""}
                   className="h-fit w-fit"
                   onClick={async () => {
                     await getDiff();
@@ -568,7 +571,7 @@ export function Staging({
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
-        {stagedList?.length > 0 || diffList?.length > 0 ?
+        {repoName && (stagedList?.length > 0 || diffList?.length > 0) ?
           viewMode === "list" ?
             listView()
           : dirList ?
