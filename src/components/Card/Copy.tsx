@@ -28,6 +28,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
 import { MoveRight, TriangleAlert } from "lucide-react";
+import { clsx } from "clsx";
 
 const formSchema = z.object({
   fileList: z.string().min(1, { message: "Please enter the file name" }),
@@ -349,12 +350,12 @@ export function Copy() {
 
             <div className="flex w-full flex-col items-center justify-end gap-2 md:flex-row md:gap-4">
               <div
-                className={
-                  (copyForm.getValues("overwrite") ?
+                className={clsx(
+                  copyForm.getValues("overwrite") ?
                     "scale-100 opacity-100 max-md:translate-y-0 md:translate-x-0"
-                  : "scale-0 opacity-0 max-md:translate-y-6 md:translate-x-40") +
-                  " flex w-fit items-center gap-1 rounded border border-yellow-500/50 bg-yellow-200/20 p-2 text-yellow-700 duration-200 ease-out dark:border-yellow-500 dark:border-yellow-900/50 dark:dark:border-yellow-900 dark:bg-yellow-800/20 dark:text-yellow-500 [&>svg]:text-yellow-700 dark:[&>svg]:text-yellow-500"
-                }
+                  : "scale-0 opacity-0 max-md:translate-y-6 md:translate-x-40",
+                  "flex w-fit items-center gap-1 rounded border border-yellow-500/50 bg-yellow-200/20 p-2 text-yellow-700 duration-200 ease-out dark:border-yellow-500 dark:border-yellow-900/50 dark:dark:border-yellow-900 dark:bg-yellow-800/20 dark:text-yellow-500 [&>svg]:text-yellow-700 dark:[&>svg]:text-yellow-500",
+                )}
               >
                 <TriangleAlert size={16} className="max-xs:hidden" />
                 <p className="text-center font-normal tracking-normal">

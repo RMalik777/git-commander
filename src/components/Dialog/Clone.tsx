@@ -47,6 +47,7 @@ import { cn } from "@/lib/utils";
 
 import { Check, ChevronsUpDown, CloudDownload } from "lucide-react";
 import { ScaleLoader } from "react-spinners";
+import { clsx } from "clsx";
 
 import * as db from "@/lib/database";
 import * as func from "@/lib/functions";
@@ -290,8 +291,8 @@ export function Clone() {
                             role="combobox"
                             aria-expanded={comboOpen}
                             className={cn(
-                              "peer h-fit w-full justify-between whitespace-normal break-all text-left",
                               !field.value && "text-muted-foreground",
+                              "peer h-fit w-full justify-between whitespace-normal break-all text-left",
                             )}
                           >
                             {field.value ?
@@ -326,7 +327,7 @@ export function Clone() {
                                 className="whitespace-normal break-all"
                               >
                                 <Check
-                                  className={cn(
+                                  className={clsx(
                                     "mr-2 h-4 w-4",
                                     link.repo_url === field.value ? "opacity-100" : "opacity-0",
                                   )}

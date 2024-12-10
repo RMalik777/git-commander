@@ -17,6 +17,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useToast } from "@/components/ui/use-toast";
 
 import { Lightbulb, RefreshCw, SearchX } from "lucide-react";
+import { clsx } from "clsx";
 
 import { BarLoader } from "react-spinners";
 
@@ -123,10 +124,10 @@ export function FileList({
               >
                 {child.children ?
                   <FolderRoot
-                    className={
-                      "group duration-200 ease-out " +
-                      (root ? "" : "ml-4 border-l border-neutral-200 dark:border-neutral-800")
-                    }
+                    className={clsx(
+                      root ? "" : "ml-4 border-l border-neutral-200 dark:border-neutral-800",
+                      "group duration-200 ease-out",
+                    )}
                     type="multiple"
                   >
                     <FolderItem value="item-1" className="">
@@ -140,10 +141,10 @@ export function FileList({
                     </FolderItem>
                   </FolderRoot>
                 : <div
-                    className={
-                      "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-800 " +
-                      (root ? "" : "ml-4 border-l border-neutral-200 dark:border-neutral-800")
-                    }
+                    className={clsx(
+                      root ? "" : "ml-4 border-l border-neutral-200 dark:border-neutral-800",
+                      "group flex items-center gap-4 p-1 pl-7 duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-800",
+                    )}
                   >
                     <button
                       className="flex w-full items-center gap-1"

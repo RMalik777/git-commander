@@ -28,6 +28,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useToast } from "@/components/ui/use-toast";
 
 import { FolderOpen, List as ListIcon, Minus, Plus, RefreshCw, Undo } from "lucide-react";
+import { clsx } from "clsx";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
@@ -477,12 +478,12 @@ export function Staging({
                   <div className="STG_2 UST_2 STG_4 UST_4">
                     {child.children ?
                       <FolderRoot
-                        className={
-                          "duration-200 ease-out " +
-                          (root ? "-ml-1" : (
+                        className={clsx(
+                          root ? "-ml-1" : (
                             "ml-4 border-l border-neutral-200 dark:border-neutral-800"
-                          ))
-                        }
+                          ),
+                          "duration-200 ease-out",
+                        )}
                         type="multiple"
                         defaultValue={["item"]}
                       >
@@ -495,12 +496,12 @@ export function Staging({
                         </FolderItem>
                       </FolderRoot>
                     : <div
-                        className={
-                          "group flex items-center gap-4 p-1 duration-200 ease-out hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900 " +
-                          (root ? "pl-6" : (
+                        className={clsx(
+                          root ? "pl-6" : (
                             "ml-4 border-l border-neutral-200 pl-7 dark:border-neutral-800"
-                          ))
-                        }
+                          ),
+                          "group flex items-center gap-4 p-1 duration-200 ease-out hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900",
+                        )}
                       >
                         <Icons name={child.name} />
                         <div className="STG_3 UST_3 flex w-full items-center justify-between">

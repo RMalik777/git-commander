@@ -14,6 +14,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useToast } from "@/components/ui/use-toast";
 
 import { Save, FileWarning, X } from "lucide-react";
+import { clsx } from "clsx";
 
 import { Icons } from "@/components/Icons";
 
@@ -194,10 +195,10 @@ export function Monaco({
               </Tooltip>
 
               <p
-                className={
-                  (unsaved ? "visible opacity-100" : "invisible opacity-0") +
-                  " font-medium duration-200 ease-out starting:opacity-0"
-                }
+                className={clsx(
+                  unsaved ? "visible opacity-100" : "invisible opacity-0",
+                  "font-medium duration-200 ease-out starting:opacity-0",
+                )}
               >
                 Warning! you have unsaved changes
               </p>

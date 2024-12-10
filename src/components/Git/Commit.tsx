@@ -32,6 +32,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
 import { Info, TriangleAlert } from "lucide-react";
+import { clsx } from "clsx";
 
 import { driver } from "driver.js";
 
@@ -213,9 +214,10 @@ export function Commit({
                 />
                 <Alert
                   variant="warning"
-                  className={
-                    (userName == "" && showAlert ? "block" : "hidden") + " duration-200 ease-out"
-                  }
+                  className={clsx(
+                    userName == "" && showAlert ? "block" : "hidden",
+                    "duration-200 ease-out",
+                  )}
                 >
                   <TriangleAlert className="h-4 w-4" />
                   <AlertTitle>Warning</AlertTitle>
