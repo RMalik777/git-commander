@@ -511,9 +511,9 @@ checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
 name = "chrono"
-version = "0.4.38"
+version = "0.4.39"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a21f936df1771bf62b77f047b726c4625ff2e8aa607c01ec06e5a05bd8463401"
+checksum = "7e36cc9d416881d2e24f9a963be5fb1cd90966419ac844274161d10488b3e825"
 dependencies = [
  "android-tzdata",
  "iana-time-zone",
@@ -2104,9 +2104,9 @@ checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
 name = "libc"
-version = "0.2.167"
+version = "0.2.168"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "09d6582e104315a817dff97f75133544b2e094ee22447d2acf4a74e189ba06fc"
+checksum = "5aaeb2981e0606ca11d79718f8bb01164f1d6ed75080182d3abf017e6d244b6d"
 
 [[package]]
 name = "libloading"
@@ -3957,7 +3957,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs-extra"
 version = "0.0.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#017975ad5243183c13143289410028e07084e9a9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#d7e23048eb42d197b94667dff74f88fc608366ee"
 dependencies = [
  "log",
  "serde",
@@ -3969,7 +3969,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "0.0.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#017975ad5243183c13143289410028e07084e9a9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#d7e23048eb42d197b94667dff74f88fc608366ee"
 dependencies = [
  "log",
  "serde",
@@ -3981,7 +3981,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-window-state"
 version = "0.1.1"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#017975ad5243183c13143289410028e07084e9a9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#d7e23048eb42d197b94667dff74f88fc608366ee"
 dependencies = [
  "bincode",
  "bitflags 2.6.0",
