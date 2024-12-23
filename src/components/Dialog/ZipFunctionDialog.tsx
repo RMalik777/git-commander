@@ -52,6 +52,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
 import { BarLoader } from "react-spinners";
+import { clsx } from "clsx";
 
 import { displayNotificationNotFocus } from "@/lib/functions";
 
@@ -322,7 +323,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
               <BarLoader
                 width="100%"
                 speedMultiplier={0.8}
-                className={(isLoading ? "" : "!w-0") + " transition-all duration-200 ease-out"}
+                className={clsx(isLoading ? "" : "!w-0", "transition-all duration-200 ease-out")}
               />
               <DialogClose asChild>
                 <Button variant="outline" type="reset" onClick={() => reset()}>

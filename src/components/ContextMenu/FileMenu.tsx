@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import { writeText } from "@tauri-apps/api/clipboard";
 import { removeFile, type FileEntry } from "@tauri-apps/api/fs";
@@ -54,7 +54,6 @@ export function FileMenu({
             onClick={() => {
               navigate("/editor", {
                 state: { path: `${dir}\\${target.path}` },
-                viewTransition: true,
               });
             }}
           >

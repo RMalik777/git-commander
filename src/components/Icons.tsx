@@ -1,4 +1,5 @@
 import DOMPurify from "dompurify";
+
 import { cn } from "@/lib/utils";
 
 import {
@@ -65,13 +66,13 @@ import {
   siTailwindcss,
   siTauri,
   siToml,
+  siTurborepo,
   siTypescript,
   siVercel,
   siVite,
   siVitest,
   siVuedotjs,
   siYaml,
-  siTurborepo,
 } from "simple-icons";
 
 interface Params {
@@ -85,8 +86,8 @@ export function Icons(params: Readonly<Params>) {
   fileNameWithoutExt?.pop();
   const fileName = fileNameWithoutExt?.join(".").toLowerCase();
 
-  const iconsClass = cn("h-4 w-4 min-w-4 min-h-4 text-current", params.className);
-  const si_Class = " fill-current";
+  const iconsClass = cn("h-4 min-h-4 w-4 min-w-4 text-current", params.className);
+  const si_Class = "fill-current";
 
   let iconsVar: SimpleIcon | undefined;
   // DATABASE

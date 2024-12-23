@@ -1,7 +1,7 @@
 import { Command } from "@tauri-apps/api/shell";
 
 import { useEffect, useLayoutEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router";
 
 import { setLastCommitMessage } from "@/lib/Redux/gitSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
@@ -44,6 +44,7 @@ import {
   Undo2,
 } from "lucide-react";
 import { HashLoader, PulseLoader } from "react-spinners";
+import { clsx } from "clsx";
 
 import * as git from "@/lib/git";
 
@@ -320,10 +321,10 @@ export function Toolbar() {
           <TooltipProvider delayDuration={100}>
             <ul className="flex flex-row items-center gap-6 sm:gap-12">
               <li
-                className={
-                  (fetchAmount > 0 ? "border-b border-r border-t pr-2" : "") +
-                  " box-border flex h-10 items-center rounded-md duration-200 ease-out dark:border-neutral-800"
-                }
+                className={clsx(
+                  fetchAmount > 0 ? "border-b border-r border-t pr-2" : "",
+                  "box-border flex h-10 items-center rounded-md duration-200 ease-out dark:border-neutral-800",
+                )}
               >
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -380,7 +381,7 @@ export function Toolbar() {
                       }}
                     >
                       <RefreshCcw
-                        className={(isFetching ? "animate-spin" : "") + " absolute min-h-fit"}
+                        className={clsx(isFetching ? "animate-spin" : "", "absolute min-h-fit")}
                       />
                     </Button>
                   </TooltipTrigger>
@@ -391,26 +392,28 @@ export function Toolbar() {
 
                 <Tooltip disableHoverableContent>
                   <TooltipTrigger
-                    className={
-                      (fetchAmount > 0 ?
+                    className={clsx(
+                      fetchAmount > 0 ?
                         "visible w-fit min-w-5 opacity-100"
-                      : "invisible w-0 opacity-100") +
-                      " flex h-full items-center text-lg font-medium duration-200 ease-out"
-                    }
+                      : "invisible w-0 opacity-100",
+                      "flex h-full items-center text-lg font-medium duration-200 ease-out",
+                    )}
                   >
                     <MoveDown
-                      className={
-                        (fetchAmount > 0 ?
+                      className={clsx(
+                        fetchAmount > 0 ?
                           "translate-x-0 scale-100 opacity-100"
-                        : "-translate-x-8 scale-0 opacity-0") + " min-w-fit duration-200 ease-out"
-                      }
+                        : "-translate-x-8 scale-0 opacity-0",
+                        "min-w-fit duration-200 ease-out",
+                      )}
                     />
                     <span
-                      className={
-                        (fetchAmount > 0 ?
+                      className={clsx(
+                        fetchAmount > 0 ?
                           "translate-x-0 scale-100 opacity-100"
-                        : "-translate-x-10 scale-0 opacity-0") + " duration-200 ease-out"
-                      }
+                        : "-translate-x-10 scale-0 opacity-0",
+                        "duration-200 ease-out",
+                      )}
                     >
                       {fetchAmount}
                     </span>
@@ -511,17 +514,18 @@ export function Toolbar() {
                           size={24}
                           speedMultiplier={1.2}
                           color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
-                          className={
-                            (isPulling ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0") +
-                            " relative duration-300 ease-out"
-                          }
+                          className={clsx(
+                            isPulling ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0",
+                            "relative duration-300 ease-out",
+                          )}
                         />
                         <ArrowDownToLine
-                          className={
-                            (isPulling ?
+                          className={clsx(
+                            isPulling ?
                               "-rotate-90 scale-0 opacity-0"
-                            : "rotate-0 scale-100 opacity-100") + " absolute duration-300 ease-out"
-                          }
+                            : "rotate-0 scale-100 opacity-100",
+                            "absolute duration-300 ease-out",
+                          )}
                         />
                       </Button>
                     </TooltipTrigger>
@@ -591,18 +595,19 @@ export function Toolbar() {
                           size={24}
                           speedMultiplier={1.2}
                           color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
-                          className={
-                            (isPushing ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0") +
-                            " relative duration-300 ease-out"
-                          }
+                          className={clsx(
+                            isPushing ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0",
+                            "relative duration-300 ease-out",
+                          )}
                         />
 
                         <ArrowUpToLine
-                          className={
-                            (isPushing ?
+                          className={clsx(
+                            isPushing ?
                               "-rotate-90 scale-0 opacity-0"
-                            : "rotate-0 scale-100 opacity-100") + " absolute duration-300 ease-out"
-                          }
+                            : "rotate-0 scale-100 opacity-100",
+                            "absolute duration-300 ease-out",
+                          )}
                         />
                       </Button>
                     </TooltipTrigger>
@@ -669,7 +674,7 @@ export function Toolbar() {
             </MenubarTrigger>
             <MenubarContent>
               <MenubarItem asChild>
-                <NavLink to="/settings" className="" viewTransition>
+                <NavLink to="/settings" className="">
                   <p className="text-base">{username}</p>
                 </NavLink>
               </MenubarItem>
@@ -729,7 +734,6 @@ export function Toolbar() {
                   <NavLink
                     to="/settings"
                     className="TB_9 hidden sm:block"
-                    viewTransition
                     onClick={() => {
                       if (localStorage.getItem("username") !== null) return;
                       setTimeout(() => {
@@ -747,7 +751,7 @@ export function Toolbar() {
                         setTimeout(() => {
                           highlighter.destroy();
                         }, 5000);
-                      }, 1);
+                      }, 10);
                     }}
                   >
                     <p className="text-base">{username}</p>
@@ -803,23 +807,24 @@ export function Toolbar() {
                   }}
                 >
                   <Sun
-                    className={
-                      (themeMode == "Light" ? "rotate-0 scale-100" : "rotate-90 scale-0") +
-                      " absolute duration-200 ease-out"
-                    }
+                    className={clsx(
+                      themeMode == "Light" ? "rotate-0 scale-100" : "rotate-90 scale-0",
+                      "absolute duration-200 ease-out",
+                    )}
                   />
                   <Moon
-                    className={
-                      (themeMode == "Dark" ? "rotate-0 scale-100" : "rotate-90 scale-0") +
-                      " absolute duration-200 ease-out"
-                    }
+                    className={clsx(
+                      themeMode == "Dark" ? "rotate-0 scale-100" : "rotate-90 scale-0",
+                      "absolute duration-200 ease-out",
+                    )}
                   />
                   <SunMoon
-                    className={
-                      (themeMode !== "Dark" && themeMode !== "Light" ?
+                    className={clsx(
+                      themeMode !== "Dark" && themeMode !== "Light" ?
                         "rotate-0 scale-100"
-                      : "-rotate-90 scale-0") + " absolute duration-200 ease-out"
-                    }
+                      : "-rotate-90 scale-0",
+                      "absolute duration-200 ease-out",
+                    )}
                   />
                 </Button>
               </TooltipTrigger>

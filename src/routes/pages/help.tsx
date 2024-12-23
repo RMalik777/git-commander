@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 
 import { CircleArrowRight, GraduationCap, History, Info } from "lucide-react";
 
@@ -30,7 +30,6 @@ export default function Help() {
             key={item.link}
             to={item.link}
             className="flex w-full cursor-pointer flex-row items-center justify-between rounded border bg-neutral-50 p-4 duration-200 ease-out hover:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-900 hover:dark:bg-neutral-800"
-            viewTransition
           >
             <div className="flex flex-row items-center gap-2">
               {item.icon}

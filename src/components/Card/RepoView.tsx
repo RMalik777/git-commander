@@ -37,6 +37,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { removeRepo, setRepo } from "@/lib/Redux/repoSlice";
 import { removePullMsg } from "@/lib/Redux/pullMsg";
 import { removeFiles, setFiles } from "@/lib/Redux/fileList";
+import { clsx } from "clsx";
 
 export function RepoView() {
   const dir = useAppSelector((state) => state.repo.directory);
@@ -120,7 +121,7 @@ export function RepoView() {
       dispatch(setFiles(fileList));
       await fileStore.set("fileList", fileList);
       await fileStore.save();
-      
+
       localStorage.removeItem("zipLocation");
       localStorage.removeItem("fetchAmount");
     }
@@ -204,10 +205,10 @@ export function RepoView() {
         <Button
           disabled={dir == ""}
           variant="link"
-          className={
-            (dir ? "" : "hidden") +
-            " h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg"
-          }
+          className={clsx(
+            dir ? "" : "hidden",
+            "h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg",
+          )}
           onClick={() => {
             if (dir) openFolder(dir);
           }}

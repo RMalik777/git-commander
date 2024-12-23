@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -15,8 +15,9 @@ import {
   Package,
   Settings,
 } from "lucide-react";
+import { clsx } from "clsx";
 
-const iconClass = "min-w-fit z-10";
+const iconClass = clsx("z-10 min-w-fit");
 const menuItem = [
   {
     name: "Home",
@@ -64,19 +65,19 @@ export function Navbar() {
 
   return (
     <aside
-      className={
-        "border-r border-neutral-200 bg-white px-3 py-3 transition-all duration-150 ease-out dark:border-neutral-700 dark:bg-neutral-950 " +
-        (navOpen ? "w-1/6 min-w-fit" : "w-16 min-w-fit")
-      }
+      className={clsx(
+        navOpen ? "w-1/6 min-w-fit" : "w-16 min-w-fit",
+        "border-r border-neutral-200 bg-white px-3 py-3 transition-all duration-150 ease-out dark:border-neutral-700 dark:bg-neutral-950",
+      )}
     >
       <nav
-        className={
-          "flex h-full flex-col justify-between duration-200 ease-out" +
-          (navOpen ? "items-end" : "items-center")
-        }
+        className={clsx(
+          navOpen ? "items-end" : "items-center",
+          "flex h-full flex-col justify-between duration-200 ease-out",
+        )}
       >
         <TooltipProvider delayDuration={50}>
-          <ul className={"flex w-full flex-col gap-4 " + (navOpen ? "self-end" : "")}>
+          <ul className={clsx(navOpen ? "self-end" : "", "flex w-full flex-col gap-4")}>
             {menuItem.map((item) => {
               return (
                 <li key={item.link} className="w-full">
@@ -84,14 +85,14 @@ export function Navbar() {
                     <TooltipTrigger asChild>
                       <Button
                         asChild
-                        className={
-                          "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out " +
-                          (navOpen ? "w-full" : "")
-                        }
+                        className={clsx(
+                          navOpen ? "w-full" : "",
+                          "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out",
+                        )}
                         size="icon"
                         variant={currentPath.pathname == item.link ? "default" : "ghost"}
                       >
-                        <NavLink to={item.link} className="group block h-fit w-full" viewTransition>
+                        <NavLink to={item.link} className="group block h-fit w-full">
                           {item.icon}
                           {navOpen ? item.name : ""}
                         </NavLink>

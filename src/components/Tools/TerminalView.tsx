@@ -8,6 +8,7 @@ import { ClipboardAddon } from "@xterm/addon-clipboard";
 import "@xterm/xterm/css/xterm.css";
 
 import { Terminal as TerminalIcon } from "lucide-react";
+import { clsx } from "clsx";
 
 import { Button } from "@/components/ui/button";
 
@@ -79,10 +80,10 @@ export function TerminalView() {
       <div
         id="terminal"
         ref={terminalElement}
-        className={
-          (openTerminal ? "block" : "hidden") +
-          " h-full max-h-60 min-h-52 w-full animate-in slide-in-from-bottom"
-        }
+        className={clsx(
+          openTerminal ? "block" : "hidden",
+          "h-full max-h-60 min-h-52 w-full animate-in slide-in-from-bottom",
+        )}
       ></div>
     </footer>
   );

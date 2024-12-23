@@ -4,7 +4,7 @@ import { HelpNavbar } from "@/components/Navbar/HelpNavbar";
 import { Separator } from "@/components/ui/separator";
 import { buttonVariants } from "@/components/ui/button";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -155,7 +155,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 1);
+        }, 10);
       },
     },
   ];
@@ -193,7 +193,7 @@ export default function Tutorial() {
             ],
             onDestroyed: () => navigate("/help/tutorial"),
           }).drive();
-        }, 1);
+        }, 10);
       },
     },
     {
@@ -214,7 +214,7 @@ export default function Tutorial() {
                     "Click on the Clone button to clone a git repository from a remote server.",
                   onNextClick: () => {
                     (window.document.querySelector(".CR_1") as HTMLElement)?.click();
-                    setTimeout(() => tour.moveNext(), 1);
+                    setTimeout(() => tour.moveNext(), 10);
                   },
                 },
               },
@@ -259,7 +259,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 1);
+        }, 10);
       },
     },
     {
@@ -303,7 +303,7 @@ export default function Tutorial() {
                     const el = window.document.querySelector(".STG_5A");
                     el?.classList.add("flex");
                     el?.classList.remove("hidden");
-                    setTimeout(() => tour.moveNext(), 1);
+                    setTimeout(() => tour.moveNext(), 10);
                   },
                 },
               },
@@ -316,7 +316,7 @@ export default function Tutorial() {
                     const el = window.document.querySelector(".STG_5A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
-                    setTimeout(() => tour.movePrevious(), 1);
+                    setTimeout(() => tour.movePrevious(), 10);
                   },
                 },
               },
@@ -339,7 +339,7 @@ export default function Tutorial() {
                     const el = window.document.querySelector(".STG_8A");
                     el?.classList.add("flex");
                     el?.classList.remove("hidden");
-                    setTimeout(() => tour.moveNext(), 1);
+                    setTimeout(() => tour.moveNext(), 10);
                   },
                 },
               },
@@ -356,13 +356,13 @@ export default function Tutorial() {
                     const el = window.document.querySelector(".STG_8A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
-                    setTimeout(() => tour.movePrevious(), 1);
+                    setTimeout(() => tour.movePrevious(), 10);
                   },
                   onNextClick: () => {
                     const el = window.document.querySelector(".STG_5A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
-                    setTimeout(() => tour.moveNext(), 1);
+                    setTimeout(() => tour.moveNext(), 10);
                   },
                 },
               },
@@ -374,7 +374,7 @@ export default function Tutorial() {
                     const item = window.document.querySelector(".STG_5A");
                     item?.classList.add("flex");
                     item?.classList.remove("hidden");
-                    setTimeout(() => tour.movePrevious(), 1);
+                    setTimeout(() => tour.movePrevious(), 10);
                   },
                 },
               },
@@ -382,7 +382,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 1);
+        }, 10);
       },
     },
     {
@@ -425,7 +425,7 @@ export default function Tutorial() {
                     const el = window.document.querySelector(".UST_5A");
                     el?.classList.add("flex");
                     el?.classList.remove("hidden");
-                    setTimeout(() => tour.moveNext(), 1);
+                    setTimeout(() => tour.moveNext(), 10);
                   },
                 },
               },
@@ -438,7 +438,7 @@ export default function Tutorial() {
                     const el = window.document.querySelector(".UST_5A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
-                    setTimeout(() => tour.movePrevious(), 1);
+                    setTimeout(() => tour.movePrevious(), 10);
                   },
                 },
               },
@@ -461,7 +461,7 @@ export default function Tutorial() {
                     const el = window.document.querySelector(".UST_8A");
                     el?.classList.add("flex");
                     el?.classList.remove("hidden");
-                    setTimeout(() => tour.moveNext(), 1);
+                    setTimeout(() => tour.moveNext(), 10);
                   },
                 },
               },
@@ -478,13 +478,13 @@ export default function Tutorial() {
                     const el = window.document.querySelector(".UST_8A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
-                    setTimeout(() => tour.movePrevious(), 1);
+                    setTimeout(() => tour.movePrevious(), 10);
                   },
                   onNextClick: () => {
                     const el = window.document.querySelector(".UST_5A");
                     el?.classList.add("hidden");
                     el?.classList.remove("flex");
-                    setTimeout(() => tour.moveNext(), 1);
+                    setTimeout(() => tour.moveNext(), 10);
                   },
                 },
               },
@@ -496,7 +496,7 @@ export default function Tutorial() {
                     const item = window.document.querySelector(".UST_5A");
                     item?.classList.add("flex");
                     item?.classList.remove("hidden");
-                    setTimeout(() => tour.movePrevious(), 1);
+                    setTimeout(() => tour.movePrevious(), 10);
                   },
                 },
               },
@@ -504,7 +504,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 1);
+        }, 10);
       },
     },
     {
@@ -555,7 +555,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 1);
+        }, 10);
       },
     },
   ];

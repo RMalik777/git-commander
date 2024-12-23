@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { removeLastCommitMessage } from "@/lib/Redux/gitSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -32,6 +32,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
 import { Info, TriangleAlert } from "lucide-react";
+import { clsx } from "clsx";
 
 import { driver } from "driver.js";
 
@@ -213,9 +214,10 @@ export function Commit({
                 />
                 <Alert
                   variant="warning"
-                  className={
-                    (userName == "" && showAlert ? "block" : "hidden") + " duration-200 ease-out"
-                  }
+                  className={clsx(
+                    userName == "" && showAlert ? "block" : "hidden",
+                    "duration-200 ease-out",
+                  )}
                 >
                   <TriangleAlert className="h-4 w-4" />
                   <AlertTitle>Warning</AlertTitle>
@@ -223,7 +225,7 @@ export function Commit({
                     You haven&apos;t set your username. The commit will be made with the default
                     username. <code>git config --get --global user.name</code>
                     <div className="flex gap-4">
-                      <NavLink to="/settings" viewTransition>
+                      <NavLink to="/settings">
                         <Button
                           type="button"
                           variant="outline"
