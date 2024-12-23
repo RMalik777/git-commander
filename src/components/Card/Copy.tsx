@@ -164,7 +164,7 @@ export function Copy() {
           description: "File has been copied successfully",
         });
       }
-        reset({
+      reset({
         fileList: "",
         destination: values.destination,
       });
