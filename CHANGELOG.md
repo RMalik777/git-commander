@@ -1,3 +1,16 @@
+# [1.22.0](https://github.com/RMalik777/git-commander/compare/v1.21.4...v1.22.0) (2024-12-23)
+
+
+### Bug Fixes
+
+* fix failed submit ([a11f0a0](https://github.com/RMalik777/git-commander/commit/a11f0a030e5d9cf6f920b9ee015b0ee23588e997))
+* tutorial not showing highlighter ([34bef9f](https://github.com/RMalik777/git-commander/commit/34bef9f1f25d25c67a20cb3f1c7a1a19218b89b9))
+
+
+### Features
+
+* copy function read folder recursively ([cc40bb1](https://github.com/RMalik777/git-commander/commit/cc40bb11390f4526b69fd0fc75d497e1f0da20cb))
+
 ## [1.21.4](https://github.com/RMalik777/git-commander/compare/v1.21.3...v1.21.4) (2024-10-30)
 
 
