@@ -164,8 +164,9 @@ export function Copy() {
           description: "File has been copied successfully",
         });
       }
-      reset({
+        reset({
         fileList: "",
+        destination: values.destination,
       });
     } catch (error) {
       if (error instanceof Error) {
@@ -196,6 +197,7 @@ export function Copy() {
       setIsLoading(false);
     }
   }
+  console.log("Destination:", copyForm.getValues("destination"));
 
   return (
     <>
