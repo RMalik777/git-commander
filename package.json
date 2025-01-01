@@ -69,7 +69,7 @@
     "@shikijs/monaco": "^1.24.4",
     "@tauri-apps/cli": "^1.6.3",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.10.2",
+    "@types/node": "^22.10.3",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "@typescript-eslint/parser": "^8.18.2",
