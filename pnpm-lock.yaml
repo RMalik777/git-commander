@@ -138,8 +138,8 @@ importers:
         specifier: ^0.15.0
         version: 0.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       simple-icons:
-        specifier: ^14.1.0
-        version: 14.1.0
+        specifier: ^14.4.0
+        version: 14.4.0
       tauri-plugin-fs-extra-api:
         specifier: github:tauri-apps/tauri-plugin-fs-extra#v1
         version: git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#93ad239a0710f2ac7d7c3421801904be44537ac5
@@ -3526,8 +3526,8 @@ packages:
     resolution: {integrity: sha512-iuh+gPf28RkltuJC7W5MRi6XAjTDCAPC/prJUpQoG4vIP3MJZ+GTydVnodXA7pwvTKb2cA0m9OFZW/cdWy/I/w==}
     engines: {node: '>=6'}
 
-  simple-icons@14.1.0:
-    resolution: {integrity: sha512-4/jkVUqhNpsyx0nqYe4QvBkg6NSxdnOnfs6AfFC5IiFsIqrE7YQveLPrbdEh40PZjEQZ20RG8HKbRjEcigJbPg==}
+  simple-icons@14.4.0:
+    resolution: {integrity: sha512-eR4WWGF2/dMn6Na7wQZ9nUnGQg4CC9MnqYUlKKfIO0kQ79BdwyFS2L+X/MIxArULsh/IE0U48d4r9N4JVPicIQ==}
     engines: {node: '>=0.12.18'}
 
   skin-tone@2.0.0:
@@ -7582,7 +7582,7 @@ snapshots:
       figures: 2.0.0
       pkg-conf: 2.1.0
 
-  simple-icons@14.1.0: {}
+  simple-icons@14.4.0: {}
 
   skin-tone@2.0.0:
     dependencies:
