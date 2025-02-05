@@ -1,3 +1,11 @@
+## [1.22.1](https://github.com/RMalik777/git-commander/compare/v1.22.0...v1.22.1) (2025-02-05)
+
+
+### Bug Fixes
+
+* fix wrong lock file ([68fe341](https://github.com/RMalik777/git-commander/commit/68fe341ec7d4791f7915031d32ef79c5c2591b54))
+* view is not hiding after dismissed ([37da737](https://github.com/RMalik777/git-commander/commit/37da737cc0e271e3acfb3bdc9828d0096e2bce89))
+
 # [1.22.0](https://github.com/RMalik777/git-commander/compare/v1.21.4...v1.22.0) (2024-12-23)
 
 
