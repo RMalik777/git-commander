@@ -16,7 +16,7 @@ export function ChangeView() {
   const [filesChanged, setFilesChanged] = useState(0);
   const [insertions, setInsertions] = useState(0);
   const [deletions, setDeletions] = useState(0);
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(localStorage.getItem("showChanges") === "true");
 
   const incomingChanges = useAppSelector((state) => state.pullMsg.changes);
   const incomingTagBranch = useAppSelector((state) => state.pullMsg.tagBranch);
@@ -30,7 +30,16 @@ export function ChangeView() {
     setFilesChanged(incomingFilesChanged);
     setInsertions(incomingInsertions);
     setDeletions(incomingDeletions);
-    setShow(true);
+    if (
+      incomingChanges ||
+      incomingTagBranch ||
+      incomingFilesChanged ||
+      incomingInsertions ||
+      incomingDeletions
+    ) {
+      setShow(true);
+      localStorage.setItem("showChanges", "true");
+    }
   }, [
     incomingChanges,
     incomingTagBranch,
@@ -52,9 +61,10 @@ export function ChangeView() {
           <Tooltip disableHoverableContent delayDuration={250}>
             <TooltipTrigger asChild>
               <button
-                className="group absolute right-4 top-4"
+                className="group absolute top-4 right-4"
                 onClick={() => {
                   setShow(false);
+                  localStorage.removeItem("showChanges");
                   toast({
                     title: "Dismissed",
                     action: (
@@ -62,6 +72,7 @@ export function ChangeView() {
                         altText="Undoing Closed changes view"
                         onClick={() => {
                           setShow(true);
+                          localStorage.setItem("showChanges", "true");
                         }}
                       >
                         Undo
@@ -86,7 +97,7 @@ export function ChangeView() {
             <span className="text-red-500">{deletions} </span>deletions (-)
           </CardTitle>
         </CardHeader>
-        <CardContent className="whitespace-pre-wrap leading-7">
+        <CardContent className="leading-7 whitespace-pre-wrap">
           <span className="text-xl font-semibold">Changes:</span>
           <br />
           {changes}
