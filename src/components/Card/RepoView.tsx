@@ -137,20 +137,29 @@ export function RepoView() {
       setErrorMsg("Error! Folder does not exist");
       sessionStorage.setItem("errorMsg", "Error! Folder does not exist");
     } else {
-      const data = await git.checkGit(path);
-      if (data.isGitRepo) {
-        sessionStorage.setItem("isGitRepo", data.isGitRepo.toString());
-        sessionStorage.setItem("showError", (!data.isGitRepo).toString());
-        sessionStorage.setItem("errorMsg", data?.errorMsg?.toString() ?? "");
-      } else {
+      try {
+        await git.checkRepository(path);
+        setIsGitRepo(true);
+        sessionStorage.setItem("isGitRepo", "true");
+        setShowError(false);
+        sessionStorage.setItem("showError", "false");
+        setErrorMsg("");
+        sessionStorage.removeItem("errorMsg");
+      } catch (error) {
         dispatch(setRepo({ name: "" }));
+        setShowError(true);
         sessionStorage.setItem("showError", "true");
         localStorage.removeItem("currentRepoName");
+        if (error?.toString().includes("not a git repository")) {
+          setIsGitRepo(false);
+          sessionStorage.setItem("isGitRepo", "false");
+          setErrorMsg("Folder is not a git repository");
+          sessionStorage.setItem("errorMsg", "Folder is not a git repository");
+        } else {
+          setErrorMsg(error?.toString() ?? "Unknown error");
+          sessionStorage.setItem("errorMsg", error?.toString() ?? "");
+        }
       }
-      setIsGitRepo(data.isGitRepo);
-      setShowError(!data.isGitRepo);
-      sessionStorage.setItem("showError", (!data.isGitRepo).toString());
-      setErrorMsg(data.errorMsg);
     }
   }
   useEffect(() => {
@@ -217,13 +226,12 @@ export function RepoView() {
             <code>{dir}</code>
           </p>
         </Button>
+        <p>{showError.toString()}</p>
         {showError ?
           <Alert variant="destructive">
             <Info className="h-4 w-4" />
             <AlertTitle>Error!</AlertTitle>
-            <AlertDescription>
-              {errorMsg?.replace("Error!", "") ?? "Folder is not a git repository"}
-            </AlertDescription>
+            <AlertDescription>{errorMsg ?? "Unknown Error"}</AlertDescription>
           </Alert>
         : null}
         <AlertDialog open={parentDialog} onOpenChange={setParentDialog}>

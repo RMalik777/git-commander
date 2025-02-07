@@ -48,28 +48,20 @@ export async function branchList(path: string) {
   return await response;
 }
 
-export async function checkGit(path: string) {
-  let errorMsg: string | undefined;
-  let isGitRepo = false;
-  const response = new Promise((resolve, reject) => {
-    const command = new Command("git 1 args", ["status"], { cwd: path });
-    command.on("close", () => resolve({ isGitRepo, errorMsg }));
-    command.on("error", (error) => {
-      console.error(error);
+export async function checkRepository(path: string) {
+  const command = new Command("git 1 args", ["status"], { cwd: path });
+  return new Promise<true>((resolve, reject) => {
+    command.spawn().catch((error) => {
       reject(new Error(error));
     });
-    command.stdout.on("data", () => (isGitRepo = true));
+    command.stdout.on("data", () => resolve(true));
     command.stderr.on("data", (data) => {
-      isGitRepo = false;
-      if (data.match(/fatal: not a git repository/gi)) errorMsg = "Folder is not a git repository";
+      reject(new Error(data));
     });
-    command.spawn().catch((error) => {
-      errorMsg = error;
-      console.error(error);
+    command.on("error", (error) => {
       reject(new Error(error));
     });
   });
-  return await response;
 }
 
 export async function checkGitStatus(path: string) {
