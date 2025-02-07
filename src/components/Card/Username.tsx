@@ -20,6 +20,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
+import { configUsernameReplace } from "@/lib/git";
+
 const formSchema = z.object({
   username: z
     .string()
@@ -40,9 +42,11 @@ export function UsernameConfig() {
   const { handleSubmit, reset } = usernameForm;
 
   const username = useAppSelector((state) => state.user.value);
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const repoDir = useAppSelector((state) => state.repo.directory);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     dispatch(setUser(values.username));
     localStorage.setItem("username", values.username);
+    await configUsernameReplace(repoDir, values.username);
     toast({
       title: "Username Changed",
       description: (

@@ -1,5 +1,4 @@
 import { Command } from "@tauri-apps/api/shell";
-import { useAppSelector } from "./Redux/hooks";
 
 export async function addAll(path: string) {
   const command = new Command("git 2 args", ["add", "."], { cwd: path });
@@ -152,6 +151,26 @@ export async function commitAll(path: string, message: string) {
   return await commit(path, message);
 }
 
+export async function configGetUsername(path: string) {
+  const response = new Promise<string>((resolve, reject) => {
+    const command = new Command("git 3 args", ["config", "--get", "user.name"], {
+      cwd: path,
+    });
+    let result: string;
+    command.on("close", () => {
+      resolve(result);
+    });
+    command.on("error", (error) => reject(new Error(`command error: "${error}"`)));
+    command.stdout.on("data", (line) => {
+      result = line.trim();
+    });
+    command.spawn().catch((error) => {
+      reject(new Error(error));
+    });
+  });
+  return await response;
+}
+
 export async function configUsername(path: string, username: string) {
   const command = new Command("git username", ["config", "user.name", username], {
     cwd: path,
@@ -161,8 +180,7 @@ export async function configUsername(path: string, username: string) {
     throw new Error(error);
   });
 }
-export async function configUsernameReplace(path: string) {
-  const username = useAppSelector((state) => state.user.value);
+export async function configUsernameReplace(path: string, username: string) {
   const command = new Command(
     "git username replace",
     ["config", "--replace-all", "user.name", username],
