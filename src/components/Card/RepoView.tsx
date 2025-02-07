@@ -226,7 +226,6 @@ export function RepoView() {
             <code>{dir}</code>
           </p>
         </Button>
-        <p>{showError.toString()}</p>
         {showError ?
           <Alert variant="destructive">
             <Info className="h-4 w-4" />
