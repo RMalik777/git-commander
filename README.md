@@ -25,22 +25,24 @@ cd git-commander
 ### Install Dependencies
 
 ```shell
-npm i
+pnpm i
 ```
 
 ### Run Development Build
 
 ```shell
-npm run tauri dev
+pnpm run tauri dev
 ```
 
 ### Build Production App
 
 ```shell
-npm run tauri build
+pnpm run tauri build
 ```
 
 The finished build will be located inside `./src-tauri/target/release/bundle` in the form of `.msi` inside msi folder and `.exe` inside nsis folder.
+
+More details about building the app can be found in the [Build Section](#build).
 
 ## How to use
 
@@ -336,6 +338,20 @@ This program use SQLite as the database. When you clone repository, the database
 On `/src-tauri` folder, there will be a file name `.env.example`. Copy the file and rename it to `.env`. The default path is the same path that reference for the production database (reference inside `/src-tauri/src/db.rs`) which is `C:/Users/<username>/Documents/Git-Commander/database.sqlite`. You can change the path to your desired path if you want.
 
 #### Migrations
+
+## Build
+
+To build the app, run the command below:
+
+```shell
+pnpm run tauri build
+```
+
+But building the app will only create the app for the current OS. If you want to build for another OS, you have to build it on the OS you want to build for. For example, if you want to build for Windows, you have to run the build command on a Windows Machine. The build may take a long time to finish, depending on your machine. To solve this we can use **GitHub Actions**.
+
+### GitHub Actions
+
+GitHub Actions will build the app automatically. The workflow file is located inside `.github/workflows/build.yml`. The workflow will build the app for Windows, MacOS, and Linux. The workflow will also manage versioning and bump the version based on [Angular Commits](https://github.com/semantic-release/semantic-release?tab=readme-ov-file#commit-message-format). The build will be uploaded as an artifact and can be downloaded from the GitHub Release page.
 
 ## References
 
