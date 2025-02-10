@@ -40,56 +40,51 @@ import { removeFiles, setFiles } from "@/lib/Redux/fileList";
 import { clsx } from "clsx";
 
 export function RepoView() {
-  const dir = useAppSelector((state) => state.repo.directory);
+  const repoDir = useAppSelector((state) => state.repo.directory);
+  const repoName = useAppSelector((state) => state.repo.name);
+  const branchName = useAppSelector((state) => state.repo.branch);
+  const commitCount = useAppSelector((state) => state.repo.commitcount);
+  const remoteUrl = useAppSelector((state) => state.repo.remoteUrl);
   const dispatch = useAppDispatch();
 
   const [isGitRepo, setIsGitRepo] = useState(sessionStorage.getItem("isGitRepo") === "true");
   const [errorMsg, setErrorMsg] = useState(sessionStorage.getItem("errorMsg") ?? null);
   const [showError, setShowError] = useState(sessionStorage.getItem("showError") == "true");
-  useEffect(() => {
-    if (!dir || dir == "") return;
-    async function getDiff() {
-      const diffStore = new Store(".diffList.json");
-      const data = await git.showChanged(dir);
-      const data2 = await git.ShowUntrackedFiles(dir);
-      const toEntry = data.map((item: string) => {
-        return {
-          name: item.split("/").pop(),
-          path: item.replace(/\//gi, "\\"),
-        } as FileEntry;
-      });
-      const toEntry2 = await data2.map((item: string) => {
-        return {
-          name: item.split("/").pop(),
-          path: item.replace(/\//gi, "\\"),
-        } as FileEntry;
-      });
-      toEntry.push(...toEntry2);
-      dispatch(setRepo({ diff: toEntry }));
-      diffStore.set("diffList", toEntry);
-      diffStore.save();
-    }
-    getDiff();
-  }, [dir]);
 
-  useEffect(() => {
-    if (!dir || dir == "") return;
-    async function getStaged() {
-      const stagedStore = new Store(".stagedList.json");
-      const data = await git.showStaged(dir);
-      const toEntry = data.map((item: string) => {
-        return {
-          name: item.split("/").pop(),
-          path: item.replace(/\//gi, "\\"),
-        } as FileEntry;
-      });
-      dispatch(setRepo({ staged: toEntry }));
-      stagedStore.set("stagedList", toEntry);
-      stagedStore.save();
-    }
-    getStaged();
-  }, [dir]);
-
+  async function getDiff() {
+    const diffStore = new Store(".diffList.json");
+    const data = await git.showChanged(repoDir);
+    const data2 = await git.showUntrackedFiles(repoDir);
+    const toEntry = data.map((item: string) => {
+      return {
+        name: item.split("/").pop(),
+        path: item.replace(/\//gi, "\\"),
+      } as FileEntry;
+    });
+    const toEntry2 = await data2.map((item: string) => {
+      return {
+        name: item.split("/").pop(),
+        path: item.replace(/\//gi, "\\"),
+      } as FileEntry;
+    });
+    toEntry.push(...toEntry2);
+    dispatch(setRepo({ diff: toEntry }));
+    diffStore.set("diffList", toEntry);
+    diffStore.save();
+  }
+  async function getStaged() {
+    const stagedStore = new Store(".stagedList.json");
+    const data = await git.showStaged(repoDir);
+    const toEntry = data.map((item: string) => {
+      return {
+        name: item.split("/").pop(),
+        path: item.replace(/\//gi, "\\"),
+      } as FileEntry;
+    });
+    dispatch(setRepo({ staged: toEntry }));
+    stagedStore.set("stagedList", toEntry);
+    stagedStore.save();
+  }
   async function openFile() {
     const toOpen = await open({
       multiple: false,
@@ -145,6 +140,12 @@ export function RepoView() {
         sessionStorage.setItem("showError", "false");
         setErrorMsg("");
         sessionStorage.removeItem("errorMsg");
+        const remoteOrigin = await git.getRemoteOrigin(path);
+        dispatch(setRepo({ remoteUrl: remoteOrigin }));
+        localStorage.setItem("remoteUrl", remoteOrigin);
+        const commitcount = await git.getCommitCount(path);
+        dispatch(setRepo({ commitcount }));
+        localStorage.setItem("commitCount", commitcount.toString());
       } catch (error) {
         dispatch(setRepo({ name: "" }));
         setShowError(true);
@@ -163,7 +164,7 @@ export function RepoView() {
     }
   }
   useEffect(() => {
-    if (!dir || dir == "") {
+    if (!repoDir || repoDir == "") {
       setShowError(false);
       sessionStorage.setItem("showError", "false");
       sessionStorage.removeItem("isGitRepo");
@@ -184,8 +185,10 @@ export function RepoView() {
       localStorage.removeItem("fetchAmount");
       return;
     }
-    checkDir(dir);
-  }, [dir]);
+    checkDir(repoDir);
+    getDiff();
+    getStaged();
+  }, [repoDir]);
 
   const [parentDialog, setParentDialog] = useState(false);
   const [parent, setParent] = useState(sessionStorage.getItem("parent") ?? null);
@@ -196,34 +199,42 @@ export function RepoView() {
     return data;
   }
   useEffect(() => {
-    if (!dir || dir == "") return;
+    if (!repoDir || repoDir == "") return;
     if (isGitRepo) {
-      getNearestParent(dir);
+      getNearestParent(repoDir);
     }
-  }, [dir]);
-
+  }, [repoDir]);
   return (
     <Card className="h-fit flex-grow">
       <CardHeader className="">
-        <CardTitle>Git Repository</CardTitle>
+        <CardTitle>{repoName !== "" ? repoName : "Repository"}</CardTitle>
         <CardDescription className="flex max-w-full flex-col text-balance leading-relaxed">
-          Select your local git repository
+          {remoteUrl !== "" ?
+            <a
+              href={remoteUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hover:underline"
+            >
+              {remoteUrl}
+            </a>
+          : "Select your local git repository"}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         <Button
-          disabled={dir == ""}
+          disabled={repoDir == ""}
           variant="link"
           className={clsx(
-            dir ? "" : "hidden",
+            repoDir ? "" : "hidden",
             "h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg",
           )}
           onClick={() => {
-            if (dir) openFolder(dir);
+            if (repoDir) openFolder(repoDir);
           }}
         >
           <p className="">
-            <code>{dir}</code>
+            <code>{repoDir}</code>
           </p>
         </Button>
         {showError ?
@@ -283,6 +294,8 @@ export function RepoView() {
             localStorage.removeItem("stagedList");
             localStorage.removeItem("fetchAmount");
             localStorage.removeItem("zipLocation");
+            localStorage.removeItem("remoteUrl");
+            localStorage.removeItem("commitCount");
             dispatch(removeRepo());
             dispatch(removePullMsg());
             dispatch(removeFiles());

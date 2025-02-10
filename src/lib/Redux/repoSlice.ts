@@ -9,6 +9,9 @@ export interface RepoState {
   branch: string;
   diff: FileEntry[];
   staged: FileEntry[];
+  remoteUrl: string;
+  commitcount: number;
+  contributorsCount: number;
 }
 
 const diffStore = new Store(".diffList.json");
@@ -20,6 +23,9 @@ const initialState: RepoState = {
   branch: localStorage.getItem("currentBranch") ?? "",
   diff: (await diffStore.get("diffList")) ?? [],
   staged: (await stagedStore.get("stagedList")) ?? [],
+  remoteUrl: localStorage.getItem("remoteUrl") ?? "",
+  commitcount: Number(localStorage.getItem("commitCount")) || 0,
+  contributorsCount: Number(localStorage.getItem("contributorsCount")) || 0,
 };
 
 export const repoSlice = createSlice({
@@ -35,6 +41,9 @@ export const repoSlice = createSlice({
         branch?: string;
         diff?: FileEntry[];
         staged?: FileEntry[];
+        remoteUrl?: string;
+        commitcount?: number;
+        contributorsCount?: number;
       }>,
     ) => {
       state.hash = action.payload.hash ?? state.hash;
@@ -43,6 +52,9 @@ export const repoSlice = createSlice({
       state.branch = action.payload.branch ?? state.branch;
       state.diff = action.payload.diff ?? state.diff;
       state.staged = action.payload.staged ?? state.staged;
+      state.remoteUrl = action.payload.remoteUrl ?? state.remoteUrl;
+      state.commitcount = action.payload.commitcount ?? state.commitcount;
+      state.contributorsCount = action.payload.contributorsCount ?? state.contributorsCount;
     },
     removeRepo: (state) => {
       state.hash = "";
@@ -51,6 +63,9 @@ export const repoSlice = createSlice({
       state.branch = "";
       state.diff = [];
       state.staged = [];
+      state.remoteUrl = "";
+      state.commitcount = 0;
+      state.contributorsCount = 0;
     },
   },
 });
