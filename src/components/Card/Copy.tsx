@@ -74,8 +74,8 @@ export function Copy() {
       overwrite: false,
       source: source,
       destination: destination,
-      rememberSource: false,
-      rememberDestination: false,
+      rememberSource: !!localStorage.getItem("source"),
+      rememberDestination: !!localStorage.getItem("destination"),
     },
   });
   const { handleSubmit, reset } = copyForm;
@@ -166,6 +166,8 @@ export function Copy() {
       }
       reset({
         fileList: "",
+        rememberDestination: values.rememberDestination,
+        rememberSource: values.rememberSource,
         destination: values.destination,
       });
     } catch (error) {
