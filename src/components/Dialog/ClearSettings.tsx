@@ -104,6 +104,18 @@ export function ClearSettings({
       dispatch(removeLastCommitMessage());
       dispatch(removePullMsg());
       removedItems.push("All settings");
+      try {
+        await db.deleteAllRemoteRepo();
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "An error occurred while clearing the repository list",
+          duration: 3000,
+          variant: "destructive",
+        });
+        console.error(error);
+        return;
+      }
     } else {
       if (data.username) {
         localStorage.removeItem("username");
