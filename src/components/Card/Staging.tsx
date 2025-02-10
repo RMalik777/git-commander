@@ -328,7 +328,7 @@ export function Staging({
                   className="STG_8 STG_9A h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
                   onClick={async () => {
                     try {
-                      await git.addAll(dir);
+                      await git.addAllFiles(dir);
                     } catch (error) {
                       console.error(error);
                       if (error instanceof Error) {

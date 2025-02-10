@@ -220,7 +220,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button disabled={fileList.length === 0} variant="default" size="sm">
-          Open Zip Dialog
+          Zip
         </Button>
       </DialogTrigger>
       <DialogContent>

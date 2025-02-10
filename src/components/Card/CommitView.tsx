@@ -21,7 +21,7 @@ export function CommitView({
   title,
   desc,
   type,
-}: Readonly<{ title: string; desc: string; type: "Local" | "Remote" | "All" }>) {
+}: Readonly<{ title: string; desc: string; type: "local" | "remote" | "all" }>) {
   const dispatch = useAppDispatch();
   const localCommit = useAppSelector((state) => state.git.localCommit);
   const remoteCommit = useAppSelector((state) => state.git.remoteCommit);
@@ -32,8 +32,8 @@ export function CommitView({
   const currentRepoHash = useAppSelector((state) => state.repo.hash);
 
   const [formattedCommit, setFormattedCommit] = useState<CommitFormat[]>(
-    type === "Local" ? localCommit
-    : type === "Remote" ? remoteCommit
+    type === "local" ? localCommit
+    : type === "remote" ? remoteCommit
     : allCommit,
   );
 
@@ -50,15 +50,15 @@ export function CommitView({
   }
   async function getCommit() {
     let result;
-    if (type === "Local" || type === "Remote") {
+    if (type === "local" || type === "remote") {
       const commit = await git.getAllCommit(currentRepoDir, currentBranch, type);
       result = formatCommit(commit);
       dispatch(setLocalCommit(result));
     } else {
-      const local = await git.getAllCommit(currentRepoDir, currentBranch, "Local");
+      const local = await git.getAllCommit(currentRepoDir, currentBranch, "local");
       const localCommit = formatCommit(local);
       dispatch(setLocalCommit(localCommit));
-      const remote = await git.getAllCommit(currentRepoDir, currentBranch, "Remote");
+      const remote = await git.getAllCommit(currentRepoDir, currentBranch, "remote");
       const remoteCommit = formatCommit(remote);
       dispatch(setRemoteCommit(remoteCommit));
       result = localCommit.concat(remoteCommit);
@@ -79,62 +79,62 @@ export function CommitView({
         commit.hash.toLowerCase().includes(find),
     );
   }, [formattedCommit, search]);
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{desc}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form className="mb-4 flex flex-col items-stretch justify-center gap-2 xs:flex-row xs:items-center xs:justify-end">
-          <Label>Search</Label>
-          <Input
-            disabled={formattedCommit.length === 0}
-            className="w-full xs:w-1/3"
-            type="search"
-            placeholder="Search by Hash, Author or Message"
-            onChange={(e) => setTimeout(() => setSearch(e.target.value), 150)}
-          />
-        </form>
-        <Table className="border-collapse border dark:border-neutral-700">
-          <TableHeader className="">
-            <TableRow>
-              <TableHead>Date and Time</TableHead>
-              <TableHead>Hash</TableHead>
-              <TableHead>Author</TableHead>
-              <TableHead>Message</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredCommit.length > 0 ?
-              filteredCommit.map((commit) => (
-                <TableRow key={commit.hash}>
-                  <TableCell>
-                    {new Date(commit.date).toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}{" "}
-                    {new Date(commit.date).toLocaleTimeString(undefined, {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    })}
-                  </TableCell>
-                  <TableCell className="break-all font-mono">{commit.hash}</TableCell>
-                  <TableCell>{commit.author}</TableCell>
-                  <TableCell className="">{commit.message}</TableCell>
-                </TableRow>
-              ))
-            : <TableRow>
-                <TableCell colSpan={4} className="text-center">
-                  {type === "Local" ? "No Commit waiting to be pushed" : "No Commit"}
-                </TableCell>
+  return formattedCommit.length !== 0 ?
+      <Card>
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{desc}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className="mb-4 flex flex-col items-stretch justify-center gap-2 xs:flex-row xs:items-center xs:justify-end">
+            <Label>Search</Label>
+            <Input
+              disabled={formattedCommit.length === 0}
+              className="w-full xs:w-1/3"
+              type="search"
+              placeholder="Search by Hash, Author or Message"
+              onChange={(e) => setTimeout(() => setSearch(e.target.value), 150)}
+            />
+          </form>
+          <Table className="border-collapse border dark:border-neutral-700">
+            <TableHeader className="">
+              <TableRow>
+                <TableHead>Date and Time</TableHead>
+                <TableHead>Hash</TableHead>
+                <TableHead>Author</TableHead>
+                <TableHead>Message</TableHead>
               </TableRow>
-            }
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  );
+            </TableHeader>
+            <TableBody>
+              {filteredCommit.length > 0 ?
+                filteredCommit.map((commit) => (
+                  <TableRow key={commit.hash}>
+                    <TableCell>
+                      {new Date(commit.date).toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}{" "}
+                      {new Date(commit.date).toLocaleTimeString(undefined, {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      })}
+                    </TableCell>
+                    <TableCell className="break-all font-mono">{commit.hash}</TableCell>
+                    <TableCell>{commit.author}</TableCell>
+                    <TableCell className="">{commit.message}</TableCell>
+                  </TableRow>
+                ))
+              : <TableRow>
+                  <TableCell colSpan={4} className="text-center">
+                    {type === "local" ? "No Commit waiting to be pushed" : "No Commit"}
+                  </TableCell>
+                </TableRow>
+              }
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    : null;
 }

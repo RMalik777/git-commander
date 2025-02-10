@@ -61,7 +61,7 @@ export function ChangeView() {
           <Tooltip disableHoverableContent delayDuration={250}>
             <TooltipTrigger asChild>
               <button
-                className="group absolute top-4 right-4"
+                className="group absolute right-4 top-4"
                 onClick={() => {
                   setShow(false);
                   localStorage.removeItem("showChanges");
@@ -97,7 +97,7 @@ export function ChangeView() {
             <span className="text-red-500">{deletions} </span>deletions (-)
           </CardTitle>
         </CardHeader>
-        <CardContent className="leading-7 whitespace-pre-wrap">
+        <CardContent className="whitespace-pre-wrap leading-7">
           <span className="text-xl font-semibold">Changes:</span>
           <br />
           {changes}

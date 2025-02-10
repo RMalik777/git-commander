@@ -155,7 +155,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 10);
+        }, 300);
       },
     },
   ];
@@ -193,7 +193,7 @@ export default function Tutorial() {
             ],
             onDestroyed: () => navigate("/help/tutorial"),
           }).drive();
-        }, 10);
+        }, 300);
       },
     },
     {
@@ -259,7 +259,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 10);
+        }, 300);
       },
     },
     {
@@ -382,7 +382,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 10);
+        }, 1000);
       },
     },
     {
@@ -504,7 +504,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 10);
+        }, 1000);
       },
     },
     {
@@ -555,7 +555,7 @@ export default function Tutorial() {
             onDestroyed: () => navigate("/help/tutorial"),
           });
           tour.drive();
-        }, 10);
+        }, 1000);
       },
     },
   ];

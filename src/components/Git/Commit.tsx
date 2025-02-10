@@ -183,7 +183,7 @@ export function Commit({
         <Card className="w-full">
           <CardHeader>
             <CardTitle>Commit</CardTitle>
-            <CardDescription>Commit changes made to remote repository</CardDescription>
+            <CardDescription>Commit changes you made to repository</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid w-full items-center gap-4">
@@ -277,10 +277,7 @@ export function Commit({
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button type="reset" variant="outline" size="sm">
-              Cancel
-            </Button>
+          <CardFooter className="flex justify-end">
             <Button type="submit" size="sm" disabled={repoName == ""} className="CMT_3">
               Commit
             </Button>

@@ -34,8 +34,8 @@ export default function Index() {
         <OctagonAlert className="h-4 w-4" />
         <AlertTitle>This program may not worked as intended</AlertTitle>
         <AlertDescription>
-          No <span className="font-semibold">git</span> detected on your system. Please install git
-          to use this program.{" "}
+          No <span className="font-semibold">git</span> detected on your system. Make sure you
+          install git properly to use this program.{" "}
           <a
             href="https://git-scm.com/downloads"
             target="_blank"

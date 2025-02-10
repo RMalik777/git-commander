@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 
 import { setLastCommitMessage } from "@/lib/Redux/gitSlice";
+import { setUser } from "@/lib/Redux/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setPullMsg } from "@/lib/Redux/pullMsg";
 import { setRepo } from "@/lib/Redux/repoSlice";
@@ -93,6 +94,12 @@ export function Toolbar() {
   const repoName = useAppSelector((state) => state.repo.name);
   const dirLocation = useAppSelector((state) => state.repo.directory);
   useLayoutEffect(() => {
+    async function readUserName() {
+      const username = await git.configGetUsername(dirLocation);
+      dispatch(setUser(username));
+    }
+    readUserName();
+
     if (repoName === "" || currentBranch === "") {
       setBranchList({ local: [], remote: [] });
     }
@@ -100,7 +107,7 @@ export function Toolbar() {
       try {
         const target: string = await git.currentBranch(dirLocation);
         const newBranchList: { local: string[]; remote: string[] } =
-          await git.branchList(dirLocation);
+          await git.getBranchList(dirLocation);
         setBranchList(newBranchList);
         const showedBranch = newBranchList?.local?.find(
           (branch) => branch?.toLowerCase() === target?.toLowerCase(),
@@ -730,10 +737,15 @@ export function Toolbar() {
           <TooltipProvider delayDuration={100}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="sm" className="CMT_1" asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="CMT_1 text-base max-xs:hidden"
+                  asChild
+                >
                   <NavLink
                     to="/settings"
-                    className="TB_9 hidden sm:block"
+                    className="TB_9"
                     onClick={() => {
                       if (localStorage.getItem("username") !== null) return;
                       setTimeout(() => {
@@ -751,10 +763,10 @@ export function Toolbar() {
                         setTimeout(() => {
                           highlighter.destroy();
                         }, 5000);
-                      }, 10);
+                      }, 50);
                     }}
                   >
-                    <p className="text-base">{username}</p>
+                    {username}
                   </NavLink>
                 </Button>
               </TooltipTrigger>
