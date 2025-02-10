@@ -253,7 +253,7 @@ export function Copy() {
                           <span className="rounded bg-neutral-200 px-2 py-1 font-mono text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50">
                             Enter
                           </span>
-                          )
+                          ). Case Sensitive.
                         </FormDescription>
                         <FormMessage />
                       </div>
