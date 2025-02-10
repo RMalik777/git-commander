@@ -116,7 +116,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
     try {
       await createDir(tempDir);
       for (const [index, file] of fileList.entries()) {
-        const prepend = `${(index + 1).toLocaleString(undefined, { minimumIntegerDigits: 2, useGrouping: false })}_`;
+        const prepend = `${(index + 1).toLocaleString(undefined, { minimumIntegerDigits: 2, useGrouping: false })}.`;
         if ((await metadata(file.path)).isDir) {
           await createDir(`${tempDir}\\${prepend}${file.name}`);
           const childDir = await readDir(file.path, { recursive: true });
