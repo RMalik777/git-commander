@@ -233,7 +233,7 @@ export function Copy() {
         </CardHeader>
         <CardContent className="">
           <Form {...copyForm}>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-end gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-end gap-2">
               <FormField
                 control={copyForm.control}
                 name="fileList"
@@ -265,7 +265,7 @@ export function Copy() {
                 control={copyForm.control}
                 name="overwrite"
                 render={({ field }) => (
-                  <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start">
+                  <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start pb-4">
                     <FormControl>
                       <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
