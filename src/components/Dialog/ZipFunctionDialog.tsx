@@ -41,6 +41,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -59,6 +60,7 @@ import { displayNotificationNotFocus } from "@/lib/functions";
 const formSchema = z.object({
   archiveName: z.string().min(1, { message: "Please enter a name for the file" }),
   archiveFormat: z.string().min(1, { message: "Please choose a file type" }),
+  removeSpace: z.boolean().optional().default(false),
   location: z.string().optional().default(""),
 });
 
@@ -116,17 +118,23 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
     try {
       await createDir(tempDir);
       for (const [index, file] of fileList.entries()) {
+        let filename;
+        if (values.removeSpace) {
+          filename = file.name?.replaceAll(" ", "_");
+        } else {
+          filename = file.name;
+        }
         const prepend = `${(index + 1).toLocaleString(undefined, { minimumIntegerDigits: 3, useGrouping: false })}.`;
         if ((await metadata(file.path)).isDir) {
-          await createDir(`${tempDir}\\${prepend}${file.name}`);
+          await createDir(`${tempDir}\\${prepend}${filename}`);
           const childDir = await readDir(file.path, { recursive: true });
           for (const child of childDir) {
-            await recursiveCopy(child, child.path, `${tempDir}\\${prepend}${file.name}\\`);
+            await recursiveCopy(child, child.path, `${tempDir}\\${prepend}${filename}\\`);
           }
         } else {
-          if (!(await exists(file.path))) throw new Error(`File ${file.name} not found`);
+          if (!(await exists(file.path))) throw new Error(`File ${filename} not found`);
           await writeBinaryFile({
-            path: `${tempDir}\\${prepend}${file.name}`,
+            path: `${tempDir}\\${prepend}${filename}`,
             contents: await readBinaryFile(file.path),
           });
         }
@@ -164,7 +172,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
         toast({
           title: "File Compressed Succesfully",
           action: (
-            <ToastAction onClick={async () => openFolder(currentDir)} altText="Open Folder">
+            <ToastAction onClick={async () => openFolder(values.location)} altText="Open Folder">
               Open Folder
             </ToastAction>
           ),
@@ -319,7 +327,24 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                 </FormItem>
               )}
             ></FormField>
-            <DialogFooter>
+            <FormField
+              control={zipFunctionForm.control}
+              name="removeSpace"
+              render={({ field }) => (
+                <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800">
+                  <FormControl>
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Remove Space</FormLabel>
+                    <FormDescription>
+                      Space will be removed and replaced with underscore ( _ )
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            ></FormField>
+            <DialogFooter className="pt-4">
               <BarLoader
                 width="100%"
                 speedMultiplier={0.8}
