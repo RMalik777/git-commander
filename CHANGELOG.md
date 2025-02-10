@@ -1,3 +1,10 @@
+## [1.23.1](https://github.com/RMalik777/git-commander/compare/v1.23.0...v1.23.1) (2025-02-10)
+
+
+### Bug Fixes
+
+* change file rename to dot instead underscore ([d2bdc4e](https://github.com/RMalik777/git-commander/commit/d2bdc4ece6182848ad29866efa5e33fd212ae485))
+
 # [1.23.0](https://github.com/RMalik777/git-commander/compare/v1.22.1...v1.23.0) (2025-02-10)
 
 
