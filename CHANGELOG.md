@@ -1,3 +1,16 @@
+# [1.23.0](https://github.com/RMalik777/git-commander/compare/v1.22.1...v1.23.0) (2025-02-10)
+
+
+### Bug Fixes
+
+* don't show waiting commit if there are no waiting commit ([1b333ff](https://github.com/RMalik777/git-commander/commit/1b333ffd3992ee0161bfc398598d01a845296fe5))
+* read name from git instead of user input ([182799e](https://github.com/RMalik777/git-commander/commit/182799ec27787b3f47fc774b5bd0b33a4dd716d4))
+
+
+### Features
+
+* show remote url ([a749f1b](https://github.com/RMalik777/git-commander/commit/a749f1b5e9aa289ee1718e96566ba44997b6c94b))
+
 ## [1.22.1](https://github.com/RMalik777/git-commander/compare/v1.22.0...v1.22.1) (2025-02-05)
 
 
