@@ -245,7 +245,7 @@ export function Copy() {
                     <FormControl>
                       <div className="space-y-2">
                         <Textarea
-                          className=""
+                          className="CPY_1"
                           {...field}
                           placeholder={`example.txt\nexample2.txt\nexample3.txt`}
                         />
@@ -267,7 +267,7 @@ export function Copy() {
                 control={copyForm.control}
                 name="overwrite"
                 render={({ field }) => (
-                  <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start pb-4">
+                  <FormItem className="CPY_2 relative flex w-full flex-row items-start gap-2 space-y-0 self-start pb-4">
                     <FormControl>
                       <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
@@ -280,7 +280,7 @@ export function Copy() {
                   control={copyForm.control}
                   name="source"
                   render={({ field }) => (
-                    <FormItem className="w-full">
+                    <FormItem className="CPY_3 w-full">
                       <FormLabel>Source Folder</FormLabel>
                       <FormControl>
                         <div className="flex flex-row gap-2">
@@ -295,6 +295,7 @@ export function Copy() {
                           <Button
                             type="button"
                             variant="outline"
+                            className="CPY_4"
                             onClick={async () => {
                               const toOpen = await open({
                                 multiple: true,
@@ -320,7 +321,7 @@ export function Copy() {
                   control={copyForm.control}
                   name="destination"
                   render={({ field }) => (
-                    <FormItem className="w-full">
+                    <FormItem className="CPY_6 w-full">
                       <FormLabel>Destination Folder</FormLabel>
                       <FormControl>
                         <div className="flex flex-row gap-2">
@@ -334,6 +335,7 @@ export function Copy() {
                           <Button
                             type="button"
                             variant="outline"
+                            className="CPY_7"
                             onClick={async () => {
                               const toOpen = await open({
                                 multiple: false,
@@ -359,7 +361,7 @@ export function Copy() {
                   control={copyForm.control}
                   name="rememberSource"
                   render={({ field }) => (
-                    <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
+                    <FormItem className="CPY_5 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
                       <FormControl>
                         <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
@@ -374,7 +376,7 @@ export function Copy() {
                   control={copyForm.control}
                   name="rememberDestination"
                   render={({ field }) => (
-                    <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
+                    <FormItem className="CPY_8 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
                       <FormControl>
                         <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
@@ -404,7 +406,7 @@ export function Copy() {
                     turned on
                   </p>
                 </div>
-                <Button className="max-md:w-full" type="submit">
+                <Button className="CPY_9 max-md:w-full" type="submit">
                   Copy
                 </Button>
               </div>

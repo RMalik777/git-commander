@@ -227,7 +227,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button disabled={fileList.length === 0} variant="default" size="sm">
+        <Button disabled={fileList.length === 0} variant="default" size="sm" className="ZIP_11">
           Zip
         </Button>
       </DialogTrigger>
@@ -243,7 +243,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
               control={zipFunctionForm.control}
               name="archiveName"
               render={({ field }) => (
-                <FormItem className="space-y-1">
+                <FormItem className="ZIP_12 space-y-1">
                   <FormLabel>Archive Name</FormLabel>
                   <FormControl>
                     <>
@@ -260,7 +260,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
               control={zipFunctionForm.control}
               name="archiveFormat"
               render={({ field }) => (
-                <FormItem className="space-y-1">
+                <FormItem className="ZIP_13 space-y-1">
                   <FormLabel>Archive Format</FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -290,7 +290,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
               control={zipFunctionForm.control}
               name="location"
               render={({ field }) => (
-                <FormItem className="space-y-1">
+                <FormItem className="ZIP_15 space-y-1">
                   <FormLabel>Location</FormLabel>
                   <FormControl>
                     <>
@@ -331,7 +331,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
               control={zipFunctionForm.control}
               name="removeSpace"
               render={({ field }) => (
-                <FormItem className="relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800">
+                <FormItem className="ZIP_16 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -355,7 +355,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                   Close
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading} className="ZIP_17">
                 Zip
               </Button>
             </DialogFooter>

@@ -63,7 +63,7 @@ export function ZipTable({
           <TableHead>
             <button
               type="button"
-              className="flex gap-2"
+              className="ZIP_4 flex gap-2"
               onClick={() => {
                 setSortCat("name");
                 if (sort === "asc") {
@@ -94,7 +94,7 @@ export function ZipTable({
           <TableHead>
             <button
               type="button"
-              className="flex gap-2"
+              className="ZIP_5 flex gap-2"
               onClick={() => {
                 setSortCat("path");
                 if (sort === "asc") {
@@ -169,6 +169,7 @@ export function ZipTable({
                     : <Button
                         variant="outline"
                         size="sm"
+                        className="ZIP_6"
                         onClick={() => {
                           setEditValue(realIndex + 1);
                           setEditId(realIndex);
@@ -197,11 +198,11 @@ export function ZipTable({
                   </button>
                 </TableCell>
                 <TableCell className="break-all">{item.path}</TableCell>
-                <TableCell>
+                <TableCell className="ZIP_7">
                   <div className="flex flex-col items-center justify-center gap-1 sm:flex-row">
                     <Button
                       size="icon"
-                      className="h-8 w-8"
+                      className="ZIP_8 h-8 w-8"
                       variant="outline"
                       disabled={index === 0}
                       onClick={() => {
@@ -227,7 +228,7 @@ export function ZipTable({
                     </Button>
                     <Button
                       size="icon"
-                      className="h-8 w-8"
+                      className="ZIP_9 h-8 w-8"
                       variant="outline"
                       disabled={index === filteredFileList.length - 1}
                       onClick={() => {
@@ -253,7 +254,7 @@ export function ZipTable({
                     </Button>
                     <Button
                       size="icon"
-                      className="h-8 w-8"
+                      className="ZIP_10 h-8 w-8"
                       variant="destructive"
                       onClick={() => {
                         filteredFileList.splice(index, 1);

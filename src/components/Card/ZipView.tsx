@@ -54,7 +54,7 @@ export function ZipView() {
           <Label>Search</Label>
           <Input
             disabled={fileList.length == 0}
-            className="w-full md:w-1/2"
+            className="ZIP_3 w-full md:w-1/2"
             type="text"
             placeholder="Search file or folder"
             onChange={(e) => setTimeout(() => setSearch(e.target.value), 100)}

@@ -158,6 +158,253 @@ export default function Tutorial() {
         }, 300);
       },
     },
+    {
+      id: "CPY",
+      title: "Copy File",
+      description: "Guide on how to copy file from source to destination.",
+      tour: () => {
+        navigate("/zip");
+        setTimeout(() => {
+          const tour = driver({
+            showProgress: true,
+            steps: [
+              {
+                element: ".CPY_1",
+                popover: {
+                  title: "Input File Name",
+                  description:
+                    "Input the file name you want to copy separated with newline (enter). Pay attention to casing (Capitalize) because the input is case sensitive.",
+                },
+              },
+              {
+                element: ".CPY_2",
+                popover: {
+                  title: "Overwrite Function",
+                  description:
+                    "If you want to overwrite file with the same name, check this box. Otherwise, the copy will be cancelled.",
+                },
+              },
+              {
+                element: ".CPY_3",
+                popover: {
+                  title: "Enter Source",
+                  description:
+                    "Enter the source folder where you want to copy the file. The program will search this folder recursively and will give a dialog if duplicate is found.",
+                },
+              },
+              {
+                element: ".CPY_4",
+                popover: {
+                  title: "Select Source",
+                  description: "Or you can select the source folder",
+                },
+              },
+              {
+                element: ".CPY_5",
+                popover: {
+                  title: "Remember Source",
+                  description:
+                    "Source will be filled automatically if you checked this box. Useful if you always copy from this source",
+                },
+              },
+              {
+                element: ".CPY_6",
+                popover: {
+                  title: "Enter Destination",
+                  description:
+                    "Enter the Destination folder where you want to copy the file. The program will search this folder recursively and will give a dialog if duplicate is found.",
+                },
+              },
+              {
+                element: ".CPY_7",
+                popover: {
+                  title: "Select Destination",
+                  description: "Or you can select the Destination folder",
+                },
+              },
+              {
+                element: ".CPY_8",
+                popover: {
+                  title: "Remember Destination",
+                  description: "Destination will be filled automatically if you checked this box.",
+                },
+              },
+              {
+                element: ".CPY_9",
+                popover: {
+                  title: "Copy",
+                  description:
+                    "Click the copy button, it will search the file and copy it. It may take a long time based on folder size.",
+                },
+              },
+              {
+                popover: {
+                  title: "Done",
+                  description: "Once the process is finished, notification will show",
+                },
+              },
+            ],
+            onDestroyed: () => navigate("/help/tutorial"),
+          });
+          tour.drive();
+        }, 1000);
+      },
+    },
+    {
+      id: "ZIP",
+      title: "Compress File",
+      description: "Guide on how to sort and zip file.",
+      tour: () => {
+        navigate("/zip");
+        setTimeout(() => {
+          const tour = driver({
+            showProgress: true,
+            steps: [
+              {
+                element: ".ZIP_1",
+                popover: {
+                  title: "Add File",
+                  description:
+                    "Click to add file you want to add to the table. You can add multiple file with single input.",
+                },
+              },
+              {
+                element: ".ZIP_2",
+                popover: {
+                  title: "Add Folder",
+                  description:
+                    "If you want to add folder, don't use click file. If you add folder only the FOLDER that will be added to the table. The file inside the folder will remain untouched (it will be zipped, but name won't be changed).",
+                },
+              },
+              {
+                element: ".ZIP_3",
+                popover: {
+                  title: "Search",
+                  description: "Search the file or folder inside the table.",
+                },
+              },
+              {
+                element: ".ZIP_4",
+                popover: {
+                  title: "Sort Based on Name",
+                  description:
+                    "Click to sort the table based on name. Click again to reverse the order.",
+                },
+              },
+              {
+                element: ".ZIP_5",
+                popover: {
+                  title: "Sort Based on Location",
+                  description:
+                    "Click to sort the table based on location. Click again to reverse the order.",
+                },
+              },
+              {
+                element: ".ZIP_6",
+                popover: {
+                  title: "Custom Sort",
+                  description:
+                    "Click the number to change the order. If you want to put an item as first item, click the number and then add number 1.",
+                },
+              },
+              {
+                element: ".ZIP_7",
+                popover: {
+                  title: "Action",
+                  description: "This is the action button",
+                },
+              },
+              {
+                element: ".ZIP_8",
+                popover: {
+                  title: "Move Up",
+                  description: "Click to move this item up by 1",
+                },
+              },
+              {
+                element: ".ZIP_9",
+                popover: {
+                  title: "Move Down",
+                  description: "Click to move this item down by 1",
+                },
+              },
+              {
+                element: ".ZIP_10",
+                popover: {
+                  title: "Remove",
+                  description: "Click to remove the file or folder from the table.",
+                },
+              },
+              {
+                element: ".ZIP_11",
+                popover: {
+                  title: "Zip",
+                  description:
+                    "Click to zip the file or folder. The file will be zipped based on the order in the table. If you want to change the order, you can do it before zipping.",
+                  onNextClick: () => {
+                    const el: HTMLButtonElement | null = window.document.querySelector(".ZIP_11");
+                    el?.click();
+                    setTimeout(() => tour.moveNext(), 100);
+                  },
+                },
+              },
+              {
+                element: ".ZIP_12",
+                popover: {
+                  title: "Output Name",
+                  description: "Input the name of the output file without the extension.",
+                },
+              },
+              {
+                element: ".ZIP_13",
+                popover: {
+                  title: "Compression Format",
+                  description: "Select compression format you want to use. The default is zip.",
+                },
+              },
+              {
+                element: ".ZIP_14",
+                popover: {
+                  title: "Compression Level",
+                  description: "Select compression level you want to use. The default is 0.",
+                },
+              },
+              {
+                element: ".ZIP_15",
+                popover: {
+                  title: "Output Location",
+                  description: "Choose where you want to store the file.",
+                },
+              },
+              {
+                element: ".ZIP_16",
+                popover: {
+                  title: "Remove Space",
+                  description:
+                    "Remove all space character from the output name and replace it with underscore ('_').",
+                },
+              },
+              {
+                element: ".ZIP_17",
+                popover: {
+                  title: "Zip",
+                  description:
+                    "Click to start the zipping process. It may take a long time based on the file size.",
+                },
+              },
+              {
+                popover: {
+                  title: "Done",
+                  description: "Once the process is finished, notification will show",
+                },
+              },
+            ],
+            onDestroyed: () => navigate("/help/tutorial"),
+          });
+          tour.drive();
+        }, 1000);
+      },
+    },
   ];
   const tutorialGit = [
     {
