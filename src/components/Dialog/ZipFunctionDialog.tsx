@@ -60,6 +60,7 @@ import { displayNotificationNotFocus } from "@/lib/functions";
 const formSchema = z.object({
   archiveName: z.string().min(1, { message: "Please enter a name for the file" }),
   archiveFormat: z.string().min(1, { message: "Please choose a file type" }),
+  compressionLevel: z.string().min(1, { message: "Please choose a compression level" }),
   removeSpace: z.boolean().optional().default(false),
   location: z.string().optional().default(""),
 });
@@ -67,6 +68,15 @@ const formSchema = z.object({
 const compressionFormat = [
   { value: "zip", label: "Zip" },
   { value: "7z", label: "7z" },
+];
+
+const compressionLevelOptions = [
+  { value: "0", label: "None" },
+  { value: "1", label: "Fastest" },
+  { value: "3", label: "Fast" },
+  { value: "5", label: "Normal" },
+  { value: "7", label: "Maximum" },
+  { value: "9", label: "Ultra" },
 ];
 
 export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[] }>) {
@@ -80,6 +90,8 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       archiveName: "",
       archiveFormat: localStorage.getItem("format") ?? "",
       location: currentDir,
+      removeSpace: false,
+      compressionLevel: "0",
     },
   });
   const { handleSubmit, reset } = zipFunctionForm;
@@ -113,7 +125,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       title: "Compressing File",
       description: "Please wait...",
     });
-    const tempDir = `${currentDir}\\.$temp`;
+    const tempDir = `${values.location}\\.$temp`;
     // FLOW: CREATE TEMP FOLDER -> DUPLICATE FILE TO TEMP FOLDER -> RENAME FILE -> CREATE TXT FILE -> ZIP FILE -> DELETE TEMP FOLDER
     try {
       await createDir(tempDir);
@@ -166,6 +178,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
         `-t${values.archiveFormat}`,
         `${values.location}\\${values.archiveName}.${values.archiveFormat}`,
         `@${tempDir}\\zip.txt`,
+        `-mx=${values.compressionLevel}`,
       ]);
       const output = await command.execute();
       if (output.code == 0) {
@@ -281,6 +294,36 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                     </SelectContent>
                   </Select>
                   <FormDescription>Choose the type of the compressed file</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            ></FormField>
+            <FormField
+              disabled={isLoading}
+              control={zipFunctionForm.control}
+              name="compressionLevel"
+              render={({ field }) => (
+                <FormItem className="ZIP_14 space-y-1">
+                  <FormLabel>Compression Level</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={isLoading}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Compression Level" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {compressionLevelOptions?.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Choose compression level (default is None)</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
