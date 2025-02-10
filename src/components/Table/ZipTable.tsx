@@ -280,9 +280,9 @@ export function ZipTable({
       <TableCaption>
         File Name will be converted to{" "}
         <code className="rounded bg-neutral-100 text-neutral-700 duration-150 ease-out dark:bg-neutral-800 dark:text-neutral-200">
-          xx.original-filename
+          xxx.original-filename
         </code>
-        {/* */}. xx is a 2 digit number
+        {/* */}. xxx is a 2 digit number
       </TableCaption>
     </Table>
   );
