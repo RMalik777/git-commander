@@ -107,7 +107,7 @@ export default function Info() {
         </div>
       </div>
 
-      <h2 className="text-xl pt-12 font-medium pb-2">Third Party License</h2>
+      <h2 className="pb-2 pt-12 text-xl font-medium">Third Party License</h2>
       <p className="whitespace-pre-wrap border">{`  7-Zip
   ~~~~~
   License for use and distribution

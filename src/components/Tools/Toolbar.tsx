@@ -107,7 +107,7 @@ export function Toolbar() {
       try {
         const target: string = await git.currentBranch(dirLocation);
         const newBranchList: { local: string[]; remote: string[] } =
-          await git.branchList(dirLocation);
+          await git.getBranchList(dirLocation);
         setBranchList(newBranchList);
         const showedBranch = newBranchList?.local?.find(
           (branch) => branch?.toLowerCase() === target?.toLowerCase(),

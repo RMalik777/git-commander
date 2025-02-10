@@ -26,7 +26,7 @@ export default function Git() {
 
   async function getDiff() {
     const data = await git.showChanged(dir);
-    const data2 = await git.ShowUntrackedFiles(dir);
+    const data2 = await git.showUntrackedFiles(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
@@ -76,7 +76,7 @@ export default function Git() {
       <CommitView
         title="Latest Commit"
         desc="List of local commit that hasn't been pushed to remote repository"
-        type="Local"
+        type="local"
       />
       <Commit getDiff={getDiff} getStaged={getStaged} />
       <Staging
