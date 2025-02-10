@@ -63,7 +63,7 @@ export function ZipTable({
           <TableHead>
             <button
               type="button"
-              className="ZIP_4 flex gap-2"
+              className="ZIP_4 flex items-center gap-2"
               onClick={() => {
                 setSortCat("name");
                 if (sort === "asc") {
@@ -85,16 +85,16 @@ export function ZipTable({
             >
               File/Folder Name
               {sort === "asc" && sortCat === "name" ?
-                <ArrowUpAZ size={20} />
+                <ArrowUpAZ size={20} className="min-w-fit" />
               : sort === "desc" && sortCat === "name" ?
-                <ArrowDownAZ size={20} />
-              : <ArrowUpDown size={20} />}
+                <ArrowDownAZ size={20} className="min-w-fit" />
+              : <ArrowUpDown size={20} className="min-w-fit" />}
             </button>
           </TableHead>
           <TableHead>
             <button
               type="button"
-              className="ZIP_5 flex gap-2"
+              className="ZIP_5 flex items-center gap-2"
               onClick={() => {
                 setSortCat("path");
                 if (sort === "asc") {
@@ -110,10 +110,10 @@ export function ZipTable({
             >
               Location
               {sort === "asc" && sortCat === "path" ?
-                <ArrowUpAZ size={20} />
+                <ArrowUpAZ size={20} className="min-w-fit" />
               : sort === "desc" && sortCat === "path" ?
-                <ArrowDownAZ size={20} />
-              : <ArrowUpDown size={20} />}
+                <ArrowDownAZ size={20} className="min-w-fit" />
+              : <ArrowUpDown size={20} className="min-w-fit" />}
             </button>
           </TableHead>
           <TableHead className="text-center">Action</TableHead>
