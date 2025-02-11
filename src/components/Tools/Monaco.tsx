@@ -16,7 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Save, FileWarning, X } from "lucide-react";
 import { clsx } from "clsx";
 
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/Tools/Icons";
 
 const allLang = Object.keys(bundledLanguages);
 

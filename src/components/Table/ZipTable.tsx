@@ -25,7 +25,7 @@ import {
 
 import { FileList } from "@/lib/Types/fileList";
 
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/Tools/Icons";
 
 // import { useAutoAnimate } from "@formkit/auto-animate/react";
 

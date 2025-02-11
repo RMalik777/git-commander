@@ -36,7 +36,7 @@ import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 import * as git from "@/lib/Backend/git";
 import { PulseLoader } from "react-spinners";
 
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/Tools/Icons";
 
 export function Staging({
   dir,

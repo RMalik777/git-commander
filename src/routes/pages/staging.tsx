@@ -8,7 +8,7 @@ import { setRepo } from "@/lib/Redux/repoSlice";
 import { setFiles } from "@/lib/Redux/fileList";
 
 import { Staging } from "@/components/Card/Staging";
-import { Commit } from "@/components/Git/Commit";
+import { Commit } from "@/components/Card/Commit";
 import { CommitView } from "@/components/Card/CommitView";
 
 import * as git from "@/lib/Backend/git";

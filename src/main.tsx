@@ -14,9 +14,7 @@ import Help from "./routes/pages/help";
 import HelpLayout from "./routes/pages/help/Layout";
 import Changelog from "./routes/pages/help/changelog";
 import Tutorial from "./routes/pages/help/tutorial";
-import Resource from "./routes/pages/help/resource";
 import Editor from "./routes/pages/editor";
-import Faq from "./routes/pages/help/faq";
 import Info from "./routes/pages/help/info";
 import Zip from "./routes/pages/Zip";
 

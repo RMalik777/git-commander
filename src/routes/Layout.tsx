@@ -4,7 +4,7 @@ import { store } from "@/lib/Redux/store";
 import { Provider } from "react-redux";
 
 import { Navbar } from "@/components/Navbar/Navbar";
-import { Toolbar } from "@/components/Tools/Toolbar";
+import { Toolbar } from "@/components/Navbar/Toolbar";
 import { Toaster } from "@/components/ui/toaster";
 import { TerminalView } from "@/components/Tools/TerminalView";
 
