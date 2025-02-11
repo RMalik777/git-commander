@@ -23,7 +23,7 @@ import {
   Minus,
 } from "lucide-react";
 
-import { FileList } from "@/lib/Types/fileList";
+import { FileList } from "@/lib/Types/FileList";
 
 import { Icons } from "@/components/Tools/Icons";
 

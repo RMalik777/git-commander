@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api";
-import { RepoFormat } from "@/lib/Types/repo";
+import { RepoFormat } from "@/lib/Types/Repo";
 
 /**
  * Checks if a repository name is a duplicate.

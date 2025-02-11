@@ -33,7 +33,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Lightbulb, Plus } from "lucide-react";
 import { clsx } from "clsx";
 
-import { FileList } from "@/lib/Types/fileList";
+import { FileList } from "@/lib/Types/FileList";
 
 const formSchema = z.object({
   location: z

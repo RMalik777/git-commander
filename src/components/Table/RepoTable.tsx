@@ -18,7 +18,7 @@ import { Trash2 } from "lucide-react";
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 import { EditRepo } from "@/components/Dialog/EditRepo";
 
-import type { RepoFormat } from "@/lib/Types/repo";
+import type { RepoFormat } from "@/lib/Types/Repo";
 
 export function RepoTable({
   repos,

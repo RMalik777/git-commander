@@ -19,7 +19,7 @@ import { ZipFunctionDialog } from "@/components/Dialog/ZipFunctionDialog";
 import { ZipTableDialog } from "@/components/Dialog/ZipTableDialog";
 import { ZipTable } from "@/components/Table/ZipTable";
 
-import type { FileList } from "@/lib/Types/fileList";
+import type { FileList } from "@/lib/Types/FileList";
 
 export default function Zip() {
   const { toast } = useToast();
