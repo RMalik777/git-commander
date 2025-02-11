@@ -1,3 +1,16 @@
+/*
+  Tangerang Selatan, 2025.
+
+  Selamat datang di git commander.
+  Jika anda diminta untuk mengerjakan program ini, saya ingin meminta maaf jika repository ini tidak terlalu rapi. Silahkan baca `README.md` untuk informasi lebih lanjut.
+
+  Jika ada yang ingin ditanyakan, jangan sungkan untuk menghubungi saya melalui email:
+  Rafli.Malik@gmail.com
+
+  Terima Kasih,
+  Rafli Malik
+*/
+
 import { useEffect, useState } from "react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -7,7 +20,7 @@ import { OctagonAlert } from "lucide-react";
 import { RepoView } from "@/components/Card/RepoView";
 import { ChangeView } from "@/components/Card/ChangeView";
 
-import * as git from "@/lib/git";
+import * as git from "@/lib/Backend/git";
 
 export default function Index() {
   const [error, setError] = useState(sessionStorage.getItem("git") == "false");

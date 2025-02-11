@@ -41,6 +41,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -54,17 +55,28 @@ import { useToast } from "@/components/ui/use-toast";
 import { BarLoader } from "react-spinners";
 import { clsx } from "clsx";
 
-import { displayNotificationNotFocus } from "@/lib/functions";
+import { displayNotificationNotFocus } from "@/lib/Backend/functions";
 
 const formSchema = z.object({
   archiveName: z.string().min(1, { message: "Please enter a name for the file" }),
   archiveFormat: z.string().min(1, { message: "Please choose a file type" }),
+  compressionLevel: z.string().min(1, { message: "Please choose a compression level" }),
+  removeSpace: z.boolean().optional().default(false),
   location: z.string().optional().default(""),
 });
 
 const compressionFormat = [
   { value: "zip", label: "Zip" },
   { value: "7z", label: "7z" },
+];
+
+const compressionLevelOptions = [
+  { value: "0", label: "None" },
+  { value: "1", label: "Fastest" },
+  { value: "3", label: "Fast" },
+  { value: "5", label: "Normal" },
+  { value: "7", label: "Maximum" },
+  { value: "9", label: "Ultra" },
 ];
 
 export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[] }>) {
@@ -78,6 +90,8 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       archiveName: "",
       archiveFormat: localStorage.getItem("format") ?? "",
       location: currentDir,
+      removeSpace: false,
+      compressionLevel: "0",
     },
   });
   const { handleSubmit, reset } = zipFunctionForm;
@@ -111,22 +125,28 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       title: "Compressing File",
       description: "Please wait...",
     });
-    const tempDir = `${currentDir}\\.$temp`;
+    const tempDir = `${values.location}\\.$temp`;
     // FLOW: CREATE TEMP FOLDER -> DUPLICATE FILE TO TEMP FOLDER -> RENAME FILE -> CREATE TXT FILE -> ZIP FILE -> DELETE TEMP FOLDER
     try {
       await createDir(tempDir);
       for (const [index, file] of fileList.entries()) {
-        const prepend = `${(index + 1).toLocaleString(undefined, { minimumIntegerDigits: 2, useGrouping: false })}.`;
+        let filename;
+        if (values.removeSpace) {
+          filename = file.name?.replaceAll(" ", "_");
+        } else {
+          filename = file.name;
+        }
+        const prepend = `${(index + 1).toLocaleString(undefined, { minimumIntegerDigits: 3, useGrouping: false })}.`;
         if ((await metadata(file.path)).isDir) {
-          await createDir(`${tempDir}\\${prepend}${file.name}`);
+          await createDir(`${tempDir}\\${prepend}${filename}`);
           const childDir = await readDir(file.path, { recursive: true });
           for (const child of childDir) {
-            await recursiveCopy(child, child.path, `${tempDir}\\${prepend}${file.name}\\`);
+            await recursiveCopy(child, child.path, `${tempDir}\\${prepend}${filename}\\`);
           }
         } else {
-          if (!(await exists(file.path))) throw new Error(`File ${file.name} not found`);
+          if (!(await exists(file.path))) throw new Error(`File ${filename} not found`);
           await writeBinaryFile({
-            path: `${tempDir}\\${prepend}${file.name}`,
+            path: `${tempDir}\\${prepend}${filename}`,
             contents: await readBinaryFile(file.path),
           });
         }
@@ -158,13 +178,14 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
         `-t${values.archiveFormat}`,
         `${values.location}\\${values.archiveName}.${values.archiveFormat}`,
         `@${tempDir}\\zip.txt`,
+        `-mx=${values.compressionLevel}`,
       ]);
       const output = await command.execute();
       if (output.code == 0) {
         toast({
           title: "File Compressed Succesfully",
           action: (
-            <ToastAction onClick={async () => openFolder(currentDir)} altText="Open Folder">
+            <ToastAction onClick={async () => openFolder(values.location)} altText="Open Folder">
               Open Folder
             </ToastAction>
           ),
@@ -219,7 +240,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button disabled={fileList.length === 0} variant="default" size="sm">
+        <Button disabled={fileList.length === 0} variant="default" size="sm" className="ZIP_11">
           Zip
         </Button>
       </DialogTrigger>
@@ -235,7 +256,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
               control={zipFunctionForm.control}
               name="archiveName"
               render={({ field }) => (
-                <FormItem className="space-y-1">
+                <FormItem className="ZIP_12 space-y-1">
                   <FormLabel>Archive Name</FormLabel>
                   <FormControl>
                     <>
@@ -252,7 +273,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
               control={zipFunctionForm.control}
               name="archiveFormat"
               render={({ field }) => (
-                <FormItem className="space-y-1">
+                <FormItem className="ZIP_13 space-y-1">
                   <FormLabel>Archive Format</FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -280,9 +301,39 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
             <FormField
               disabled={isLoading}
               control={zipFunctionForm.control}
+              name="compressionLevel"
+              render={({ field }) => (
+                <FormItem className="ZIP_14 space-y-1">
+                  <FormLabel>Compression Level</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={isLoading}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Compression Level" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {compressionLevelOptions?.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Choose compression level (default is None)</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            ></FormField>
+            <FormField
+              disabled={isLoading}
+              control={zipFunctionForm.control}
               name="location"
               render={({ field }) => (
-                <FormItem className="space-y-1">
+                <FormItem className="ZIP_15 space-y-1">
                   <FormLabel>Location</FormLabel>
                   <FormControl>
                     <>
@@ -319,7 +370,24 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                 </FormItem>
               )}
             ></FormField>
-            <DialogFooter>
+            <FormField
+              control={zipFunctionForm.control}
+              name="removeSpace"
+              render={({ field }) => (
+                <FormItem className="ZIP_16 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800">
+                  <FormControl>
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Remove Space</FormLabel>
+                    <FormDescription>
+                      Space will be removed and replaced with underscore ( _ )
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            ></FormField>
+            <DialogFooter className="pt-4">
               <BarLoader
                 width="100%"
                 speedMultiplier={0.8}
@@ -330,7 +398,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
                   Close
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading} className="ZIP_17">
                 Zip
               </Button>
             </DialogFooter>

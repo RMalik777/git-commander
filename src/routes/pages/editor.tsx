@@ -11,7 +11,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-import { Monaco } from "@/components/Monaco";
+import { Monaco } from "@/components/Tools/Monaco";
 
 import { FileX, MessageCircleQuestion } from "lucide-react";
 

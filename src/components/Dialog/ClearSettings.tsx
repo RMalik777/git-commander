@@ -36,7 +36,7 @@ import { PulseLoader } from "react-spinners";
 
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
-import * as db from "@/lib/database";
+import * as db from "@/lib/Backend/database";
 
 const FormSchema = z.object({
   all: z.boolean().default(false).optional(),
@@ -104,6 +104,18 @@ export function ClearSettings({
       dispatch(removeLastCommitMessage());
       dispatch(removePullMsg());
       removedItems.push("All settings");
+      try {
+        await db.deleteAllRemoteRepo();
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "An error occurred while clearing the repository list",
+          duration: 3000,
+          variant: "destructive",
+        });
+        console.error(error);
+        return;
+      }
     } else {
       if (data.username) {
         localStorage.removeItem("username");

@@ -3,7 +3,8 @@ import { FileEntry } from "@tauri-apps/api/fs";
 import { Store } from "tauri-plugin-store-api";
 
 export interface RepoState {
-  hash: string;
+  remoteHash: string;
+  localHash: string;
   name: string;
   directory: string;
   branch: string;
@@ -17,7 +18,8 @@ export interface RepoState {
 const diffStore = new Store(".diffList.json");
 const stagedStore = new Store(".stagedList.json");
 const initialState: RepoState = {
-  hash: localStorage.getItem("currentRepoHash") ?? "",
+  remoteHash: localStorage.getItem("remoteRepoHash") ?? "",
+  localHash: localStorage.getItem("localRepoHash") ?? "",
   name: localStorage.getItem("currentRepoName") ?? "",
   directory: localStorage.getItem("repoDir") ?? "",
   branch: localStorage.getItem("currentBranch") ?? "",
@@ -35,7 +37,8 @@ export const repoSlice = createSlice({
     setRepo: (
       state,
       action: PayloadAction<{
-        hash?: string;
+        remoteHash?: string;
+        localHash?: string;
         name?: string;
         directory?: string;
         branch?: string;
@@ -46,7 +49,8 @@ export const repoSlice = createSlice({
         contributorsCount?: number;
       }>,
     ) => {
-      state.hash = action.payload.hash ?? state.hash;
+      state.remoteHash = action.payload.remoteHash ?? state.remoteHash;
+      state.localHash = action.payload.localHash ?? state.localHash;
       state.name = action.payload.name ?? state.name;
       state.directory = action.payload.directory ?? state.directory;
       state.branch = action.payload.branch ?? state.branch;
@@ -57,7 +61,8 @@ export const repoSlice = createSlice({
       state.contributorsCount = action.payload.contributorsCount ?? state.contributorsCount;
     },
     removeRepo: (state) => {
-      state.hash = "";
+      state.remoteHash = "";
+      state.localHash = "";
       state.name = "";
       state.directory = "";
       state.branch = "";

@@ -23,7 +23,7 @@ import { BarLoader } from "react-spinners";
 
 import { FileMenu } from "@/components/ContextMenu/FileMenu";
 
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/Tools/Icons";
 
 export function FileList({
   dir,

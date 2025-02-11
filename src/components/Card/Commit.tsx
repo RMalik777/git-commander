@@ -36,7 +36,7 @@ import { clsx } from "clsx";
 
 import { driver } from "driver.js";
 
-import * as git from "@/lib/git";
+import * as git from "@/lib/Backend/git";
 
 const formSchema = z.object({
   commitMsg: z
@@ -100,6 +100,9 @@ export function Commit({
           description: "No changes to commit",
         });
       } else {
+        const localHash = await git.getLatestCommitHash(currentRepoDir, currentBranch, "local");
+        dispatch(setRepo({ localHash: localHash }));
+        localStorage.setItem("localRepoHash", localHash);
         toast({
           title: "Successfully Commited",
           description: (
@@ -132,12 +135,13 @@ export function Commit({
                     });
                   }
                   try {
-                    const currentHash = await git.getLatestRemoteCommitHash(
+                    const currentHash = await git.getLatestCommitHash(
                       currentRepoDir,
                       currentBranch,
+                      "remote",
                     );
-                    dispatch(setRepo({ hash: currentHash }));
-                    localStorage.setItem("currentRepoHash", currentHash.toString());
+                    dispatch(setRepo({ remoteHash: currentHash }));
+                    localStorage.setItem("remoteRepoHash", currentHash.toString());
                   } catch (error) {
                     throw Error(error as string);
                   }

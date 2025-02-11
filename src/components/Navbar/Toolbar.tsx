@@ -47,7 +47,7 @@ import {
 import { HashLoader, PulseLoader } from "react-spinners";
 import { clsx } from "clsx";
 
-import * as git from "@/lib/git";
+import * as git from "@/lib/Backend/git";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -483,16 +483,16 @@ export function Toolbar() {
                                 setPullMsg({
                                   tagBranch: matchTag?.[1]?.toString() ?? "",
                                   changes: matchChanges?.[1]?.toString() ?? "",
-                                  filesChanged: parseInt(matchSummary?.[1] ?? 0),
-                                  insertions: parseInt(matchSummary?.[2] ?? 0),
-                                  deletions: parseInt(matchSummary?.[3] ?? 0),
+                                  filesChanged: parseInt(matchSummary?.[1] ?? "0"),
+                                  insertions: parseInt(matchSummary?.[2] ?? "0"),
+                                  deletions: parseInt(matchSummary?.[3] ?? "0"),
                                 }),
                               );
                               const desc = (): string => {
                                 if (matchSummary) {
                                   return `${matchSummary?.[1] ?? 0} files changed, ${matchSummary?.[2] ?? 0} insertions (+), ${matchSummary?.[3] ?? 0} deletions (-)`;
                                 } else {
-                                  return response;
+                                  return response.toString();
                                 }
                               };
                               toast({
@@ -573,12 +573,13 @@ export function Toolbar() {
                               });
                             }
                             try {
-                              const currentHash = await git.getLatestRemoteCommitHash(
+                              const currentHash = await git.getLatestCommitHash(
                                 dirLocation,
                                 currentBranch,
+                                "remote",
                               );
-                              dispatch(setRepo({ hash: currentHash }));
-                              localStorage.setItem("currentRepoHash", currentHash.toString());
+                              dispatch(setRepo({ remoteHash: currentHash }));
+                              localStorage.setItem("remoteRepoHash", currentHash.toString());
                             } catch (error) {
                               throw Error(error as string);
                             }
@@ -645,6 +646,13 @@ export function Toolbar() {
                               title: "Undo Succesfully",
                               description: response,
                             });
+                            const localHash = await git.getLatestCommitHash(
+                              dirLocation,
+                              currentBranch,
+                              "local",
+                            );
+                            dispatch(setRepo({ localHash: localHash }));
+                            localStorage.setItem("localRepoHash", localHash);
                           } catch (error) {
                             console.error(error);
                             if (error instanceof Error) {

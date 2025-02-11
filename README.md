@@ -24,20 +24,22 @@ cd git-commander
 
 ### Install Dependencies
 
+pnpm is recommended, if you have `node.js` installed already you can [install npm with corepack](https://pnpm.io/installation#using-corepack). If you don't want to use pnpm, you can continue to use npm.
+
 ```shell
-pnpm i
+npm i
 ```
 
 ### Run Development Build
 
 ```shell
-pnpm run tauri dev
+npm run tauri dev
 ```
 
 ### Build Production App
 
 ```shell
-pnpm run tauri build
+npm run tauri build
 ```
 
 The finished build will be located inside `./src-tauri/target/release/bundle` in the form of `.msi` inside msi folder and `.exe` inside nsis folder.
@@ -110,11 +112,36 @@ To commit changes, enter the commit message in the input field, make sure you fo
 
 ## Development
 
+Before you start developing, make sure you develop from the `dev` branch. The `main` branch is the production branch to initiate build automatically. Read more in the [GitHub Actions](#github-actions) section.
+
+```shell
+git switch dev
+```
+
 ### Prerequisite
 
-### IDE
+#### Node.js (and npm)
 
-Recommended IDE: [Visual Studio Code](https://code.visualstudio.com/)
+When you install Node.js, npm will be installed automatically.
+
+1. Download and install the latest version of [Node.js](https://nodejs.org/).
+2. Verify your installation by running the following command in your terminal:
+
+   ```shell
+   node -v
+   ```
+
+3. Make sure npm is also installed by running the following command in your terminal:
+
+   ```shell
+   npm -v
+   ```
+
+#### IDE
+
+> Recommended IDE: [Visual Studio Code](https://code.visualstudio.com/)
+
+Visual Studio Code is preferred, but you can use any text editor you want. If you use Visual Studio Code, the recommended extension will be prompted when you open the project.
 
 #### Dependencies
 
@@ -124,7 +151,9 @@ Recommended IDE: [Visual Studio Code](https://code.visualstudio.com/)
 2. Follow the installation guide
 3. If you use Visual Studio Code, install the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension
 
-##### Diesel CLI
+##### Diesel CLI (optional)
+
+Diesel is used for interacting with database during development. If you're not interacting with database during development, you don't need to install Diesel.
 
 1. Follow Instruction from [Diesel Docs](https://diesel.rs/guides/getting-started)
 2. When installing Diesel CLI, only install the SQLite features
@@ -133,7 +162,9 @@ Recommended IDE: [Visual Studio Code](https://code.visualstudio.com/)
    cargo install diesel_cli --no-default-features --features sqlite
    ```
 
-##### SQLite
+##### SQLite (optional)
+
+SQLite is used as the database for this project. If you're not manipulating the database with the database during development, you don't need to install SQLite.
 
 1. Download [SQLite](https://www.sqlite.org/download.html)
    Choose the download file based on your operating system.
@@ -212,7 +243,8 @@ If you new to Diesel and Rust, follow the tutorial on [Diesel Getting Started Pa
 
 ### Front End
 
-Built with [React](https://react.dev/) with UI using [shadcn/ui](https://ui.shadcn.com/). Typescript (`.tsx`) is recommended but not required if you prefer JavaScript(`.jsx`).
+Built with [React](https://react.dev/) with UI using [shadcn/ui](https://ui.shadcn.com/). Typescript (`.tsx`) is recommended but not required if you prefer JavaScript(`.jsx`). Styles are built using [Tailwind CSS](https://tailwindcss.com/).\
+Please read the related documentation for more information.
 
 #### Pages
 
@@ -327,7 +359,6 @@ The default terminal on Linux and MacOS is `bash`. If you want to change the ter
 
 #### Known Issue
 
-- Spacing between the terminal and the input field is not consistent.
 - After changing repository, the terminal will not clear the screen.
 
 ### Backend (Rust)
@@ -337,21 +368,57 @@ The default terminal on Linux and MacOS is `bash`. If you want to change the ter
 This program use SQLite as the database. When you clone repository, the database is not provided but you can build it.\
 On `/src-tauri` folder, there will be a file name `.env.example`. Copy the file and rename it to `.env`. The default path is the same path that reference for the production database (reference inside `/src-tauri/src/db.rs`) which is `C:/Users/<username>/Documents/Git-Commander/database.sqlite`. You can change the path to your desired path if you want.
 
-#### Migrations
+### After Development
+
+#### Formatting
+
+This project use prettier for formatting. Make sure you adhere to the formatting rules inside `.prettierrc.`. To format the code, run the command below:
+
+```shell
+npm run format
+```
+
+##### Formatting `src-tauri`
+
+The Rust code is formatted using `rustfmt`. To format the code you need to be inside the `src-tauri` folder before running this command:
+
+```shell
+# if you not inside the src-tauri folder run the command below, if you already inside the src-tauri, run the cargo fmt directly.
+# cd src-tauri
+cargo fmt
+```
+
+#### Linting
+
+This project use eslint for linting. To adjust the linting rules change `.eslint.config.js`. To lint the code, run the command below:
+
+```shell
+npm run lint
+```
+
+##### Linting `src-tauri`
+
+The Rust code is linted using `clippy`. To lint the code you need to be inside the `src-tauri` folder before running this command:
+
+```shell
+# if you not inside the src-tauri folder run the command below, if you already inside the src-tauri, run the cargo clippy directly.
+# cd src-tauri
+cargo clippy
+```
 
 ## Build
 
 To build the app, run the command below:
 
 ```shell
-pnpm run tauri build
+npm run tauri build
 ```
 
 But building the app will only create the app for the current OS. If you want to build for another OS, you have to build it on the OS you want to build for. For example, if you want to build for Windows, you have to run the build command on a Windows Machine. The build may take a long time to finish, depending on your machine. To solve this we can use **GitHub Actions**.
 
 ### GitHub Actions
 
-GitHub Actions will build the app automatically. The workflow file is located inside `.github/workflows/build.yml`. The workflow will build the app for Windows, MacOS, and Linux. The workflow will also manage versioning and bump the version based on [Angular Commits](https://github.com/semantic-release/semantic-release?tab=readme-ov-file#commit-message-format). The build will be uploaded as an artifact and can be downloaded from the GitHub Release page.
+Make sure you develop from the `dev` branch. When you merge a pull request from the `dev` branch to the `main` branch, GitHub Actions will build the app automatically. The workflow file is located inside `.github/workflows/build.yml`. The workflow will build the app for Windows, MacOS, and Linux. The workflow will also manage versioning and bump the version based on [Angular Commits](https://github.com/semantic-release/semantic-release?tab=readme-ov-file#commit-message-format). The build will be uploaded as an artifact and can be downloaded from the GitHub Release page.
 
 ## References
 

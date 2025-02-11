@@ -31,8 +31,9 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
 import { Lightbulb, Plus } from "lucide-react";
+import { clsx } from "clsx";
 
-import { FileList } from "@/lib/Types/fileList";
+import { FileList } from "@/lib/Types/FileList";
 
 const formSchema = z.object({
   location: z
@@ -124,7 +125,11 @@ export function ZipTableDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="w-full">
+        <Button
+          variant="outline"
+          size="sm"
+          className={clsx(add === "File" ? "ZIP_1" : "ZIP_2", "w-full")}
+        >
           <Plus size={20} />
           Add {add}
         </Button>

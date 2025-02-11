@@ -23,9 +23,9 @@ import {
   Minus,
 } from "lucide-react";
 
-import { FileList } from "@/lib/Types/fileList";
+import { FileList } from "@/lib/Types/FileList";
 
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/Tools/Icons";
 
 // import { useAutoAnimate } from "@formkit/auto-animate/react";
 
@@ -63,7 +63,7 @@ export function ZipTable({
           <TableHead>
             <button
               type="button"
-              className="flex gap-2"
+              className="ZIP_4 flex items-center gap-2"
               onClick={() => {
                 setSortCat("name");
                 if (sort === "asc") {
@@ -85,16 +85,16 @@ export function ZipTable({
             >
               File/Folder Name
               {sort === "asc" && sortCat === "name" ?
-                <ArrowUpAZ size={20} />
+                <ArrowUpAZ size={20} className="min-w-fit" />
               : sort === "desc" && sortCat === "name" ?
-                <ArrowDownAZ size={20} />
-              : <ArrowUpDown size={20} />}
+                <ArrowDownAZ size={20} className="min-w-fit" />
+              : <ArrowUpDown size={20} className="min-w-fit" />}
             </button>
           </TableHead>
           <TableHead>
             <button
               type="button"
-              className="flex gap-2"
+              className="ZIP_5 flex items-center gap-2"
               onClick={() => {
                 setSortCat("path");
                 if (sort === "asc") {
@@ -110,10 +110,10 @@ export function ZipTable({
             >
               Location
               {sort === "asc" && sortCat === "path" ?
-                <ArrowUpAZ size={20} />
+                <ArrowUpAZ size={20} className="min-w-fit" />
               : sort === "desc" && sortCat === "path" ?
-                <ArrowDownAZ size={20} />
-              : <ArrowUpDown size={20} />}
+                <ArrowDownAZ size={20} className="min-w-fit" />
+              : <ArrowUpDown size={20} className="min-w-fit" />}
             </button>
           </TableHead>
           <TableHead className="text-center">Action</TableHead>
@@ -169,6 +169,7 @@ export function ZipTable({
                     : <Button
                         variant="outline"
                         size="sm"
+                        className="ZIP_6"
                         onClick={() => {
                           setEditValue(realIndex + 1);
                           setEditId(realIndex);
@@ -197,11 +198,11 @@ export function ZipTable({
                   </button>
                 </TableCell>
                 <TableCell className="break-all">{item.path}</TableCell>
-                <TableCell>
+                <TableCell className="ZIP_7">
                   <div className="flex flex-col items-center justify-center gap-1 sm:flex-row">
                     <Button
                       size="icon"
-                      className="h-8 w-8"
+                      className="ZIP_8 h-8 w-8"
                       variant="outline"
                       disabled={index === 0}
                       onClick={() => {
@@ -227,7 +228,7 @@ export function ZipTable({
                     </Button>
                     <Button
                       size="icon"
-                      className="h-8 w-8"
+                      className="ZIP_9 h-8 w-8"
                       variant="outline"
                       disabled={index === filteredFileList.length - 1}
                       onClick={() => {
@@ -253,7 +254,7 @@ export function ZipTable({
                     </Button>
                     <Button
                       size="icon"
-                      className="h-8 w-8"
+                      className="ZIP_10 h-8 w-8"
                       variant="destructive"
                       onClick={() => {
                         filteredFileList.splice(index, 1);
@@ -280,9 +281,9 @@ export function ZipTable({
       <TableCaption>
         File Name will be converted to{" "}
         <code className="rounded bg-neutral-100 text-neutral-700 duration-150 ease-out dark:bg-neutral-800 dark:text-neutral-200">
-          xx.original-filename
+          xxx.original-filename
         </code>
-        {/* */}. xx is a 2 digit number
+        {/* */}. xxx is a 2 digit number
       </TableCaption>
     </Table>
   );
