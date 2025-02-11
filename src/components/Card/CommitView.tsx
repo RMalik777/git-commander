@@ -29,7 +29,8 @@ export function CommitView({
   const currentBranch = useAppSelector((state) => state.repo.branch);
   const currentRepoDir = useAppSelector((state) => state.repo.directory);
   const currentRepoName = useAppSelector((state) => state.repo.name);
-  const currentRepoHash = useAppSelector((state) => state.repo.hash);
+  const remoteHash = useAppSelector((state) => state.repo.remoteHash);
+  const localHash = useAppSelector((state) => state.repo.localHash);
 
   const [formattedCommit, setFormattedCommit] = useState<CommitFormat[]>(
     type === "local" ? localCommit
@@ -67,7 +68,7 @@ export function CommitView({
   }
   useEffect(() => {
     getCommit();
-  }, [currentBranch, currentRepoDir, currentRepoName, currentRepoHash]);
+  }, [currentBranch, currentRepoDir, currentRepoName, remoteHash, localHash]);
 
   const [search, setSearch] = useState("");
   const filteredCommit = useMemo(() => {

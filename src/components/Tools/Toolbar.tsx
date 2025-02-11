@@ -573,12 +573,13 @@ export function Toolbar() {
                               });
                             }
                             try {
-                              const currentHash = await git.getLatestRemoteCommitHash(
+                              const currentHash = await git.getLatestCommitHash(
                                 dirLocation,
                                 currentBranch,
+                                "remote",
                               );
-                              dispatch(setRepo({ hash: currentHash }));
-                              localStorage.setItem("currentRepoHash", currentHash.toString());
+                              dispatch(setRepo({ remoteHash: currentHash }));
+                              localStorage.setItem("remoteRepoHash", currentHash.toString());
                             } catch (error) {
                               throw Error(error as string);
                             }
@@ -645,6 +646,13 @@ export function Toolbar() {
                               title: "Undo Succesfully",
                               description: response,
                             });
+                            const localHash = await git.getLatestCommitHash(
+                              dirLocation,
+                              currentBranch,
+                              "local",
+                            );
+                            dispatch(setRepo({ localHash: localHash }));
+                            localStorage.setItem("localRepoHash", localHash);
                           } catch (error) {
                             console.error(error);
                             if (error instanceof Error) {

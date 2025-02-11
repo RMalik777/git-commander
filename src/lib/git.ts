@@ -467,15 +467,18 @@ export async function getAllCommit(path: string, branch: string, type: "local" |
  * @param branch - The name of the remote branch to get the latest commit hash from.
  * @returns A promise that resolves to the latest commit hash as a string.
  */
-export async function getLatestRemoteCommitHash(path: string, branch: string) {
-  const response = new Promise<string>((resolve, reject) => {
-    const command = new Command(
-      "git 4 args",
-      ["log", `origin/${branch}`, '--pretty=format:"%h"', "-1"],
-      {
-        cwd: path,
-      },
-    );
+export async function getLatestCommitHash(path: string, branch: string, type: "local" | "remote") {
+  let command;
+  if (type === "local") {
+    command = new Command("git 4 args", ["log", `@{push}..`, '--pretty=format:"%h"', "-1"], {
+      cwd: path,
+    });
+  } else {
+    command = new Command("git 4 args", ["log", `origin/${branch}`, '--pretty=format:"%h"', "-1"], {
+      cwd: path,
+    });
+  }
+  return new Promise<string>((resolve, reject) => {
     let result: string;
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
@@ -485,12 +488,6 @@ export async function getLatestRemoteCommitHash(path: string, branch: string) {
     command.stderr.on("data", (line) => console.log(`command stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
-}
-
-export async function getNumberOfCommitsNotPushed(path: string) {
-  const response = await getAllCommit(path, "", "local");
-  return response.length;
 }
 
 export async function getLastCommitMessage(path: string) {
@@ -508,10 +505,10 @@ export async function getLastCommitMessage(path: string) {
 }
 
 export async function getParent(path: string) {
-  const response = new Promise((resolve, reject) => {
-    const command = new Command("git 2 args", ["rev-parse", "--show-toplevel"], {
-      cwd: path,
-    });
+  const command = new Command("git 2 args", ["rev-parse", "--show-toplevel"], {
+    cwd: path,
+  });
+  return new Promise<string>((resolve, reject) => {
     let result: string;
     command.on("close", () => resolve(result));
     command.on("error", (error) => {
@@ -525,123 +522,115 @@ export async function getParent(path: string) {
       reject(new Error(error));
     });
   });
-  return await response;
 }
 
 export async function push(path: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 1 args", ["push"], { cwd: path });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 1 args", ["push"], { cwd: path });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line));
     command.stderr.on("data", (line) => result.push(line));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
+
 export async function pull(path: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 1 args", ["pull"], { cwd: path });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 1 args", ["pull"], { cwd: path });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line));
     command.stderr.on("data", (line) => result.push(line));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
 
 export async function removeUntrackedAll(path: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 2 args", ["clean", "-f"], {
+    cwd: path,
+  });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 2 args", ["clean", "-f"], {
-      cwd: path,
-    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line));
     command.stderr.on("data", (line) => result.push(line));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
 
 export async function revertAll(path: string) {
   await removeUntrackedAll(path);
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 2 args", ["restore", "."], {
+    cwd: path,
+  });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 2 args", ["restore", "."], {
-      cwd: path,
-    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line));
     command.stderr.on("data", (line) => result.push(line));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
 
 export async function revertFile(path: string, filePath: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 2 args", ["restore", filePath], {
+    cwd: path,
+  });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 2 args", ["restore", filePath], {
-      cwd: path,
-    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line));
     command.stderr.on("data", (line) => result.push(line));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
 
 export async function showChanged(path: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 2 args", ["diff", "--name-only"], {
+    cwd: path,
+  });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 2 args", ["diff", "--name-only"], {
-      cwd: path,
-    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line.trim().replace(/[\n\r]/g, "")));
     // command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
 
 export async function showStaged(path: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 3 args", ["diff", "--name-only", "--cached"], {
+    cwd: path,
+  });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 3 args", ["diff", "--name-only", "--cached"], {
-      cwd: path,
-    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line.trim().replace(/[\n\r]/g, "")));
     // command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
 
 export async function showUntrackedFiles(path: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 3 args", ["ls-files", "--others", "--exclude-standard"], {
+    cwd: path,
+  });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 3 args", ["ls-files", "--others", "--exclude-standard"], {
-      cwd: path,
-    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line.replace(/[\n\r]/g, "")));
     command.stderr.on("data", (line) => result.push(line.replace(/[\n\r]/g, "")));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
 
 export async function setSSLFalse() {
@@ -651,37 +640,12 @@ export async function setSSLFalse() {
   });
 }
 
-export async function switchBranch(path: string, branch: string) {
-  const response = new Promise((resolve, reject) => {
-    const resultNormal: string[] = [];
-    const resultReject: string[] = [];
-    const command = new Command("git 3 args", ["switch", branch, "--progress"], {
-      cwd: path,
-    });
-    command.on("close", () => {
-      if (resultReject.length > 1) {
-        const result = resultReject.join("").trim();
-        const leadingError = /(^error:)([\S\s]+)(aborting)/gi;
-        const newError = RegExp(leadingError).exec(result);
-        if (newError) reject(new Error(newError?.[2].trim()));
-        else resolve(result);
-      }
-      resolve(resultNormal);
-    });
-    command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (data) => resultNormal.push(data));
-    command.stderr.on("data", (data) => resultReject.push(data));
-    command.spawn().catch((error) => reject(new Error(error)));
-  });
-  return await response;
-}
-
 export async function undoLastCommit(path: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 3 args", ["reset", "--soft", "HEAD^"], {
+    cwd: path,
+  });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 3 args", ["reset", "--soft", "HEAD^"], {
-      cwd: path,
-    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line));
@@ -690,47 +654,44 @@ export async function undoLastCommit(path: string) {
       reject(new Error(error));
     });
   });
-  return await response;
 }
 
 export async function unstageAll(path: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 2 args", ["reset", "HEAD"], {
+    cwd: path,
+  });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 2 args", ["reset", "HEAD"], {
-      cwd: path,
-    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line));
     command.stderr.on("data", (line) => result.push(line));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
+
 export async function unstageFile(path: string, file: string) {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 3 args", ["restore", "--staged", file], {
+    cwd: path,
+  });
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 3 args", ["restore", "--staged", file], {
-      cwd: path,
-    });
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line));
     command.stderr.on("data", (line) => result.push(line));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }
 
 export async function version() {
-  const response = new Promise((resolve, reject) => {
+  const command = new Command("git 1 args", ["--version"]);
+  return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
-    const command = new Command("git 1 args", ["--version"]);
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line.trim()));
     command.stderr.on("data", (line) => result.push(line.trim()));
     command.spawn().catch((error) => reject(new Error(error)));
   });
-  return await response;
 }

@@ -112,9 +112,28 @@ To commit changes, enter the commit message in the input field, make sure you fo
 
 ### Prerequisite
 
-### IDE
+#### Node.js (and npm)
 
-Recommended IDE: [Visual Studio Code](https://code.visualstudio.com/)
+When you install Node.js, npm will be installed automatically.
+
+1. Download and install the latest version of [Node.js](https://nodejs.org/).
+2. Verify your installation by running the following command in your terminal:
+
+   ```shell
+   node -v
+   ```
+
+3. Make sure npm is also installed by running the following command in your terminal:
+
+   ```shell
+   npm -v
+   ```
+
+#### IDE
+
+> Recommended IDE: [Visual Studio Code](https://code.visualstudio.com/)
+
+Visual Studio Code is preferred, but you can use any text editor you want. If you use Visual Studio Code, the recommended extension will be prompted when you open the project.
 
 #### Dependencies
 
@@ -125,6 +144,8 @@ Recommended IDE: [Visual Studio Code](https://code.visualstudio.com/)
 3. If you use Visual Studio Code, install the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension
 
 ##### Diesel CLI
+
+Diesel is used for interacting with database during development. If you're not interacting with database during development, you don't need to install Diesel.
 
 1. Follow Instruction from [Diesel Docs](https://diesel.rs/guides/getting-started)
 2. When installing Diesel CLI, only install the SQLite features

@@ -41,7 +41,7 @@ import { clsx } from "clsx";
 import { MoveRight, TriangleAlert } from "lucide-react";
 import { PulseLoader } from "react-spinners";
 
-import { Duplicate } from "@/components/Card/DuplicateDialog";
+import { Duplicate } from "@/components/Dialog/DuplicateDialog";
 
 const formSchema = z.object({
   fileList: z.string().min(1, { message: "Please enter the file name" }),
