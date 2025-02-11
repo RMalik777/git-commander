@@ -5,7 +5,6 @@ use serde::Serialize;
 
 #[derive(Queryable, Serialize, Insertable)]
 #[diesel(table_name = remote_repository)]
-
 pub struct RemoteRepo {
   pub id: String,
   pub repo_name: String,

@@ -28,7 +28,7 @@ import {
 
 import { Info } from "lucide-react";
 
-import * as dirFunc from "@/lib/directory";
+import { getAllChildDir } from "@/lib/functions";
 import * as git from "@/lib/git";
 
 import { Clone } from "@/components/Dialog/Clone";
@@ -42,8 +42,6 @@ import { clsx } from "clsx";
 export function RepoView() {
   const repoDir = useAppSelector((state) => state.repo.directory);
   const repoName = useAppSelector((state) => state.repo.name);
-  const branchName = useAppSelector((state) => state.repo.branch);
-  const commitCount = useAppSelector((state) => state.repo.commitcount);
   const remoteUrl = useAppSelector((state) => state.repo.remoteUrl);
   const dispatch = useAppDispatch();
 
@@ -112,7 +110,7 @@ export function RepoView() {
       await diffStore.save();
       await stagedStore.save();
 
-      const fileList = await dirFunc.getAllChildDir(toOpen);
+      const fileList = await getAllChildDir(toOpen);
       dispatch(setFiles(fileList));
       await fileStore.set("fileList", fileList);
       await fileStore.save();

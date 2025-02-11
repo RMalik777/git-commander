@@ -490,6 +490,16 @@ export async function getLatestCommitHash(path: string, branch: string, type: "l
   });
 }
 
+/**
+ * Retrieves the last commit message from a Git repository at the specified path. Used before undoing a commits to remember the commit message.
+ * git equivalent:
+ * ```sh
+ * git log -1 --pretty=%B
+ * ```
+ *
+ * @param path - The file system path to the Git repository.
+ * @returns A promise that resolves to an array of strings containing the last commit message.
+ */
 export async function getLastCommitMessage(path: string) {
   const command = new Command("git 3 args", ["log", "-1", "--pretty=%B"], {
     cwd: path,
@@ -504,6 +514,17 @@ export async function getLastCommitMessage(path: string) {
   });
 }
 
+/**
+ * Executes a Git command to retrieve the top-level directory of a Git repository. Used when the user is opening a repository from a subdirectory.
+ * git equivalent:
+ * ```sh
+ * git rev-parse --show-toplevel
+ * ```
+ *
+ * @param path - The file system path where the Git command should be executed.
+ * @returns A promise that resolves to the top-level directory path of the Git repository.
+ *
+ */
 export async function getParent(path: string) {
   const command = new Command("git 2 args", ["rev-parse", "--show-toplevel"], {
     cwd: path,
@@ -524,18 +545,38 @@ export async function getParent(path: string) {
   });
 }
 
+/**
+ * Pushes changes to the remote repository.
+ * git equivalent:
+ * ```sh
+ * git push
+ * ```
+ *
+ * @param path - The file system path to the local Git repository.
+ * @returns A promise that resolves with an array of strings containing the output of the command, or rejects with an error if the command fails.
+ */
 export async function push(path: string) {
   const command = new Command("git 1 args", ["push"], { cwd: path });
   return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
-    command.stdout.on("data", (line) => result.push(line));
-    command.stderr.on("data", (line) => result.push(line));
+    command.stdout.on("data", (line) => result.push(line.trim()));
+    command.stderr.on("data", (line) => result.push(line.trim()));
     command.spawn().catch((error) => reject(new Error(error)));
   });
 }
 
+/**
+ * Pull the latest changes from remote repository.
+ * git equivalent:
+ * ```sh
+ * git pull
+ * ```
+ *
+ * @param path - The path to the directory where the `git pull` command should be executed.
+ * @returns A promise that resolves with an array of strings containing the output of the command, or rejects with an error if the command fails.
+ */
 export async function pull(path: string) {
   const command = new Command("git 1 args", ["pull"], { cwd: path });
   return new Promise<string[]>((resolve, reject) => {
@@ -548,6 +589,16 @@ export async function pull(path: string) {
   });
 }
 
+/**
+ * Removes all untracked files in the specified Git repository path.
+ * git equivalent:
+ * ```sh
+ * git clean -f
+ * ```
+ *
+ * @param path - The file system path to the Git repository.
+ * @returns A promise that resolves with an array of strings containing the output lines from the Git command.
+ */
 export async function removeUntrackedAll(path: string) {
   const command = new Command("git 2 args", ["clean", "-f"], {
     cwd: path,
@@ -562,6 +613,13 @@ export async function removeUntrackedAll(path: string) {
   });
 }
 
+/**
+ * Reverts all changes in the given repository path. This function first removes all untracked files by running `removeUntrackedAll()` and then runs the `git restore .` command
+ *
+ * @param path - The file system path to the Git repository.
+ * @returns A promise that resolves with an array of strings containing the output of the command,
+ * or rejects with an error if the command fails.
+ */
 export async function revertAll(path: string) {
   await removeUntrackedAll(path);
   const command = new Command("git 2 args", ["restore", "."], {
@@ -577,6 +635,17 @@ export async function revertAll(path: string) {
   });
 }
 
+/**
+ * Reverts a single file to its last committed state using the `git restore` command.
+ * git equivalent:
+ * ```sh
+ * git restore <file_path>
+ * ```
+ *
+ * @param path - The working directory where the git command should be executed.
+ * @param filePath - The path to the file that should be reverted.
+ * @returns A promise that resolves with an array of strings containing the command output, or rejects with an error.
+ */
 export async function revertFile(path: string, filePath: string) {
   const command = new Command("git 2 args", ["restore", filePath], {
     cwd: path,
@@ -591,6 +660,16 @@ export async function revertFile(path: string, filePath: string) {
   });
 }
 
+/**
+ * Executes a Git command to show the list of changed files in the specified directory.
+ * git equivalent:
+ * ```sh
+ * git diff --name-only
+ * ```
+ *
+ * @param path - The path to the directory where the Git command should be executed.
+ * @returns A promise that resolves to an array of strings, each representing a changed file.
+ */
 export async function showChanged(path: string) {
   const command = new Command("git 2 args", ["diff", "--name-only"], {
     cwd: path,
@@ -605,6 +684,16 @@ export async function showChanged(path: string) {
   });
 }
 
+/**
+ * Executes a Git command to show the list of staged files in the specified repository path.
+ * git equivalent:
+ * ```sh
+ * git diff --name-only --cached
+ * ```
+ *
+ * @param path - The file system path to the Git repository.
+ * @returns A promise that resolves to an array of strings, each representing a staged file.
+ */
 export async function showStaged(path: string) {
   const command = new Command("git 3 args", ["diff", "--name-only", "--cached"], {
     cwd: path,
@@ -614,11 +703,20 @@ export async function showStaged(path: string) {
     command.on("close", () => resolve(result));
     command.on("error", (error) => reject(new Error(error)));
     command.stdout.on("data", (line) => result.push(line.trim().replace(/[\n\r]/g, "")));
-    // command.stderr.on("data", (line) => console.log(`stderr: "${line}"`));
     command.spawn().catch((error) => reject(new Error(error)));
   });
 }
 
+/**
+ * Executes a Git command to list untracked files in the specified directory.
+ * git equivalent:
+ * ```sh
+ * git ls-files --others --exclude-standard
+ * ```
+ *
+ * @param path - The path to the directory where the Git command should be executed.
+ * @returns A promise that resolves to an array of strings, each representing an untracked file.
+ */
 export async function showUntrackedFiles(path: string) {
   const command = new Command("git 3 args", ["ls-files", "--others", "--exclude-standard"], {
     cwd: path,
@@ -633,6 +731,17 @@ export async function showUntrackedFiles(path: string) {
   });
 }
 
+/**
+ * Sets the global Git configuration to disable SSL verification.
+ * This function executes the command `git config --global http.sslVerify false`
+ * to disable SSL verification for all Git operations globally.
+ * git equivalent:
+ * ```sh
+ * git config --global http.sslVerify false
+ * ```
+ *
+ * @returns A promise that resolves when the command is executed.
+ */
 export async function setSSLFalse() {
   const command = new Command("git ssl", ["config --global http.sslVerify false"]);
   await command.spawn().catch((error) => {
@@ -640,6 +749,16 @@ export async function setSSLFalse() {
   });
 }
 
+/**
+ * Undo the last commit in the given Git repository path while keeping the changes in the working directory.
+ * git equivalent:
+ * ```sh
+ * git reset --soft HEAD^
+ * ```
+ *
+ * @param path - The file system path to the Git repository.
+ * @returns A promise that resolves with an array of strings containing the command output, or rejects with an error if the command fails.
+ */
 export async function undoLastCommit(path: string) {
   const command = new Command("git 3 args", ["reset", "--soft", "HEAD^"], {
     cwd: path,
@@ -656,6 +775,16 @@ export async function undoLastCommit(path: string) {
   });
 }
 
+/**
+ * Unstages all changes in the given repository path.
+ * git equivalent:
+ * ```sh
+ * git reset HEAD
+ * ```
+ *
+ * @param path - The path to the repository where changes should be unstaged.
+ * @returns A promise that resolves with an array of strings containing the output of the command.
+ */
 export async function unstageAll(path: string) {
   const command = new Command("git 2 args", ["reset", "HEAD"], {
     cwd: path,
@@ -670,6 +799,17 @@ export async function unstageAll(path: string) {
   });
 }
 
+/**
+ * Unstages a file in a given Git repository path.
+ * git equivalent:
+ * ```sh
+ * git restore --staged <file>
+ * ```
+ *
+ * @param path - The path to the Git repository.
+ * @param file - The name of the file to unstage.
+ * @returns A promise that resolves to an array of strings containing the command output.
+ */
 export async function unstageFile(path: string, file: string) {
   const command = new Command("git 3 args", ["restore", "--staged", file], {
     cwd: path,
@@ -684,6 +824,15 @@ export async function unstageFile(path: string, file: string) {
   });
 }
 
+/**
+ * Retrieves the version of the installed Git.
+ * git equivalent:
+ * ```sh
+ * git --version
+ * ```
+ *
+ * @returns A promise that resolves to an array of strings containing the version information.
+ */
 export async function version() {
   const command = new Command("git 1 args", ["--version"]);
   return new Promise<string[]>((resolve, reject) => {

@@ -10,7 +10,7 @@ import { setRepo } from "@/lib/Redux/repoSlice";
 
 import { useToast } from "@/components/ui/use-toast";
 
-import * as dirFunc from "@/lib/directory";
+import { getAllChildDir } from "@/lib/functions";
 import * as git from "@/lib/git";
 
 export default function Git() {
@@ -71,7 +71,7 @@ export default function Git() {
     refFile.current = dir;
     let allChild: FileEntry[];
     try {
-      allChild = await dirFunc.getAllChildDir(dir);
+      allChild = await getAllChildDir(dir);
       dispatch(setFiles(allChild));
       store.set("fileList", allChild);
       store.save();

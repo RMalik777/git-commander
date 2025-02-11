@@ -12,7 +12,7 @@ import { Commit } from "@/components/Git/Commit";
 import { CommitView } from "@/components/Card/CommitView";
 
 import * as git from "@/lib/git";
-import * as dirFunc from "@/lib/directory";
+import { getAllChildDir } from "@/lib/functions";
 
 export default function Git() {
   const dispatch = useAppDispatch();
@@ -61,7 +61,7 @@ export default function Git() {
 
   useLayoutEffect(() => {
     async function setDirectory() {
-      const allChild = await dirFunc.getAllChildDir(dir);
+      const allChild = await getAllChildDir(dir);
       dispatch(setFiles(allChild));
       fileStore.set("fileList", allChild);
       fileStore.save();
