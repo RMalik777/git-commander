@@ -24,7 +24,7 @@ cd git-commander
 
 ### Install Dependencies
 
-npm is recommended, if you have `node.js` installed already you can [install npm with corepack](https://npm.io/installation#using-corepack). If you don't want to use npm, you can use npm or yarn.
+pnpm is recommended, if you have `node.js` installed already you can [install npm with corepack](https://pnpm.io/installation#using-corepack). If you don't want to use pnpm, you can continue to use npm.
 
 ```shell
 npm i
