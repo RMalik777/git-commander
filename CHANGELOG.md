@@ -1,3 +1,10 @@
+## [1.24.1](https://github.com/RMalik777/git-commander/compare/v1.24.0...v1.24.1) (2025-02-11)
+
+
+### Bug Fixes
+
+* wrong file name ([342e0b0](https://github.com/RMalik777/git-commander/commit/342e0b0f8dfb1ec2d8bd036c80fbba7ec5237c4d))
+
 # [1.24.0](https://github.com/RMalik777/git-commander/compare/v1.23.1...v1.24.0) (2025-02-11)
 
 
