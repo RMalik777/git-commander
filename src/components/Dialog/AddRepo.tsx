@@ -29,7 +29,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
-import * as db from "@/lib/database";
+import * as db from "@/lib/Backend/database";
 
 const formSchema = z.object({
   name: z

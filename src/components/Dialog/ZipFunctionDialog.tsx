@@ -55,7 +55,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { BarLoader } from "react-spinners";
 import { clsx } from "clsx";
 
-import { displayNotificationNotFocus } from "@/lib/functions";
+import { displayNotificationNotFocus } from "@/lib/Backend/functions";
 
 const formSchema = z.object({
   archiveName: z.string().min(1, { message: "Please enter a name for the file" }),

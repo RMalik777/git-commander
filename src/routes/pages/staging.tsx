@@ -11,8 +11,8 @@ import { Staging } from "@/components/Card/Staging";
 import { Commit } from "@/components/Git/Commit";
 import { CommitView } from "@/components/Card/CommitView";
 
-import * as git from "@/lib/git";
-import { getAllChildDir } from "@/lib/functions";
+import * as git from "@/lib/Backend/git";
+import { getAllChildDir } from "@/lib/Backend/functions";
 
 export default function Git() {
   const dispatch = useAppDispatch();

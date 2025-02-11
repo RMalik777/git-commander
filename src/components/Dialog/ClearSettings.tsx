@@ -36,7 +36,7 @@ import { PulseLoader } from "react-spinners";
 
 import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
-import * as db from "@/lib/database";
+import * as db from "@/lib/Backend/database";
 
 const FormSchema = z.object({
   all: z.boolean().default(false).optional(),

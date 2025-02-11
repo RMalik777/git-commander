@@ -49,9 +49,9 @@ import { Check, ChevronsUpDown, CloudDownload } from "lucide-react";
 import { ScaleLoader } from "react-spinners";
 import { clsx } from "clsx";
 
-import * as db from "@/lib/database";
-import * as func from "@/lib/functions";
-import * as git from "@/lib/git";
+import * as db from "@/lib/Backend/database";
+import * as func from "@/lib/Backend/functions";
+import * as git from "@/lib/Backend/git";
 
 import { RepoFormat } from "@/lib/Types/repo";
 

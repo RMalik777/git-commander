@@ -20,7 +20,7 @@ import { OctagonAlert } from "lucide-react";
 import { RepoView } from "@/components/Card/RepoView";
 import { ChangeView } from "@/components/Card/ChangeView";
 
-import * as git from "@/lib/git";
+import * as git from "@/lib/Backend/git";
 
 export default function Index() {
   const [error, setError] = useState(sessionStorage.getItem("git") == "false");

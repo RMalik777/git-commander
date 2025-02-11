@@ -36,7 +36,7 @@ import { clsx } from "clsx";
 
 import { driver } from "driver.js";
 
-import * as git from "@/lib/git";
+import * as git from "@/lib/Backend/git";
 
 const formSchema = z.object({
   commitMsg: z

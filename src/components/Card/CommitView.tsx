@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import * as git from "@/lib/git";
+import * as git from "@/lib/Backend/git";
 
 export function CommitView({
   title,

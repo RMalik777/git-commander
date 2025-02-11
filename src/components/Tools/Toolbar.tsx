@@ -47,7 +47,7 @@ import {
 import { HashLoader, PulseLoader } from "react-spinners";
 import { clsx } from "clsx";
 
-import * as git from "@/lib/git";
+import * as git from "@/lib/Backend/git";
 
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";

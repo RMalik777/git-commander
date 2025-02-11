@@ -20,7 +20,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
-import { configUsernameReplace } from "@/lib/git";
+import { configUsernameReplace } from "@/lib/Backend/git";
 
 const formSchema = z.object({
   username: z

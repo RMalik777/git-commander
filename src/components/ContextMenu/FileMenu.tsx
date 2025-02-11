@@ -19,7 +19,7 @@ import { ConfirmationDialog } from "@/components/Dialog/Confirmation";
 
 import { Code2 } from "lucide-react";
 
-import * as git from "@/lib/git";
+import * as git from "@/lib/Backend/git";
 import { PulseLoader } from "react-spinners";
 
 export function FileMenu({

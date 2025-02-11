@@ -18,7 +18,7 @@ import { RepoTable } from "@/components/Table/RepoTable";
 
 import type { RepoFormat } from "@/lib/Types/repo";
 
-import * as db from "@/lib/database";
+import * as db from "@/lib/Backend/database";
 
 export default function Settings() {
   const [openClearSettings, setOpenClearSettings] = useState(false);

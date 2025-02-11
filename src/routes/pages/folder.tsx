@@ -10,8 +10,8 @@ import { setRepo } from "@/lib/Redux/repoSlice";
 
 import { useToast } from "@/components/ui/use-toast";
 
-import { getAllChildDir } from "@/lib/functions";
-import * as git from "@/lib/git";
+import { getAllChildDir } from "@/lib/Backend/functions";
+import * as git from "@/lib/Backend/git";
 
 export default function Git() {
   const { toast } = useToast();

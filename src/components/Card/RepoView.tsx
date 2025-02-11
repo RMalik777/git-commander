@@ -28,8 +28,8 @@ import {
 
 import { Info } from "lucide-react";
 
-import { getAllChildDir } from "@/lib/functions";
-import * as git from "@/lib/git";
+import { getAllChildDir } from "@/lib/Backend/functions";
+import * as git from "@/lib/Backend/git";
 
 import { Clone } from "@/components/Dialog/Clone";
 
