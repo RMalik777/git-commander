@@ -65,14 +65,6 @@ const router = createBrowserRouter([
             element: <Tutorial />,
           },
           {
-            path: "/help/faq",
-            element: <Faq />,
-          },
-          {
-            path: "/help/resource",
-            element: <Resource />,
-          },
-          {
             path: "/help/changelog",
             element: <Changelog />,
           },
