@@ -1,3 +1,19 @@
+# [1.24.0](https://github.com/RMalik777/git-commander/compare/v1.23.1...v1.24.0) (2025-02-11)
+
+
+### Bug Fixes
+
+* change prepend to 3 digit ([7e347e4](https://github.com/RMalik777/git-commander/commit/7e347e4ab4ebba589a752178c2415888c7c89d1c))
+* list is not deleted when clearing settings ([cfadeef](https://github.com/RMalik777/git-commander/commit/cfadeefd73a15b946405d85b7c575309f8ccf38d))
+* remember resetting value on refresh ([43cac16](https://github.com/RMalik777/git-commander/commit/43cac16b69f019c87dcb1354f00fe1eebc9a1c23))
+* show waiting commit based on hash ([1323702](https://github.com/RMalik777/git-commander/commit/1323702a691a844bad4d1fd55e20d7bd6a01a930))
+
+
+### Features
+
+* add compression level selector ([ec3830d](https://github.com/RMalik777/git-commander/commit/ec3830d9df10911050d0a5570f536507cd78610d))
+* add option to remove space ([20fc0ea](https://github.com/RMalik777/git-commander/commit/20fc0ea9d31cb9e06482e6fae90a365d07bb4178))
+
 ## [1.23.1](https://github.com/RMalik777/git-commander/compare/v1.23.0...v1.23.1) (2025-02-10)
 
 
