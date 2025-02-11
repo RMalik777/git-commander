@@ -483,16 +483,16 @@ export function Toolbar() {
                                 setPullMsg({
                                   tagBranch: matchTag?.[1]?.toString() ?? "",
                                   changes: matchChanges?.[1]?.toString() ?? "",
-                                  filesChanged: parseInt(matchSummary?.[1] ?? 0),
-                                  insertions: parseInt(matchSummary?.[2] ?? 0),
-                                  deletions: parseInt(matchSummary?.[3] ?? 0),
+                                  filesChanged: parseInt(matchSummary?.[1] ?? "0"),
+                                  insertions: parseInt(matchSummary?.[2] ?? "0"),
+                                  deletions: parseInt(matchSummary?.[3] ?? "0"),
                                 }),
                               );
                               const desc = (): string => {
                                 if (matchSummary) {
                                   return `${matchSummary?.[1] ?? 0} files changed, ${matchSummary?.[2] ?? 0} insertions (+), ${matchSummary?.[3] ?? 0} deletions (-)`;
                                 } else {
-                                  return response;
+                                  return response.toString();
                                 }
                               };
                               toast({
