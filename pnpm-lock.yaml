@@ -141,14 +141,14 @@ importers:
         specifier: ^0.15.0
         version: 0.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       simple-icons:
-        specifier: ^14.6.0
-        version: 14.6.0
+        specifier: ^14.8.0
+        version: 14.8.0
       tauri-plugin-fs-extra-api:
         specifier: github:tauri-apps/tauri-plugin-fs-extra#v1
-        version: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a
+        version: git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a
       tauri-plugin-store-api:
         specifier: github:tauri-apps/tauri-plugin-store#v1
-        version: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15
+        version: git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8adc771354df0a99bc55893525676433f0f4d646
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -3741,8 +3741,8 @@ packages:
     resolution: {integrity: sha512-iuh+gPf28RkltuJC7W5MRi6XAjTDCAPC/prJUpQoG4vIP3MJZ+GTydVnodXA7pwvTKb2cA0m9OFZW/cdWy/I/w==}
     engines: {node: '>=6'}
 
-  simple-icons@14.6.0:
-    resolution: {integrity: sha512-s2C9qwZJpM2gkDpCeVxlN5/XpvCTM444pPX9JvLWRiFL7npZIjQISHR7EYUe7IgGEFyznmoRmM8VdJm5LQih+g==}
+  simple-icons@14.8.0:
+    resolution: {integrity: sha512-19UQ+az9qHSwgXuZLwJMTJLX5MfzYEaWUzoetkXMXrp2wXqKujh98SUF2jAEohahTU1FmNW46vDYomSkvynEuA==}
     engines: {node: '>=0.12.18'}
 
   skin-tone@2.0.0:
@@ -3891,12 +3891,12 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  tauri-plugin-fs-extra-api@https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a}
+  tauri-plugin-fs-extra-api@git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a:
+    resolution: {commit: baf39e86ecec2485180b971fcc041d374a2ef38a, repo: git@github.com:tauri-apps/tauri-plugin-fs-extra.git, type: git}
     version: 0.0.0
 
-  tauri-plugin-store-api@https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15}
+  tauri-plugin-store-api@git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8adc771354df0a99bc55893525676433f0f4d646:
+    resolution: {commit: 8adc771354df0a99bc55893525676433f0f4d646, repo: git@github.com:tauri-apps/tauri-plugin-store.git, type: git}
     version: 0.0.0
 
   temp-dir@3.0.0:
@@ -7982,7 +7982,7 @@ snapshots:
       figures: 2.0.0
       pkg-conf: 2.1.0
 
-  simple-icons@14.6.0: {}
+  simple-icons@14.8.0: {}
 
   skin-tone@2.0.0:
     dependencies:
@@ -8173,11 +8173,11 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tauri-plugin-fs-extra-api@https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a:
+  tauri-plugin-fs-extra-api@git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a:
     dependencies:
       '@tauri-apps/api': 1.6.0
 
-  tauri-plugin-store-api@https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15:
+  tauri-plugin-store-api@git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8adc771354df0a99bc55893525676433f0f4d646:
     dependencies:
       '@tauri-apps/api': 1.6.0
 
