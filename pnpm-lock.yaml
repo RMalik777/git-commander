@@ -145,10 +145,10 @@ importers:
         version: 14.6.0
       tauri-plugin-fs-extra-api:
         specifier: github:tauri-apps/tauri-plugin-fs-extra#v1
-        version: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a
+        version: git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a
       tauri-plugin-store-api:
         specifier: github:tauri-apps/tauri-plugin-store#v1
-        version: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15
+        version: git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8adc771354df0a99bc55893525676433f0f4d646
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -172,8 +172,8 @@ importers:
         specifier: ^8.42.3
         version: 8.42.3
       '@types/node':
-        specifier: ^22.13.1
-        version: 22.13.1
+        specifier: ^22.13.17
+        version: 22.13.17
       '@types/react':
         specifier: ^19.0.8
         version: 19.0.8
@@ -185,7 +185,7 @@ importers:
         version: 8.24.0(eslint@9.20.0(jiti@2.4.2))(typescript@5.7.3)
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.3.4(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
+        version: 4.3.4(vite@6.1.0(@types/node@22.13.17)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.5.2)
@@ -242,7 +242,7 @@ importers:
         version: 8.24.0(eslint@9.20.0(jiti@2.4.2))(typescript@5.7.3)
       vite:
         specifier: ^6.1.0
-        version: 6.1.0(@types/node@22.13.1)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0)
+        version: 6.1.0(@types/node@22.13.17)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0)
 
 packages:
 
@@ -1526,8 +1526,8 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
-  '@types/node@22.13.1':
-    resolution: {integrity: sha512-jK8uzQlrvXqEU91UxiK5J7pKHyzgnI1Qnl0QDHIgVGuolJhRb9EEl28Cj9b3rGR8B2lhFCtvIm5os8lFnO/1Ew==}
+  '@types/node@22.13.17':
+    resolution: {integrity: sha512-nAJuQXoyPj04uLgu+obZcSmsfOenUg6DxPKogeUy6yNCFwWaj5sBF8/G/pNo8EtBJjAfSVgfIlugR/BCOleO+g==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -3891,12 +3891,12 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  tauri-plugin-fs-extra-api@https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a}
+  tauri-plugin-fs-extra-api@git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a:
+    resolution: {commit: baf39e86ecec2485180b971fcc041d374a2ef38a, repo: git@github.com:tauri-apps/tauri-plugin-fs-extra.git, type: git}
     version: 0.0.0
 
-  tauri-plugin-store-api@https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15}
+  tauri-plugin-store-api@git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8adc771354df0a99bc55893525676433f0f4d646:
+    resolution: {commit: 8adc771354df0a99bc55893525676433f0f4d646, repo: git@github.com:tauri-apps/tauri-plugin-store.git, type: git}
     version: 0.0.0
 
   temp-dir@3.0.0:
@@ -5515,7 +5515,7 @@ snapshots:
 
   '@types/ms@2.1.0': {}
 
-  '@types/node@22.13.1':
+  '@types/node@22.13.17':
     dependencies:
       undici-types: 6.20.0
 
@@ -5619,14 +5619,14 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vitejs/plugin-react@4.3.4(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))':
+  '@vitejs/plugin-react@4.3.4(vite@6.1.0(@types/node@22.13.17)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))':
     dependencies:
       '@babel/core': 7.26.8
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.8)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.8)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 6.1.0(@types/node@22.13.1)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0)
+      vite: 6.1.0(@types/node@22.13.17)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -8173,11 +8173,11 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tauri-plugin-fs-extra-api@https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a:
+  tauri-plugin-fs-extra-api@git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a:
     dependencies:
       '@tauri-apps/api': 1.6.0
 
-  tauri-plugin-store-api@https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15:
+  tauri-plugin-store-api@git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8adc771354df0a99bc55893525676433f0f4d646:
     dependencies:
       '@tauri-apps/api': 1.6.0
 
@@ -8389,13 +8389,13 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0):
+  vite@6.1.0(@types/node@22.13.17)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0):
     dependencies:
       esbuild: 0.24.2
       postcss: 8.5.2
       rollup: 4.34.6
     optionalDependencies:
-      '@types/node': 22.13.1
+      '@types/node': 22.13.17
       fsevents: 2.3.3
       jiti: 2.4.2
       lightningcss: 1.29.1
