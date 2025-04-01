@@ -21,8 +21,8 @@ importers:
         specifier: ^0.8.2
         version: 0.8.2
       '@hookform/resolvers':
-        specifier: ^3.10.0
-        version: 3.10.0(react-hook-form@7.54.2(react@19.0.0))
+        specifier: ^4.1.3
+        version: 4.1.3(react-hook-form@7.54.2(react@19.0.0))
       '@radix-ui/react-accordion':
         specifier: ^1.2.3
         version: 1.2.3(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -145,10 +145,10 @@ importers:
         version: 14.6.0
       tauri-plugin-fs-extra-api:
         specifier: github:tauri-apps/tauri-plugin-fs-extra#v1
-        version: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a
+        version: git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a
       tauri-plugin-store-api:
         specifier: github:tauri-apps/tauri-plugin-store#v1
-        version: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15
+        version: git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8adc771354df0a99bc55893525676433f0f4d646
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -571,8 +571,8 @@ packages:
   '@formkit/auto-animate@0.8.2':
     resolution: {integrity: sha512-SwPWfeRa5veb1hOIBMdzI+73te5puUBHmqqaF1Bu7FjvxlYSz/kJcZKSa9Cg60zL0uRNeJL2SbRxV6Jp6Q1nFQ==}
 
-  '@hookform/resolvers@3.10.0':
-    resolution: {integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==}
+  '@hookform/resolvers@4.1.3':
+    resolution: {integrity: sha512-Jsv6UOWYTrEFJ/01ZrnwVXs7KDvP8XIo115i++5PWvNkNvkrsTfGiLS6w+eJ57CYtUtDQalUWovCZDHFJ8u1VQ==}
     peerDependencies:
       react-hook-form: ^7.0.0
 
@@ -1411,6 +1411,9 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@tauri-apps/api@1.6.0':
     resolution: {integrity: sha512-rqI++FWClU5I2UBp4HXFvl+sBWkdigBkxnpJDQUWttNyG7IZP4FwQGhTNL5EOw0vI8i6eSAJ5frLqO7n7jbJdg==}
@@ -3891,12 +3894,12 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  tauri-plugin-fs-extra-api@https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a}
+  tauri-plugin-fs-extra-api@git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a:
+    resolution: {commit: baf39e86ecec2485180b971fcc041d374a2ef38a, repo: git@github.com:tauri-apps/tauri-plugin-fs-extra.git, type: git}
     version: 0.0.0
 
-  tauri-plugin-store-api@https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15}
+  tauri-plugin-store-api@git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8adc771354df0a99bc55893525676433f0f4d646:
+    resolution: {commit: 8adc771354df0a99bc55893525676433f0f4d646, repo: git@github.com:tauri-apps/tauri-plugin-store.git, type: git}
     version: 0.0.0
 
   temp-dir@3.0.0:
@@ -4514,8 +4517,9 @@ snapshots:
 
   '@formkit/auto-animate@0.8.2': {}
 
-  '@hookform/resolvers@3.10.0(react-hook-form@7.54.2(react@19.0.0))':
+  '@hookform/resolvers@4.1.3(react-hook-form@7.54.2(react@19.0.0))':
     dependencies:
+      '@standard-schema/utils': 0.3.0
       react-hook-form: 7.54.2(react@19.0.0)
 
   '@humanfs/core@0.19.1': {}
@@ -5411,6 +5415,8 @@ snapshots:
   '@sindresorhus/merge-streams@2.3.0': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@standard-schema/utils@0.3.0': {}
 
   '@tauri-apps/api@1.6.0': {}
 
@@ -8173,11 +8179,11 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tauri-plugin-fs-extra-api@https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a:
+  tauri-plugin-fs-extra-api@git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a:
     dependencies:
       '@tauri-apps/api': 1.6.0
 
-  tauri-plugin-store-api@https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15:
+  tauri-plugin-store-api@git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8adc771354df0a99bc55893525676433f0f4d646:
     dependencies:
       '@tauri-apps/api': 1.6.0
 
