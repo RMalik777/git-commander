@@ -145,10 +145,10 @@ importers:
         version: 14.6.0
       tauri-plugin-fs-extra-api:
         specifier: github:tauri-apps/tauri-plugin-fs-extra#v1
-        version: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a
+        version: git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a
       tauri-plugin-store-api:
         specifier: github:tauri-apps/tauri-plugin-store#v1
-        version: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15
+        version: git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8e7289fb6c3e5456993a562bd9d70d2129e68e82
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -208,8 +208,8 @@ importers:
         specifier: ^15.14.0
         version: 15.14.0
       lucide-react:
-        specifier: ^0.474.0
-        version: 0.474.0(react@19.0.0)
+        specifier: ^0.503.0
+        version: 0.503.0(react@19.0.0)
       postcss:
         specifier: ^8.5.2
         version: 8.5.2
@@ -2866,8 +2866,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@0.474.0:
-    resolution: {integrity: sha512-CmghgHkh0OJNmxGKWc0qfPJCYHASPMVSyGY8fj3xgk4v84ItqDg64JNKFZn5hC6E0vHi6gxnbCgwhyVB09wQtA==}
+  lucide-react@0.503.0:
+    resolution: {integrity: sha512-HGGkdlPWQ0vTF8jJ5TdIqhQXZi6uh3LnNgfZ8MHiuxFfX3RZeA79r2MW2tHAZKlAVfoNE8esm3p+O6VkIvpj6w==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -3891,12 +3891,12 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  tauri-plugin-fs-extra-api@https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a}
+  tauri-plugin-fs-extra-api@git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a:
+    resolution: {commit: baf39e86ecec2485180b971fcc041d374a2ef38a, repo: git@github.com:tauri-apps/tauri-plugin-fs-extra.git, type: git}
     version: 0.0.0
 
-  tauri-plugin-store-api@https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15}
+  tauri-plugin-store-api@git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8e7289fb6c3e5456993a562bd9d70d2129e68e82:
+    resolution: {commit: 8e7289fb6c3e5456993a562bd9d70d2129e68e82, repo: git@github.com:tauri-apps/tauri-plugin-store.git, type: git}
     version: 0.0.0
 
   temp-dir@3.0.0:
@@ -7033,7 +7033,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@0.474.0(react@19.0.0):
+  lucide-react@0.503.0(react@19.0.0):
     dependencies:
       react: 19.0.0
 
@@ -8173,11 +8173,11 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tauri-plugin-fs-extra-api@https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/baf39e86ecec2485180b971fcc041d374a2ef38a:
+  tauri-plugin-fs-extra-api@git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#baf39e86ecec2485180b971fcc041d374a2ef38a:
     dependencies:
       '@tauri-apps/api': 1.6.0
 
-  tauri-plugin-store-api@https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/c63862aba828658318dbfdef80e765479a698e15:
+  tauri-plugin-store-api@git+https://git@github.com:tauri-apps/tauri-plugin-store.git#8e7289fb6c3e5456993a562bd9d70d2129e68e82:
     dependencies:
       '@tauri-apps/api': 1.6.0
 
