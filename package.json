@@ -83,7 +83,7 @@
     "globals": "^15.14.0",
     "lucide-react": "^0.503.0",
     "postcss": "^8.5.2",
-    "prettier": "^3.5.0",
+    "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "semantic-release": "^24.2.2",
     "shiki": "^2.3.2",
