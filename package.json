@@ -79,7 +79,7 @@
     "clsx": "^2.1.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react": "^7.37.5",
     "globals": "^15.14.0",
     "lucide-react": "^0.503.0",
     "postcss": "^8.5.6",
