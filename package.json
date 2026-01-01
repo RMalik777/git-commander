@@ -80,7 +80,7 @@
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.4",
-    "globals": "^15.14.0",
+    "globals": "^16.5.0",
     "lucide-react": "^0.503.0",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
