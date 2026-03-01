@@ -141,8 +141,8 @@ importers:
         specifier: ^0.17.0
         version: 0.17.0(react-dom@19.0.0(react@19.2.3))(react@19.2.3)
       simple-icons:
-        specifier: ^16.1.0
-        version: 16.1.0
+        specifier: ^16.10.0
+        version: 16.10.0
       tauri-plugin-fs-extra-api:
         specifier: github:tauri-apps/tauri-plugin-fs-extra#v1
         version: git+https://git@github.com:tauri-apps/tauri-plugin-fs-extra.git#498e78b0bb017caa5760e8ea35ddcadbec265d49
@@ -2776,6 +2776,7 @@ packages:
 
   glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   globals@14.0.0:
@@ -4213,8 +4214,8 @@ packages:
     resolution: {integrity: sha512-iuh+gPf28RkltuJC7W5MRi6XAjTDCAPC/prJUpQoG4vIP3MJZ+GTydVnodXA7pwvTKb2cA0m9OFZW/cdWy/I/w==}
     engines: {node: '>=6'}
 
-  simple-icons@16.1.0:
-    resolution: {integrity: sha512-fL95b22MWTn3y+zQ/QC9oKqJ6mXXNwm35oy5XMVPdvJZGfGNWDMMb33kfqm50OuRKNcdjbk7HQ73NdWcvaBXIQ==}
+  simple-icons@16.10.0:
+    resolution: {integrity: sha512-62kuxaG3pE+cFNerudUtwb9BLmudzayHrlHkvU9gf8Nxcj7VYOm9dh3WNbGaFk60aQtfnRyzViZaouFG2B45kg==}
     engines: {node: '>=0.12.18'}
 
   skin-tone@2.0.0:
@@ -8935,7 +8936,7 @@ snapshots:
       figures: 2.0.0
       pkg-conf: 2.1.0
 
-  simple-icons@16.1.0: {}
+  simple-icons@16.10.0: {}
 
   skin-tone@2.0.0:
     dependencies:
