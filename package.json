@@ -72,7 +72,7 @@
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.0.3",
-    "@typescript-eslint/parser": "^8.49.0",
+    "@typescript-eslint/parser": "^8.59.1",
     "@vitejs/plugin-react": "^5.2.0",
     "autoprefixer": "^10.4.24",
     "class-variance-authority": "^0.7.1",
