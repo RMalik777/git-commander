@@ -1,3 +1,54 @@
+## [1.24.1](https://github.com/RMalik777/git-commander/compare/v1.24.0...v1.24.1) (2025-02-11)
+
+
+### Bug Fixes
+
+* wrong file name ([342e0b0](https://github.com/RMalik777/git-commander/commit/342e0b0f8dfb1ec2d8bd036c80fbba7ec5237c4d))
+
+# [1.24.0](https://github.com/RMalik777/git-commander/compare/v1.23.1...v1.24.0) (2025-02-11)
+
+
+### Bug Fixes
+
+* change prepend to 3 digit ([7e347e4](https://github.com/RMalik777/git-commander/commit/7e347e4ab4ebba589a752178c2415888c7c89d1c))
+* list is not deleted when clearing settings ([cfadeef](https://github.com/RMalik777/git-commander/commit/cfadeefd73a15b946405d85b7c575309f8ccf38d))
+* remember resetting value on refresh ([43cac16](https://github.com/RMalik777/git-commander/commit/43cac16b69f019c87dcb1354f00fe1eebc9a1c23))
+* show waiting commit based on hash ([1323702](https://github.com/RMalik777/git-commander/commit/1323702a691a844bad4d1fd55e20d7bd6a01a930))
+
+
+### Features
+
+* add compression level selector ([ec3830d](https://github.com/RMalik777/git-commander/commit/ec3830d9df10911050d0a5570f536507cd78610d))
+* add option to remove space ([20fc0ea](https://github.com/RMalik777/git-commander/commit/20fc0ea9d31cb9e06482e6fae90a365d07bb4178))
+
+## [1.23.1](https://github.com/RMalik777/git-commander/compare/v1.23.0...v1.23.1) (2025-02-10)
+
+
+### Bug Fixes
+
+* change file rename to dot instead underscore ([d2bdc4e](https://github.com/RMalik777/git-commander/commit/d2bdc4ece6182848ad29866efa5e33fd212ae485))
+
+# [1.23.0](https://github.com/RMalik777/git-commander/compare/v1.22.1...v1.23.0) (2025-02-10)
+
+
+### Bug Fixes
+
+* don't show waiting commit if there are no waiting commit ([1b333ff](https://github.com/RMalik777/git-commander/commit/1b333ffd3992ee0161bfc398598d01a845296fe5))
+* read name from git instead of user input ([182799e](https://github.com/RMalik777/git-commander/commit/182799ec27787b3f47fc774b5bd0b33a4dd716d4))
+
+
+### Features
+
+* show remote url ([a749f1b](https://github.com/RMalik777/git-commander/commit/a749f1b5e9aa289ee1718e96566ba44997b6c94b))
+
+## [1.22.1](https://github.com/RMalik777/git-commander/compare/v1.22.0...v1.22.1) (2025-02-05)
+
+
+### Bug Fixes
+
+* fix wrong lock file ([68fe341](https://github.com/RMalik777/git-commander/commit/68fe341ec7d4791f7915031d32ef79c5c2591b54))
+* view is not hiding after dismissed ([37da737](https://github.com/RMalik777/git-commander/commit/37da737cc0e271e3acfb3bdc9828d0096e2bce89))
+
 # [1.22.0](https://github.com/RMalik777/git-commander/compare/v1.21.4...v1.22.0) (2024-12-23)
 
 
