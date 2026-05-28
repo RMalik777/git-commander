@@ -1,3 +1,10 @@
+## [1.24.2](https://github.com/RMalik777/git-commander/compare/v1.24.1...v1.24.2) (2026-05-28)
+
+
+### Bug Fixes
+
+* **icons:** fix importing css icons ([f1a8e06](https://github.com/RMalik777/git-commander/commit/f1a8e06b4ea79ef1d3a541e4674ef7408c154d99))
+
 ## [1.24.1](https://github.com/RMalik777/git-commander/compare/v1.24.0...v1.24.1) (2025-02-11)
 
 
