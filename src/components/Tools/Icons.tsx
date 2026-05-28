@@ -28,7 +28,7 @@ import {
   siC,
   siComposer,
   siCplusplus,
-  siCss3,
+  siCss,
   siDependabot,
   siDotenv,
   siDotnet,
@@ -156,7 +156,7 @@ export function Icons(params: Readonly<Params>) {
   }
   // CSS
   else if (extension === "css") {
-    iconsVar = siCss3;
+    iconsVar = siCss;
   }
   // HTML
   else if (extension === "html") {
