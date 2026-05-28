@@ -6,3 +6,5 @@ package-lock.json
 yarn.lock
 target
 CHANGELOG.md
+.agents
+.claude

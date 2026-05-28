@@ -2360,15 +2360,6 @@ packages:
       picomatch:
         optional: true
 
-  fdir@6.5.0:
-    resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      picomatch: ^3 || ^4
-    peerDependenciesMeta:
-      picomatch:
-        optional: true
-
   figures@2.0.0:
     resolution: {integrity: sha512-Oa2M9atig69ZkfwiApY8F2Yy+tzMbazyvqv21R0NsSC8floSOC09BbT1ITWAdoMGQvJ/aZnR1KMwdx9tvHnTNA==}
     engines: {node: '>=4'}
@@ -3988,11 +3979,11 @@ packages:
     hasBin: true
 
   tauri-plugin-fs-extra-api@https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/498e78b0bb017caa5760e8ea35ddcadbec265d49:
-    resolution: {gitHosted: true, integrity: sha512-Ma1Yr9hO4j+xWJipKT0ZvwxvwjbhxLParK/a9qdrTZvL9x28o//ILHmjy4mfi/eWSDTnXqxn1P0jMc3UNeKoEQ==, tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/498e78b0bb017caa5760e8ea35ddcadbec265d49}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/498e78b0bb017caa5760e8ea35ddcadbec265d49}
     version: 0.0.0
 
   tauri-plugin-store-api@https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/15a2fa051c402785fcfc470242f48c5707f03fbd:
-    resolution: {gitHosted: true, integrity: sha512-Rv3JTtBBq8wj3ve9WYlC7LVr/fOJUTBVTFVQqDsMDrFnZYL2aV7Yw77x+V+CceapAu2CY6XeE/XMC7EL9q18nQ==, tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/15a2fa051c402785fcfc470242f48c5707f03fbd}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/15a2fa051c402785fcfc470242f48c5707f03fbd}
     version: 0.0.0
 
   temp-dir@3.0.0:
@@ -6609,10 +6600,6 @@ snapshots:
   fastq@1.20.1:
     dependencies:
       reusify: 1.1.0
-
-  fdir@6.5.0(picomatch@4.0.4):
-    optionalDependencies:
-      picomatch: 4.0.4
 
   fdir@6.5.0(picomatch@4.0.4):
     optionalDependencies:
