@@ -1,7 +1,11 @@
-import { open } from "@tauri-apps/api/dialog";
-import { copyFile, exists, readDir, type FileEntry } from "@tauri-apps/api/fs";
-import { open as openFolder } from "@tauri-apps/api/shell";
-import { metadata } from "tauri-plugin-fs-extra-api";
+import { open } from "@tauri-apps/plugin-dialog";
+import { copyFile, exists, readDir } from "@tauri-apps/plugin-fs";
+import { join } from "@tauri-apps/api/path";
+
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
+
+import { open as openFolder } from "@tauri-apps/plugin-shell";
+import { stat } from "@tauri-apps/plugin-fs";
 
 import { useState } from "react";
 
@@ -43,6 +47,19 @@ import { PulseLoader } from "react-spinners";
 
 import { Duplicate } from "@/components/Dialog/DuplicateDialog";
 
+async function readDirRecursive(dir: string): Promise<DirEntryWithPath[]> {
+  const entries = await readDir(dir);
+  return Promise.all(
+    entries.map(async (entry) => {
+      const path = await join(dir, entry.name);
+      if (entry.isDirectory) {
+        return { ...entry, path, children: await readDirRecursive(path) };
+      }
+      return { ...entry, path };
+    }),
+  );
+}
+
 const formSchema = z.object({
   fileList: z.string().min(1, { message: "Please enter the file name" }),
   overwrite: z.boolean().default(false).optional(),
@@ -60,7 +77,7 @@ export function Copy() {
   const [duplicateList, setDuplicateList] = useState<
     { name: string; duplicate: FileEntryWithMetadata[] }[]
   >([]);
-  const [uniqueList, setUniqueList] = useState<FileEntry[]>([]);
+  const [uniqueList, setUniqueList] = useState<DirEntryWithPath[]>([]);
   const [notFoundList, setNotFoundList] = useState<string[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -84,9 +101,9 @@ export function Copy() {
     try {
       setIsLoading(true);
       const list = values.fileList.trim().split("\n");
-      const dir: FileEntry[] = await readDir(values.source, { recursive: true });
-      const found: FileEntry[] = [];
-      const uniqueFound: FileEntry[] = [];
+      const dir: DirEntryWithPath[] = await readDirRecursive(values.source);
+      const found: DirEntryWithPath[] = [];
+      const uniqueFound: DirEntryWithPath[] = [];
       const localDuplicateList: { name: string; duplicate: FileEntryWithMetadata[] }[] = [];
 
       if (values.rememberSource) localStorage.setItem("source", values.source);
@@ -99,26 +116,25 @@ export function Copy() {
       }
 
       await search(dir);
-      async function search(parent: FileEntry[]) {
+      async function search(parent: DirEntryWithPath[]) {
         for (const file of parent) {
           const duplicate =
             uniqueFound.find((item) => item.name === file.name) ??
             localDuplicateList
-              .map((item) => item.duplicate)
-              .flat()
+              .flatMap((item) => item.duplicate)
               .find((item) => item.name === file.name);
           if (duplicate) {
             const duplicateAlreadyAdded = localDuplicateList.find(
               (item) => item.name === file.name,
             );
             if (duplicateAlreadyAdded) {
-              duplicateAlreadyAdded.duplicate.push({ ...file, ...(await metadata(file.path)) });
+              duplicateAlreadyAdded.duplicate.push({ ...file, ...(await stat(file.path)) });
             } else {
               localDuplicateList.push({
                 name: file.name ?? "",
                 duplicate: [
-                  { ...duplicate, ...(await metadata(duplicate.path)) },
-                  { ...file, ...(await metadata(file.path)) },
+                  { ...duplicate, ...(await stat(duplicate.path)) },
+                  { ...file, ...(await stat(file.path)) },
                 ],
               });
               uniqueFound.splice(uniqueFound.indexOf(duplicate), 1);

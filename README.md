@@ -168,7 +168,6 @@ SQLite is used as the database for this project. If you're not manipulating the 
 
 1. Download [SQLite](https://www.sqlite.org/download.html)
    Choose the download file based on your operating system.
-
    - Download source code\
      Example: `sqlite-amalgamation-3450200.zip`
    - Download precompiled binaries\

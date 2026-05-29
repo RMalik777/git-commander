@@ -1,5 +1,5 @@
-import type { FileEntryWithMetadata } from "@/lib/Types/Duplicate";
-import { copyFile, exists, type FileEntry } from "@tauri-apps/api/fs";
+import type { DirEntryWithPath, FileEntryWithMetadata } from "@/lib/Types/Duplicate";
+import { copyFile, exists } from "@tauri-apps/plugin-fs";
 import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,7 +42,7 @@ export function Duplicate({
   open: boolean;
   onOpenChange: (open: boolean) => void;
   duplicateList: { name: string; duplicate: FileEntryWithMetadata[] }[];
-  uniqueList: FileEntry[];
+  uniqueList: DirEntryWithPath[];
   notFoundList: string[];
   destination: string;
   overwrite?: boolean;
@@ -195,7 +195,7 @@ export function Duplicate({
                                 {file.path}{" "}
                                 <small>
                                   Last Edited{" "}
-                                  {file.modifiedAt.toLocaleString(undefined, {
+                                  {file.mtime?.toLocaleString(undefined, {
                                     dateStyle: "long",
                                     timeStyle: "medium",
                                   })}

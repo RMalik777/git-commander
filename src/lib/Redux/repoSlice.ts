@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FileEntry } from "@tauri-apps/api/fs";
-import { Store } from "tauri-plugin-store-api";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
+import { Store } from "@tauri-apps/plugin-store";
 
 export interface RepoState {
   remoteHash: string;
@@ -8,15 +8,15 @@ export interface RepoState {
   name: string;
   directory: string;
   branch: string;
-  diff: FileEntry[];
-  staged: FileEntry[];
+  diff: DirEntryWithPath[];
+  staged: DirEntryWithPath[];
   remoteUrl: string;
   commitcount: number;
   contributorsCount: number;
 }
 
-const diffStore = new Store(".diffList.json");
-const stagedStore = new Store(".stagedList.json");
+const diffStore = await Store.load(".diffList.json");
+const stagedStore = await Store.load(".stagedList.json");
 const initialState: RepoState = {
   remoteHash: localStorage.getItem("remoteRepoHash") ?? "",
   localHash: localStorage.getItem("localRepoHash") ?? "",
@@ -42,8 +42,8 @@ export const repoSlice = createSlice({
         name?: string;
         directory?: string;
         branch?: string;
-        diff?: FileEntry[];
-        staged?: FileEntry[];
+        diff?: DirEntryWithPath[];
+        staged?: DirEntryWithPath[];
         remoteUrl?: string;
         commitcount?: number;
         contributorsCount?: number;

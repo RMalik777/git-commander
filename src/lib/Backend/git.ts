@@ -1,7 +1,7 @@
-import { Command } from "@tauri-apps/api/shell";
+import { Command } from "@tauri-apps/plugin-shell";
 
 export async function getContributors(path: string) {
-  const command = new Command("git 2 args", ["shortlog", "-sne"], { cwd: path });
+  const command = Command.create("git 2 args", ["shortlog", "-sne"], { cwd: path });
   return new Promise<string[]>((resolve, reject) => {
     const contributors: string[] = [];
     command.spawn().catch((error) => reject(new Error(error)));
@@ -23,7 +23,7 @@ export async function getContributors(path: string) {
 }
 
 export async function getCommitCount(path: string) {
-  const command = new Command("git 3 args", ["rev-list", "--count", "--all"], { cwd: path });
+  const command = Command.create("git 3 args", ["rev-list", "--count", "--all"], { cwd: path });
   return new Promise<number>((resolve, reject) => {
     let commitCount: number;
     command.spawn().catch((error) => reject(new Error(error)));
@@ -45,7 +45,7 @@ export async function getCommitCount(path: string) {
 }
 
 export async function getRemoteOrigin(path: string) {
-  const command = new Command("git 3 args", ["config", "--get", "remote.origin.url"], {
+  const command = Command.create("git 3 args", ["config", "--get", "remote.origin.url"], {
     cwd: path,
   });
   return new Promise<string>((resolve, reject) => {
@@ -81,10 +81,12 @@ export async function getRemoteOrigin(path: string) {
  * @returns A promise that resolves when the command is executed successfully.
  */
 export async function addAllFiles(path: string) {
-  await new Command("git 2 args", ["add", "."], { cwd: path }).spawn().catch((error) => {
-    console.error(error);
-    throw new Error(error);
-  });
+  await Command.create("git 2 args", ["add", "."], { cwd: path })
+    .spawn()
+    .catch((error) => {
+      console.error(error);
+      throw new Error(error);
+    });
 }
 
 /**
@@ -98,7 +100,7 @@ export async function addAllFiles(path: string) {
  * @returns A promise that resolves when the file has been successfully added to the staging area and rejected if an error occurs.
  */
 export async function addFile(path: string, filePath: string) {
-  const command = new Command("git 2 args", ["add", filePath], { cwd: path });
+  const command = Command.create("git 2 args", ["add", filePath], { cwd: path });
   return new Promise<void>((resolve, reject) => {
     command.on("error", (error) => reject(new Error(error)));
     command.spawn().catch((error) => {
@@ -131,7 +133,7 @@ export async function addFile(path: string, filePath: string) {
  * ```
  */
 export async function getBranchList(path: string) {
-  const command = new Command("git 2 args", ["branch", "-a"], { cwd: path });
+  const command = Command.create("git 2 args", ["branch", "-a"], { cwd: path });
   return new Promise<{ local: string[]; remote: string[] }>((resolve, reject) => {
     const result: { local: string[]; remote: string[] } = {
       local: [],
@@ -169,7 +171,7 @@ export async function getBranchList(path: string) {
  * @returns A promise that resolves to `true` if the repository is valid, or rejects with an error if not.
  */
 export async function checkRepository(path: string) {
-  const command = new Command("git 1 args", ["status"], { cwd: path });
+  const command = Command.create("git 1 args", ["status"], { cwd: path });
   return new Promise<true>((resolve, reject) => {
     command.spawn().catch((error) => {
       reject(new Error(error));
@@ -196,7 +198,7 @@ export async function checkRepository(path: string) {
  * @returns A promise that resolves to an array of strings containing the clone information and progress.
  */
 export async function clone(localRepo: string, remoteRepo: string) {
-  const command = new Command("git 3 args", ["clone", "--progress", remoteRepo], {
+  const command = Command.create("git 3 args", ["clone", "--progress", remoteRepo], {
     cwd: localRepo,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -231,7 +233,7 @@ export async function clone(localRepo: string, remoteRepo: string) {
  * @returns A promise that resolves to last line of the command.
  */
 export async function commit(path: string, message: string) {
-  const command = new Command("git 3 args", ["commit", "-m", message], {
+  const command = Command.create("git 3 args", ["commit", "-m", message], {
     cwd: path,
   });
   return new Promise<string>((resolve, reject) => {
@@ -261,7 +263,7 @@ export async function commit(path: string, message: string) {
  * @returns A promise that resolves to the Git username as a string.
  */
 export async function configGetUsername(path: string) {
-  const command = new Command("git 3 args", ["config", "--get", "user.name"], {
+  const command = Command.create("git 3 args", ["config", "--get", "user.name"], {
     cwd: path,
   });
   return new Promise<string>((resolve, reject) => {
@@ -291,7 +293,7 @@ export async function configGetUsername(path: string) {
  * @returns A promise that resolve to a void when the command is executed successfully.
  */
 export async function configUsername(path: string, username: string) {
-  const command = new Command("git username", ["config", "user.name", username], {
+  const command = Command.create("git username", ["config", "user.name", username], {
     cwd: path,
   });
   await command.spawn().catch((error) => {
@@ -317,7 +319,7 @@ export async function configUsername(path: string, username: string) {
  * ```
  */
 export async function configUsernameReplace(path: string, username: string) {
-  const command = new Command(
+  const command = Command.create(
     "git username replace",
     ["config", "--replace-all", "user.name", username],
     {
@@ -336,7 +338,7 @@ export async function configUsernameReplace(path: string, username: string) {
  * @returns A promise that resolves to the name of the current branch as a string.
  */
 export async function currentBranch(path: string) {
-  const command = new Command("git 2 args", ["branch", "--show-current"], {
+  const command = Command.create("git 2 args", ["branch", "--show-current"], {
     cwd: path,
   });
   return new Promise<string>((resolve, reject) => {
@@ -362,7 +364,7 @@ export async function currentBranch(path: string) {
  * @returns A promise that resolves to the result of the fetch command as a string.
  */
 export async function fetch(path: string) {
-  const command = new Command("git 1 args", ["fetch"], { cwd: path });
+  const command = Command.create("git 1 args", ["fetch"], { cwd: path });
   return new Promise<string>((resolve, reject) => {
     const result: string[] = [];
     command.on("close", () => resolve(result.toString()));
@@ -386,7 +388,7 @@ export async function fetch(path: string) {
  *
  */
 export async function getDiffCommit(path: string, branch: string) {
-  const command = new Command(
+  const command = Command.create(
     "git 4 args",
     [
       "log",
@@ -422,7 +424,7 @@ export async function getAllCommit(path: string, branch: string, type: "local" |
   const response = new Promise<string[]>((resolve, reject) => {
     let command;
     if (type === "local") {
-      command = new Command(
+      command = Command.create(
         "git 4 args",
         [
           "log",
@@ -435,7 +437,7 @@ export async function getAllCommit(path: string, branch: string, type: "local" |
         },
       );
     } else if (type === "remote") {
-      command = new Command(
+      command = Command.create(
         "git 4 args",
         [
           "log",
@@ -470,13 +472,17 @@ export async function getAllCommit(path: string, branch: string, type: "local" |
 export async function getLatestCommitHash(path: string, branch: string, type: "local" | "remote") {
   let command;
   if (type === "local") {
-    command = new Command("git 4 args", ["log", `@{push}..`, '--pretty=format:"%h"', "-1"], {
+    command = Command.create("git 4 args", ["log", `@{push}..`, '--pretty=format:"%h"', "-1"], {
       cwd: path,
     });
   } else {
-    command = new Command("git 4 args", ["log", `origin/${branch}`, '--pretty=format:"%h"', "-1"], {
-      cwd: path,
-    });
+    command = Command.create(
+      "git 4 args",
+      ["log", `origin/${branch}`, '--pretty=format:"%h"', "-1"],
+      {
+        cwd: path,
+      },
+    );
   }
   return new Promise<string>((resolve, reject) => {
     let result: string;
@@ -501,7 +507,7 @@ export async function getLatestCommitHash(path: string, branch: string, type: "l
  * @returns A promise that resolves to an array of strings containing the last commit message.
  */
 export async function getLastCommitMessage(path: string) {
-  const command = new Command("git 3 args", ["log", "-1", "--pretty=%B"], {
+  const command = Command.create("git 3 args", ["log", "-1", "--pretty=%B"], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -526,7 +532,7 @@ export async function getLastCommitMessage(path: string) {
  *
  */
 export async function getParent(path: string) {
-  const command = new Command("git 2 args", ["rev-parse", "--show-toplevel"], {
+  const command = Command.create("git 2 args", ["rev-parse", "--show-toplevel"], {
     cwd: path,
   });
   return new Promise<string>((resolve, reject) => {
@@ -556,7 +562,7 @@ export async function getParent(path: string) {
  * @returns A promise that resolves with an array of strings containing the output of the command, or rejects with an error if the command fails.
  */
 export async function push(path: string) {
-  const command = new Command("git 1 args", ["push"], { cwd: path });
+  const command = Command.create("git 1 args", ["push"], { cwd: path });
   return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
     command.on("close", () => resolve(result));
@@ -578,7 +584,7 @@ export async function push(path: string) {
  * @returns A promise that resolves with an array of strings containing the output of the command, or rejects with an error if the command fails.
  */
 export async function pull(path: string) {
-  const command = new Command("git 1 args", ["pull"], { cwd: path });
+  const command = Command.create("git 1 args", ["pull"], { cwd: path });
   return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
     command.on("close", () => resolve(result));
@@ -600,7 +606,7 @@ export async function pull(path: string) {
  * @returns A promise that resolves with an array of strings containing the output lines from the Git command.
  */
 export async function removeUntrackedAll(path: string) {
-  const command = new Command("git 2 args", ["clean", "-f"], {
+  const command = Command.create("git 2 args", ["clean", "-f"], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -622,7 +628,7 @@ export async function removeUntrackedAll(path: string) {
  */
 export async function revertAll(path: string) {
   await removeUntrackedAll(path);
-  const command = new Command("git 2 args", ["restore", "."], {
+  const command = Command.create("git 2 args", ["restore", "."], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -647,7 +653,7 @@ export async function revertAll(path: string) {
  * @returns A promise that resolves with an array of strings containing the command output, or rejects with an error.
  */
 export async function revertFile(path: string, filePath: string) {
-  const command = new Command("git 2 args", ["restore", filePath], {
+  const command = Command.create("git 2 args", ["restore", filePath], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -671,7 +677,7 @@ export async function revertFile(path: string, filePath: string) {
  * @returns A promise that resolves to an array of strings, each representing a changed file.
  */
 export async function showChanged(path: string) {
-  const command = new Command("git 2 args", ["diff", "--name-only"], {
+  const command = Command.create("git 2 args", ["diff", "--name-only"], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -695,7 +701,7 @@ export async function showChanged(path: string) {
  * @returns A promise that resolves to an array of strings, each representing a staged file.
  */
 export async function showStaged(path: string) {
-  const command = new Command("git 3 args", ["diff", "--name-only", "--cached"], {
+  const command = Command.create("git 3 args", ["diff", "--name-only", "--cached"], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -718,7 +724,7 @@ export async function showStaged(path: string) {
  * @returns A promise that resolves to an array of strings, each representing an untracked file.
  */
 export async function showUntrackedFiles(path: string) {
-  const command = new Command("git 3 args", ["ls-files", "--others", "--exclude-standard"], {
+  const command = Command.create("git 3 args", ["ls-files", "--others", "--exclude-standard"], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -743,7 +749,7 @@ export async function showUntrackedFiles(path: string) {
  * @returns A promise that resolves when the command is executed.
  */
 export async function setSSLFalse() {
-  const command = new Command("git ssl", ["config --global http.sslVerify false"]);
+  const command = Command.create("git ssl", ["config --global http.sslVerify false"]);
   await command.spawn().catch((error) => {
     console.error(error);
   });
@@ -760,7 +766,7 @@ export async function setSSLFalse() {
  * @returns A promise that resolves with an array of strings containing the command output, or rejects with an error if the command fails.
  */
 export async function undoLastCommit(path: string) {
-  const command = new Command("git 3 args", ["reset", "--soft", "HEAD^"], {
+  const command = Command.create("git 3 args", ["reset", "--soft", "HEAD^"], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -786,7 +792,7 @@ export async function undoLastCommit(path: string) {
  * @returns A promise that resolves with an array of strings containing the output of the command.
  */
 export async function unstageAll(path: string) {
-  const command = new Command("git 2 args", ["reset", "HEAD"], {
+  const command = Command.create("git 2 args", ["reset", "HEAD"], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -811,7 +817,7 @@ export async function unstageAll(path: string) {
  * @returns A promise that resolves to an array of strings containing the command output.
  */
 export async function unstageFile(path: string, file: string) {
-  const command = new Command("git 3 args", ["restore", "--staged", file], {
+  const command = Command.create("git 3 args", ["restore", "--staged", file], {
     cwd: path,
   });
   return new Promise<string[]>((resolve, reject) => {
@@ -834,7 +840,7 @@ export async function unstageFile(path: string, file: string) {
  * @returns A promise that resolves to an array of strings containing the version information.
  */
 export async function version() {
-  const command = new Command("git 1 args", ["--version"]);
+  const command = Command.create("git 1 args", ["--version"]);
   return new Promise<string[]>((resolve, reject) => {
     const result: string[] = [];
     command.on("close", () => resolve(result));

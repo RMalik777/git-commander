@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FileEntry } from "@tauri-apps/api/fs";
-import { Store } from "tauri-plugin-store-api";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
+import { Store } from "@tauri-apps/plugin-store";
 
 export interface FileList {
-  files: FileEntry[] | undefined;
+  files: DirEntryWithPath[] | undefined;
 }
-const store = new Store(".fileList.json");
+const store = await Store.load(".fileList.json");
 const initialState: FileList = {
   files: (await store.get("fileList")) ?? undefined,
 };
@@ -14,7 +14,7 @@ export const fileListSlice = createSlice({
   name: "fileList",
   initialState,
   reducers: {
-    setFiles: (state, action: PayloadAction<FileEntry[]>) => {
+    setFiles: (state, action: PayloadAction<DirEntryWithPath[]>) => {
       state.files = action.payload;
     },
     removeFiles: (state) => {

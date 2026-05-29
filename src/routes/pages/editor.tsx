@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/lib/Redux/hooks";
 import { Fragment, useLayoutEffect, useState } from "react";
 import { useLocation, NavLink } from "react-router";
-import { exists } from "@tauri-apps/api/fs";
+import { exists } from "@tauri-apps/plugin-fs";
 
 import {
   Breadcrumb,

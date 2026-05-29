@@ -1,7 +1,7 @@
 import { useLayoutEffect } from "react";
 
-import { Store } from "tauri-plugin-store-api";
-import { FileEntry } from "@tauri-apps/api/fs";
+import { Store } from "@tauri-apps/plugin-store";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
@@ -20,24 +20,21 @@ export default function Git() {
   const dir = useAppSelector((state) => state.repo.directory);
   const diffList = useAppSelector((state) => state.repo.diff);
 
-  const fileStore = new Store(".fileList.json");
-  const diffStore = new Store(".diffList.json");
-  const stagedStore = new Store(".stagedList.json");
-
   async function getDiff() {
+    const diffStore = await Store.load(".diffList.json");
     const data = await git.showChanged(dir);
     const data2 = await git.showUntrackedFiles(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
+      } as unknown as DirEntryWithPath;
     });
     const toEntry2 = await data2.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
+      } as unknown as DirEntryWithPath;
     });
     toEntry.push(...toEntry2);
     dispatch(setRepo({ diff: toEntry }));
@@ -47,12 +44,13 @@ export default function Git() {
 
   const stagedList = useAppSelector((state) => state.repo.staged);
   async function getStaged() {
+    const stagedStore = await Store.load(".stagedList.json");
     const data = await git.showStaged(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
+      } as unknown as DirEntryWithPath;
     });
     dispatch(setRepo({ staged: toEntry }));
     stagedStore.set("stagedList", toEntry);
@@ -61,6 +59,7 @@ export default function Git() {
 
   useLayoutEffect(() => {
     async function setDirectory() {
+      const fileStore = await Store.load(".fileList.json");
       const allChild = await getAllChildDir(dir);
       dispatch(setFiles(allChild));
       fileStore.set("fileList", allChild);

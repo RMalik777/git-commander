@@ -1,0 +1,102 @@
+{
+  "identifier": "migrated",
+  "description": "permissions that were migrated from v1",
+  "local": true,
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-set-focus",
+    "core:window:allow-request-user-attention",
+    "store:default",
+    "os:default",
+    "clipboard-manager:default",
+    "notification:default",
+    "fs:default",
+    "fs:allow-read-file",
+    "fs:allow-write-file",
+    "fs:allow-read-dir",
+    "fs:allow-mkdir",
+    "fs:allow-remove",
+    "fs:allow-rename",
+    "fs:allow-copy-file",
+    "fs:allow-exists",
+    "fs:allow-stat",
+    "fs:scope-home-recursive",
+    "dialog:allow-open",
+    {
+      "identifier": "shell:allow-spawn",
+      "allow": [
+        {
+          "name": "git ssl",
+          "cmd": "git",
+          "args": ["config --global http.sslVerify false"],
+          "sidecar": false
+        },
+        {
+          "name": "git username",
+          "cmd": "git",
+          "args": ["config", "user.name", { "validator": "[\\S\\s]+" }],
+          "sidecar": false
+        },
+        {
+          "name": "git username replace",
+          "cmd": "git",
+          "args": ["config", "--replace-all", "user.name", { "validator": "[\\S\\s]+" }],
+          "sidecar": false
+        },
+        {
+          "name": "git 1 args",
+          "cmd": "git",
+          "args": [{ "validator": "[\\S\\s]+" }],
+          "sidecar": false
+        },
+        {
+          "name": "git 2 args",
+          "cmd": "git",
+          "args": [{ "validator": "[\\S\\s]+" }, { "validator": "[\\S\\s]+" }],
+          "sidecar": false
+        },
+        {
+          "name": "git 3 args",
+          "cmd": "git",
+          "args": [
+            { "validator": "[\\S\\s]+" },
+            { "validator": "[\\S\\s]+" },
+            { "validator": "[\\S\\s]+" }
+          ],
+          "sidecar": false
+        },
+        {
+          "name": "git 4 args",
+          "cmd": "git",
+          "args": [
+            { "validator": "[\\S\\s]+" },
+            { "validator": "[\\S\\s]+" },
+            { "validator": "[\\S\\s]+" },
+            { "validator": "[\\S\\s]+" }
+          ],
+          "sidecar": false
+        }
+      ]
+    },
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "name": "../src-tauri/bin/sza",
+          "cmd": "../src-tauri/bin/sza",
+          "args": [
+            "a",
+            { "validator": "[\\S\\s]+" },
+            { "validator": "[\\S\\s]+" },
+            { "validator": "[\\S\\s]+" }
+          ],
+          "sidecar": true
+        }
+      ]
+    },
+    "shell:allow-stdin-write",
+    "shell:allow-kill",
+    "window-state:default"
+  ]
+}

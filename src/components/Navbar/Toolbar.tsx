@@ -1,4 +1,4 @@
-import { Command } from "@tauri-apps/api/shell";
+import { Command } from "@tauri-apps/plugin-shell";
 
 import { useEffect, useLayoutEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
@@ -94,6 +94,8 @@ export function Toolbar() {
   const repoName = useAppSelector((state) => state.repo.name);
   const dirLocation = useAppSelector((state) => state.repo.directory);
   useLayoutEffect(() => {
+    if (!dirLocation) return;
+
     async function readUserName() {
       const username = await git.configGetUsername(dirLocation);
       dispatch(setUser(username));
@@ -130,7 +132,7 @@ export function Toolbar() {
     const response = new Promise((resolve, reject) => {
       const resultNormal: string[] = [],
         resultReject: string[] = [];
-      const command = new Command("git 3 args", ["switch", branch, "--progress"], {
+      const command = Command.create("git 3 args", ["switch", branch, "--progress"], {
         cwd: path,
       });
       command.on("close", () => {

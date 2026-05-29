@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { FileEntry } from "@tauri-apps/api/fs";
-import { open } from "@tauri-apps/api/shell";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
+import { open } from "@tauri-apps/plugin-shell";
 
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setRepo } from "@/lib/Redux/repoSlice";
@@ -47,9 +47,9 @@ export function Staging({
   getStaged,
 }: Readonly<{
   dir: string;
-  dirList: FileEntry[] | undefined;
-  diffList: FileEntry[];
-  stagedList: FileEntry[];
+  dirList: DirEntryWithPath[] | undefined;
+  diffList: DirEntryWithPath[];
+  stagedList: DirEntryWithPath[];
   getDiff: () => Promise<void>;
   getStaged: () => Promise<void>;
 }>) {
@@ -60,7 +60,7 @@ export function Staging({
   const [revertDialog, setRevertDialog] = useState(false);
   const repoName = useAppSelector((state) => state.repo.name);
 
-  function actionButton(file: FileEntry, mode: string) {
+  function actionButton(file: DirEntryWithPath, mode: string) {
     return (
       <div className="STG_5A STG_5 UST_5 UST_5A flex flex-row items-center gap-2">
         <TooltipProvider delayDuration={250} disableHoverableContent>
@@ -435,7 +435,7 @@ export function Staging({
       </List>
     );
   }
-  function treeView(parent: FileEntry[], root: boolean): React.ReactNode {
+  function treeView(parent: DirEntryWithPath[], root: boolean): React.ReactNode {
     return (
       <>
         {parent.map((placeholder) => {

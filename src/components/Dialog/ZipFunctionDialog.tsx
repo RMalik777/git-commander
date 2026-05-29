@@ -2,19 +2,19 @@ import { useState } from "react";
 
 import { useAppSelector } from "@/lib/Redux/hooks";
 
-import { open } from "@tauri-apps/api/dialog";
+import { open } from "@tauri-apps/plugin-dialog";
 import {
-  createDir,
   exists,
-  type FileEntry,
-  readBinaryFile,
+  mkdir,
   readDir,
-  removeDir,
-  writeBinaryFile,
+  readFile,
+  remove,
+  stat,
+  writeFile,
   writeTextFile,
-} from "@tauri-apps/api/fs";
-import { Command, open as openFolder } from "@tauri-apps/api/shell";
-import { metadata } from "tauri-plugin-fs-extra-api";
+} from "@tauri-apps/plugin-fs";
+import { Command, open as openFolder } from "@tauri-apps/plugin-shell";
+import type { FileList } from "@/lib/Types/fileList";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -57,6 +57,20 @@ import { clsx } from "clsx";
 
 import { displayNotificationNotFocus } from "@/lib/Backend/functions";
 
+async function getAllFilePaths(dir: string): Promise<string[]> {
+  const entries = await readDir(dir);
+  const paths: string[] = [];
+  for (const entry of entries) {
+    const entryPath = `${dir}\\${entry.name}`;
+    if (entry.isDirectory) {
+      paths.push(...(await getAllFilePaths(entryPath)));
+    } else {
+      paths.push(entryPath);
+    }
+  }
+  return paths;
+}
+
 const formSchema = z.object({
   archiveName: z.string().min(1, { message: "Please enter a name for the file" }),
   archiveFormat: z.string().min(1, { message: "Please choose a file type" }),
@@ -79,13 +93,14 @@ const compressionLevelOptions = [
   { value: "9", label: "Ultra" },
 ];
 
-export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[] }>) {
+export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileList[] }>) {
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const currentDir = useAppSelector((state) => state.repo.directory);
   const zipFunctionForm = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(formSchema) as any,
     defaultValues: {
       archiveName: "",
       archiveFormat: localStorage.getItem("format") ?? "",
@@ -95,19 +110,25 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
     },
   });
   const { handleSubmit, reset } = zipFunctionForm;
-  async function recursiveCopy(parent: FileEntry, source: string, destination: string) {
-    if ((await metadata(parent.path)).isDir) {
-      await createDir(`${destination}\\${parent.name}`);
-      const childDir = await readDir(parent.path, { recursive: true });
-      for (const child of childDir) {
-        await recursiveCopy(child, source, `${destination}\\${parent.name}`);
+  async function recursiveCopy(
+    parent: { name: string; path: string; isDirectory: boolean },
+    source: string,
+    destination: string,
+  ) {
+    if (parent.isDirectory) {
+      await mkdir(`${destination}\\${parent.name}`);
+      const entries = await readDir(parent.path);
+      for (const entry of entries) {
+        const entryPath = `${parent.path}\\${entry.name}`;
+        await recursiveCopy(
+          { name: entry.name, path: entryPath, isDirectory: entry.isDirectory },
+          source,
+          `${destination}\\${parent.name}`,
+        );
       }
     } else {
       if (!(await exists(parent.path))) throw new Error(`File ${parent.name} not found`);
-      await writeBinaryFile({
-        path: `${destination}\\${parent.name}`,
-        contents: await readBinaryFile(parent.path),
-      });
+      await writeFile(`${destination}\\${parent.name}`, await readFile(parent.path));
     }
   }
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -128,7 +149,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
     const tempDir = `${values.location}\\.$temp`;
     // FLOW: CREATE TEMP FOLDER -> DUPLICATE FILE TO TEMP FOLDER -> RENAME FILE -> CREATE TXT FILE -> ZIP FILE -> DELETE TEMP FOLDER
     try {
-      await createDir(tempDir);
+      await mkdir(tempDir);
       for (const [index, file] of fileList.entries()) {
         let filename;
         if (values.removeSpace) {
@@ -137,24 +158,28 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
           filename = file.name;
         }
         const prepend = `${(index + 1).toLocaleString(undefined, { minimumIntegerDigits: 3, useGrouping: false })}.`;
-        if ((await metadata(file.path)).isDir) {
-          await createDir(`${tempDir}\\${prepend}${filename}`);
-          const childDir = await readDir(file.path, { recursive: true });
-          for (const child of childDir) {
-            await recursiveCopy(child, child.path, `${tempDir}\\${prepend}${filename}\\`);
+        if ((await stat(file.path)).isDirectory) {
+          await mkdir(`${tempDir}\\${prepend}${filename}`);
+          const entries = await readDir(file.path);
+          for (const entry of entries) {
+            const entryPath = `${file.path}\\${entry.name}`;
+            await recursiveCopy(
+              { name: entry.name, path: entryPath, isDirectory: entry.isDirectory },
+              entryPath,
+              `${tempDir}\\${prepend}${filename}\\`,
+            );
           }
         } else {
           if (!(await exists(file.path))) throw new Error(`File ${filename} not found`);
-          await writeBinaryFile({
-            path: `${tempDir}\\${prepend}${filename}`,
-            contents: await readBinaryFile(file.path),
-          });
+          await writeFile(`${tempDir}\\${prepend}${filename}`, await readFile(file.path));
         }
       }
-      const newFileList = await readDir(tempDir, { recursive: true });
-      const pathList = newFileList.map((item) => `"${item.path}"`);
-      const pathListString = `${pathList.join("\n").trim()}`;
-      await writeTextFile({ path: `${tempDir}\\zip.txt`, contents: pathListString });
+      const pathList = await getAllFilePaths(tempDir);
+      const pathListString = pathList
+        .map((p) => `"${p}"`)
+        .join("\n")
+        .trim();
+      await writeTextFile(`${tempDir}\\zip.txt`, pathListString);
 
       /**
        * EXPLANATION WHY THE FUNCTION READ A TXT FILE INSTEAD OF PASSING THE PATH DIRECTLY
@@ -233,7 +258,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileEntry[]
       }
     } finally {
       setIsLoading(false);
-      await removeDir(tempDir, { recursive: true });
+      await remove(tempDir, { recursive: true });
     }
   }
 

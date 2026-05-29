@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { open } from "@tauri-apps/api/dialog";
-import { Command as ShellCommand } from "@tauri-apps/api/shell";
-import { appWindow } from "@tauri-apps/api/window";
+import { open } from "@tauri-apps/plugin-dialog";
+import { Command as ShellCommand } from "@tauri-apps/plugin-shell";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -54,6 +54,7 @@ import * as func from "@/lib/Backend/functions";
 import * as git from "@/lib/Backend/git";
 
 import { RepoFormat } from "@/lib/Types/Repo";
+const appWindow = getCurrentWebviewWindow();
 
 const formSchema = z.object({
   target: z.string().url({ message: "Please select a repository!" }),
@@ -99,7 +100,7 @@ export function Clone() {
     if (username) await git.configUsername(localRepo, username);
     const response: Promise<string[]> = new Promise((resolve, reject) => {
       const result: string[] = [];
-      const command = new ShellCommand("git 3 args", ["clone", "--progress", remoteRepo], {
+      const command = ShellCommand.create("git 3 args", ["clone", "--progress", remoteRepo], {
         cwd: localRepo,
       });
       command.on("close", () => {

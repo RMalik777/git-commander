@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { getTauriVersion } from "@tauri-apps/api/app";
-import { writeText } from "@tauri-apps/api/clipboard";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import {
   arch,
   Arch,
@@ -9,10 +9,10 @@ import {
   OsType,
   platform,
   Platform,
-  tempdir,
   type,
   version,
-} from "@tauri-apps/api/os";
+} from "@tauri-apps/plugin-os";
+import { tempDir as getTempDir } from "@tauri-apps/api/path";
 
 import { Button } from "@/components/ui/button";
 
@@ -39,7 +39,7 @@ export default function Info() {
       setOsLocale(await locale());
       setOsType(await type());
       setTauriVersion(await getTauriVersion());
-      setTempDir(await tempdir());
+      setTempDir(await getTempDir());
     }
     getInfo();
   }, []);

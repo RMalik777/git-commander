@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
-import { FileEntry } from "@tauri-apps/api/fs";
-import { Store } from "tauri-plugin-store-api";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
+import { Store } from "@tauri-apps/plugin-store";
 
 import { FileList } from "@/components/Card/FileList";
 import { setFiles } from "@/lib/Redux/fileList";
@@ -22,20 +22,20 @@ export default function Git() {
   const refFile = useRef("");
 
   async function getDiff() {
-    const diffList = new Store(".diffList.json");
+    const diffList = await Store.load(".diffList.json");
     const data = await git.showChanged(dir);
     const data2 = await git.showUntrackedFiles(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
+      } as unknown as DirEntryWithPath;
     });
     const toEntry2 = await data2.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
+      } as unknown as DirEntryWithPath;
     });
     toEntry.push(...toEntry2);
     dispatch(setRepo({ diff: toEntry }));
@@ -49,13 +49,13 @@ export default function Git() {
 
   const stagedList = useAppSelector((state) => state.repo.staged);
   async function getStaged() {
-    const stagedStore = new Store(".stagedList.json");
+    const stagedStore = await Store.load(".stagedList.json");
     const data = await git.showStaged(dir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
+      } as unknown as DirEntryWithPath;
     });
     dispatch(setRepo({ staged: toEntry }));
     stagedStore.set("stagedList", toEntry);
@@ -67,9 +67,9 @@ export default function Git() {
   }, [dir]);
 
   async function getDirList() {
-    const store = new Store(".fileList.json");
+    const store = await Store.load(".fileList.json");
     refFile.current = dir;
-    let allChild: FileEntry[];
+    let allChild: DirEntryWithPath[];
     try {
       allChild = await getAllChildDir(dir);
       dispatch(setFiles(allChild));

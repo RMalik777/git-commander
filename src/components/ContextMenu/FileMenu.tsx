@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-import { writeText } from "@tauri-apps/api/clipboard";
-import { removeFile, type FileEntry } from "@tauri-apps/api/fs";
-import { open } from "@tauri-apps/api/shell";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+import { remove } from "@tauri-apps/plugin-fs";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
+import { open } from "@tauri-apps/plugin-shell";
 
 import {
   ContextMenu,
@@ -31,7 +32,7 @@ export function FileMenu({
   getDiff,
 }: Readonly<{
   children: React.ReactNode;
-  target: FileEntry;
+  target: DirEntryWithPath;
   dir: string;
   status: "Staged" | "Changed" | "Unchanged";
   getStaged: () => Promise<void>;
@@ -255,7 +256,7 @@ export function FileMenu({
         open={openDialogDelete}
         setOpen={setOpenDialogDelete}
         onConfirm={async () => {
-          await removeFile(dir + "\\" + target.path);
+          await remove(dir + "\\" + target.path);
           await getStaged();
           await getDiff();
         }}

@@ -1,4 +1,4 @@
-import { open } from "@tauri-apps/api/shell";
+import { open } from "@tauri-apps/plugin-shell";
 import { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import {
   Minus,
 } from "lucide-react";
 
-import { FileList } from "@/lib/Types/FileList";
+import { FileList } from "@/lib/Types/fileList";
 
 import { Icons } from "@/components/Tools/Icons";
 

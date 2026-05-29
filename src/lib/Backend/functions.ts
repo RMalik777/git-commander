@@ -1,10 +1,12 @@
-import { FileEntry, exists, readTextFile, readDir } from "@tauri-apps/api/fs";
+import { exists, readTextFile, readDir } from "@tauri-apps/plugin-fs";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
 import {
   isPermissionGranted,
   requestPermission,
   sendNotification,
-} from "@tauri-apps/api/notification";
-import { appWindow } from "@tauri-apps/api/window";
+} from "@tauri-apps/plugin-notification";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+const appWindow = getCurrentWebviewWindow();
 
 /**
  * Displays a notification if the application window is not focused.
@@ -122,7 +124,7 @@ export async function readGitIgnore(dir: string, scan: boolean = true) {
  * @returns A promise that resolves to the sorted and filtered list of file entries.
  */
 export async function sortAndFilter(
-  parent: FileEntry[],
+  parent: DirEntryWithPath[],
   rootDir: string,
   parentDir: string = "",
   ignore?: {
@@ -174,7 +176,7 @@ export async function sortAndFilter(
         }
       }
     }
-    delete child.name;
+    delete (child as { name?: string }).name;
     child.path = child.path?.replace(rootDir, "");
     if (child.children) {
       child.children.sort((a, b) => a.name?.localeCompare(b.name ?? "") ?? 0);
@@ -189,9 +191,22 @@ export async function sortAndFilter(
   return parent;
 }
 
+async function readDirTree(dir: string): Promise<DirEntryWithPath[]> {
+  const entries = await readDir(dir);
+  return Promise.all(
+    entries.map(async (entry) => {
+      const path = `${dir}\\${entry.name}`;
+      if (entry.isDirectory) {
+        return { ...entry, path, children: await readDirTree(path) };
+      }
+      return { ...entry, path };
+    }),
+  );
+}
+
 export async function getAllChildDir(repo: string) {
   try {
-    const directory = await readDir(repo, { recursive: true });
+    const directory = await readDirTree(repo);
     const sorted = await sortAndFilter(directory, repo);
     return sorted;
   } catch (error) {

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-import { readTextFile, writeTextFile } from "@tauri-apps/api/fs";
-import { open } from "@tauri-apps/api/shell";
+import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
+import { open } from "@tauri-apps/plugin-shell";
 
 import "@/lib/Monaco/userWorker";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";

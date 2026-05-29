@@ -1,4 +1,8 @@
-import type { Metadata } from "tauri-plugin-fs-extra-api";
-import type { FileEntry } from "@tauri-apps/api/fs";
+import type { DirEntry, FileInfo } from "@tauri-apps/plugin-fs";
 
-export interface FileEntryWithMetadata extends FileEntry, Metadata {}
+export interface DirEntryWithPath extends DirEntry {
+  path: string;
+  children?: DirEntryWithPath[];
+}
+
+export interface FileEntryWithMetadata extends DirEntryWithPath, FileInfo {}

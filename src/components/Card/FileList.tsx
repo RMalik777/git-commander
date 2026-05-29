@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { FileEntry } from "@tauri-apps/api/fs";
-import { open } from "@tauri-apps/api/shell";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
+import { open } from "@tauri-apps/plugin-shell";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,9 +35,9 @@ export function FileList({
   getDirList,
 }: Readonly<{
   dir: string;
-  dirList: FileEntry[] | undefined;
-  diffList: FileEntry[];
-  stagedList: FileEntry[];
+  dirList: DirEntryWithPath[] | undefined;
+  diffList: DirEntryWithPath[];
+  stagedList: DirEntryWithPath[];
   getDiff: () => Promise<void>;
   getStaged: () => Promise<void>;
   getDirList: () => Promise<void>;
@@ -50,7 +50,7 @@ export function FileList({
   }, [dirList]);
 
   const [refreshClick, setRefreshClick] = useState(false);
-  function currentStatus(file: FileEntry) {
+  function currentStatus(file: DirEntryWithPath) {
     let fileStatus = "Unchanged";
     if (
       diffList.some((target) => {
@@ -83,7 +83,7 @@ export function FileList({
       </div>
     );
   }
-  function recursiveDirRenderer(parent: FileEntry[], root: boolean): React.ReactNode {
+  function recursiveDirRenderer(parent: DirEntryWithPath[], root: boolean): React.ReactNode {
     if (!parent || parent instanceof Error) return null;
     return (
       <>

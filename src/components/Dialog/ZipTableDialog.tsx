@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { open } from "@tauri-apps/api/dialog";
-import { exists } from "@tauri-apps/api/fs";
+import { open } from "@tauri-apps/plugin-dialog";
+import { exists } from "@tauri-apps/plugin-fs";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -33,7 +33,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Lightbulb, Plus } from "lucide-react";
 import { clsx } from "clsx";
 
-import { FileList } from "@/lib/Types/FileList";
+import { FileList } from "@/lib/Types/fileList";
 
 const formSchema = z.object({
   location: z
@@ -78,14 +78,17 @@ export function ZipTableDialog({
         });
         return;
       }
-      const name = values.location.split("\\").pop();
-      setFileList([...fileList, { name: name, path: values.location, type: add }]);
+      const name = values.location.split("\\").pop() ?? "";
+      setFileList([...fileList, { name, path: values.location, type: add } as unknown as FileList]);
     } else {
       if (values.location.length == 0) return;
       else if (values.location.length == 1) {
         const newLocation = values.location.toString();
         const name = newLocation.split("\\").pop();
-        setFileList([...fileList, { name: name, path: newLocation, type: add }]);
+        setFileList([
+          ...fileList,
+          { name: name ?? "", path: newLocation, type: add } as unknown as FileList,
+        ]);
         toast({
           title: `${add} Added`,
         });
@@ -104,7 +107,11 @@ export function ZipTableDialog({
           }
           const newLocation = values.location[i].toString();
           const name = newLocation.split("\\").pop();
-          newFileList.push({ name: name, path: newLocation, type: add });
+          newFileList.push({
+            name: name ?? "",
+            path: newLocation,
+            type: add,
+          } as unknown as FileList);
         }
         setFileList([...fileList, ...newFileList]);
         toast({

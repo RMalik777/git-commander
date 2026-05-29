@@ -1,5 +1,5 @@
-import type { FileEntry } from "@tauri-apps/api/fs";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
 
-export interface FileList extends FileEntry {
+export interface FileList extends DirEntryWithPath {
   type: "File" | "Folder";
 }

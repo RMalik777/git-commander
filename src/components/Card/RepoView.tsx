@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
-import { open } from "@tauri-apps/api/dialog";
-import { exists, FileEntry } from "@tauri-apps/api/fs";
-import { open as openFolder } from "@tauri-apps/api/shell";
-import { Store } from "tauri-plugin-store-api";
+import { open } from "@tauri-apps/plugin-dialog";
+import { exists } from "@tauri-apps/plugin-fs";
+import type { DirEntryWithPath } from "@/lib/Types/Duplicate";
+import { open as openFolder } from "@tauri-apps/plugin-shell";
+import { Store } from "@tauri-apps/plugin-store";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -50,20 +51,20 @@ export function RepoView() {
   const [showError, setShowError] = useState(sessionStorage.getItem("showError") == "true");
 
   async function getDiff() {
-    const diffStore = new Store(".diffList.json");
+    const diffStore = await Store.load(".diffList.json");
     const data = await git.showChanged(repoDir);
     const data2 = await git.showUntrackedFiles(repoDir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
+      } as unknown as DirEntryWithPath;
     });
     const toEntry2 = await data2.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
+      } as unknown as DirEntryWithPath;
     });
     toEntry.push(...toEntry2);
     dispatch(setRepo({ diff: toEntry }));
@@ -71,13 +72,13 @@ export function RepoView() {
     diffStore.save();
   }
   async function getStaged() {
-    const stagedStore = new Store(".stagedList.json");
+    const stagedStore = await Store.load(".stagedList.json");
     const data = await git.showStaged(repoDir);
     const toEntry = data.map((item: string) => {
       return {
         name: item.split("/").pop(),
         path: item.replace(/\//gi, "\\"),
-      } as FileEntry;
+      } as unknown as DirEntryWithPath;
     });
     dispatch(setRepo({ staged: toEntry }));
     stagedStore.set("stagedList", toEntry);
@@ -100,9 +101,9 @@ export function RepoView() {
       }
       dispatch(removeFiles());
       dispatch(removePullMsg());
-      const fileStore = new Store(".fileList.json");
-      const diffStore = new Store(".diffList.json");
-      const stagedStore = new Store(".stagedList.json");
+      const fileStore = await Store.load(".fileList.json");
+      const diffStore = await Store.load(".diffList.json");
+      const stagedStore = await Store.load(".stagedList.json");
       await fileStore.clear();
       await diffStore.clear();
       await stagedStore.clear();
@@ -169,23 +170,25 @@ export function RepoView() {
       sessionStorage.removeItem("errorMsg");
       setErrorMsg(null);
       localStorage.removeItem("fetchAmount");
-      const fileStore = new Store(".fileList.json");
-      const diffStore = new Store(".diffList.json");
-      const stagedStore = new Store(".stagedList.json");
-      fileStore.clear();
-      diffStore.clear();
-      stagedStore.clear();
-      fileStore.save();
-      diffStore.save();
-      stagedStore.save();
-      fileStore.save();
+      Store.load(".fileList.json").then((s) => {
+        s.clear();
+        s.save();
+      });
+      Store.load(".diffList.json").then((s) => {
+        s.clear();
+        s.save();
+      });
+      Store.load(".stagedList.json").then((s) => {
+        s.clear();
+        s.save();
+      });
 
       localStorage.removeItem("fetchAmount");
       return;
     }
     checkDir(repoDir);
-    getDiff();
-    getStaged();
+    getDiff().catch(console.error);
+    getStaged().catch(console.error);
   }, [repoDir]);
 
   const [parentDialog, setParentDialog] = useState(false);
@@ -283,9 +286,6 @@ export function RepoView() {
           size="sm"
           variant="destructive"
           onClick={() => {
-            const fileStore = new Store(".fileList.json");
-            const diffStore = new Store(".diffList.json");
-            const stagedStore = new Store(".stagedList.json");
             localStorage.removeItem("repoDir");
             localStorage.removeItem("currentRepoName");
             localStorage.removeItem("currentBranch");
@@ -297,12 +297,18 @@ export function RepoView() {
             dispatch(removeRepo());
             dispatch(removePullMsg());
             dispatch(removeFiles());
-            fileStore.clear();
-            diffStore.clear();
-            stagedStore.clear();
-            fileStore.save();
-            diffStore.save();
-            stagedStore.save();
+            Store.load(".fileList.json").then((s) => {
+              s.clear();
+              s.save();
+            });
+            Store.load(".diffList.json").then((s) => {
+              s.clear();
+              s.save();
+            });
+            Store.load(".stagedList.json").then((s) => {
+              s.clear();
+              s.save();
+            });
           }}
         >
           Close Repository
