@@ -13,9 +13,9 @@ export default function Layout({ children }: Readonly<{ children?: React.ReactNo
     <Provider store={store}>
       <div className="flex h-dvh max-h-dvh min-h-dvh flex-col overflow-hidden scroll-smooth antialiased">
         <Toolbar />
-        <div className="min-w-dvw flex h-fit flex-grow flex-row overflow-hidden">
+        <div className="flex h-fit min-w-dvw grow flex-row overflow-hidden">
           <Navbar />
-          <main className="flex-grow overflow-y-auto bg-white p-4 duration-200 ease-out dark:bg-neutral-950">
+          <main className="grow overflow-y-auto bg-white p-4 duration-200 ease-out dark:bg-neutral-950">
             {children ?? <Outlet />}
           </main>
         </div>

@@ -162,7 +162,7 @@ export function Clone() {
             <p>
               Repository <b>{repository}</b> cloned successfully!
               <br />
-              Location: <code className="rounded bg-gray-100 p-1">{newLocation}</code>
+              Location: <code className="rounded-sm bg-gray-100 p-1">{newLocation}</code>
             </p>
           ),
         });
@@ -177,7 +177,7 @@ export function Clone() {
             <p>
               Repository <b>{repository.repo_name}</b> cloned successfully!
               <br />
-              Location: <code className="rounded bg-gray-100 p-1">{newLocation}</code>
+              Location: <code className="rounded-sm bg-gray-100 p-1">{newLocation}</code>
             </p>
           ),
         });
@@ -268,7 +268,7 @@ export function Clone() {
           Clone
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-fit xs:max-w-[360px] sm:max-w-[540px] md:max-w-[640px] lg:max-w-[720px]">
+      <DialogContent className="xs:max-w-[360px] max-w-fit sm:max-w-[540px] md:max-w-[640px] lg:max-w-[720px]">
         <DialogHeader>
           <DialogTitle>Clone Remote Repository</DialogTitle>
           <DialogDescription>
@@ -293,7 +293,7 @@ export function Clone() {
                             aria-expanded={comboOpen}
                             className={cn(
                               !field.value && "text-muted-foreground",
-                              "peer h-fit w-full justify-between whitespace-normal break-all text-left",
+                              "peer h-fit w-full justify-between text-left break-all whitespace-normal",
                             )}
                           >
                             {field.value ?
@@ -325,7 +325,7 @@ export function Clone() {
                                   cloneForm.setValue("target", link.repo_url);
                                   setComboOpen(false);
                                 }}
-                                className="whitespace-normal break-all"
+                                className="break-all whitespace-normal"
                               >
                                 <Check
                                   className={clsx(
@@ -352,7 +352,7 @@ export function Clone() {
               control={cloneForm.control}
               name="addToDB"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start gap-2 space-y-0 rounded border p-2 dark:border-neutral-800">
+                <FormItem className="flex flex-row items-start gap-2 space-y-0 rounded-sm border p-2 dark:border-neutral-800">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -415,7 +415,7 @@ export function Clone() {
                 </Button>
               }
               {progress ?
-                <p className="text-center text-neutral-700 dark:text-neutral-300 sm:text-right">
+                <p className="text-center text-neutral-700 sm:text-right dark:text-neutral-300">
                   {progress}
                 </p>
               : null}

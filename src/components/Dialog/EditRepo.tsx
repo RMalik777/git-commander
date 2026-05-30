@@ -101,11 +101,7 @@ export function EditRepo({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          className="flex flex-grow items-center justify-center gap-1"
-          variant="outline"
-          size="sm"
-        >
+        <Button className="flex grow items-center justify-center gap-1" variant="outline" size="sm">
           <Pencil size={16} className="md:hidden lg:block" />
           <span className="hidden md:block">Edit</span>
         </Button>

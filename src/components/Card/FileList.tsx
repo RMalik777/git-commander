@@ -74,7 +74,7 @@ export function FileList({
       fileStatus = "Staged";
     }
     return (
-      <div className="hidden flex-row items-center gap-2 2xs:flex">
+      <div className="2xs:flex hidden flex-row items-center gap-2">
         {fileStatus === "Changed" ?
           <h4 className="text-sm text-neutral-300 duration-200 dark:text-neutral-600">Edited</h4>
         : fileStatus === "Staged" ?
@@ -187,7 +187,7 @@ export function FileList({
             <h4 className="font-mono text-xl font-bold tracking-tight md:text-2xl lg:text-3xl">
               Empty
             </h4>
-            <p className="text-center text-base font-medium text-neutral-400 dark:text-neutral-600 md:text-lg">
+            <p className="text-center text-base font-medium text-neutral-400 md:text-lg dark:text-neutral-600">
               Directory may be empty or the system couldn&apos;t access it.
             </p>
           </div>
@@ -258,17 +258,19 @@ export function FileList({
             </Tooltip>
           </TooltipProvider>
         </CardTitle>
-        <CardDescription className="flex max-w-full flex-col text-balance leading-relaxed">
+        <CardDescription className="flex max-w-full flex-col leading-relaxed text-balance">
           Stage your file before committing to the repository.
         </CardDescription>
       </CardHeader>
-      <CardContent className="overflow-auto pl-4 pt-3">{checkIfLoading()}</CardContent>
+      <CardContent className="overflow-auto pt-3 pl-4">{checkIfLoading()}</CardContent>
       <CardFooter className="flex justify-center">
-        <div className="flex w-fit flex-col items-center justify-center gap-1 rounded border border-blue-500 bg-blue-200/20 p-2 dark:bg-blue-700/20 xs:flex-row">
+        <div className="xs:flex-row flex w-fit flex-col items-center justify-center gap-1 rounded-sm border border-blue-500 bg-blue-200/20 p-2 dark:bg-blue-700/20">
           <Lightbulb size={20} className="min-w-fit text-blue-600 dark:text-blue-500" />
           <p className="text-center text-neutral-600 dark:text-neutral-300">
             File and folder referenced inside{" "}
-            <code className="rounded bg-neutral-100/50 p-1 dark:bg-neutral-900/50">.gitignore</code>{" "}
+            <code className="rounded-sm bg-neutral-100/50 p-1 dark:bg-neutral-900/50">
+              .gitignore
+            </code>{" "}
             will not be shown.
           </p>
         </div>

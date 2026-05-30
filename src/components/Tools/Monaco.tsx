@@ -143,7 +143,7 @@ export function Monaco({
           title: "Saved",
           description: (
             <p>
-              <code className="rounded bg-neutral-50/80 p-1 dark:bg-neutral-800/80">{path}</code>{" "}
+              <code className="rounded-sm bg-neutral-50/80 p-1 dark:bg-neutral-800/80">{path}</code>{" "}
               saved.
             </p>
           ),
@@ -236,7 +236,7 @@ export function Monaco({
         ></div>
       </>
     : <div className="flex h-fit min-h-full w-full flex-col items-center justify-center gap-1 md:gap-2">
-        <FileWarning className="h-12 w-auto dark:text-white sm:h-14 md:h-16 lg:h-20" />
+        <FileWarning className="h-12 w-auto sm:h-14 md:h-16 lg:h-20 dark:text-white" />
         <h1 className="text-center text-xl font-semibold tracking-tight sm:text-xl md:text-2xl lg:text-3xl">
           Failed to Read File
         </h1>
@@ -246,7 +246,7 @@ export function Monaco({
         </p>
         <Button
           variant="outline"
-          className="h-fit w-fit gap-4 whitespace-normal break-all text-left font-normal"
+          className="h-fit w-fit gap-4 text-left font-normal break-all whitespace-normal"
           onClick={async () => {
             try {
               await open(parentFolder);

@@ -67,7 +67,7 @@ export function Staging({
           <Tooltip>
             <TooltipTrigger asChild>
               <button
-                className="STG_6 UST_6 h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                className="STG_6 UST_6 h-5 w-5 shrink-0 rounded-sm p-px duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
                 onClick={async () => {
                   if (file.path.includes(dir)) {
                     if (file.children) {
@@ -96,7 +96,7 @@ export function Staging({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
-                    className="STG_7 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                    className="STG_7 h-5 w-5 shrink-0 rounded-sm duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
                     onClick={async () => {
                       try {
                         await git.addFile(dir, file.path);
@@ -131,7 +131,7 @@ export function Staging({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
-                    className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                    className="h-5 w-5 shrink-0 rounded-sm p-px duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
                     onClick={() => setOpenDialogId(file.path)}
                   >
                     <Undo className="h-full w-full duration-200 ease-out" />
@@ -145,7 +145,7 @@ export function Staging({
           : <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  className="UST_7 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  className="UST_7 h-5 w-5 shrink-0 rounded-sm duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
                   onClick={async () => {
                     try {
                       await git.unstageFile(dir, file.path);
@@ -261,7 +261,7 @@ export function Staging({
               <ListTrigger>Staged</ListTrigger>
               <div className="UST_8A flex flex-row items-center gap-2 px-1">
                 <button
-                  className="UST_8 h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  className="UST_8 h-5 w-5 shrink-0 rounded-sm duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
                   onClick={async () => {
                     try {
                       await git.unstageAll(dir);
@@ -301,7 +301,7 @@ export function Staging({
                     getDiff={getDiff}
                     getStaged={getStaged}
                   >
-                    <div className="group flex items-center gap-2 p-1 pl-3 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                    <div className="group flex items-center gap-2 p-1 pl-3 hover:bg-neutral-100 dark:hover:bg-neutral-900">
                       <Icons name={target.name} />
                       <div className="flex w-full items-center justify-between">
                         <div className="flex flex-row items-center gap-4">
@@ -325,7 +325,7 @@ export function Staging({
               <ListTrigger>Changed</ListTrigger>
               <div className="STG_8A flex flex-row items-center gap-2 px-1">
                 <button
-                  className="STG_8 STG_9A h-5 w-5 shrink-0 rounded duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  className="STG_8 STG_9A h-5 w-5 shrink-0 rounded-sm duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
                   onClick={async () => {
                     try {
                       await git.addAllFiles(dir);
@@ -356,7 +356,7 @@ export function Staging({
                   <Plus className="h-full w-full duration-200 ease-out" />
                 </button>
                 <button
-                  className="h-5 w-5 shrink-0 rounded p-px duration-200 ease-out hover:bg-neutral-200 hover:dark:bg-neutral-800"
+                  className="h-5 w-5 shrink-0 rounded-sm p-px duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
                   onClick={() => setRevertDialog(true)}
                 >
                   <Undo className="h-full w-full duration-200 ease-out" />
@@ -414,7 +414,7 @@ export function Staging({
                     getDiff={getDiff}
                     getStaged={getStaged}
                   >
-                    <div className="group flex cursor-default items-center gap-2 p-1 pl-3 hover:bg-neutral-100 hover:dark:bg-neutral-900">
+                    <div className="group flex cursor-default items-center gap-2 p-1 pl-3 hover:bg-neutral-100 dark:hover:bg-neutral-900">
                       <Icons name={target.name} />
                       <div className="flex w-full items-center justify-between">
                         <div className="flex flex-row items-center gap-4">
@@ -500,7 +500,7 @@ export function Staging({
                           root ? "pl-6" : (
                             "ml-4 border-l border-neutral-200 pl-7 dark:border-neutral-800"
                           ),
-                          "group flex items-center gap-4 p-1 duration-200 ease-out hover:bg-neutral-100 hover:underline hover:dark:bg-neutral-900",
+                          "group flex items-center gap-4 p-1 duration-200 ease-out hover:bg-neutral-100 hover:underline dark:hover:bg-neutral-900",
                         )}
                       >
                         <Icons name={child.name} />
@@ -547,7 +547,7 @@ export function Staging({
             </Tooltip>
           </TooltipProvider>
         </CardTitle>
-        <CardDescription className="flex max-w-full flex-col text-balance leading-relaxed">
+        <CardDescription className="flex max-w-full flex-col leading-relaxed text-balance">
           Stage your file before committing to the repository.
         </CardDescription>
       </CardHeader>

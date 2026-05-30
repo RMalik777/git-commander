@@ -108,7 +108,7 @@ export function Commit({
           description: (
             <>
               Commited to{" "}
-              <code className="rounded bg-gray-50 p-1 dark:bg-neutral-900">
+              <code className="rounded-sm bg-gray-50 p-1 dark:bg-neutral-900">
                 {repoName}/{currentBranch}
               </code>
               <br />
@@ -151,7 +151,7 @@ export function Commit({
                     toast({
                       title: "Failed to push",
                       description: (
-                        <p className="whitespace-pre-wrap break-words">{error.message}</p>
+                        <p className="wrap-break-word whitespace-pre-wrap">{error.message}</p>
                       ),
                       variant: "destructive",
                     });
@@ -183,7 +183,7 @@ export function Commit({
   }
   return (
     <Form {...commitForm}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex-grow">
+      <form onSubmit={handleSubmit(onSubmit)} className="grow">
         <Card className="w-full">
           <CardHeader>
             <CardTitle>Commit</CardTitle>

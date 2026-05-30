@@ -399,7 +399,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileList[] 
               control={zipFunctionForm.control}
               name="removeSpace"
               render={({ field }) => (
-                <FormItem className="ZIP_16 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800">
+                <FormItem className="ZIP_16 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded-sm border p-2 dark:border-neutral-800">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -416,7 +416,7 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileList[] 
               <BarLoader
                 width="100%"
                 speedMultiplier={0.8}
-                className={clsx(isLoading ? "" : "!w-0", "transition-all duration-200 ease-out")}
+                className={clsx(isLoading ? "" : "w-0!", "transition-all duration-200 ease-out")}
               />
               <DialogClose asChild>
                 <Button variant="outline" type="reset" onClick={() => reset()}>

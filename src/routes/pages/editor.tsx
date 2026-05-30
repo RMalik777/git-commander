@@ -63,19 +63,19 @@ export default function Editor() {
       </div>
     : <div className="flex h-full w-full flex-col items-center justify-center gap-4 sm:gap-8 lg:gap-16">
         <section className="flex w-full max-w-prose flex-col items-center justify-center gap-2 sm:flex-row">
-          <FileX className="h-14 w-auto dark:text-neutral-50 sm:h-16 md:h-20 lg:h-24" />
+          <FileX className="h-14 w-auto sm:h-16 md:h-20 lg:h-24 dark:text-neutral-50" />
           <div className="text-center sm:text-left">
-            <h2 className="text-xl font-semibold tracking-tight dark:text-neutral-50 md:text-2xl lg:text-3xl xl:text-4xl">
+            <h2 className="text-xl font-semibold tracking-tight md:text-2xl lg:text-3xl xl:text-4xl dark:text-neutral-50">
               {pathLength > 0 ? "File not found" : "No file selected"}
             </h2>
-            <p className="text-base font-medium tracking-normal text-neutral-400 dark:text-neutral-600 md:text-lg">
+            <p className="text-base font-medium tracking-normal text-neutral-400 md:text-lg dark:text-neutral-600">
               {pathLength > 0 ?
                 "Selected file is not available or has been deleted"
               : "Please select a file from content page to open editor"}
             </p>
           </div>
         </section>
-        <section className="flex w-full max-w-prose flex-col items-start gap-1 rounded border bg-neutral-100 p-4 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-50">
+        <section className="flex w-full max-w-prose flex-col items-start gap-1 rounded-sm border bg-neutral-100 p-4 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-50">
           <div className="flex items-center gap-1">
             <MessageCircleQuestion className="h-8 w-auto dark:text-neutral-50" />
             <p className="text-xl font-bold">Help</p>
@@ -87,7 +87,7 @@ export default function Editor() {
               <span>
                 <NavLink
                   to="/folder"
-                  className="rounded-sm px-1 py-px font-medium underline duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-800"
+                  className="rounded-xs px-1 py-px font-medium underline duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-800"
                 >
                   Content
                 </NavLink>
@@ -97,7 +97,7 @@ export default function Editor() {
             <li>Navigate to the file you want to edit</li>
             <li>
               Right click on the file and click{" "}
-              <span className="rounded bg-neutral-200 p-1 font-medium dark:bg-neutral-800">
+              <span className="rounded-sm bg-neutral-200 p-1 font-medium dark:bg-neutral-800">
                 Open in Editor
               </span>{" "}
               from the context menu

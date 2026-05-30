@@ -52,7 +52,7 @@ export function RepoTable({
             </TableCell>
             <TableCell>
               <a href={repo.repo_url} target="_blank" rel="noopener noreferrer">
-                <code className="whitespace-normal break-all">{repo.repo_url}</code>
+                <code className="break-all whitespace-normal">{repo.repo_url}</code>
               </a>
             </TableCell>
             <TableCell align="center">
@@ -65,7 +65,7 @@ export function RepoTable({
                   afterEdit={fetchData}
                 />
                 <Button
-                  className="flex flex-grow items-center justify-center gap-1"
+                  className="flex grow items-center justify-center gap-1"
                   variant="destructive"
                   size="sm"
                   onClick={() => {

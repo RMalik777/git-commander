@@ -268,7 +268,7 @@ export function Copy() {
                         <FormDescription>
                           Enter the file name you want to copy, separated by line(
                           {/* */}
-                          <span className="rounded bg-neutral-200 px-2 py-1 font-mono text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50">
+                          <span className="rounded-sm bg-neutral-200 px-2 py-1 font-mono text-neutral-900 dark:bg-neutral-800 dark:text-neutral-50">
                             Enter
                           </span>
                           ). Case Sensitive.
@@ -377,7 +377,7 @@ export function Copy() {
                   control={copyForm.control}
                   name="rememberSource"
                   render={({ field }) => (
-                    <FormItem className="CPY_5 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
+                    <FormItem className="CPY_5 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded-sm border p-2 md:w-1/2 dark:border-neutral-800">
                       <FormControl>
                         <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
@@ -392,7 +392,7 @@ export function Copy() {
                   control={copyForm.control}
                   name="rememberDestination"
                   render={({ field }) => (
-                    <FormItem className="CPY_8 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded border p-2 dark:border-neutral-800 md:w-1/2">
+                    <FormItem className="CPY_8 relative flex w-full flex-row items-start gap-2 space-y-0 self-start rounded-sm border p-2 md:w-1/2 dark:border-neutral-800">
                       <FormControl>
                         <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
@@ -413,7 +413,7 @@ export function Copy() {
                     copyForm.getValues("overwrite") ?
                       "scale-100 opacity-100 max-md:translate-y-0 md:translate-x-0"
                     : "scale-0 opacity-0 max-md:translate-y-6 md:translate-x-40",
-                    "flex w-fit items-center gap-1 rounded border border-yellow-500/50 bg-yellow-200/20 p-2 text-yellow-700 duration-200 ease-out dark:border-yellow-500 dark:border-yellow-900/50 dark:dark:border-yellow-900 dark:bg-yellow-800/20 dark:text-yellow-500 [&>svg]:text-yellow-700 dark:[&>svg]:text-yellow-500",
+                    "flex w-fit items-center gap-1 rounded-sm border border-yellow-500/50 bg-yellow-200/20 p-2 text-yellow-700 duration-200 ease-out dark:border-yellow-500 dark:border-yellow-900/50 dark:dark:border-yellow-900 dark:bg-yellow-800/20 dark:text-yellow-500 [&>svg]:text-yellow-700 dark:[&>svg]:text-yellow-500",
                   )}
                 >
                   <TriangleAlert size={16} className="max-xs:hidden" />

@@ -87,11 +87,11 @@ export function CommitView({
           <CardDescription>{desc}</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="mb-4 flex flex-col items-stretch justify-center gap-2 xs:flex-row xs:items-center xs:justify-end">
+          <form className="xs:flex-row xs:items-center xs:justify-end mb-4 flex flex-col items-stretch justify-center gap-2">
             <Label>Search</Label>
             <Input
               disabled={formattedCommit.length === 0}
-              className="w-full xs:w-1/3"
+              className="xs:w-1/3 w-full"
               type="search"
               placeholder="Search by Hash, Author or Message"
               onChange={(e) => setTimeout(() => setSearch(e.target.value), 150)}
@@ -122,7 +122,7 @@ export function CommitView({
                         second: "2-digit",
                       })}
                     </TableCell>
-                    <TableCell className="break-all font-mono">{commit.hash}</TableCell>
+                    <TableCell className="font-mono break-all">{commit.hash}</TableCell>
                     <TableCell>{commit.author}</TableCell>
                     <TableCell className="">{commit.message}</TableCell>
                   </TableRow>

@@ -168,7 +168,7 @@ export function ClearSettings({
               control={clearSettingsForm.control}
               name="all"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2 dark:border-neutral-800">
+                <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-2 dark:border-neutral-800">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -182,7 +182,7 @@ export function ClearSettings({
               control={clearSettingsForm.control}
               name="username"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2 dark:border-neutral-800">
+                <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-2 dark:border-neutral-800">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -197,7 +197,7 @@ export function ClearSettings({
               control={clearSettingsForm.control}
               name="theme"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2 dark:border-neutral-800">
+                <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-2 dark:border-neutral-800">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -212,7 +212,7 @@ export function ClearSettings({
               control={clearSettingsForm.control}
               name="repoList"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2 dark:border-neutral-800">
+                <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-2 dark:border-neutral-800">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>

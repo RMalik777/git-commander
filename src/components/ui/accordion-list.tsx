@@ -28,7 +28,7 @@ const ListHeader = React.forwardRef<
   <AccordionPrimitive.Header
     ref={ref}
     className={cn(
-      "flex w-full duration-200 ease-out hover:bg-neutral-100 hover:dark:bg-neutral-900",
+      "flex w-full duration-200 ease-out hover:bg-neutral-100 dark:hover:bg-neutral-900",
       className,
     )}
     {...props}
@@ -64,10 +64,10 @@ const ListContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-    className="ml-3 overflow-hidden border-l border-neutral-200 text-sm transition-all duration-200 ease-out data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down dark:border-neutral-800"
+    className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down ml-3 overflow-hidden border-l border-neutral-200 text-sm transition-all duration-200 ease-out dark:border-neutral-800"
     {...props}
   >
-    <div className={cn("pb-2 pt-0", className)}>{children}</div>
+    <div className={cn("pt-0 pb-2", className)}>{children}</div>
   </AccordionPrimitive.Content>
 ));
 

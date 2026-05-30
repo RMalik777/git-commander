@@ -82,7 +82,7 @@ export function TerminalView() {
         ref={terminalElement}
         className={clsx(
           openTerminal ? "block" : "hidden",
-          "h-full max-h-60 min-h-52 w-full animate-in slide-in-from-bottom",
+          "animate-in slide-in-from-bottom h-full max-h-60 min-h-52 w-full",
         )}
       ></div>
     </footer>

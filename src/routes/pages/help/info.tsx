@@ -45,7 +45,7 @@ export default function Info() {
   }, []);
   return (
     <>
-      <div className="flex flex-col gap-4 rounded bg-neutral-50 p-4 duration-150 ease-out dark:bg-neutral-900">
+      <div className="flex flex-col gap-4 rounded-sm bg-neutral-50 p-4 duration-150 ease-out dark:bg-neutral-900">
         <Button
           size="icon"
           className="absolute self-end"
@@ -107,8 +107,8 @@ export default function Info() {
         </div>
       </div>
 
-      <h2 className="pb-2 pt-12 text-xl font-medium">Third Party License</h2>
-      <p className="whitespace-pre-wrap border">{`  7-Zip
+      <h2 className="pt-12 pb-2 text-xl font-medium">Third Party License</h2>
+      <p className="border whitespace-pre-wrap">{`  7-Zip
   ~~~~~
   License for use and distribution
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -228,7 +228,7 @@ export function Toolbar() {
                 const response = await switchBranch(dirLocation, toSwitch);
                 toast({
                   title: "Switched Branch",
-                  description: <p className="whitespace-pre-wrap break-words">{response}</p>,
+                  description: <p className="wrap-break-word whitespace-pre-wrap">{response}</p>,
                 });
                 setIsSwitching(false);
                 dispatch(setRepo({ branch: e }));
@@ -238,7 +238,9 @@ export function Toolbar() {
                   console.error(error);
                   toast({
                     title: "Failed to switch branch",
-                    description: <p className="whitespace-pre-wrap break-words">{error.message}</p>,
+                    description: (
+                      <p className="wrap-break-word whitespace-pre-wrap">{error.message}</p>
+                    ),
                     variant: "destructive",
                   });
                 }
@@ -331,7 +333,7 @@ export function Toolbar() {
             <ul className="flex flex-row items-center gap-6 sm:gap-12">
               <li
                 className={clsx(
-                  fetchAmount > 0 ? "border-b border-r border-t pr-2" : "",
+                  fetchAmount > 0 ? "border-t border-r border-b pr-2" : "",
                   "box-border flex h-10 items-center rounded-md duration-200 ease-out dark:border-neutral-800",
                 )}
               >
@@ -373,7 +375,9 @@ export function Toolbar() {
                             toast({
                               title: "Failed to fetch",
                               description: (
-                                <p className="whitespace-pre-wrap break-words">{error.message}</p>
+                                <p className="wrap-break-word whitespace-pre-wrap">
+                                  {error.message}
+                                </p>
                               ),
                               variant: "destructive",
                             });
@@ -509,7 +513,9 @@ export function Toolbar() {
                               toast({
                                 title: "Failed to pull",
                                 description: (
-                                  <p className="whitespace-pre-wrap break-words">{error.message}</p>
+                                  <p className="wrap-break-word whitespace-pre-wrap">
+                                    {error.message}
+                                  </p>
                                 ),
                                 variant: "destructive",
                               });
@@ -524,15 +530,15 @@ export function Toolbar() {
                           speedMultiplier={1.2}
                           color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
                           className={clsx(
-                            isPulling ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0",
+                            isPulling ? "scale-100! opacity-100!" : "scale-0! opacity-0!",
                             "relative duration-300 ease-out",
                           )}
                         />
                         <ArrowDownToLine
                           className={clsx(
                             isPulling ?
-                              "-rotate-90 scale-0 opacity-0"
-                            : "rotate-0 scale-100 opacity-100",
+                              "scale-0 -rotate-90 opacity-0"
+                            : "scale-100 rotate-0 opacity-100",
                             "absolute duration-300 ease-out",
                           )}
                         />
@@ -591,7 +597,9 @@ export function Toolbar() {
                               toast({
                                 title: "Failed to push",
                                 description: (
-                                  <p className="whitespace-pre-wrap break-words">{error.message}</p>
+                                  <p className="wrap-break-word whitespace-pre-wrap">
+                                    {error.message}
+                                  </p>
                                 ),
                                 variant: "destructive",
                               });
@@ -606,7 +614,7 @@ export function Toolbar() {
                           speedMultiplier={1.2}
                           color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
                           className={clsx(
-                            isPushing ? "!scale-100 !opacity-100" : "!scale-0 !opacity-0",
+                            isPushing ? "scale-100! opacity-100!" : "scale-0! opacity-0!",
                             "relative duration-300 ease-out",
                           )}
                         />
@@ -614,8 +622,8 @@ export function Toolbar() {
                         <ArrowUpToLine
                           className={clsx(
                             isPushing ?
-                              "-rotate-90 scale-0 opacity-0"
-                            : "rotate-0 scale-100 opacity-100",
+                              "scale-0 -rotate-90 opacity-0"
+                            : "scale-100 rotate-0 opacity-100",
                             "absolute duration-300 ease-out",
                           )}
                         />
@@ -750,7 +758,7 @@ export function Toolbar() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="CMT_1 text-base max-xs:hidden"
+                  className="CMT_1 max-xs:hidden text-base"
                   asChild
                 >
                   <NavLink
@@ -830,21 +838,21 @@ export function Toolbar() {
                 >
                   <Sun
                     className={clsx(
-                      themeMode == "Light" ? "rotate-0 scale-100" : "rotate-90 scale-0",
+                      themeMode == "Light" ? "scale-100 rotate-0" : "scale-0 rotate-90",
                       "absolute duration-200 ease-out",
                     )}
                   />
                   <Moon
                     className={clsx(
-                      themeMode == "Dark" ? "rotate-0 scale-100" : "rotate-90 scale-0",
+                      themeMode == "Dark" ? "scale-100 rotate-0" : "scale-0 rotate-90",
                       "absolute duration-200 ease-out",
                     )}
                   />
                   <SunMoon
                     className={clsx(
                       themeMode !== "Dark" && themeMode !== "Light" ?
-                        "rotate-0 scale-100"
-                      : "-rotate-90 scale-0",
+                        "scale-100 rotate-0"
+                      : "scale-0 -rotate-90",
                       "absolute duration-200 ease-out",
                     )}
                   />

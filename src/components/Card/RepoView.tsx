@@ -206,10 +206,10 @@ export function RepoView() {
     }
   }, [repoDir]);
   return (
-    <Card className="h-fit flex-grow">
+    <Card className="h-fit grow">
       <CardHeader className="">
         <CardTitle>{repoName !== "" ? repoName : "Repository"}</CardTitle>
-        <CardDescription className="flex max-w-full flex-col text-balance leading-relaxed">
+        <CardDescription className="flex max-w-full flex-col leading-relaxed text-balance">
           {remoteUrl !== "" ?
             <a
               href={remoteUrl}
@@ -228,7 +228,7 @@ export function RepoView() {
           variant="link"
           className={clsx(
             repoDir ? "" : "hidden",
-            "h-fit w-fit whitespace-normal break-all rounded border bg-gray-100 px-2 py-1 text-left text-base text-gray-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50 xl:text-lg",
+            "h-fit w-fit rounded-sm border bg-gray-100 px-2 py-1 text-left text-base break-all whitespace-normal text-gray-900 xl:text-lg dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-50",
           )}
           onClick={() => {
             if (repoDir) openFolder(repoDir);
@@ -250,7 +250,7 @@ export function RepoView() {
             <AlertDialogHeader>
               <AlertDialogTitle>Git repository found in the parent directory</AlertDialogTitle>
               <AlertDialogDescription>
-                <code className="rounded border border-gray-200 bg-gray-100 p-1 dark:border-neutral-700 dark:bg-neutral-800">
+                <code className="rounded-sm border border-gray-200 bg-gray-100 p-1 dark:border-neutral-700 dark:bg-neutral-800">
                   {parent}
                 </code>{" "}
                 is the parent of the selected directory. Do you want to open the parent directory?

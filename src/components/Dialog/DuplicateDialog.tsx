@@ -180,7 +180,7 @@ export function Duplicate({
                     >
                       {duplicateList?.[progress]?.duplicate?.map((file) => (
                         <FormItem key={file.path}>
-                          <FormLabel className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 duration-200 hover:shadow dark:border-neutral-800 dark:hover:border-neutral-700 dark:hover:shadow-neutral-800">
+                          <FormLabel className="flex flex-row items-center space-y-0 space-x-3 rounded-md border p-4 duration-200 hover:shadow-sm dark:border-neutral-800 dark:hover:border-neutral-700 dark:hover:shadow-neutral-800">
                             <FormControl>
                               <RadioGroupItem value={file.path} />
                             </FormControl>
@@ -206,7 +206,7 @@ export function Duplicate({
                         </FormItem>
                       ))}
                       <FormItem>
-                        <FormLabel className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 duration-200 hover:shadow dark:border-neutral-800 dark:hover:border-neutral-700 dark:hover:shadow-neutral-800">
+                        <FormLabel className="flex flex-row items-center space-y-0 space-x-3 rounded-md border p-4 duration-200 hover:shadow-sm dark:border-neutral-800 dark:hover:border-neutral-700 dark:hover:shadow-neutral-800">
                           <FormControl>
                             <RadioGroupItem value="skip" />
                           </FormControl>
@@ -220,7 +220,7 @@ export function Duplicate({
               )}
             />
 
-            <div className="flex flex-row gap-1 *:flex-grow">
+            <div className="flex flex-row gap-1 *:grow">
               <Button
                 type="button"
                 variant="outline"

@@ -29,7 +29,7 @@ export default function Help() {
           <NavLink
             key={item.link}
             to={item.link}
-            className="flex w-full cursor-pointer flex-row items-center justify-between rounded border bg-neutral-50 p-4 duration-200 ease-out hover:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-900 hover:dark:bg-neutral-800"
+            className="flex w-full cursor-pointer flex-row items-center justify-between rounded-sm border bg-neutral-50 p-4 duration-200 ease-out hover:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
           >
             <div className="flex flex-row items-center gap-2">
               {item.icon}
