@@ -4,17 +4,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const alertVariants = cva(
-  "animate-in fade-in relative w-full rounded-lg border border-neutral-200 p-4 duration-200 ease-out dark:border-neutral-800 [&>svg]:absolute [&>svg]:top-4 [&>svg]:left-4 [&>svg]:text-neutral-950 dark:[&>svg]:text-neutral-50 [&>svg+div]:translate-y-[-3px] [&>svg~*]:pl-7",
+  "group/alert relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        default: "bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50",
+        default: "bg-card text-card-foreground",
         destructive:
-          "border-red-500/50 bg-red-200/20 text-red-600 dark:border-red-500 dark:border-red-900/50 dark:dark:border-red-900 dark:bg-red-900/10 dark:text-red-500 [&>svg]:text-red-500 dark:[&>svg]:text-red-500",
-        warning:
-          "border-yellow-500/50 bg-yellow-200/20 text-yellow-700 dark:border-yellow-500 dark:border-yellow-900/50 dark:dark:border-yellow-900 dark:bg-yellow-800/20 dark:text-yellow-500 [&>svg]:text-yellow-700 dark:[&>svg]:text-yellow-500",
-        information:
-          "border-blue-500/50 bg-blue-200/20 text-blue-600 dark:border-blue-500 dark:border-blue-900/50 dark:dark:border-blue-900 dark:bg-blue-800/20 dark:text-blue-100 [&>svg]:text-blue-500 dark:[&>svg]:text-blue-100",
+          "bg-card text-destructive *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current",
       },
     },
     defaultVariants: {
@@ -23,31 +19,51 @@ const alertVariants = cva(
   },
 );
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
-  <div ref={ref} role="alert" className={cn(alertVariants({ variant }), className)} {...props} />
-));
-Alert.displayName = "Alert";
-
-const AlertTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => (
-    <h5
-      ref={ref}
-      className={cn("mb-1 leading-none font-medium tracking-tight", className)}
+function Alert({
+  className,
+  variant,
+  ...props
+}: React.ComponentProps<"div"> & VariantProps<typeof alertVariants>) {
+  return (
+    <div
+      data-slot="alert"
+      role="alert"
+      className={cn(alertVariants({ variant }), className)}
       {...props}
     />
-  ),
-);
-AlertTitle.displayName = "AlertTitle";
+  );
+}
 
-const AlertDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("text-sm [&_p]:leading-relaxed", className)} {...props} />
-));
-AlertDescription.displayName = "AlertDescription";
+function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-title"
+      className={cn(
+        "[&_a]:hover:text-foreground font-medium group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 
-export { Alert, AlertTitle, AlertDescription };
+function AlertDescription({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="alert-description"
+      className={cn(
+        "text-muted-foreground [&_a]:hover:text-foreground text-sm text-balance md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_p:not(:last-child)]:mb-4",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function AlertAction({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div data-slot="alert-action" className={cn("absolute top-2 right-2", className)} {...props} />
+  );
+}
+
+export { Alert, AlertTitle, AlertDescription, AlertAction };

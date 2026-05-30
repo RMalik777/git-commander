@@ -1,4 +1,5 @@
 allowBuilds:
   esbuild: true
+  msw: true
 minimumReleaseAgeExclude:
   - dompurify@3.4.7
