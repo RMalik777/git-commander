@@ -131,16 +131,18 @@ export function ZipTableDialog({
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className={clsx(add === "File" ? "ZIP_1" : "ZIP_2", "w-full")}
-        >
-          <Plus size={20} />
-          Add {add}
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button
+            variant="outline"
+            size="sm"
+            className={clsx(add === "File" ? "ZIP_1" : "ZIP_2", "w-full")}
+          >
+            <Plus size={20} />
+            Add {add}
+          </Button>
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add {add} to Table</DialogTitle>
@@ -197,11 +199,13 @@ export function ZipTableDialog({
               )}
             ></FormField>
             <DialogFooter className="mt-4">
-              <DialogClose asChild>
-                <Button type="reset" variant="outline">
-                  Close
-                </Button>
-              </DialogClose>
+              <DialogClose
+                render={
+                  <Button type="reset" variant="outline">
+                    Close
+                  </Button>
+                }
+              />
               <Button type="submit">Add</Button>
             </DialogFooter>
           </form>

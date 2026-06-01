@@ -224,11 +224,13 @@ export function ClearSettings({
               )}
             />
             <DialogFooter className="pt-4">
-              <DialogClose asChild>
-                <Button variant="outline" type="reset" onClick={() => reset()}>
-                  Cancel
-                </Button>
-              </DialogClose>
+              <DialogClose
+                render={
+                  <Button variant="outline" type="reset" onClick={() => reset()}>
+                    Cancel
+                  </Button>
+                }
+              />
               <Button
                 variant="destructive"
                 type="button"

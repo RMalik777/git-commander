@@ -100,12 +100,18 @@ export function EditRepo({
   }, [open]);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="flex grow items-center justify-center gap-1" variant="outline" size="sm">
-          <Pencil size={16} className="md:hidden lg:block" />
-          <span className="hidden md:block">Edit</span>
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button
+            className="flex grow items-center justify-center gap-1"
+            variant="outline"
+            size="sm"
+          >
+            <Pencil size={16} className="md:hidden lg:block" />
+            <span className="hidden md:block">Edit</span>
+          </Button>
+        }
+      />
       <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
         <DialogHeader>
           <DialogTitle>Edit Repository</DialogTitle>
@@ -146,11 +152,13 @@ export function EditRepo({
               )}
             />
             <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="secondary" onClick={() => reset()}>
-                  Cancel
-                </Button>
-              </DialogClose>
+              <DialogClose
+                render={
+                  <Button variant="secondary" onClick={() => reset()}>
+                    Cancel
+                  </Button>
+                }
+              />
               <Button variant="default" type="submit">
                 Edit
               </Button>

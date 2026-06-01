@@ -63,51 +63,106 @@ export function Staging({
   function actionButton(file: DirEntryWithPath, mode: string) {
     return (
       <div className="STG_5A STG_5 UST_5 UST_5A flex flex-row items-center gap-2">
-        <TooltipProvider delayDuration={250} disableHoverableContent>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className="STG_6 UST_6 h-5 w-5 shrink-0 rounded-sm p-px duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
-                onClick={async () => {
-                  if (file.path.includes(dir)) {
-                    if (file.children) {
-                      await open(file.path);
+        <TooltipProvider delay={250}>
+          <Tooltip disableHoverablePopup>
+            <TooltipTrigger
+              render={
+                <button
+                  className="STG_6 UST_6 h-5 w-5 shrink-0 rounded-sm p-px duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
+                  onClick={async () => {
+                    if (file.path.includes(dir)) {
+                      if (file.children) {
+                        await open(file.path);
+                      } else {
+                        const newPath = file.path.split("\\");
+                        newPath.pop();
+                        await open(newPath.join("\\"));
+                      }
                     } else {
                       const newPath = file.path.split("\\");
                       newPath.pop();
-                      await open(newPath.join("\\"));
+                      await open(dir + "\\" + newPath.join("\\"));
                     }
-                  } else {
-                    const newPath = file.path.split("\\");
-                    newPath.pop();
-                    await open(dir + "\\" + newPath.join("\\"));
-                  }
-                }}
-              >
-                <FolderOpen className="h-full w-full duration-200 ease-out" />
-              </button>
-            </TooltipTrigger>
+                  }}
+                >
+                  <FolderOpen className="h-full w-full duration-200 ease-out" />
+                </button>
+              }
+            />
             <TooltipContent>
               <p>Open</p>
             </TooltipContent>
           </Tooltip>
           {mode === "Changed" ?
             <>
-              <Tooltip>
-                <TooltipTrigger asChild>
+              <Tooltip disableHoverablePopup>
+                <TooltipTrigger
+                  render={
+                    <button
+                      className="STG_7 h-5 w-5 shrink-0 rounded-sm duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
+                      onClick={async () => {
+                        try {
+                          await git.addFile(dir, file.path);
+                        } catch (error) {
+                          console.error(error);
+                          if (error instanceof Error) {
+                            toast({
+                              title: "Error Staging",
+                              description: (
+                                <p>
+                                  <code>{file.name}</code> can&apos;t be staged
+                                  <br />
+                                  <code>{error.message}</code>
+                                </p>
+                              ),
+                              variant: "destructive",
+                            });
+                          }
+                          return;
+                        }
+                        await getDiff();
+                        await getStaged();
+                      }}
+                    >
+                      <Plus className="h-full w-full duration-200 ease-out" />
+                    </button>
+                  }
+                />
+                <TooltipContent>
+                  <p>Stage Changes</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip disableHoverablePopup>
+                <TooltipTrigger
+                  render={
+                    <button
+                      className="h-5 w-5 shrink-0 rounded-sm p-px duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
+                      onClick={() => setOpenDialogId(file.path)}
+                    >
+                      <Undo className="h-full w-full duration-200 ease-out" />
+                    </button>
+                  }
+                />
+                <TooltipContent>
+                  <p>Revert Changes</p>
+                </TooltipContent>
+              </Tooltip>
+            </>
+          : <Tooltip disableHoverablePopup>
+              <TooltipTrigger
+                render={
                   <button
-                    className="STG_7 h-5 w-5 shrink-0 rounded-sm duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
+                    className="UST_7 h-5 w-5 shrink-0 rounded-sm duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
                     onClick={async () => {
                       try {
-                        await git.addFile(dir, file.path);
+                        await git.unstageFile(dir, file.path);
                       } catch (error) {
-                        console.error(error);
                         if (error instanceof Error) {
                           toast({
-                            title: "Error Staging",
+                            title: "Error Unstaging",
                             description: (
                               <p>
-                                <code>{file.name}</code> can&apos;t be staged
+                                <code>{file.name}</code> can&apos;t be unstaged
                                 <br />
                                 <code>{error.message}</code>
                               </p>
@@ -117,61 +172,14 @@ export function Staging({
                         }
                         return;
                       }
-                      await getDiff();
                       await getStaged();
+                      await getDiff();
                     }}
                   >
-                    <Plus className="h-full w-full duration-200 ease-out" />
+                    <Minus className="h-full w-full duration-200 ease-out" />
                   </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Stage Changes</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    className="h-5 w-5 shrink-0 rounded-sm p-px duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
-                    onClick={() => setOpenDialogId(file.path)}
-                  >
-                    <Undo className="h-full w-full duration-200 ease-out" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Revert Changes</p>
-                </TooltipContent>
-              </Tooltip>
-            </>
-          : <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  className="UST_7 h-5 w-5 shrink-0 rounded-sm duration-200 ease-out hover:bg-neutral-200 dark:hover:bg-neutral-800"
-                  onClick={async () => {
-                    try {
-                      await git.unstageFile(dir, file.path);
-                    } catch (error) {
-                      if (error instanceof Error) {
-                        toast({
-                          title: "Error Unstaging",
-                          description: (
-                            <p>
-                              <code>{file.name}</code> can&apos;t be unstaged
-                              <br />
-                              <code>{error.message}</code>
-                            </p>
-                          ),
-                          variant: "destructive",
-                        });
-                      }
-                      return;
-                    }
-                    await getStaged();
-                    await getDiff();
-                  }}
-                >
-                  <Minus className="h-full w-full duration-200 ease-out" />
-                </button>
-              </TooltipTrigger>
+                }
+              />
               <TooltipContent>
                 <p>Unstage Changes</p>
               </TooltipContent>
@@ -525,22 +533,24 @@ export function Staging({
       <CardHeader className="">
         <CardTitle className="flex items-center gap-4">
           Staging Area
-          <TooltipProvider delayDuration={50}>
+          <TooltipProvider delay={50}>
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  disabled={repoName === ""}
-                  className="h-fit w-fit"
-                  onClick={async () => {
-                    await getDiff();
-                    await getStaged();
-                  }}
-                >
-                  <RefreshCw size={20} />
-                </Button>
-              </TooltipTrigger>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    disabled={repoName === ""}
+                    className="h-fit w-fit"
+                    onClick={async () => {
+                      await getDiff();
+                      await getStaged();
+                    }}
+                  >
+                    <RefreshCw size={20} />
+                  </Button>
+                }
+              />
               <TooltipContent>
                 <p className="font-normal tracking-normal">Refresh</p>
               </TooltipContent>

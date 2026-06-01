@@ -225,33 +225,35 @@ export function FileList({
       <CardHeader className="">
         <CardTitle className="flex items-center gap-4">
           File List
-          <TooltipProvider delayDuration={50}>
+          <TooltipProvider delay={50}>
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="FE_3 h-fit w-fit"
-                  onClick={async () => {
-                    setRefreshClick(true);
-                    setLoading(true);
-                    try {
-                      await getDirList();
-                      await getDiff();
-                      await getStaged();
-                    } catch (error) {
-                      console.error(error);
-                    } finally {
-                      setTimeout(() => {
-                        setRefreshClick(false);
-                        setLoading(false);
-                      }, 100);
-                    }
-                  }}
-                >
-                  <RefreshCw size={20} className={refreshClick ? "animate-spin" : ""} />
-                </Button>
-              </TooltipTrigger>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="FE_3 h-fit w-fit"
+                    onClick={async () => {
+                      setRefreshClick(true);
+                      setLoading(true);
+                      try {
+                        await getDirList();
+                        await getDiff();
+                        await getStaged();
+                      } catch (error) {
+                        console.error(error);
+                      } finally {
+                        setTimeout(() => {
+                          setRefreshClick(false);
+                          setLoading(false);
+                        }, 100);
+                      }
+                    }}
+                  >
+                    <RefreshCw size={20} className={refreshClick ? "animate-spin" : ""} />
+                  </Button>
+                }
+              />
               <TooltipContent>
                 <p className="font-normal tracking-normal">Refresh</p>
               </TooltipContent>

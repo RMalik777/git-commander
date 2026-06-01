@@ -264,11 +264,13 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileList[] 
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
-        <Button disabled={fileList.length === 0} variant="default" size="sm" className="ZIP_11">
-          Zip
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button disabled={fileList.length === 0} variant="default" size="sm" className="ZIP_11">
+            Zip
+          </Button>
+        }
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Compress</DialogTitle>
@@ -418,11 +420,13 @@ export function ZipFunctionDialog({ fileList }: Readonly<{ fileList: FileList[] 
                 speedMultiplier={0.8}
                 className={clsx(isLoading ? "" : "w-0!", "transition-all duration-200 ease-out")}
               />
-              <DialogClose asChild>
-                <Button variant="outline" type="reset" onClick={() => reset()}>
-                  Close
-                </Button>
-              </DialogClose>
+              <DialogClose
+                render={
+                  <Button variant="outline" type="reset" onClick={() => reset()}>
+                    Close
+                  </Button>
+                }
+              />
               <Button type="submit" disabled={isLoading} className="ZIP_17">
                 Zip
               </Button>

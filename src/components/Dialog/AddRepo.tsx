@@ -86,9 +86,7 @@ export function AddRepo({ afterAdd }: Readonly<{ afterAdd: () => void }>) {
   return (
     <>
       <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogTrigger asChild>
-          <Button variant="outline">Add Repo</Button>
-        </DialogTrigger>
+        <DialogTrigger render={<Button variant="outline">Add Repo</Button>} />
         <DialogContent className="max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-prose">
           <DialogHeader>
             <DialogTitle>Add Repository</DialogTitle>
@@ -129,11 +127,13 @@ export function AddRepo({ afterAdd }: Readonly<{ afterAdd: () => void }>) {
                 )}
               />
               <DialogFooter className="items-center">
-                <DialogClose asChild>
-                  <Button variant="outline" type="reset" onClick={() => reset()}>
-                    Cancel
-                  </Button>
-                </DialogClose>
+                <DialogClose
+                  render={
+                    <Button variant="outline" type="reset" onClick={() => reset()}>
+                      Cancel
+                    </Button>
+                  }
+                />
                 <Button variant="default" type="submit">
                   Add
                 </Button>

@@ -76,28 +76,28 @@ export function Navbar() {
           "flex h-full flex-col justify-between duration-200 ease-out",
         )}
       >
-        <TooltipProvider delayDuration={50}>
+        <TooltipProvider delay={50}>
           <ul className={clsx(navOpen ? "self-end" : "", "flex w-full flex-col gap-4")}>
             {menuItem.map((item) => {
               return (
                 <li key={item.link} className="w-full">
                   <Tooltip open={navOpen ? false : undefined}>
-                    <TooltipTrigger asChild>
-                      <Button
-                        asChild
-                        className={clsx(
-                          navOpen ? "w-full" : "",
-                          "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out",
-                        )}
-                        size="icon"
-                        variant={currentPath.pathname == item.link ? "default" : "ghost"}
-                      >
-                        <NavLink to={item.link} className="group block h-fit w-full">
+                    <TooltipTrigger
+                      render={
+                        <Button
+                          render={<NavLink to={item.link} className="group block h-fit w-full" />}
+                          className={clsx(
+                            navOpen ? "w-full" : "",
+                            "group relative justify-start gap-2 p-2 transition-all duration-150 ease-out",
+                          )}
+                          size="icon"
+                          variant={currentPath.pathname == item.link ? "default" : "ghost"}
+                        >
                           {item.icon}
                           {navOpen ? item.name : ""}
-                        </NavLink>
-                      </Button>
-                    </TooltipTrigger>
+                        </Button>
+                      }
+                    />
                     <TooltipContent side="right">
                       <p>{item.name}</p>
                     </TooltipContent>
@@ -107,21 +107,23 @@ export function Navbar() {
             })}
           </ul>
           <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="ghost"
-                className={navOpen ? "self-end" : ""}
-                onClick={() => {
-                  setNavOpen(!navOpen);
-                  localStorage.setItem("navOpen", (!navOpen).toString());
-                }}
-              >
-                {navOpen ?
-                  <ArrowLeftToLine size={18} className="" />
-                : <ArrowRightToLine size={18} className="" />}
-              </Button>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className={navOpen ? "self-end" : ""}
+                  onClick={() => {
+                    setNavOpen(!navOpen);
+                    localStorage.setItem("navOpen", (!navOpen).toString());
+                  }}
+                >
+                  {navOpen ?
+                    <ArrowLeftToLine size={18} className="" />
+                  : <ArrowRightToLine size={18} className="" />}
+                </Button>
+              }
+            />
             <TooltipContent side="right">
               <p>{navOpen ? "Collapse" : "Expand"}</p>
             </TooltipContent>

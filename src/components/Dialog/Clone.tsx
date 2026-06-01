@@ -263,11 +263,13 @@ export function Clone() {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
-        <Button variant="secondary" size="sm" className="CR_1">
-          Clone
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button variant="secondary" size="sm" className="CR_1">
+            Clone
+          </Button>
+        }
+      />
       <DialogContent className="xs:max-w-[360px] max-w-fit sm:max-w-[540px] md:max-w-[640px] lg:max-w-[720px]">
         <DialogHeader>
           <DialogTitle>Clone Remote Repository</DialogTitle>
@@ -285,8 +287,8 @@ export function Clone() {
                   <FormLabel>Repository</FormLabel>
                   <Popover open={comboOpen} onOpenChange={setComboOpen}>
                     <div className="CR_2 flex flex-col items-center justify-center gap-1 sm:flex-row">
-                      <PopoverTrigger asChild>
-                        <FormControl>
+                      <PopoverTrigger
+                        render={
                           <Button
                             variant="outline"
                             role="combobox"
@@ -299,11 +301,10 @@ export function Clone() {
                             {field.value ?
                               links?.find((link) => link.repo_url === field.value)?.repo_name
                             : "Select remote repository..."}
-
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
-                        </FormControl>
-                      </PopoverTrigger>
+                        }
+                      />
                       <div className="flex w-full flex-row items-center justify-center gap-4 sm:w-fit sm:gap-1">
                         <Separator orientation="horizontal" className="block shrink grow sm:w-2" />
                         <p>or</p>

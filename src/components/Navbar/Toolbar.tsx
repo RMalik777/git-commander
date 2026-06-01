@@ -184,21 +184,23 @@ export function Toolbar() {
   return (
     <header className="TB_1 flex flex-col">
       <div className="flex w-full grow flex-row">
-        <TooltipProvider delayDuration={350}>
+        <TooltipProvider delay={350}>
           <div className="relative flex h-full w-full items-center justify-center border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
             <Tooltip>
-              <TooltipTrigger asChild>
-                <h1 className="TB_2 text-base font-medium">
-                  {repoName === "" ?
-                    ""
-                  : isSwitching ?
-                    <span>{switchMessage}</span>
-                  : <>
-                      <span>{repoName}</span>/{currentBranch}
-                    </>
-                  }
-                </h1>
-              </TooltipTrigger>
+              <TooltipTrigger
+                render={
+                  <h1 className="TB_2 text-base font-medium">
+                    {repoName === "" ?
+                      ""
+                    : isSwitching ?
+                      <span>{switchMessage}</span>
+                    : <>
+                        <span>{repoName}</span>/{currentBranch}
+                      </>
+                    }
+                  </h1>
+                }
+              />
               <TooltipContent side="bottom">
                 <p>Current Repo and Branch</p>
               </TooltipContent>
@@ -211,6 +213,7 @@ export function Toolbar() {
           <Select
             value={currentBranch}
             onValueChange={async (e) => {
+              if (e === null) return;
               setIsSwitching(true);
               const toSwitch = e.replace(/origin\//gi, "").trim();
               toast({
@@ -251,13 +254,18 @@ export function Toolbar() {
             }}
           >
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" asChild className="TB_3">
-                  <SelectTrigger className="w-fit rounded-none">
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="TB_3"
+                    render={<SelectTrigger className="w-fit rounded-none" />}
+                  >
                     <GitBranch />
-                  </SelectTrigger>
-                </Button>
-              </TooltipTrigger>
+                  </Button>
+                }
+              />
               <TooltipContent side="bottom">
                 <p>Change Branch</p>
               </TooltipContent>
@@ -291,37 +299,41 @@ export function Toolbar() {
       <div className="flex h-fit flex-row items-center justify-between border-b border-neutral-200 bg-white px-3 py-3 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950">
         <div className="flex h-full flex-row items-center gap-2 sm:gap-4">
           <div className="flex w-fit flex-row items-center gap-1">
-            <TooltipProvider delayDuration={550}>
+            <TooltipProvider delay={550}>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    className="TB_4"
-                    disabled={window.history.state.idx == 0}
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => navigate(-1)}
-                  >
-                    <ChevronLeft />
-                  </Button>
-                </TooltipTrigger>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      className="TB_4"
+                      disabled={window.history.state.idx == 0}
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => navigate(-1)}
+                    >
+                      <ChevronLeft />
+                    </Button>
+                  }
+                />
                 <TooltipContent side="bottom">
                   <p>Back</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <TooltipProvider delayDuration={550}>
+            <TooltipProvider delay={550}>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    disabled={window.history.state.idx == window.history.length - 1}
-                    className="TB_5 max-xs:hidden"
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => navigate(1)}
-                  >
-                    <ChevronRight />
-                  </Button>
-                </TooltipTrigger>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      disabled={window.history.state.idx == window.history.length - 1}
+                      className="TB_5 max-xs:hidden"
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => navigate(1)}
+                    >
+                      <ChevronRight />
+                    </Button>
+                  }
+                />
                 <TooltipContent side="bottom">
                   <p>Forward</p>
                 </TooltipContent>
@@ -329,7 +341,7 @@ export function Toolbar() {
             </TooltipProvider>
           </div>
           <Separator orientation="vertical" className="h-full" />
-          <TooltipProvider delayDuration={100}>
+          <TooltipProvider delay={100}>
             <ul className="flex flex-row items-center gap-6 sm:gap-12">
               <li
                 className={clsx(
@@ -338,72 +350,74 @@ export function Toolbar() {
                 )}
               >
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      className="TB_6"
-                      size="icon"
-                      variant="outline"
-                      onClick={async () => {
-                        try {
-                          setIsFetching(true);
-                          const result = await git.fetch(dirLocation);
-                          const response = await git.getDiffCommit(dirLocation, currentBranch);
-                          setFetchAmount(response.length);
-                          if (result.startsWith("fatal") || result.startsWith("error")) {
-                            toast({
-                              title: "Error",
-                              description: result,
-                              variant: "destructive",
-                            });
-                          } else if (result == "") {
-                            toast({
-                              title: "Repository Up To Date",
-                            });
-                          } else {
-                            toast({
-                              title: "Repository Synced",
-                              description: (
-                                <p>
-                                  {result} <br /> Pull to integrate changes to local repository
-                                </p>
-                              ),
-                            });
+                  <TooltipTrigger
+                    render={
+                      <Button
+                        className="TB_6"
+                        size="icon"
+                        variant="outline"
+                        onClick={async () => {
+                          try {
+                            setIsFetching(true);
+                            const result = await git.fetch(dirLocation);
+                            const response = await git.getDiffCommit(dirLocation, currentBranch);
+                            setFetchAmount(response.length);
+                            if (result.startsWith("fatal") || result.startsWith("error")) {
+                              toast({
+                                title: "Error",
+                                description: result,
+                                variant: "destructive",
+                              });
+                            } else if (result == "") {
+                              toast({
+                                title: "Repository Up To Date",
+                              });
+                            } else {
+                              toast({
+                                title: "Repository Synced",
+                                description: (
+                                  <p>
+                                    {result} <br /> Pull to integrate changes to local repository
+                                  </p>
+                                ),
+                              });
+                            }
+                          } catch (error) {
+                            if (error instanceof Error) {
+                              console.error(error);
+                              toast({
+                                title: "Failed to fetch",
+                                description: (
+                                  <p className="wrap-break-word whitespace-pre-wrap">
+                                    {error.message}
+                                  </p>
+                                ),
+                                variant: "destructive",
+                              });
+                            } else {
+                              toast({
+                                title: "Failed to fetch",
+                                description: error?.toString(),
+                                variant: "destructive",
+                              });
+                            }
+                          } finally {
+                            setIsFetching(false);
                           }
-                        } catch (error) {
-                          if (error instanceof Error) {
-                            console.error(error);
-                            toast({
-                              title: "Failed to fetch",
-                              description: (
-                                <p className="wrap-break-word whitespace-pre-wrap">
-                                  {error.message}
-                                </p>
-                              ),
-                              variant: "destructive",
-                            });
-                          } else {
-                            toast({
-                              title: "Failed to fetch",
-                              description: error?.toString(),
-                              variant: "destructive",
-                            });
-                          }
-                        } finally {
-                          setIsFetching(false);
-                        }
-                      }}
-                    >
-                      <RefreshCcw
-                        className={clsx(isFetching ? "animate-spin" : "", "absolute min-h-fit")}
-                      />
-                    </Button>
-                  </TooltipTrigger>
+                        }}
+                      >
+                        <RefreshCcw
+                          className={clsx(isFetching ? "animate-spin" : "", "absolute min-h-fit")}
+                        />
+                      </Button>
+                    }
+                  />
                   <TooltipContent side="bottom">
                     <p>Sync</p>
                   </TooltipContent>
                 </Tooltip>
 
-                <Tooltip disableHoverableContent>
+                <Tooltip disableHoverablePopup>
                   <TooltipTrigger
                     className={clsx(
                       fetchAmount > 0 ?
@@ -443,192 +457,195 @@ export function Toolbar() {
               <li>
                 <div className="flex gap-2 sm:gap-4">
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        className="TB_6"
-                        size="icon"
-                        variant="outline"
-                        onClick={async () => {
-                          setIsPulling(true);
-                          toast({
-                            title: "Pulling Repository",
-                            description: (
-                              <PulseLoader
-                                size={6}
-                                speedMultiplier={0.8}
-                                color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
-                              />
-                            ),
-                          });
-                          try {
-                            const response = await git.pull(dirLocation);
-                            if (response.toString().startsWith("fatal")) {
-                              toast({
-                                title: "Error",
-                                description: response,
-                                variant: "destructive",
-                              });
-                            } else if (response.toString().includes("Already up to date")) {
-                              toast({
-                                title: "Already up to date",
-                              });
-                            } else {
-                              const toCompare = response.toString().trim();
-                              const regexTag = new RegExp(
-                                String.raw`From[\s\S]+${repoName}\s*, ([\s\S]+),(?:already up to date|updating \w+)`,
-                                "i",
-                              );
-                              const regexChanges =
-                                /Fast-forward\s([\s\S]+)\s\d+ files changed, \d+ insertions\(\+\), \d+ deletions\(-\)/i;
-                              const regexSummary =
-                                /(\d+) files changed, (\d+) insertions\(\+\), (\d+) deletions\(-\)/i;
-                              const matchTag = toCompare.match(regexTag);
-                              const matchChanges = toCompare.match(regexChanges);
-                              const matchSummary = toCompare.match(regexSummary);
-                              dispatch(
-                                setPullMsg({
-                                  tagBranch: matchTag?.[1]?.toString() ?? "",
-                                  changes: matchChanges?.[1]?.toString() ?? "",
-                                  filesChanged: parseInt(matchSummary?.[1] ?? "0"),
-                                  insertions: parseInt(matchSummary?.[2] ?? "0"),
-                                  deletions: parseInt(matchSummary?.[3] ?? "0"),
-                                }),
-                              );
-                              const desc = (): string => {
-                                if (matchSummary) {
-                                  return `${matchSummary?.[1] ?? 0} files changed, ${matchSummary?.[2] ?? 0} insertions (+), ${matchSummary?.[3] ?? 0} deletions (-)`;
-                                } else {
-                                  return response.toString();
-                                }
-                              };
-                              toast({
-                                title: "Pulled Succesfully",
-                                description: desc(),
-                              });
-                              setFetchAmount(0);
+                    <TooltipTrigger
+                      render={
+                        <Button
+                          className="TB_6"
+                          size="icon"
+                          variant="outline"
+                          onClick={async () => {
+                            setIsPulling(true);
+                            toast({
+                              title: "Pulling Repository",
+                              description: (
+                                <PulseLoader
+                                  size={6}
+                                  speedMultiplier={0.8}
+                                  color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                                />
+                              ),
+                            });
+                            try {
+                              const response = await git.pull(dirLocation);
+                              if (response.toString().startsWith("fatal")) {
+                                toast({
+                                  title: "Error",
+                                  description: response,
+                                  variant: "destructive",
+                                });
+                              } else if (response.toString().includes("Already up to date")) {
+                                toast({
+                                  title: "Already up to date",
+                                });
+                              } else {
+                                const toCompare = response.toString().trim();
+                                const regexTag = new RegExp(
+                                  String.raw`From[\s\S]+${repoName}\s*, ([\s\S]+),(?:already up to date|updating \w+)`,
+                                  "i",
+                                );
+                                const regexChanges =
+                                  /Fast-forward\s([\s\S]+)\s\d+ files changed, \d+ insertions\(\+\), \d+ deletions\(-\)/i;
+                                const regexSummary =
+                                  /(\d+) files changed, (\d+) insertions\(\+\), (\d+) deletions\(-\)/i;
+                                const matchTag = toCompare.match(regexTag);
+                                const matchChanges = toCompare.match(regexChanges);
+                                const matchSummary = toCompare.match(regexSummary);
+                                dispatch(
+                                  setPullMsg({
+                                    tagBranch: matchTag?.[1]?.toString() ?? "",
+                                    changes: matchChanges?.[1]?.toString() ?? "",
+                                    filesChanged: parseInt(matchSummary?.[1] ?? "0"),
+                                    insertions: parseInt(matchSummary?.[2] ?? "0"),
+                                    deletions: parseInt(matchSummary?.[3] ?? "0"),
+                                  }),
+                                );
+                                const desc = (): string => {
+                                  if (matchSummary) {
+                                    return `${matchSummary?.[1] ?? 0} files changed, ${matchSummary?.[2] ?? 0} insertions (+), ${matchSummary?.[3] ?? 0} deletions (-)`;
+                                  } else {
+                                    return response.toString();
+                                  }
+                                };
+                                toast({
+                                  title: "Pulled Succesfully",
+                                  description: desc(),
+                                });
+                                setFetchAmount(0);
+                              }
+                            } catch (error) {
+                              if (error instanceof Error) {
+                                console.error(error);
+                                toast({
+                                  title: "Failed to pull",
+                                  description: (
+                                    <p className="wrap-break-word whitespace-pre-wrap">
+                                      {error.message}
+                                    </p>
+                                  ),
+                                  variant: "destructive",
+                                });
+                              }
+                            } finally {
+                              setIsPulling(false);
                             }
-                          } catch (error) {
-                            if (error instanceof Error) {
-                              console.error(error);
-                              toast({
-                                title: "Failed to pull",
-                                description: (
-                                  <p className="wrap-break-word whitespace-pre-wrap">
-                                    {error.message}
-                                  </p>
-                                ),
-                                variant: "destructive",
-                              });
-                            }
-                          } finally {
-                            setIsPulling(false);
-                          }
-                        }}
-                      >
-                        <HashLoader
-                          size={24}
-                          speedMultiplier={1.2}
-                          color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
-                          className={clsx(
-                            isPulling ? "scale-100! opacity-100!" : "scale-0! opacity-0!",
-                            "relative duration-300 ease-out",
-                          )}
-                        />
-                        <ArrowDownToLine
-                          className={clsx(
-                            isPulling ?
-                              "scale-0 -rotate-90 opacity-0"
-                            : "scale-100 rotate-0 opacity-100",
-                            "absolute duration-300 ease-out",
-                          )}
-                        />
-                      </Button>
-                    </TooltipTrigger>
+                          }}
+                        >
+                          <HashLoader
+                            size={24}
+                            speedMultiplier={1.2}
+                            color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                            className={clsx(
+                              isPulling ? "scale-100! opacity-100!" : "scale-0! opacity-0!",
+                              "relative duration-300 ease-out",
+                            )}
+                          />
+                          <ArrowDownToLine
+                            className={clsx(
+                              isPulling ?
+                                "scale-0 -rotate-90 opacity-0"
+                              : "scale-100 rotate-0 opacity-100",
+                              "absolute duration-300 ease-out",
+                            )}
+                          />
+                        </Button>
+                      }
+                    />
                     <TooltipContent side="bottom">
                       <p>Pull</p>
                     </TooltipContent>
                   </Tooltip>
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        className="TB_7"
-                        size="icon"
-                        variant="outline"
-                        onClick={async () => {
-                          setIsPushing(true);
-                          toast({
-                            title: "Pushing Repository",
-                            description: (
-                              <PulseLoader
-                                size={6}
-                                speedMultiplier={0.8}
-                                color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
-                              />
-                            ),
-                          });
-                          try {
-                            const response = await git.push(dirLocation);
-                            if (response.toString().includes("fatal")) {
-                              toast({
-                                title: "Failed to push",
-                                description: response.toString().trim(),
-                                variant: "destructive",
-                              });
-                            } else {
-                              toast({
-                                title: "Pushed Succesfully",
-                                description: response.toString().trim(),
-                              });
-                            }
+                    <TooltipTrigger
+                      render={
+                        <Button
+                          className="TB_7"
+                          size="icon"
+                          variant="outline"
+                          onClick={async () => {
+                            setIsPushing(true);
+                            toast({
+                              title: "Pushing Repository",
+                              description: (
+                                <PulseLoader
+                                  size={6}
+                                  speedMultiplier={0.8}
+                                  color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                                />
+                              ),
+                            });
                             try {
-                              const currentHash = await git.getLatestCommitHash(
-                                dirLocation,
-                                currentBranch,
-                                "remote",
-                              );
-                              dispatch(setRepo({ remoteHash: currentHash }));
-                              localStorage.setItem("remoteRepoHash", currentHash.toString());
+                              const response = await git.push(dirLocation);
+                              if (response.toString().includes("fatal")) {
+                                toast({
+                                  title: "Failed to push",
+                                  description: response.toString().trim(),
+                                  variant: "destructive",
+                                });
+                              } else {
+                                toast({
+                                  title: "Pushed Succesfully",
+                                  description: response.toString().trim(),
+                                });
+                              }
+                              try {
+                                const currentHash = await git.getLatestCommitHash(
+                                  dirLocation,
+                                  currentBranch,
+                                  "remote",
+                                );
+                                dispatch(setRepo({ remoteHash: currentHash }));
+                                localStorage.setItem("remoteRepoHash", currentHash.toString());
+                              } catch (error) {
+                                throw Error(error as string);
+                              }
                             } catch (error) {
-                              throw Error(error as string);
+                              if (error instanceof Error) {
+                                console.error(error);
+                                toast({
+                                  title: "Failed to push",
+                                  description: (
+                                    <p className="wrap-break-word whitespace-pre-wrap">
+                                      {error.message}
+                                    </p>
+                                  ),
+                                  variant: "destructive",
+                                });
+                              }
+                            } finally {
+                              setIsPushing(false);
                             }
-                          } catch (error) {
-                            if (error instanceof Error) {
-                              console.error(error);
-                              toast({
-                                title: "Failed to push",
-                                description: (
-                                  <p className="wrap-break-word whitespace-pre-wrap">
-                                    {error.message}
-                                  </p>
-                                ),
-                                variant: "destructive",
-                              });
-                            }
-                          } finally {
-                            setIsPushing(false);
-                          }
-                        }}
-                      >
-                        <HashLoader
-                          size={24}
-                          speedMultiplier={1.2}
-                          color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
-                          className={clsx(
-                            isPushing ? "scale-100! opacity-100!" : "scale-0! opacity-0!",
-                            "relative duration-300 ease-out",
-                          )}
-                        />
-
-                        <ArrowUpToLine
-                          className={clsx(
-                            isPushing ?
-                              "scale-0 -rotate-90 opacity-0"
-                            : "scale-100 rotate-0 opacity-100",
-                            "absolute duration-300 ease-out",
-                          )}
-                        />
-                      </Button>
-                    </TooltipTrigger>
+                          }}
+                        >
+                          <HashLoader
+                            size={24}
+                            speedMultiplier={1.2}
+                            color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                            className={clsx(
+                              isPushing ? "scale-100! opacity-100!" : "scale-0! opacity-0!",
+                              "relative duration-300 ease-out",
+                            )}
+                          />
+                          <ArrowUpToLine
+                            className={clsx(
+                              isPushing ?
+                                "scale-0 -rotate-90 opacity-0"
+                              : "scale-100 rotate-0 opacity-100",
+                              "absolute duration-300 ease-out",
+                            )}
+                          />
+                        </Button>
+                      }
+                    />
                     <TooltipContent side="bottom">
                       <p>Push</p>
                     </TooltipContent>
@@ -638,51 +655,53 @@ export function Toolbar() {
               <li>
                 <div className="flex gap-4">
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        className="TB_8"
-                        size="icon"
-                        variant="outline"
-                        onClick={async () => {
-                          const lastCommitMessage = await git.getLastCommitMessage(dirLocation);
-                          dispatch(
-                            setLastCommitMessage(
-                              lastCommitMessage.toString().trim().replace(/,$/g, ""),
-                            ),
-                          );
-                          try {
-                            const response = await git.undoLastCommit(dirLocation);
-                            toast({
-                              title: "Undo Succesfully",
-                              description: response,
-                            });
-                            const localHash = await git.getLatestCommitHash(
-                              dirLocation,
-                              currentBranch,
-                              "local",
+                    <TooltipTrigger
+                      render={
+                        <Button
+                          className="TB_8"
+                          size="icon"
+                          variant="outline"
+                          onClick={async () => {
+                            const lastCommitMessage = await git.getLastCommitMessage(dirLocation);
+                            dispatch(
+                              setLastCommitMessage(
+                                lastCommitMessage.toString().trim().replace(/,$/g, ""),
+                              ),
                             );
-                            dispatch(setRepo({ localHash: localHash }));
-                            localStorage.setItem("localRepoHash", localHash);
-                          } catch (error) {
-                            console.error(error);
-                            if (error instanceof Error) {
+                            try {
+                              const response = await git.undoLastCommit(dirLocation);
+                              toast({
+                                title: "Undo Succesfully",
+                                description: response,
+                              });
+                              const localHash = await git.getLatestCommitHash(
+                                dirLocation,
+                                currentBranch,
+                                "local",
+                              );
+                              dispatch(setRepo({ localHash: localHash }));
+                              localStorage.setItem("localRepoHash", localHash);
+                            } catch (error) {
+                              console.error(error);
+                              if (error instanceof Error) {
+                                toast({
+                                  title: "Failed to undo",
+                                  description: error.message,
+                                  variant: "destructive",
+                                });
+                              }
                               toast({
                                 title: "Failed to undo",
-                                description: error.message,
+                                description: "An unknown error occured while undoing last commit",
                                 variant: "destructive",
                               });
                             }
-                            toast({
-                              title: "Failed to undo",
-                              description: "An unknown error occured while undoing last commit",
-                              variant: "destructive",
-                            });
-                          }
-                        }}
-                      >
-                        <Undo2 />
-                      </Button>
-                    </TooltipTrigger>
+                          }}
+                        >
+                          <Undo2 />
+                        </Button>
+                      }
+                    />
                     <TooltipContent side="bottom">
                       <p>Undo Last Commit</p>
                     </TooltipContent>
@@ -698,11 +717,13 @@ export function Toolbar() {
               <Menu />
             </MenubarTrigger>
             <MenubarContent>
-              <MenubarItem asChild>
-                <NavLink to="/settings" className="">
-                  <p className="text-base">{username}</p>
-                </NavLink>
-              </MenubarItem>
+              <MenubarItem
+                render={
+                  <NavLink to="/settings">
+                    <p className="text-base">{username}</p>
+                  </NavLink>
+                }
+              />
               <MenubarSeparator />
               <MenubarItem
                 className="flex flex-row items-center gap-2"
@@ -752,42 +773,44 @@ export function Toolbar() {
           </MenubarMenu>
         </Menubar>
         <div className="hidden h-full w-fit flex-row items-center gap-2 sm:flex md:gap-4">
-          <TooltipProvider delayDuration={100}>
+          <TooltipProvider delay={100}>
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="CMT_1 max-xs:hidden text-base"
-                  asChild
-                >
-                  <NavLink
-                    to="/settings"
-                    className="TB_9"
-                    onClick={() => {
-                      if (localStorage.getItem("username") !== null) return;
-                      setTimeout(() => {
-                        highlighter.highlight({
-                          element: "#usernameInput",
-                          popover: {
-                            title: "Username Configuration",
-                            description: "Change your username here",
-                            showButtons: ["close"],
-                            onCloseClick: () => {
+              <TooltipTrigger
+                render={
+                  <Button
+                    render={
+                      <NavLink
+                        to="/settings"
+                        className="TB_9"
+                        onClick={() => {
+                          if (localStorage.getItem("username") !== null) return;
+                          setTimeout(() => {
+                            highlighter.highlight({
+                              element: "#usernameInput",
+                              popover: {
+                                title: "Username Configuration",
+                                description: "Change your username here",
+                                showButtons: ["close"],
+                                onCloseClick: () => {
+                                  highlighter.destroy();
+                                },
+                              },
+                            });
+                            setTimeout(() => {
                               highlighter.destroy();
-                            },
-                          },
-                        });
-                        setTimeout(() => {
-                          highlighter.destroy();
-                        }, 5000);
-                      }, 50);
-                    }}
+                            }, 5000);
+                          }, 50);
+                        }}
+                      />
+                    }
+                    variant="outline"
+                    size="sm"
+                    className="CMT_1 max-xs:hidden text-base"
                   >
                     {username}
-                  </NavLink>
-                </Button>
-              </TooltipTrigger>
+                  </Button>
+                }
+              />
               <TooltipContent side="bottom">
                 <p>
                   <b>username</b> used when using git commit
@@ -796,68 +819,65 @@ export function Toolbar() {
             </Tooltip>
             <Separator orientation="vertical" className="h-full" />
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  className="TB_10"
-                  variant="outline"
-                  size="icon"
-                  onClick={() => {
-                    // if the theme is dark, change to light
-                    if (
-                      document.documentElement.classList.contains("dark") &&
-                      window.localStorage.getItem("theme") === "Dark"
-                    ) {
-                      document.documentElement.classList.remove("dark");
-                      document.documentElement.style.colorScheme = "light";
-                      window.localStorage.setItem("theme", "Light");
-                      setThemeMode("Light");
-                    }
-                    // if the theme is light, change to follow system
-                    else if (
-                      !document.documentElement.classList.contains("dark") &&
-                      window.localStorage.getItem("theme") === "Light"
-                    ) {
-                      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+              <TooltipTrigger
+                render={
+                  <Button
+                    className="TB_10"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => {
+                      if (
+                        document.documentElement.classList.contains("dark") &&
+                        window.localStorage.getItem("theme") === "Dark"
+                      ) {
+                        document.documentElement.classList.remove("dark");
+                        document.documentElement.style.colorScheme = "light";
+                        window.localStorage.setItem("theme", "Light");
+                        setThemeMode("Light");
+                      } else if (
+                        !document.documentElement.classList.contains("dark") &&
+                        window.localStorage.getItem("theme") === "Light"
+                      ) {
+                        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                          document.documentElement.classList.add("dark");
+                          document.documentElement.style.colorScheme = "dark";
+                        } else {
+                          document.documentElement.classList.remove("dark");
+                          document.documentElement.style.removeProperty("color-scheme");
+                        }
+                        window.localStorage.removeItem("theme");
+                        setThemeMode("System");
+                      } else {
                         document.documentElement.classList.add("dark");
                         document.documentElement.style.colorScheme = "dark";
-                      } else {
-                        document.documentElement.classList.remove("dark");
-                        document.documentElement.style.removeProperty("color-scheme");
+                        window.localStorage.setItem("theme", "Dark");
+                        setThemeMode("Dark");
                       }
-                      window.localStorage.removeItem("theme");
-                      setThemeMode("System");
-                    }
-                    // if the theme is following system, change to dark
-                    else {
-                      document.documentElement.classList.add("dark");
-                      document.documentElement.style.colorScheme = "dark";
-                      window.localStorage.setItem("theme", "Dark");
-                      setThemeMode("Dark");
-                    }
-                  }}
-                >
-                  <Sun
-                    className={clsx(
-                      themeMode == "Light" ? "scale-100 rotate-0" : "scale-0 rotate-90",
-                      "absolute duration-200 ease-out",
-                    )}
-                  />
-                  <Moon
-                    className={clsx(
-                      themeMode == "Dark" ? "scale-100 rotate-0" : "scale-0 rotate-90",
-                      "absolute duration-200 ease-out",
-                    )}
-                  />
-                  <SunMoon
-                    className={clsx(
-                      themeMode !== "Dark" && themeMode !== "Light" ?
-                        "scale-100 rotate-0"
-                      : "scale-0 -rotate-90",
-                      "absolute duration-200 ease-out",
-                    )}
-                  />
-                </Button>
-              </TooltipTrigger>
+                    }}
+                  >
+                    <Sun
+                      className={clsx(
+                        themeMode == "Light" ? "scale-100 rotate-0" : "scale-0 rotate-90",
+                        "absolute duration-200 ease-out",
+                      )}
+                    />
+                    <Moon
+                      className={clsx(
+                        themeMode == "Dark" ? "scale-100 rotate-0" : "scale-0 rotate-90",
+                        "absolute duration-200 ease-out",
+                      )}
+                    />
+                    <SunMoon
+                      className={clsx(
+                        themeMode !== "Dark" && themeMode !== "Light" ?
+                          "scale-100 rotate-0"
+                        : "scale-0 -rotate-90",
+                        "absolute duration-200 ease-out",
+                      )}
+                    />
+                  </Button>
+                }
+              />
               <TooltipContent side="bottom">
                 <p>{themeMode}</p>
               </TooltipContent>

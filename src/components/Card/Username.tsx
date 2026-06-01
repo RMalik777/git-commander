@@ -79,7 +79,7 @@ export function UsernameConfig() {
                   </FormControl>
                   <FormDescription>
                     This will be the <b>user.name</b> used when committing. If empty, git{" "}
-                    <TooltipProvider delayDuration={250}>
+                    <TooltipProvider delay={250}>
                       <Tooltip>
                         <TooltipTrigger>
                           <b>global user.name</b>

@@ -175,20 +175,22 @@ export function Monaco({
   }
   return isValid ?
       <>
-        <TooltipProvider delayDuration={100}>
+        <TooltipProvider delay={100}>
           <div className="flex w-full items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="group min-h-10 min-w-10"
-                    onClick={async () => await saveContent()}
-                  >
-                    <Save />
-                  </Button>
-                </TooltipTrigger>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="group min-h-10 min-w-10"
+                      onClick={async () => await saveContent()}
+                    >
+                      <Save />
+                    </Button>
+                  }
+                />
                 <TooltipContent>
                   <p>Save</p>
                 </TooltipContent>
@@ -205,20 +207,22 @@ export function Monaco({
             </div>
 
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="group min-h-10 min-w-10"
-                  onClick={async () => {
-                    window.history.replaceState({}, "");
-                    sessionStorage.removeItem("editorActive");
-                    setPath("");
-                  }}
-                >
-                  <X />
-                </Button>
-              </TooltipTrigger>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="group min-h-10 min-w-10"
+                    onClick={async () => {
+                      window.history.replaceState({}, "");
+                      sessionStorage.removeItem("editorActive");
+                      setPath("");
+                    }}
+                  >
+                    <X />
+                  </Button>
+                }
+              />
               <TooltipContent>
                 <p>Close</p>
               </TooltipContent>
