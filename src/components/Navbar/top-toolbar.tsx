@@ -4,18 +4,24 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 
 import { setLastCommitMessage } from "@/lib/Redux/gitSlice";
-import { setUser } from "@/lib/Redux/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/Redux/hooks";
 import { setPullMsg } from "@/lib/Redux/pullMsg";
 import { setRepo } from "@/lib/Redux/repoSlice";
+import { setUser } from "@/lib/Redux/userSlice";
 
+import { useTheme } from "@/components/provider/theme-provider";
+import { ModeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Menubar,
   MenubarContent,
+  MenubarGroup,
   MenubarItem,
   MenubarMenu,
   MenubarSeparator,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import {
@@ -27,9 +33,11 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Spinner } from "@/components/ui/spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 
+import { clsx } from "clsx";
 import {
   ArrowDownToLine,
   ArrowUpToLine,
@@ -45,7 +53,6 @@ import {
   Undo2,
 } from "lucide-react";
 import { HashLoader, PulseLoader } from "react-spinners";
-import { clsx } from "clsx";
 
 import * as git from "@/lib/Backend/git";
 
@@ -54,33 +61,7 @@ import "driver.js/dist/driver.css";
 
 export function Toolbar() {
   const navigate = useNavigate();
-  const [themeMode, setThemeMode] = useState<string | null>(null);
-  useLayoutEffect(() => {
-    setThemeMode(window.localStorage.getItem("theme") ?? "System");
-  }, []);
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    if (e.matches && !localStorage.getItem("theme")) {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.documentElement.className = "dark";
-        document.documentElement.style.colorScheme = "dark";
-      } else {
-        document.documentElement.classList.remove("dark");
-        document.documentElement.style.colorScheme = "light";
-      }
-    }
-  });
-
-  window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e) => {
-    if (e.matches && !localStorage.getItem("theme")) {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.documentElement.className = "dark";
-        document.documentElement.style.colorScheme = "dark";
-      } else {
-        document.documentElement.classList.remove("dark");
-        document.documentElement.style.colorScheme = "light";
-      }
-    }
-  });
+  const { setTheme, theme, activeTheme } = useTheme();
 
   const { toast } = useToast();
   const dispatch = useAppDispatch();
@@ -172,6 +153,7 @@ export function Toolbar() {
     if (Number.isNaN(amountFromStorage)) return 0;
     return amountFromStorage;
   });
+
   useEffect(() => {
     localStorage.setItem("fetchAmount", fetchAmount.toString());
   }, [fetchAmount]);
@@ -182,10 +164,10 @@ export function Toolbar() {
   const highlighter = driver({});
 
   return (
-    <header className="TB_1 flex flex-col">
-      <div className="flex w-full grow flex-row">
-        <TooltipProvider delay={350}>
-          <div className="relative flex h-full w-full items-center justify-center border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
+    <header className="TB_1 bg-background sticky top-0 z-50 flex w-full items-center">
+      <div className="flex h-auto w-full flex-col items-center">
+        <div className="flex h-auto w-full grow flex-row">
+          <div className="relative flex h-auto w-full items-center justify-center border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950">
             <Tooltip>
               <TooltipTrigger
                 render={
@@ -206,7 +188,7 @@ export function Toolbar() {
               </TooltipContent>
             </Tooltip>
             <span
-              className="absolute bottom-0 left-0 h-[2px] animate-pulse bg-black dark:bg-white"
+              className="absolute bottom-0 left-0 h-0.5 animate-pulse bg-black dark:bg-white"
               style={{ width: `${switchPercentage}%` }}
             ></span>
           </div>
@@ -222,7 +204,7 @@ export function Toolbar() {
                   <PulseLoader
                     size={6}
                     speedMultiplier={0.8}
-                    color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                    color={theme === "dark" ? "#FFFFFF" : "#000000"}
                   />
                 ),
                 duration: 6000,
@@ -259,7 +241,7 @@ export function Toolbar() {
                   <Button
                     variant="outline"
                     size="icon"
-                    className="TB_3"
+                    className="TB_3 h-fit w-fit rounded-none px-1 py-0"
                     render={<SelectTrigger className="w-fit rounded-none" />}
                   >
                     <GitBranch />
@@ -271,7 +253,7 @@ export function Toolbar() {
               </TooltipContent>
             </Tooltip>
 
-            <SelectContent className="h-fit max-h-[80dvh]">
+            <SelectContent className="h-fit max-h-[80svh] w-full">
               <SelectGroup>
                 <SelectLabel>Local</SelectLabel>
                 {branchList?.local?.map((branch) => {
@@ -294,12 +276,10 @@ export function Toolbar() {
               </SelectGroup>
             </SelectContent>
           </Select>
-        </TooltipProvider>
-      </div>
-      <div className="flex h-fit flex-row items-center justify-between border-b border-neutral-200 bg-white px-3 py-3 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950">
-        <div className="flex h-full flex-row items-center gap-2 sm:gap-4">
-          <div className="flex w-fit flex-row items-center gap-1">
-            <TooltipProvider delay={550}>
+        </div>
+        <div className="flex h-fit w-full flex-row items-center justify-between border-b border-neutral-200 bg-white p-1 duration-200 ease-out dark:border-neutral-700 dark:bg-neutral-950">
+          <div className="flex h-full flex-row items-center gap-2 sm:gap-4">
+            <div className="flex w-fit flex-row items-center gap-1">
               <Tooltip>
                 <TooltipTrigger
                   render={
@@ -318,8 +298,6 @@ export function Toolbar() {
                   <p>Back</p>
                 </TooltipContent>
               </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider delay={550}>
               <Tooltip>
                 <TooltipTrigger
                   render={
@@ -338,10 +316,8 @@ export function Toolbar() {
                   <p>Forward</p>
                 </TooltipContent>
               </Tooltip>
-            </TooltipProvider>
-          </div>
-          <Separator orientation="vertical" className="h-full" />
-          <TooltipProvider delay={100}>
+            </div>
+            <Separator orientation="vertical" className="h-full" />
             <ul className="flex flex-row items-center gap-6 sm:gap-12">
               <li
                 className={clsx(
@@ -406,9 +382,9 @@ export function Toolbar() {
                           }
                         }}
                       >
-                        <RefreshCcw
-                          className={clsx(isFetching ? "animate-spin" : "", "absolute min-h-fit")}
-                        />
+                        {isFetching ?
+                          <Spinner />
+                        : <RefreshCcw />}
                       </Button>
                     }
                   />
@@ -471,7 +447,7 @@ export function Toolbar() {
                                 <PulseLoader
                                   size={6}
                                   speedMultiplier={0.8}
-                                  color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                                  color={activeTheme === "dark" ? "#FFFFFF" : "#000000"}
                                 />
                               ),
                             });
@@ -543,7 +519,7 @@ export function Toolbar() {
                           <HashLoader
                             size={24}
                             speedMultiplier={1.2}
-                            color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                            color={activeTheme === "dark" ? "#FFFFFF" : "#000000"}
                             className={clsx(
                               isPulling ? "scale-100! opacity-100!" : "scale-0! opacity-0!",
                               "relative duration-300 ease-out",
@@ -579,7 +555,7 @@ export function Toolbar() {
                                 <PulseLoader
                                   size={6}
                                   speedMultiplier={0.8}
-                                  color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                                  color={activeTheme === "dark" ? "#FFFFFF" : "#000000"}
                                 />
                               ),
                             });
@@ -629,7 +605,7 @@ export function Toolbar() {
                           <HashLoader
                             size={24}
                             speedMultiplier={1.2}
-                            color={themeMode === "Dark" ? "#FFFFFF" : "#000000"}
+                            color={activeTheme === "dark" ? "#FFFFFF" : "#000000"}
                             className={clsx(
                               isPushing ? "scale-100! opacity-100!" : "scale-0! opacity-0!",
                               "relative duration-300 ease-out",
@@ -709,71 +685,53 @@ export function Toolbar() {
                 </div>
               </li>
             </ul>
-          </TooltipProvider>
-        </div>
-        <Menubar className="sm:hidden">
-          <MenubarMenu>
-            <MenubarTrigger>
-              <Menu />
-            </MenubarTrigger>
-            <MenubarContent>
-              <MenubarItem
-                render={
-                  <NavLink to="/settings">
-                    <p className="text-base">{username}</p>
-                  </NavLink>
-                }
-              />
-              <MenubarSeparator />
-              <MenubarItem
-                className="flex flex-row items-center gap-2"
-                onClick={() => {
-                  // if the theme is dark, change to light
-                  if (
-                    document.documentElement.classList.contains("dark") &&
-                    window.localStorage.getItem("theme") === "Dark"
-                  ) {
-                    document.documentElement.classList.remove("dark");
-                    document.documentElement.style.colorScheme = "light";
-                    window.localStorage.setItem("theme", "Light");
-                    setThemeMode("Light");
+          </div>
+          <Menubar className="sm:hidden">
+            <MenubarMenu>
+              <MenubarTrigger>
+                <Menu />
+              </MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem
+                  render={
+                    <NavLink to="/settings">
+                      <p>{username}</p>
+                    </NavLink>
                   }
-                  // if the theme is light, change to follow system
-                  else if (
-                    !document.documentElement.classList.contains("dark") &&
-                    window.localStorage.getItem("theme") === "Light"
-                  ) {
-                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                      document.documentElement.classList.add("dark");
-                      document.documentElement.style.colorScheme = "dark";
-                    } else {
-                      document.documentElement.classList.remove("dark");
-                      document.documentElement.style.removeProperty("color-scheme");
-                    }
-                    window.localStorage.removeItem("theme");
-                    setThemeMode("System");
-                  }
-                  // if the theme is following system, change to dark
-                  else {
-                    document.documentElement.classList.add("dark");
-                    document.documentElement.style.colorScheme = "dark";
-                    window.localStorage.setItem("theme", "Dark");
-                    setThemeMode("Dark");
-                  }
-                }}
-              >
-                {themeMode == "Light" ?
-                  <Sun className="duration-200" />
-                : themeMode == "Dark" ?
-                  <Moon className="duration-200" />
-                : <SunMoon className="duration-200" />}
-                {themeMode}
-              </MenubarItem>
-            </MenubarContent>
-          </MenubarMenu>
-        </Menubar>
-        <div className="hidden h-full w-fit flex-row items-center gap-2 sm:flex md:gap-4">
-          <TooltipProvider delay={100}>
+                />
+                <MenubarSeparator />
+                <MenubarGroup>
+                  <MenubarSub>
+                    <MenubarSubTrigger>
+                      {theme === "light" ?
+                        <Sun />
+                      : theme === "dark" ?
+                        <Moon />
+                      : <SunMoon />}
+                      Theme
+                    </MenubarSubTrigger>
+                    <MenubarSubContent>
+                      <MenubarGroup>
+                        <MenubarItem onClick={() => setTheme("light")}>
+                          <Sun />
+                          Light
+                        </MenubarItem>
+                        <MenubarItem onClick={() => setTheme("dark")}>
+                          <Moon />
+                          Dark
+                        </MenubarItem>
+                        <MenubarItem onClick={() => setTheme("system")}>
+                          <SunMoon />
+                          System
+                        </MenubarItem>
+                      </MenubarGroup>
+                    </MenubarSubContent>
+                  </MenubarSub>
+                </MenubarGroup>
+              </MenubarContent>
+            </MenubarMenu>
+          </Menubar>
+          <div className="hidden h-full w-fit flex-row items-center gap-2 sm:flex md:gap-4">
             <Tooltip>
               <TooltipTrigger
                 render={
@@ -817,72 +775,9 @@ export function Toolbar() {
                 </p>
               </TooltipContent>
             </Tooltip>
-            <Separator orientation="vertical" className="h-full" />
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <Button
-                    className="TB_10"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => {
-                      if (
-                        document.documentElement.classList.contains("dark") &&
-                        window.localStorage.getItem("theme") === "Dark"
-                      ) {
-                        document.documentElement.classList.remove("dark");
-                        document.documentElement.style.colorScheme = "light";
-                        window.localStorage.setItem("theme", "Light");
-                        setThemeMode("Light");
-                      } else if (
-                        !document.documentElement.classList.contains("dark") &&
-                        window.localStorage.getItem("theme") === "Light"
-                      ) {
-                        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                          document.documentElement.classList.add("dark");
-                          document.documentElement.style.colorScheme = "dark";
-                        } else {
-                          document.documentElement.classList.remove("dark");
-                          document.documentElement.style.removeProperty("color-scheme");
-                        }
-                        window.localStorage.removeItem("theme");
-                        setThemeMode("System");
-                      } else {
-                        document.documentElement.classList.add("dark");
-                        document.documentElement.style.colorScheme = "dark";
-                        window.localStorage.setItem("theme", "Dark");
-                        setThemeMode("Dark");
-                      }
-                    }}
-                  >
-                    <Sun
-                      className={clsx(
-                        themeMode == "Light" ? "scale-100 rotate-0" : "scale-0 rotate-90",
-                        "absolute duration-200 ease-out",
-                      )}
-                    />
-                    <Moon
-                      className={clsx(
-                        themeMode == "Dark" ? "scale-100 rotate-0" : "scale-0 rotate-90",
-                        "absolute duration-200 ease-out",
-                      )}
-                    />
-                    <SunMoon
-                      className={clsx(
-                        themeMode !== "Dark" && themeMode !== "Light" ?
-                          "scale-100 rotate-0"
-                        : "scale-0 -rotate-90",
-                        "absolute duration-200 ease-out",
-                      )}
-                    />
-                  </Button>
-                }
-              />
-              <TooltipContent side="bottom">
-                <p>{themeMode}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+            <Separator orientation="vertical" />
+            <ModeToggle />
+          </div>
         </div>
       </div>
     </header>

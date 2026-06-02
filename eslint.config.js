@@ -3,10 +3,12 @@ import pluginJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import react from "eslint-plugin-react";
 import tseslint from "typescript-eslint";
+import { reactRefresh } from "eslint-plugin-react-refresh";
 
 export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
+  reactRefresh.configs.recommended(),
   { ignores: ["src-tauri/**", "dist/**", "CHANGELOG.md", "src/components/ui"] },
   {
     files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],

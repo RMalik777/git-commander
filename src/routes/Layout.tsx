@@ -3,25 +3,33 @@ import { Outlet } from "react-router";
 import { store } from "@/lib/Redux/store";
 import { Provider } from "react-redux";
 
-import { Navbar } from "@/components/Navbar/Navbar";
-import { Toolbar } from "@/components/Navbar/Toolbar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/provider/theme-provider";
+
+import { AppSidebar } from "@/components/Navbar/sidebar";
+import { Toolbar } from "@/components/Navbar/top-toolbar";
 import { Toaster } from "@/components/ui/toaster";
 import { TerminalView } from "@/components/Tools/TerminalView";
 
 export default function Layout({ children }: Readonly<{ children?: React.ReactNode }>) {
   return (
-    <Provider store={store}>
-      <div className="flex h-dvh max-h-dvh min-h-dvh flex-col overflow-hidden scroll-smooth antialiased">
-        <Toolbar />
-        <div className="flex h-fit min-w-dvw grow flex-row overflow-hidden">
-          <Navbar />
-          <main className="grow overflow-y-auto bg-white p-4 duration-200 ease-out dark:bg-neutral-950">
-            {children ?? <Outlet />}
-          </main>
-        </div>
-        <TerminalView />
-        <Toaster />
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className="[--header-height:calc(--spacing(20))]">
+        <Provider store={store}>
+          <TooltipProvider delay={150}>
+            <SidebarProvider className="flex flex-col">
+              <Toolbar />
+              <div className="flex flex-1">
+                <AppSidebar />
+                <SidebarInset className="p-2">{children ?? <Outlet />}</SidebarInset>
+              </div>
+              <TerminalView />
+              <Toaster />
+            </SidebarProvider>
+          </TooltipProvider>
+        </Provider>
       </div>
-    </Provider>
+    </ThemeProvider>
   );
 }
