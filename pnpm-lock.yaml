@@ -171,8 +171,8 @@ importers:
         specifier: ^4.8.3
         version: 4.8.3(@types/node@25.9.1)(typescript@5.9.3)
       simple-icons:
-        specifier: ^16.21.0
-        version: 16.21.0
+        specifier: ^16.22.0
+        version: 16.22.0
       tauri-plugin-fs-extra-api:
         specifier: github:tauri-apps/tauri-plugin-fs-extra#v1
         version: https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/498e78b0bb017caa5760e8ea35ddcadbec265d49
@@ -4813,8 +4813,8 @@ packages:
     resolution: {integrity: sha512-iuh+gPf28RkltuJC7W5MRi6XAjTDCAPC/prJUpQoG4vIP3MJZ+GTydVnodXA7pwvTKb2cA0m9OFZW/cdWy/I/w==}
     engines: {node: '>=6'}
 
-  simple-icons@16.21.0:
-    resolution: {integrity: sha512-kH6LEx5yvBGVNaVrHnZ7D17G16CmmHiI8DD7MwIwgnWmDFTiFu4PhFZLNdV6bMGr61qbHMMTXLoo/T6C25dMGA==}
+  simple-icons@16.22.0:
+    resolution: {integrity: sha512-/raPcEWh89R2O2IMmHum6W2dF99NNX3yWikVXKUalkDIWz3Rw/S2S+oDPTgJcIGsRh+25m0y8vj4aBaV/KPz3Q==}
     engines: {node: '>=0.12.18'}
 
   sisteransi@1.0.5:
@@ -10296,7 +10296,7 @@ snapshots:
       figures: 2.0.0
       pkg-conf: 2.1.0
 
-  simple-icons@16.21.0: {}
+  simple-icons@16.22.0: {}
 
   sisteransi@1.0.5: {}
 
