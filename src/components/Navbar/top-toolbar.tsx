@@ -9,7 +9,7 @@ import { setPullMsg } from "@/lib/Redux/pullMsg";
 import { setRepo } from "@/lib/Redux/repoSlice";
 import { setUser } from "@/lib/Redux/userSlice";
 
-import { useTheme } from "@/components/provider/theme-provider";
+import { useTheme } from "@/lib/integrations/theme-provider";
 import { ModeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -243,6 +243,7 @@ export function Toolbar() {
                     size="icon"
                     className="TB_3 h-fit w-fit rounded-none px-1 py-0"
                     render={<SelectTrigger className="w-fit rounded-none" />}
+                    nativeButton={false}
                   >
                     <GitBranch />
                   </Button>
