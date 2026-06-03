@@ -66,7 +66,7 @@
     "react-resizable-panels": "^2.1.9",
     "react-router": "^7.15.1",
     "react-spinners": "^0.17.0",
-    "shadcn": "^4.8.3",
+    "shadcn": "^4.10.0",
     "simple-icons": "^16.21.0",
     "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra#v1",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1",
