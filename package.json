@@ -36,7 +36,7 @@
     "@xterm/xterm": "^5.5.0",
     "cmdk": "^1.1.1",
     "dompurify": "^3.4.7",
-    "driver.js": "^1.4.0",
+    "driver.js": "^1.8.0",
     "monaco-editor": "^0.55.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
